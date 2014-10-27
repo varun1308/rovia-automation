@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Application\RoviaApp.cs" />
     <Compile Include="Configuration\ApplicationSettings.cs" />
+    <Compile Include="Pages\AirResultsPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Tests\HomePageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Controls\AirResultsControls.csv" />
     <None Include="Controls\HomeControls.csv" />
     <None Include="Utility\KillChromeDriver.bat" />
   </ItemGroup>

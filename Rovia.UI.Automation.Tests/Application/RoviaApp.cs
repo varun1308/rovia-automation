@@ -13,6 +13,11 @@ namespace Rovia.UI.Automation.Tests.Application
         {
             get { return InitializePage<HomePage>("HomeControls"); }
         }
+
+        public AirResultsPage AirResultsPage
+        {
+            get { return InitializePage<AirResultsPage>("AirResultsControls"); }
+        }
         
 
         public bool SaveScreenshot(TestContext context)
