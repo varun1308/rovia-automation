@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovia.UI.Automation.Tests", "Rovia.UI.Automation.Tests\Rovia.UI.Automation.Tests.csproj", "{345FD97B-731D-4578-AE68-B1F483BA4E37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. References", "0. References", "{2F50C0F2-E95A-463D-A64C-15C65F1EFA99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppacitiveLoggingFramework", "AppacitiveLoggingFramework", "{290CC6DB-3A94-4798-88D7-867A6D5D39FB}"
+	ProjectSection(SolutionItems) = preProject
+		References\AppacitiveLoggingFramework\AppacitiveAutomationFramework.dll = References\AppacitiveLoggingFramework\AppacitiveAutomationFramework.dll
+		References\AppacitiveLoggingFramework\Selenium.WebDriverBackedSelenium.dll = References\AppacitiveLoggingFramework\Selenium.WebDriverBackedSelenium.dll
+		References\AppacitiveLoggingFramework\Tavisca.Testing.Platform.dll = References\AppacitiveLoggingFramework\Tavisca.Testing.Platform.dll
+		References\AppacitiveLoggingFramework\ThoughtWorks.Selenium.Core.dll = References\AppacitiveLoggingFramework\ThoughtWorks.Selenium.Core.dll
+		References\AppacitiveLoggingFramework\WebDriver.dll = References\AppacitiveLoggingFramework\WebDriver.dll
+		References\AppacitiveLoggingFramework\WebDriver.Support.dll = References\AppacitiveLoggingFramework\WebDriver.Support.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Tests", "1. Tests", "{CF664EEF-96E2-43CA-B21D-EC23345806AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{345FD97B-731D-4578-AE68-B1F483BA4E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{345FD97B-731D-4578-AE68-B1F483BA4E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{345FD97B-731D-4578-AE68-B1F483BA4E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{345FD97B-731D-4578-AE68-B1F483BA4E37}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{290CC6DB-3A94-4798-88D7-867A6D5D39FB} = {2F50C0F2-E95A-463D-A64C-15C65F1EFA99}
+		{345FD97B-731D-4578-AE68-B1F483BA4E37} = {CF664EEF-96E2-43CA-B21D-EC23345806AD}
+	EndGlobalSection
+EndGlobal
