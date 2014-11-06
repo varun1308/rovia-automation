@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Tests.Application;
+using Rovia.UI.Automation.Tests.Model;
 using Rovia.UI.Automation.Tests.Utility;
 
 namespace Rovia.UI.Automation.Tests.Tests
@@ -34,16 +36,35 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void ShouldShowHomePage()
         {
             Assert.IsTrue(_app.HomePage.IsVisible(), "Home was unavailable");
-
         }
 
         [TestMethod]
         [TestCategory("Sanity")]
         public void CheckFlightsWorking()
         {
-            _app.HomePage.DoAirSearch("DFW", "MIA", DateTime.Today.AddDays(7),
-                false, DateTime.Today.AddDays(14), 1, 0, 0);
-
+            AirSearchScenario airScenario = new AirSearchScenario()
+            {
+                Adults = 1,
+                Childs = 0,
+                Infants = 0,
+                SearchType = SearchType.Return,
+                AirportPairs = new List<AirportPair>{
+                    new AirportPair()
+                {
+                    FromLocation = "LAS",
+                    ToLocation = "LAX",
+                    DepartureDateTime = DateTime.Today.AddDays(7)
+                },
+                   new AirportPair()
+                {
+                    FromLocation = "LAX",
+                    ToLocation = "MIA",
+                    DepartureDateTime = DateTime.Today.AddDays(23)
+                }
+                }
+            };
+            _app.HomePage.DoAirSearch(airScenario);
+            
             while (_app.AirResultsPage.IsWaitingVisible())
             {
                 Thread.Sleep(2000);
@@ -53,5 +74,31 @@ namespace Rovia.UI.Automation.Tests.Tests
             Assert.IsTrue(_app.AirResultsPage.IsResultsVisible(), "Results not found");
         }
 
+        [TestMethod]
+        [TestCategory("Sanity")]
+        public void AddFlightToCart()
+        {
+            AirSearchScenario airScenario = new AirSearchScenario()
+            {
+                Adults = 1,
+                Childs = 0,
+                Infants = 0,
+                SearchType = SearchType.OneWay,
+                AirportPairs = new List<AirportPair>{new AirportPair()
+                {
+                    FromLocation = "LAS",
+                    ToLocation = "LAX",
+                    DepartureDateTime = DateTime.Today.AddDays(7)
+                }}
+            };
+            _app.HomePage.DoAirSearch(airScenario);
+
+            while (_app.AirResultsPage.IsWaitingVisible())
+            {
+                Thread.Sleep(2000);
+                if (_app.AirResultsPage.IsResultsVisible())
+                    Assert.IsTrue(_app.AirResultsPage.AddToCart(), "Itinerary not available");
+            }
+        }
     }
 }
