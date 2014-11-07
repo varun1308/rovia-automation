@@ -1,8 +1,2 @@
-divWaiting,div.loading.mbl
+﻿divWaiting,div.loading.mbl
 divMatrix,div#flightMatrixTable
-divResults,div#AirListHolder
-btnaddToCart,a#btnAddToCart0
-divconfirm,div.matrixmodal
-divloader,div.icon_preloader.mha
-btncheckout,a#btnCheckout
-tfCheckout,a#aCheckout

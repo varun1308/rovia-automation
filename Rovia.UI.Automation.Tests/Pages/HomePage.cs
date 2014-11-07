@@ -3,9 +3,7 @@ using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Model;
 using Rovia.UI.Automation.Tests.Utility;
-using System.Threading;
 
 namespace Rovia.UI.Automation.Tests.Pages
 {
@@ -14,92 +12,74 @@ namespace Rovia.UI.Automation.Tests.Pages
         internal bool IsVisible()
         {
             var div = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Slow);
-            //for selecting country
-            var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow);
-            if (country != null && country.Displayed)
-            {
-                country.SendKeys("United States");
-                var saveCountry = WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.Slow);
-                saveCountry.Click();
-            }
             return div != null && div.Displayed;
         }
 
-        internal void DoAirSearch(AirSearchScenario airScenario)
+        internal void DoAirSearch(string from, string to, DateTime onwardDateTime, bool isReturn, DateTime returnDateTime,
+            int adults=1, int children=0, int infants=0)
         {
             var flights = WaitAndGetBySelector("flights", ApplicationSettings.TimeOut.Slow);
+
             if (flights == null || !flights.Displayed)
             {
                 Assert.Fail("Flights Nav Bar not displayed.");
             }
+
             flights.Click();
 
             var flightPanel = WaitAndGetBySelector("flightsSearchPanel", ApplicationSettings.TimeOut.Fast);
 
             if(flightPanel==null || !flightPanel.Displayed)
                 Assert.Fail("Flights Panel not displayed.");
+
+            //check if return or one way
+            if (!isReturn)
+            {
+                var btnOneway = WaitAndGetBySelector("flightJourneyTypeOneWay", ApplicationSettings.TimeOut.Fast);
+
+                if (btnOneway == null || !btnOneway.Displayed)
+                    Assert.Fail("One way journey button not displayed.");
+
+                btnOneway.Click();
+            }
+
+            //Enter from/to airports
+
+            var input = WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Fast);
+
+            input.SendKeys(from);
+
+            input = WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Fast);
+            input.SendKeys(to);
+
+            //enter date
+
+            input = WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Fast);
             
-            //check if journey is multicity
-            if (airScenario.SearchType == SearchType.Multicity)
+            input.SendKeys(onwardDateTime.ToString("MM/dd/yyyy"));
+
+            if (isReturn)
             {
-                var btnMulticity = WaitAndGetBySelector("flightJourneyTypeMulticity", ApplicationSettings.TimeOut.Fast);
+                input = WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Fast);
 
-                if (btnMulticity == null || !btnMulticity.Displayed)
-                    Assert.Fail("Multicity journey button not displayed.");
-                btnMulticity.Click();
-                for (int i = 0; i < airScenario.AirportPairs.Count; i++)
-                {
-                    ExecuteJavascript("$('#depAP"+(i+1)+"').val('"+airScenario.AirportPairs[i].FromLocation+"')");
-                    ExecuteJavascript("$('#retAP" + (i + 1) + "').val('" + airScenario.AirportPairs[i].ToLocation + "')");
-                    ExecuteJavascript("$('input[val-rule=\"MDDepartureDate" + (i + 1) + "\"]').val('" + airScenario.AirportPairs[i].DepartureDateTime.ToString("MM/dd/yyyy") + "')");
-
-                    if (i < airScenario.AirportPairs.Count-1)
-                    {
-                        WaitAndGetBySelector("btnaddflight", ApplicationSettings.TimeOut.Fast).Click();
-                    }
-                }
-            }
-            else
-            {
-                //check if return or one way
-                if (airScenario.SearchType == SearchType.OneWay)
-                {
-                    var btnOneway = WaitAndGetBySelector("flightJourneyTypeOneWay", ApplicationSettings.TimeOut.Fast);
-
-                    if (btnOneway == null || !btnOneway.Displayed)
-                        Assert.Fail("One way journey button not displayed.");
-
-                    btnOneway.Click();
-                }
-
-                //Enter from/to airports
-
-                var input = WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Fast);
-
-                input.SendKeys(airScenario.AirportPairs[0].FromLocation);
-
-                input = WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Fast);
-                input.SendKeys(airScenario.AirportPairs[0].ToLocation);
-
-                //enter date
-
-                input = WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Fast);
-
-                input.SendKeys(airScenario.AirportPairs[0].DepartureDateTime.ToString("MM/dd/yyyy"));
-
-                if (airScenario.SearchType == SearchType.Return)
-                {
-                    input = WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Fast);
-
-                    input.SendKeys(airScenario.AirportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
-                }
+                input.SendKeys(onwardDateTime.ToString("MM/dd/yyyy"));
             }
 
-            WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Adults.ToString());
-            WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Childs.ToString());
-            WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Infants.ToString());
+            var combo = WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast);
 
-            WaitAndGetBySelector("btnSearch", ApplicationSettings.TimeOut.Fast).Click();
+            combo.SelectFromDropDown(adults.ToString());
+
+            combo = WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast);
+
+            combo.SelectFromDropDown(children.ToString());
+
+            combo = WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast);
+
+            combo.SelectFromDropDown(infants.ToString());
+
+            var btnSearch = WaitAndGetBySelector("btnSearch", ApplicationSettings.TimeOut.Fast);
+
+            btnSearch.Click();
         }
 
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Tests.Application;
@@ -22,32 +21,9 @@ namespace Rovia.UI.Automation.Tests.Pages
             return div != null && div.Displayed;
         }
 
-        internal bool AddToCart()
-        {
-            var div = WaitAndGetBySelector("divResults", ApplicationSettings.TimeOut.Slow);
-            if (div != null && div.Displayed)
-            {
-                WaitAndGetBySelector("btnaddToCart", ApplicationSettings.TimeOut.Slow).Click();
-
-                var divloader = WaitAndGetBySelector("divloader", ApplicationSettings.TimeOut.Slow);
-                while (divloader != null && divloader.Displayed)
-                {
-                        Thread.Sleep(2000);
-                        WaitAndGetBySelector("btncheckout", ApplicationSettings.TimeOut.Slow).Click();
-
-                        while (IsTripFolderVisible())
-                        {
-                            return true;
-                        }
-                }
-            }
-            return false;
-        }
-
-        internal bool IsTripFolderVisible()
-        {
-            var tfCheckout = WaitAndGetBySelector("tfCheckout", ApplicationSettings.TimeOut.Slow);
-            return tfCheckout != null && tfCheckout.Displayed;
-        }
+        
     }
+
+
+
 }
