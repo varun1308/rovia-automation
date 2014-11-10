@@ -1,0 +1,7 @@
+loginlink,a#ucPWP_ctl09_5270_ucHeaderMenu_lnkLogin
+username,input#userid
+password,input#Password
+signin,button[val-submit="login"]
+loginsuccessHome,span.notxtshadow.mrm.username
+loginsuccessTrip,span.greyfont.mrm
+divPrefCust,div#dvPrefCustHolder

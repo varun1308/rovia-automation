@@ -1,0 +1,12 @@
+divPreLoadertoMakePayment,div#divCartLoadProgress
+checkTerms,input#chkTNC
+paynow,a.jsBtnPayNow.btn.btn-warning
+preloading,div#divWaitBookTrip
+divPayNowfailed,div.alert.alert-error.span12.mtm
+fillCCDetailsDiv,div#PaymentInputHolder
+divPaymentBox,div.paymentbox
+SpinningDiv,div#ajax-loading
+SubmitPayment,a#SubmitPayment
+ConfirmationDiv,div.alert-success.mal.pvm.phl
+Country,select#Country
+Provinces,select#Provinces

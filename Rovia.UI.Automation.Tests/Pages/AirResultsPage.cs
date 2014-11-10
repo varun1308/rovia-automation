@@ -28,23 +28,20 @@ namespace Rovia.UI.Automation.Tests.Pages
             if (div != null && div.Displayed)
             {
                 WaitAndGetBySelector("btnaddToCart", ApplicationSettings.TimeOut.Slow).Click();
-
-                var divloader = WaitAndGetBySelector("divloader", ApplicationSettings.TimeOut.Slow);
+                
+                var divloader = WaitAndGetBySelector("divloader", ApplicationSettings.TimeOut.Fast);
                 while (divloader != null && divloader.Displayed)
+                Thread.Sleep(500);
+                WaitAndGetBySelector("btncheckout", ApplicationSettings.TimeOut.Slow).Click();
+                while (IsTripFolderVisible())
                 {
-                        Thread.Sleep(2000);
-                        WaitAndGetBySelector("btncheckout", ApplicationSettings.TimeOut.Slow).Click();
-
-                        while (IsTripFolderVisible())
-                        {
-                            return true;
-                        }
+                    return true;
                 }
             }
             return false;
         }
 
-        internal bool IsTripFolderVisible()
+        private bool IsTripFolderVisible()
         {
             var tfCheckout = WaitAndGetBySelector("tfCheckout", ApplicationSettings.TimeOut.Slow);
             return tfCheckout != null && tfCheckout.Displayed;

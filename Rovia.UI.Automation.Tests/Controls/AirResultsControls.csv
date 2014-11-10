@@ -2,7 +2,6 @@ divWaiting,div.loading.mbl
 divMatrix,div#flightMatrixTable
 divResults,div#AirListHolder
 btnaddToCart,a#btnAddToCart0
-divconfirm,div.matrixmodal
-divloader,div.icon_preloader.mha
+divloader,div.txtAlignCenter.jsWaitMessage
 btncheckout,a#btnCheckout
 tfCheckout,a#aCheckout
