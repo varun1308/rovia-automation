@@ -132,7 +132,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                 SearchType = SearchType.OneWay,
                 AirportPairs = new List<AirportPair>{new AirportPair()
                 {
-                    FromLocation = "LAS",
+                    FromLocation = "LAX",
                     ToLocation = "MIA",
                     DepartureDateTime = DateTime.Today.AddDays(7)
                 }}
@@ -170,7 +170,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                     Thread.Sleep(1000);
 
                     //check if itinerary available or price not changed before actual payment
-                    Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess(), "Itinerary not available or Price has changed.");
+                    Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_CreditCard(), "Itinerary not available or Price has changed.");
 
                     #region pay by credit card
                     PaymentFields paymentFields = new PaymentFields()
@@ -200,7 +200,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                         }
                     };
 
-                    Assert.IsTrue(_app.CheckoutPage.MakePayment(paymentFields), "Payment Failed");
+                    Assert.IsTrue(_app.CheckoutPage.MakePayment_CreditCard(paymentFields), "Payment Failed");
                     #endregion
 
                     break;
@@ -271,7 +271,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                     Thread.Sleep(1000);
 
                     //check if itinerary available or price not changed before actual payment
-                    Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess(), "Itinerary not available or Price has changed.");
+                    Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_CreditCard(), "Itinerary not available or Price has changed.");
 
                     #region pay by credit card
                     PaymentFields paymentFields = new PaymentFields()
@@ -301,7 +301,86 @@ namespace Rovia.UI.Automation.Tests.Tests
                         }
                     };
 
-                    Assert.IsTrue(_app.CheckoutPage.MakePayment(paymentFields), "Payment Failed");
+                    Assert.IsTrue(_app.CheckoutPage.MakePayment_CreditCard(paymentFields), "Payment Failed");
+                    #endregion
+
+                    break;
+                }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        public void PreferedCust_BookingFlow_RoviaBucks_Success()
+        {
+
+            #region search for flight
+            AirSearchScenario airScenario = new AirSearchScenario()
+            {
+                Adults = 1,
+                Childs = 0,
+                Infants = 0,
+                SearchType = SearchType.OneWay,
+                AirportPairs = new List<AirportPair>{new AirportPair()
+                {
+                    FromLocation = "LAS",
+                    ToLocation = "MIA",
+                    DepartureDateTime = DateTime.Today.AddDays(7)
+                }}
+            };
+            _app.HomePage.DoAirSearch(airScenario);
+            #endregion
+
+            while (_app.AirResultsPage.IsWaitingVisible())
+            {
+                Thread.Sleep(2000);
+
+                if (_app.AirResultsPage.IsResultsVisible())
+                {
+                    //if results available add first flight to cart
+                    Assert.IsTrue(_app.AirResultsPage.AddToCart(), "Itinerary not available.");
+
+                    Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
+
+                    //for registered user can login
+                    Assert.IsTrue(_app.LoginDetailsPage.Login(), "Login Failed");
+
+                    #region submit passenger details
+                    PassengerDetails pes = new PassengerDetails()
+                    {
+                        InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
+                        FirstName = "Vikul",
+                        LastName = "Rathod",
+                        DOB = "09/16/1989",
+                        Gender = "Male",
+                        Emailid = "vrathod@tavisca.com"
+                    };
+                    _app.PassengerInfoPage.SubmitPassengerDetails(pes);
+                    #endregion
+
+                    Thread.Sleep(1000);
+                    
+                    #region pay by credit card
+                    PaymentFields paymentFields = new PaymentFields()
+                    {
+                        EmailAddress = "vrathod@tavisca.com",
+                        Address = new Address()
+                        {
+                            Address1 = "888 main",
+                            City = "Plano",
+                            Country = "US",
+                            PostalCode = "77777",
+                            Provinces = "TX"
+                        },
+                        PhoneNumber = new PhoneNumber()
+                        {
+                            PhoneNumberArea = "222",
+                            PhoneNumberExchange = "223",
+                            PhoneNumberDigits = "7777",
+                        }
+                    };
+
+                    Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_RB(paymentFields), "Booking failed with Rovia Bucks");
                     #endregion
 
                     break;

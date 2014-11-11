@@ -20,6 +20,7 @@ namespace Rovia.UI.Automation.Tests.Pages
            var divCartLoaded= WaitAndGetBySelector("divCartLoaded", ApplicationSettings.TimeOut.Slow);
            if (divCartLoaded != null && divCartLoaded.Displayed)
            {
+               Thread.Sleep(2000);
                WaitAndGetBySelector("countryInsurance", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passenger.InsuranceData.Country);
                ExecuteJavascript("$('input.span7.jsDob').prop('disabled', false);");
                ExecuteJavascript("$('input.span12.jsFName').val('"+passenger.FirstName+"')");

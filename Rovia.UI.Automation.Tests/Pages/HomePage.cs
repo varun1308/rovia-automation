@@ -13,13 +13,13 @@ namespace Rovia.UI.Automation.Tests.Pages
     {
         internal bool IsVisible()
         {
-            var div = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Slow);
+            var div = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Safe);
             //for selecting country
-            var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow);
+            var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Safe);
             if (country != null && country.Displayed)
             {
                 country.SendKeys("United States");
-                var saveCountry = WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.Slow);
+                var saveCountry = WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.SuperFast);
                 saveCountry.Click();
             }
             return div != null && div.Displayed;
@@ -34,7 +34,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             flights.Click();
 
-            var flightPanel = WaitAndGetBySelector("flightsSearchPanel", ApplicationSettings.TimeOut.Fast);
+            var flightPanel = WaitAndGetBySelector("flightsSearchPanel", ApplicationSettings.TimeOut.Safe);
 
             if(flightPanel==null || !flightPanel.Displayed)
                 Assert.Fail("Flights Panel not displayed.");
