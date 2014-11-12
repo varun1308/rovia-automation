@@ -3,28 +3,12 @@ using System.Drawing.Imaging;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Pages;
 
 namespace Rovia.UI.Automation.Tests.Application
 {
     public class RoviaApp : UIApplication
     {
-        public AppState State { get; set; }
-
-        public RoviaApp()
-        {
-            State = new AppState()
-            {
-                CurrentUser = new User()
-                {
-                    Type = UserType.Guest,
-                    IsLoggedIn = false
-                }
-            };
-        }
-
         public HomePage HomePage
         {
             get { return InitializePage<HomePage>("HomeControls"); }
@@ -75,11 +59,6 @@ namespace Rovia.UI.Automation.Tests.Application
             {
             }
             return false;
-        }
-
-        public void GoToHomePage()
-        {
-            Launch(ApplicationSettings.Url);
         }
     }
 }

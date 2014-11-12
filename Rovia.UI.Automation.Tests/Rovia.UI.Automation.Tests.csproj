@@ -43,7 +43,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="Tavisca.Testing.Platform">
@@ -72,9 +71,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Application\AppState.cs" />
     <Compile Include="Application\RoviaApp.cs" />
-    <Compile Include="Application\User.cs" />
     <Compile Include="Configuration\ApplicationSettings.cs" />
     <Compile Include="Model\AirSearchScenario.cs" />
     <Compile Include="Model\NewUserRegistration.cs" />
@@ -86,7 +83,6 @@
     <Compile Include="Pages\LoginDetailsPage.cs" />
     <Compile Include="Pages\PassengerInfoPage.cs" />
     <Compile Include="Pages\TripFolderPage.cs" />
-    <Compile Include="Tests\AirTests\AirHappyFlowTest.cs" />
     <Compile Include="Tests\HomePageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Testhelper.cs" />
@@ -98,28 +94,10 @@
     <None Include="Controls\HomeControls.csv" />
     <None Include="Controls\LoginDetailsControls.csv" />
     <None Include="Controls\PassengerInfoControls.csv" />
-    <None Include="DataSheets\AirScenarios.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Utility\KillChromeDriver.bat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\chromedriver.exe" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\Rovia.UI.Automation.Criteria\Rovia.UI.Automation.Criteria.csproj">
-      <Project>{d8f99af7-ebaf-431d-9bc9-8a47a42e217f}</Project>
-      <Name>Rovia.UI.Automation.Criteria</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rovia.UI.Automation.DataBinder\Rovia.UI.Automation.DataBinder.csproj">
-      <Project>{8f7b95ed-5702-4388-a0a3-a974107e80cd}</Project>
-      <Name>Rovia.UI.Automation.DataBinder</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rovia.Ui.Automation.ScenarioObjects\Rovia.UI.Automation.ScenarioObjects.csproj">
-      <Project>{21ae4471-a960-447b-b736-803ec7a64e0a}</Project>
-      <Name>Rovia.UI.Automation.ScenarioObjects</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

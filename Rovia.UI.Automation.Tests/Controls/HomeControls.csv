@@ -1,12 +1,9 @@
 divHome,.home_header_utility
 country,select.span12.jCountrySelect
 saveCountry,a.btn.btn-primary.span12.jSaveBtn
-lnkLogIn,a#ucPWP_ctl09_5270_ucHeaderMenu_lnkLogin
-logOut,a#ucPWP_ctl08_13082_ucHeaderMenu_lnkLogout
 flights,ul.nav.fontUpperCase li.ico_flights
 flightsSearchPanel,div[data-producttype="flight"]
 flightJourneyTypeOneWay,div.tripbuttons button[data-triptype="0"]
-flightJourneyTypeRoundTrip,div.tripbuttons button[data-triptype="1"]
 flightJourneyTypeMulticity,div.tripbuttons button[data-triptype="2"]
 fromAp,input#depAP
 toAp,input#retAP
@@ -15,15 +12,5 @@ returnDate,input#retDate
 adults,select#drpAdultCount
 children,select#drpChildCount
 infants,select.jInfant
-btnAirSearch,button#btnAirSearch
-rentals,ul.nav.fontUpperCase li.ico_rentals
-rentalsSearchPanel,div[data-producttype="car"]
-fromC,input#txtPickUpLoc
-toC,input#txtDropOffLoc
-fromDateC,input#txtPickupDate
-toDateC,input#txtDropoffDate
-btnCarSearch,button#btnCarSearch
-addFlight,a#addflight
-cabinType,select.jCabinClass
-includeNearByAirports,input.jsIncludeNearbyAirports
-dates,.timepicker_arrow
+btnSearch,button#btnAirSearch
+btnaddflight,a#addflight
