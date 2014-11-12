@@ -61,5 +61,25 @@ namespace Rovia.UI.Automation.Tests.Pages
             Thread.Sleep(500);
             return true;
         }
+
+        internal bool IsVisible()
+        {
+            var div = WaitAndGetBySelector("divLogInPanel", ApplicationSettings.TimeOut.Slow);
+            return div != null && div.Displayed;
+        }
+
+        internal void LogIn(string userId, string password)
+        {
+            //Enter Credentials
+
+            WaitAndGetBySelector("username", ApplicationSettings.TimeOut.Fast).SendKeys(userId);
+
+            WaitAndGetBySelector("password", ApplicationSettings.TimeOut.Fast).SendKeys(password);
+
+            WaitAndGetBySelector("btnLogIn", ApplicationSettings.TimeOut.Fast).Click();
+
+
+
+        }
     }
 }
