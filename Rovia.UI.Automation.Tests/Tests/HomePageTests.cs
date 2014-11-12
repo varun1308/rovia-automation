@@ -34,7 +34,6 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void ShouldShowHomePage()
         {
             Assert.IsTrue(_app.HomePage.IsVisible(), "Home was unavailable");
-
         }
 
         [TestMethod]
@@ -42,7 +41,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void CheckFlightsWorking()
         {
             _app.HomePage.DoAirSearch("DFW", "MIA", DateTime.Today.AddDays(7),
-                false, DateTime.Today.AddDays(14), 1, 0, 0);
+                true, DateTime.Today.AddDays(14), 1, 0, 0);
 
             while (_app.AirResultsPage.IsWaitingVisible())
             {
@@ -51,6 +50,19 @@ namespace Rovia.UI.Automation.Tests.Tests
                     break;
             }
             Assert.IsTrue(_app.AirResultsPage.IsResultsVisible(), "Results not found");
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        public void CheckLogIn()
+        {
+            _app.HomePage.GoToLoginPage();
+            Assert.IsTrue(_app.LogInPage.IsVisible(), "LogIn Link failed");
+            _app.LogInPage.DefaultLogIn();
+            Assert.IsTrue(_app.HomePage.IsVisible(), "Log In Failed");
+            Assert.IsTrue(_app.HomePage.IsUserLoggedIn(), "Log In Failed");
+            _app.HomePage.LogOut();
+            Assert.IsTrue(_app.LogInPage.IsVisible(), "LogOut Failed");
         }
 
     }

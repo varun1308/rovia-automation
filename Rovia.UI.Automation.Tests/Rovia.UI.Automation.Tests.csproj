@@ -38,12 +38,15 @@
     <Reference Include="AppacitiveAutomationFramework">
       <HintPath>..\References\AppacitiveLoggingFramework\AppacitiveAutomationFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Selenium.WebDriverBackedSelenium">
       <HintPath>..\References\AppacitiveLoggingFramework\Selenium.WebDriverBackedSelenium.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Tavisca.Testing.Platform">
       <HintPath>..\References\AppacitiveLoggingFramework\Tavisca.Testing.Platform.dll</HintPath>
     </Reference>
@@ -73,7 +76,11 @@
     <Compile Include="Application\RoviaApp.cs" />
     <Compile Include="Configuration\ApplicationSettings.cs" />
     <Compile Include="Pages\AirResultsPage.cs" />
+    <Compile Include="Pages\CarResultsPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Pages\LogInPage.cs" />
+    <Compile Include="Tests\AirTests\AirHappyFlowTest.cs" />
+    <Compile Include="Tests\CarTest\CarCompleteBookingFlowTest.cs" />
     <Compile Include="Tests\HomePageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Testhelper.cs" />
@@ -81,12 +88,36 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Controls\AirResultsControls.csv" />
+    <None Include="Controls\CarResultsControls.csv" />
     <None Include="Controls\HomeControls.csv" />
+    <None Include="Controls\LogInControls.csv" />
+    <None Include="DataSheets\AirScenarios.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Utility\KillChromeDriver.bat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\chromedriver.exe" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rovia.UI.Automation.Constants\Rovia.UI.Automation.Constants.csproj">
+      <Project>{c9de78a7-df44-43e5-9af3-eee7fb439fef}</Project>
+      <Name>Rovia.UI.Automation.Constants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rovia.UI.Automation.Criteria\Rovia.UI.Automation.Criteria.csproj">
+      <Project>{d8f99af7-ebaf-431d-9bc9-8a47a42e217f}</Project>
+      <Name>Rovia.UI.Automation.Criteria</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rovia.UI.Automation.DataBinder\Rovia.UI.Automation.DataBinder.csproj">
+      <Project>{8f7b95ed-5702-4388-a0a3-a974107e80cd}</Project>
+      <Name>Rovia.UI.Automation.DataBinder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rovia.Ui.Automation.ScenarioObjects\Rovia.UI.Automation.ScenarioObjects.csproj">
+      <Project>{21ae4471-a960-447b-b736-803ec7a64e0a}</Project>
+      <Name>Rovia.UI.Automation.ScenarioObjects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

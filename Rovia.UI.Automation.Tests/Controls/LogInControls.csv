@@ -1,0 +1,4 @@
+﻿divLogInPanel,div.create_profile_wrap.new_layout
+username,input#userid.span12.jUserName
+password,input#Password.span12.jPassword
+btnLogIn,button.btn.btn-large.btn-block.btn-primary.jSubmit

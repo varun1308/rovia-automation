@@ -1,2 +1,12 @@
 ﻿divWaiting,div.loading.mbl
 divMatrix,div#flightMatrixTable
+btnaddToCart,.btn_AddToCart
+divLoader,div.icon_preloader.mha
+btnCheckOut,a#btnCheckout
+resultHolder,div#AirListHolder
+amount,p.price.font-weight700
+titleAirLines,div.text-boxtitle
+subTitleAirLines,div.text-subtitle
+supplier,.jsSupplierName
+btnCancel,#btnCloseFlightPopup
+alerts,#dvAddToCartAir .alert
