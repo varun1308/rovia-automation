@@ -5,3 +5,5 @@ signin,button[val-submit="login"]
 loginsuccessHome,span.notxtshadow.mrm.username
 loginsuccessTrip,span.greyfont.mrm
 divPrefCust,div#dvPrefCustHolder
+divLogInPanel,div.create_profile_wrap.new_layout
+btnLogIn,button.btn.btn-large.btn-block.btn-primary.jSubmit
