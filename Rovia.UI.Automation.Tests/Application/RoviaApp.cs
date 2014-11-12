@@ -18,7 +18,26 @@ namespace Rovia.UI.Automation.Tests.Application
         {
             get { return InitializePage<AirResultsPage>("AirResultsControls"); }
         }
-        
+
+        public LoginDetailsPage LoginDetailsPage
+        {
+            get { return InitializePage<LoginDetailsPage>("LoginDetailsControls"); }
+        }
+
+        public TripFolderPage TripFolderPage
+        {
+            get { return InitializePage<TripFolderPage>("AirResultsControls"); }
+        }
+
+        public PassengerInfoPage PassengerInfoPage
+        {
+            get { return InitializePage<PassengerInfoPage>("PassengerInfoControls"); }
+        }
+
+        public CheckoutPage CheckoutPage
+        {
+            get { return InitializePage<CheckoutPage>("CheckoutControls"); }
+        }
 
         public bool SaveScreenshot(TestContext context)
         {
