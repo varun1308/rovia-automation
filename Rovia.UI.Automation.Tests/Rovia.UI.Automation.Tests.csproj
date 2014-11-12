@@ -98,7 +98,9 @@
     <None Include="Controls\HomeControls.csv" />
     <None Include="Controls\LoginDetailsControls.csv" />
     <None Include="Controls\PassengerInfoControls.csv" />
-    <None Include="DataSheet\AirScenarios.xlsx" />
+    <Content Include="DataSheet\AirScenarios.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Utility\KillChromeDriver.bat" />
   </ItemGroup>
   <ItemGroup>
