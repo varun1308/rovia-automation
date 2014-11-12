@@ -28,20 +28,19 @@ namespace Rovia.UI.Automation.Tests.Pages
             var preLoadingDiv = WaitAndGetBySelector("preloading", ApplicationSettings.TimeOut.Slow);
             while (preLoadingDiv != null && preLoadingDiv.Displayed)
             {
-                Thread.Sleep(2000);
-                var divPayNowfailed = WaitAndGetBySelector("divPayNowfailed", ApplicationSettings.TimeOut.Slow);
+                var bfcPageDiv = WaitAndGetBySelector("bfcPageDiv", ApplicationSettings.TimeOut.Safe);
+                var divPayNowfailed = WaitAndGetBySelector("divPayNowfailed", ApplicationSettings.TimeOut.SuperFast);
                 if (divPayNowfailed != null && divPayNowfailed.Displayed)
                     return false;
-                else
+                else if (bfcPageDiv != null && bfcPageDiv.Displayed)
                     return true;
             }
-
             return false;
         }
 
         internal bool MakePayment_CreditCard(PaymentFields paymentFields)
         {
-            var fillCcDetailsDiv = WaitAndGetBySelector("fillCCDetailsDiv", ApplicationSettings.TimeOut.Fast);
+            var fillCcDetailsDiv = WaitAndGetBySelector("fillCCDetailsDiv", ApplicationSettings.TimeOut.Safe);
             if (fillCcDetailsDiv != null && fillCcDetailsDiv.Displayed)
             {
                 Thread.Sleep(5000);
