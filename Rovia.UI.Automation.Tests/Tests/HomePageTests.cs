@@ -12,6 +12,7 @@ namespace Rovia.UI.Automation.Tests.Tests
     public class HomePageTests
     {
         private static RoviaApp _app;
+        public TestContext TestContext { get; set; }
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -50,7 +51,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                 SearchType = SearchType.OneWay,
                 AirportPairs = new List<AirportPair>{
                     new AirportPair()
-                {
+                {  
                     FromLocation = "LAS",
                     ToLocation = "LAX",
                     DepartureDateTime = DateTime.Today.AddDays(7)
