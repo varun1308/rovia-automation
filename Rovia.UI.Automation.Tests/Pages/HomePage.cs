@@ -1,345 +1,106 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Model;
 using Rovia.UI.Automation.Tests.Utility;
 using System.Threading;
-//using AirportPair = Rovia.UI.Automation.Tests.Model.AirportPair;
-//using SearchType = Rovia.UI.Automation.Tests.Model.SearchType;
 
 namespace Rovia.UI.Automation.Tests.Pages
 {
     public class HomePage : UIPage
     {
-        //internal void DoAirSearch(AirSearchScenario airScenario)
-        //{
-        //    var flights = WaitAndGetBySelector("flights", ApplicationSettings.TimeOut.Slow);
-        //    if (flights == null || !flights.Displayed)
-        //    {
-        //        Assert.Fail("Flights Nav Bar not displayed.");
-        //    }
-        //    flights.Click();
-
-        //    var flightPanel = WaitAndGetBySelector("flightsSearchPanel", ApplicationSettings.TimeOut.Safe);
-
-        //    if(flightPanel==null || !flightPanel.Displayed)
-        //        Assert.Fail("Flights Panel not displayed.");
-            
-        //    //check if journey is multicity
-        //    if (airScenario.SearchType == SearchType.Multicity)
-        //    {
-        //        var btnMulticity = WaitAndGetBySelector("flightJourneyTypeMulticity", ApplicationSettings.TimeOut.Fast);
-
-        //        if (btnMulticity == null || !btnMulticity.Displayed)
-        //            Assert.Fail("Multicity journey button not displayed.");
-        //        btnMulticity.Click();
-        //        for (int i = 0; i < airScenario.AirportPairs.Count; i++)
-        //        {
-        //            ExecuteJavascript("$('#depAP"+(i+1)+"').val('"+airScenario.AirportPairs[i].FromLocation+"')");
-        //            ExecuteJavascript("$('#retAP" + (i + 1) + "').val('" + airScenario.AirportPairs[i].ToLocation + "')");
-        //            ExecuteJavascript("$('input[val-rule=\"MDDepartureDate" + (i + 1) + "\"]').val('" + airScenario.AirportPairs[i].DepartureDateTime.ToString("MM/dd/yyyy") + "')");
-
-        //            if (i < airScenario.AirportPairs.Count-1)
-        //            {
-        //                WaitAndGetBySelector("btnaddflight", ApplicationSettings.TimeOut.Fast).Click();
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //check if return or one way
-        //        if (airScenario.SearchType == SearchType.OneWay)
-        //        {
-        //            var btnOneway = WaitAndGetBySelector("flightJourneyTypeOneWay", ApplicationSettings.TimeOut.Fast);
-
-        //            if (btnOneway == null || !btnOneway.Displayed)
-        //                Assert.Fail("One way journey button not displayed.");
-
-        //            btnOneway.Click();
-        //        }
-
-        //        //Enter from/to airports
-
-        //        var input = WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Fast);
-
-        //        input.SendKeys(airScenario.AirportPairs[0].FromLocation);
-
-        //        input = WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Fast);
-        //        input.SendKeys(airScenario.AirportPairs[0].ToLocation);
-
-        //        //enter date
-
-        //        input = WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Fast);
-
-        //        input.SendKeys(airScenario.AirportPairs[0].DepartureDateTime.ToString("MM/dd/yyyy"));
-
-        //        if (airScenario.SearchType == SearchType.Return)
-        //        {
-        //            input = WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Fast);
-
-        //            input.SendKeys(airScenario.AirportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
-        //        }
-        //    }
-
-        //    WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Adults.ToString());
-        //    WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Childs.ToString());
-        //    WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Infants.ToString());
-
-        //    WaitAndGetBySelector("btnSearch", ApplicationSettings.TimeOut.Fast).Click();
-        //}
-
-        #region Common
         internal bool IsVisible()
         {
-            var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow);
-            Thread.Sleep(500);
+            var div = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Safe);
+            //for selecting country
+            var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Safe);
             if (country != null && country.Displayed)
             {
                 country.SendKeys("United States");
-                WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.Slow).Click();
+                var saveCountry = WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.SuperFast);
+                saveCountry.Click();
             }
-            var div = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Slow);
             return div != null && div.Displayed;
         }
 
-        internal bool IsUserLoggedIn()
-        {
-            var anchor = WaitAndGetBySelector("logOut", ApplicationSettings.TimeOut.Slow);
-            return anchor != null && anchor.Displayed;
-        }
-
-        internal void DoAirSearch(string from, string to, DateTime onwardDateTime, bool isReturn, DateTime returnDateTime,
-        int adults = 1, int children = 0, int infants = 0)
+        internal void DoAirSearch(AirSearchScenario airScenario)
         {
             var flights = WaitAndGetBySelector("flights", ApplicationSettings.TimeOut.Slow);
-
             if (flights == null || !flights.Displayed)
             {
                 Assert.Fail("Flights Nav Bar not displayed.");
             }
-
             flights.Click();
 
-            Thread.Sleep(500);
-            var flightPanel = WaitAndGetBySelector("flightsSearchPanel", ApplicationSettings.TimeOut.Slow);
+            var flightPanel = WaitAndGetBySelector("flightsSearchPanel", ApplicationSettings.TimeOut.Safe);
 
-            if (flightPanel == null || !flightPanel.Displayed)
+            if(flightPanel==null || !flightPanel.Displayed)
                 Assert.Fail("Flights Panel not displayed.");
-
-            //check if return or one way
-            if (!isReturn)
+            
+            //check if journey is multicity
+            if (airScenario.SearchType == SearchType.Multicity)
             {
-                var btnOneway = WaitAndGetBySelector("flightJourneyTypeOneWay", ApplicationSettings.TimeOut.Fast);
+                var btnMulticity = WaitAndGetBySelector("flightJourneyTypeMulticity", ApplicationSettings.TimeOut.Fast);
 
-                if (btnOneway == null || !btnOneway.Displayed)
-                    Assert.Fail("One way journey button not displayed.");
+                if (btnMulticity == null || !btnMulticity.Displayed)
+                    Assert.Fail("Multicity journey button not displayed.");
+                btnMulticity.Click();
+                for (int i = 0; i < airScenario.AirportPairs.Count; i++)
+                {
+                    ExecuteJavascript("$('#depAP"+(i+1)+"').val('"+airScenario.AirportPairs[i].FromLocation+"')");
+                    ExecuteJavascript("$('#retAP" + (i + 1) + "').val('" + airScenario.AirportPairs[i].ToLocation + "')");
+                    ExecuteJavascript("$('input[val-rule=\"MDDepartureDate" + (i + 1) + "\"]').val('" + airScenario.AirportPairs[i].DepartureDateTime.ToString("MM/dd/yyyy") + "')");
 
-                btnOneway.Click();
+                    if (i < airScenario.AirportPairs.Count-1)
+                    {
+                        WaitAndGetBySelector("btnaddflight", ApplicationSettings.TimeOut.Fast).Click();
+                    }
+                }
             }
-
-            //Enter from/to airports
-
-            var input = WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Slow);
-
-            input.SendKeys(from);
-
-            input = WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Slow);
-            input.SendKeys(to);
-
-            //enter date
-
-            input = WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Slow);
-
-            input.SendKeys(onwardDateTime.ToString("MM/dd/yyyy"));
-
-            if (isReturn)
-            {
-                input = WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Slow);
-
-                input.SendKeys(onwardDateTime.ToString("MM/dd/yyyy"));
-            }
-
-            var combo = WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast);
-
-            combo.SelectFromDropDown(adults.ToString());
-
-            combo = WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast);
-
-            combo.SelectFromDropDown(children.ToString());
-
-            combo = WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast);
-
-            combo.SelectFromDropDown(infants.ToString());
-
-            var btnSearch = WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Fast);
-
-            btnSearch.Click();
-        }
-
-
-
-        internal void GoToLoginPage()
-        {
-            WaitAndGetBySelector("lnkLogIn", ApplicationSettings.TimeOut.Fast).Click();
-        }
-
-        internal void LogOut()
-        {
-            WaitAndGetBySelector("logOut", ApplicationSettings.TimeOut.Fast).Click();
-        }
-        #endregion
-
-        #region AirSearch
-        private void SelectFlightPanel()
-        {
-            var flights = WaitAndGetBySelector("flights", ApplicationSettings.TimeOut.Slow);
-            if (flights == null || !flights.Displayed)
-                Assert.Fail("Flights Nav Bar not displayed.");
-            flights.Click();
-
-            Thread.Sleep(500);
-
-            var flightPanel = WaitAndGetBySelector("flightsSearchPanel", ApplicationSettings.TimeOut.Slow);
-            if (flightPanel == null || !flightPanel.Displayed)
-                Assert.Fail("Flights Panel not displayed.");
-
-        }
-
-        private void SetFlightType(SearchType searchType)
-        {
-            switch (searchType)
-            {
-                case SearchType.OneWay: SelectOneWayFlight();
-                    break;
-                case SearchType.RoundTrip: SelectRoundTripFlight();
-                    break;
-                case SearchType.MultiCity: SelectMulticityFlight();
-                    break;
-
-            }
-        }
-        private void SelectOneWayFlight()
-        {
-            try
-            {
-                WaitAndGetBySelector("flightJourneyTypeOneWay", ApplicationSettings.TimeOut.Fast).Click();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("One way journey button not displayed", ex);
-            }
-        }
-        private void SelectMulticityFlight()
-        {
-            try
-            {
-                WaitAndGetBySelector("flightJourneyTypeMulticity", ApplicationSettings.TimeOut.Fast).Click();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Multicity journey button not displayed", ex);
-            }
-        }
-        private void SelectRoundTripFlight()
-        {
-            try
-            {
-                WaitAndGetBySelector("flightJourneyTypeRoundTrip", ApplicationSettings.TimeOut.Fast).Click();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("RoundTrip journey button not displayed", ex);
-            }
-        }
-
-        internal void Search(AirSearchCriteria airSearchCriteria)
-        {
-            SelectFlightPanel();
-            SelectCabinType(airSearchCriteria);
-            SetFlightType(airSearchCriteria.SearchType);
-            //check if return or one way
-            EnterAirports(airSearchCriteria.SearchType, airSearchCriteria.AirportPairs);
-            //Enter from/to airports
-            EnterPassengerDetails(airSearchCriteria.Passengers);
-            ApplyFilters(airSearchCriteria.Filters);
-            WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Fast).Click();
-        }
-
-        private void ApplyFilters(AirFilters filters)
-        {
-            ExecuteJavascript("$('.jCabinClass').siblings('div').find('.filter-option').text('" + filters.CabinType.ToString().Replace('_', ' ') + "')");
-            if (filters.IncludeNearByAirPorts)
-                WaitAndGetBySelector("includeNearByAirports", ApplicationSettings.TimeOut.SuperFast).Click();
-            if (filters.NonStopFlight)
-                ExecuteJavascript("$('#ulNonStopFlights').find('[data-value=\"NS\"]').click()");
-            if (filters.AirLines != null && filters.AirLines.Count != 0)
-                filters.AirLines.ForEach(x => ExecuteJavascript("$('#ulAirlines').find('[data-text=\"" + x + "\"]').click()"));
-
-        }
-
-        private void SelectCabinType(AirSearchCriteria airSearchCriteria)
-        {
-
-        }
-
-        private void EnterPassengerDetails(Passengers passengers)
-        {
-            try
-            {
-                WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Adults.ToString());
-                WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Children.ToString());
-                WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Infants.ToString());
-            }
-            catch (Exception Ex)
-            {
-                throw new Exception("Error while entering passenger details", Ex);
-            }
-        }
-
-        private void EnterAirports(SearchType searchType, List<AirportPair> airportPairs)
-        {
-            if (searchType == SearchType.MultiCity)
-                InputMultiCityAirPorts(airportPairs);
             else
             {
-                WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].DepartureAirport);
-                WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].ArrivalAirport);
-                WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].DepartureDateTime.ToString("MM/dd/yyyy"));
-                if (searchType == SearchType.RoundTrip)
-                    WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
+                //check if return or one way
+                if (airScenario.SearchType == SearchType.OneWay)
+                {
+                    var btnOneway = WaitAndGetBySelector("flightJourneyTypeOneWay", ApplicationSettings.TimeOut.Fast);
+
+                    if (btnOneway == null || !btnOneway.Displayed)
+                        Assert.Fail("One way journey button not displayed.");
+
+                    btnOneway.Click();
+                }
+
+                //Enter from/to airports
+
+                var input = WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Fast);
+
+                input.SendKeys(airScenario.AirportPairs[0].FromLocation);
+
+                input = WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Fast);
+                input.SendKeys(airScenario.AirportPairs[0].ToLocation);
+
+                //enter date
+
+                input = WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Fast);
+
+                input.SendKeys(airScenario.AirportPairs[0].DepartureDateTime.ToString("MM/dd/yyyy"));
+
+                if (airScenario.SearchType == SearchType.Return)
+                {
+                    input = WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Fast);
+
+                    input.SendKeys(airScenario.AirportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
+                }
             }
 
+            WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Adults.ToString());
+            WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Childs.ToString());
+            WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Infants.ToString());
+
+            WaitAndGetBySelector("btnSearch", ApplicationSettings.TimeOut.Fast).Click();
         }
-
-        private void InputMultiCityAirPorts(List<AirportPair> airportPairs)
-        {
-            var i = 1;
-            while (true)
-            {
-                ExecuteJavascript("$('#depAP" + i + "').val('" + airportPairs[i - 1].DepartureAirport + "')");
-                ExecuteJavascript("$('#retAP" + i + "').val('" + airportPairs[i - 1].ArrivalAirport + "')");
-                //WaitAndGetBySelector("$('.jsMDDepDate1')", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[i].DepartureDateTime.ToString("MM/dd/yyyy"));
-
-                //ExecuteJavascript("$('input[val-rule=MDDepartureDate" + i + "]').val('" + airportPairs[i - 1].DepartureDateTime.ToString("MM/dd/yyyy") + "')");//.val('" + airportPairs[i].DepartureDateTime.ToString("MM/dd/yyyy") + "')");
-                if (i == airportPairs.Count)
-                    break;
-                WaitAndGetBySelector("addFlight", ApplicationSettings.TimeOut.Fast).Click();
-                ++i;
-            }
-            i = 0;
-            var dates = GetUIElements("dates").Skip(2).Take(airportPairs.Count).ToList();
-            dates.ForEach(x => x.SendKeys(airportPairs[i++].DepartureDateTime.ToString("MM/dd/yyyy")));
-            dates[0].Click();
-        }
-
-
-        #endregion
 
 
     }
