@@ -29,7 +29,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                 WaitAndGetBySelector("btnaddToCart", ApplicationSettings.TimeOut.Slow).Click();
                 
-                var divloader = WaitAndGetBySelector("divloader", ApplicationSettings.TimeOut.Fast);
+                var divloader = WaitAndGetBySelector("divloader", ApplicationSettings.TimeOut.Slow);
                 while (divloader != null && divloader.Displayed)
                 Thread.Sleep(500);
                 WaitAndGetBySelector("btncheckout", ApplicationSettings.TimeOut.Slow).Click();

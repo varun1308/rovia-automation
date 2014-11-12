@@ -14,7 +14,6 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 App = new RoviaApp();
                 App.Launch(ApplicationSettings.Url);
-                //Assert.IsTrue(App.HomePage.IsVisible());
             }
 
             [AssemblyCleanup]

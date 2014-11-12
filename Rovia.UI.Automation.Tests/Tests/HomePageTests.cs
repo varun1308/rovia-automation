@@ -122,7 +122,6 @@ namespace Rovia.UI.Automation.Tests.Tests
         [TestCategory("Sanity")]
         public void PreferedCust_BookingFlow_CreditCard_Success()
         {
-
             #region search for flight
             AirSearchScenario airScenario = new AirSearchScenario()
             {
@@ -132,9 +131,9 @@ namespace Rovia.UI.Automation.Tests.Tests
                 SearchType = SearchType.OneWay,
                 AirportPairs = new List<AirportPair>{new AirportPair()
                 {
-                    FromLocation = "LAX",
-                    ToLocation = "MIA",
-                    DepartureDateTime = DateTime.Today.AddDays(7)
+                    FromLocation = "DFW",
+                    ToLocation = "LAS",
+                    DepartureDateTime = DateTime.Today.AddDays(10)
                 }}
             };
             _app.HomePage.DoAirSearch(airScenario);
@@ -325,7 +324,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                 {
                     FromLocation = "LAS",
                     ToLocation = "MIA",
-                    DepartureDateTime = DateTime.Today.AddDays(7)
+                    DepartureDateTime = DateTime.Today.AddDays(8)
                 }}
             };
             _app.HomePage.DoAirSearch(airScenario);

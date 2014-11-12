@@ -24,7 +24,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 
             Thread.Sleep(1000);
             //var isLoginSuccessHome = WaitAndGetBySelector("loginsuccessHome", ApplicationSettings.TimeOut.Slow);
-            var isLoginSuccessTrip = WaitAndGetBySelector("loginsuccessTrip", ApplicationSettings.TimeOut.Slow);
+            var isLoginSuccessTrip = WaitAndGetBySelector("loginsuccessTrip", ApplicationSettings.TimeOut.Safe);
             if ((isLoginSuccessTrip != null && isLoginSuccessTrip.Displayed))
                 return true;
             else

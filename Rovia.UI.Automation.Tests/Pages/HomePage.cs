@@ -13,7 +13,6 @@ namespace Rovia.UI.Automation.Tests.Pages
     {
         internal bool IsVisible()
         {
-            var div = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Safe);
             //for selecting country
             var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Safe);
             if (country != null && country.Displayed)
@@ -22,6 +21,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 var saveCountry = WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.SuperFast);
                 saveCountry.Click();
             }
+            var div = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Safe);
             return div != null && div.Displayed;
         }
 
