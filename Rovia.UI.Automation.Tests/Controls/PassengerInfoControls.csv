@@ -1,0 +1,20 @@
+divCartLoaded,#dvDispOnCartLoaded
+countryInsurance,select.jsInsCountry.span12
+divInsuranceAvailable,div.jsTravelInsurance
+checkforInsurance,input[type="checkbox"]
+firstname,input.span12.jsFName
+middlename,input.span12.jsMName
+lastname,input.span12.jsLName
+pxsuffix,select.span10.jsSuffix
+selfholder,div.jsSelfHolder input[type="checkbox"]
+DOB,input.span7.jsDob
+emailid,input.span11.jsEmail
+verifyemailid,input.span11.jsVEmail
+gender,select.span10.jsGender
+redressnum,input.span12.jsRedressNo
+PassId,input.span12.jsPassId
+airline,select.span10.font12.jsAirline
+freqflyernum,input.span8.jsFFNumber
+Submitbutton,a#lnkSubmitPax
+ConfirmPxButton,a.btn.btn-warning.pull-right.jsBtnConfirm
+SpinningDiv,div#divCartLoadProgress
