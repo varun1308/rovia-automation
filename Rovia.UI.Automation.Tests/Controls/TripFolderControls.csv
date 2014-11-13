@@ -1,0 +1,11 @@
+totalItems,div.mhl .span7 .font14 strong
+divTripsHolder,div.jsItemsHolder
+pruductType, div.border-grey.mal
+productName, span.text-boxtitle
+totalFare,span.price
+totalPassengers,div.font11.mbl
+fareBreakup,div[class="font11"]
+modifyItemClick,a.font12.mrl.jsModifyItem
+removeItemClick,a.font12.mhl.jsDeleteCartItem
+continueShopping,a#aSearchHome
+checkoutButton,a#aCheckout

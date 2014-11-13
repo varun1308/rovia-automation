@@ -42,7 +42,7 @@ namespace Rovia.UI.Automation.Tests.Application
 
         public TripFolderPage TripFolderPage
         {
-            get { return InitializePage<TripFolderPage>("AirResultsControls"); }
+            get { return InitializePage<TripFolderPage>("TripFolderControls"); }
         }
 
         public PassengerInfoPage PassengerInfoPage

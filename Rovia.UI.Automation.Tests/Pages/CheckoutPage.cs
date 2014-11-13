@@ -17,14 +17,10 @@ namespace Rovia.UI.Automation.Tests.Pages
             var fillCcDetailsDiv = WaitAndGetBySelector("fillCCDetailsDiv", ApplicationSettings.TimeOut.Safe);
             while (fillCcDetailsDiv != null && !fillCcDetailsDiv.Displayed)
                 break;
-            //ExecuteJavascript("$('#chkTNC').prop('checked',true)");
-            //ExecuteJavascript("$('.jsBtnPayNow.btn.btn-warning').click()");
-
+            
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Safe).Click();
-            //WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click();
-            ExecuteJavascript("$('.jsBtnPayNow.btn.btn-warning').click()");
+            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click();
 
-            //Need to handle failure case as of now assumed success case
             var preLoadingDiv = WaitAndGetBySelector("preloading", ApplicationSettings.TimeOut.Slow);
             while (preLoadingDiv != null && preLoadingDiv.Displayed)
             {
