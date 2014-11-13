@@ -11,39 +11,24 @@ using Rovia.UI.Automation.Tests.Utility;
 
 namespace Rovia.UI.Automation.Tests.Pages
 {
-    public class AirResultsPage : UIPage
+    public class AirResultsPage : UIPage,IResultsPage
     {
-        internal bool AddToCart()
-        {
-            var div = WaitAndGetBySelector("divResults", ApplicationSettings.TimeOut.Slow);
-            if (div != null && div.Displayed)
-            {
-                WaitAndGetBySelector("btnaddToCart", ApplicationSettings.TimeOut.Slow).Click();
-                
-                var divloader = WaitAndGetBySelector("divloader", ApplicationSettings.TimeOut.Slow);
-                while (divloader != null && divloader.Displayed)
-                Thread.Sleep(500);
-                WaitAndGetBySelector("btncheckout", ApplicationSettings.TimeOut.Slow).Click();
-                while (IsTripFolderVisible())
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
         
-        private static Dictionary<AirResult, IUIWebElement> _results;
-        internal bool IsWaitingVisible()
+        private static Dictionary<Results, IUIWebElement> _results;
+
+        #region private member functions
+        private bool IsWaitingVisible()
         {
             var div = WaitAndGetBySelector("divWaiting", ApplicationSettings.TimeOut.Fast);
             return div != null && div.Displayed;
         }
 
-        internal bool IsResultsVisible()
+        private bool IsResultsVisible()
         {
             var div = WaitAndGetBySelector("divMatrix", ApplicationSettings.TimeOut.Slow);
             return div != null && div.Displayed;
         }
+
         private bool AddToCart(IUIWebElement btnAddToCart)
         {
 
@@ -55,53 +40,16 @@ namespace Rovia.UI.Automation.Tests.Pages
                     break;
                 Thread.Sleep(1000);
             }
-            var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Fast);
-            if (btnCheckOut != null)
+            var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Slow);
+            if (btnCheckOut != null && btnCheckOut.Displayed )
             {
                 btnCheckOut.Click();
                 return true;
             }
 
-            WaitAndGetBySelector("btnCancel", ApplicationSettings.TimeOut.Fast);
+            WaitAndGetBySelector("btnCancel", ApplicationSettings.TimeOut.Slow).Click();
             return false;
 
-        }
-
-        internal void AddToCart(List<AirResult> result)
-        {
-            WaitForResultLoad();
-            if (result.Any(airResult => AddToCart(_results[airResult])))
-            {
-                return;
-            }
-            throw new Exception("AddToCartFailed");
-        }
-
-        private void WaitForResultLoad()
-        {
-            while (IsWaitingVisible())
-            {
-                Thread.Sleep(2000);
-                if (IsResultsVisible())
-                    break;
-            }
-        }
-
-        internal List<AirResult> ParseResults()
-        {
-
-            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
-            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
-            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
-            var supplier = GetUIElements("supplier").Select(x => x.GetAttribute("title")).ToArray();
-            var addToCartControl = GetUIElements("btnaddToCart");
-            ProcessairLines(airLines, subair);
-            _results = new Dictionary<AirResult, IUIWebElement>();
-            for (var i = 0; i < addToCartControl.Count; i++)
-            {
-                _results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], null), addToCartControl[i]);
-            }
-            return _results.Keys.ToList();
         }
 
         private void ProcessairLines(List<string> airLines, List<string> subair)
@@ -142,12 +90,57 @@ namespace Rovia.UI.Automation.Tests.Pages
                 TotalAmount = double.Parse(total[0].Remove(0, 1)),
                 AmountPerPerson = double.Parse(perHead[0].Remove(0, 1))
             };
+        } 
+        #endregion
+
+        #region IResultsPage Member Functions
+        public void AddToCart(List<Results> result)
+        {
+
+            if (result.Any(airResult => AddToCart(_results[airResult])))
+            {
+                return;
+            }
+            throw new Exception("AddToCartFailed");
         }
 
-        internal bool IsTripFolderVisible()
+        public void WaitForResultLoad()
         {
-            var tfCheckout = WaitAndGetBySelector("tfCheckout", ApplicationSettings.TimeOut.Slow);
-            return tfCheckout != null && tfCheckout.Displayed;
+            try
+            {
+                while (IsWaitingVisible())
+                {
+                    Thread.Sleep(2000);
+                    if (IsResultsVisible())
+                        break;
+                }
+                if (!IsResultsVisible())
+                    throw new Exception("Results Not visible");
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Results failed to load", exception);
+            }
         }
+
+        public List<Results> ParseResults()
+        {
+
+            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
+            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
+            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
+            var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
+            var addToCartControl = GetUIElements("btnAddToCart");
+            ProcessairLines(airLines, subair);
+            _results = new Dictionary<Results, IUIWebElement>();
+            for (var i = 0; i < addToCartControl.Count; i++)
+            {
+                _results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], null), addToCartControl[i]);
+            }
+            return _results.Keys.ToList();
+        } 
+        #endregion
+
+        
     }
 }

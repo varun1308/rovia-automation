@@ -21,6 +21,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         {
             TestHelper.DataBinder = new AirScenarioDataBinder();
             _app = TestHelper.App;
+            
         }
 
         [TestInitialize]
@@ -42,62 +43,6 @@ namespace Rovia.UI.Automation.Tests.Tests
             Assert.IsTrue(_app.HomePage.IsVisible(), "Home was unavailable");
         }
 
-        //[TestMethod]
-        //[TestCategory("Sanity")]
-        //public void CheckFlightsWorking()
-        //{
-        //    AirSearchScenario airScenario = new AirSearchScenario()
-        //    {
-        //        Adults = 1,
-        //        Childs = 0,
-        //        Infants = 0,
-        //        SearchType = SearchType.OneWay,
-        //        AirportPairs = new List<AirportPair>{
-        //            new AirportPair()
-        //        {
-        //            FromLocation = "LAS",
-        //            ToLocation = "LAX",
-        //            DepartureDateTime = DateTime.Today.AddDays(7)
-        //        }
-        //        }
-        //    };
-        //    _app.HomePage.DoAirSearch(airScenario);
-
-        //    while (_app.AirResultsPage.IsWaitingVisible())
-        //    {
-        //        Thread.Sleep(2000);
-        //        if (_app.AirResultsPage.IsResultsVisible())
-        //            break;
-        //    }
-        //    Assert.IsTrue(_app.AirResultsPage.IsResultsVisible(), "Results not found");
-        //}
-
-        //[TestMethod]
-        //[TestCategory("Sanity")]
-        //public void AddFlightToCart()
-        //{
-        //    AirSearchScenario airScenario = new AirSearchScenario()
-        //    {
-        //        Adults = 1,
-        //        Childs = 0,
-        //        Infants = 0,
-        //        SearchType = SearchType.OneWay,
-        //        AirportPairs = new List<AirportPair>{new AirportPair()
-        //        {
-        //            FromLocation = "LAS",
-        //            ToLocation = "LAX",
-        //            DepartureDateTime = DateTime.Today.AddDays(7)
-        //        }}
-        //    };
-        //    _app.HomePage.DoAirSearch(airScenario);
-
-        //    while (_app.AirResultsPage.IsWaitingVisible())
-        //    {
-        //        Thread.Sleep(2000);
-        //        if (_app.AirResultsPage.IsResultsVisible())
-        //            Assert.IsTrue(_app.AirResultsPage.AddToCart(), "Itinerary not available");
-        //    }
-        //}
 
         [TestMethod]
         [TestCategory("Sanity")]
@@ -106,73 +51,62 @@ namespace Rovia.UI.Automation.Tests.Tests
         {
             TestHelper.SetCriteria(TestContext.DataRow);
             TestHelper.Search();
+            TestHelper.AddToCart();
 
-            while (_app.AirResultsPage.IsWaitingVisible())
+            Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
+
+            //for registered user can login
+            Assert.IsTrue(_app.LoginDetailsPage.Login(), "Login Failed");
+
+            #region submit passenger details
+            PassengerDetails pes = new PassengerDetails()
             {
-                Thread.Sleep(2000);
-                
-                if (_app.AirResultsPage.IsResultsVisible())
+                InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
+                FirstName = "Vikul",
+                LastName = "Rathod",
+                DOB = "09/16/1989",
+                Gender = "Male",
+                Emailid = "vrathod@tavisca.com"
+            };
+            _app.PassengerInfoPage.SubmitPassengerDetails(pes);
+            #endregion
+
+            Thread.Sleep(1000);
+
+            //check if itinerary available or price not changed before actual payment
+            Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_CreditCard(), "Itinerary not available or Price has changed.");
+
+            #region pay by credit card
+            PaymentFields paymentFields = new PaymentFields()
+            {
+                EmailAddress = "vrathod@tavisca.com",
+                CreditCard = new CreditCard()
                 {
-                    //if results available add first flight to cart
-                    Assert.IsTrue(_app.AirResultsPage.AddToCart(), "Itinerary not available.");
-
-                    Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
-
-                    //for registered user can login
-                    Assert.IsTrue(_app.LoginDetailsPage.Login(), "Login Failed");
-
-                    #region submit passenger details
-                    PassengerDetails pes = new PassengerDetails()
-                    {
-                        InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
-                        FirstName = "Vikul",
-                        LastName = "Rathod",
-                        DOB = "09/16/1989",
-                        Gender = "Male",
-                        Emailid = "vrathod@tavisca.com"
-                    };
-                    _app.PassengerInfoPage.SubmitPassengerDetails(pes);
-                    #endregion
-
-                    Thread.Sleep(1000);
-
-                    //check if itinerary available or price not changed before actual payment
-                    Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_CreditCard(), "Itinerary not available or Price has changed.");
-
-                    #region pay by credit card
-                    PaymentFields paymentFields = new PaymentFields()
-                    {
-                        EmailAddress = "vrathod@tavisca.com",
-                        CreditCard = new CreditCard()
-                        {
-                            NameOnCard = "Vikul Rathod",
-                            CardNumber = "4111111111111111",
-                            SecurityCode = 999,
-                            ExpirationMonth = 10,
-                            ExpirationYear = 2015
-                        },
-                        Address = new Address()
-                        {
-                            Address1 = "888 main",
-                            City = "Plano",
-                            Country = "US",
-                            PostalCode = "77777",
-                            Provinces = "TX"
-                        },
-                        PhoneNumber = new PhoneNumber()
-                        {
-                            PhoneNumberArea = "222",
-                            PhoneNumberExchange = "223",
-                            PhoneNumberDigits = "7777",
-                        }
-                    };
-
-                    Assert.IsTrue(_app.CheckoutPage.MakePayment_CreditCard(paymentFields), "Payment Failed");
-                    #endregion
-
-                    break;
+                    NameOnCard = "Vikul Rathod",
+                    CardNumber = "4111111111111111",
+                    SecurityCode = 999,
+                    ExpirationMonth = 10,
+                    ExpirationYear = 2015
+                },
+                Address = new Address()
+                {
+                    Address1 = "888 main",
+                    City = "Plano",
+                    Country = "US",
+                    PostalCode = "77777",
+                    Provinces = "TX"
+                },
+                PhoneNumber = new PhoneNumber()
+                {
+                    PhoneNumberArea = "222",
+                    PhoneNumberExchange = "223",
+                    PhoneNumberDigits = "7777",
                 }
-            }
+            };
+
+            Assert.IsTrue(_app.CheckoutPage.MakePayment_CreditCard(paymentFields), "Payment Failed");
+            #endregion
+
         }
 
         [TestMethod]
@@ -183,84 +117,76 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.SetCriteria(TestContext.DataRow);
             TestHelper.Search();
 
-            while (_app.AirResultsPage.IsWaitingVisible())
+            TestHelper.AddToCart();
+
+            Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
+
+            #region Guest User Registration
+            //for guest user asks for login on checkout page and he will register here
+            //please change email id before run this test case
+            NewUserRegistration newUser = new NewUserRegistration()
             {
-                Thread.Sleep(2000);
-                
-                if (_app.AirResultsPage.IsResultsVisible())
+                FName = "Vikul",
+                LName = "Rathod",
+                EmailId = "vikulr@gmail.com",
+                DOB = "09/16/1989",
+                Password = "Vikul1989"
+            };
+            Assert.IsTrue(_app.LoginDetailsPage.NewUserRegistration(newUser), "Registration Failed");
+
+            Assert.IsTrue(_app.LoginDetailsPage.PreferedCustomerRegistration(), "Error during pref cust registration");
+
+            #endregion
+
+            #region submit passenger details
+            PassengerDetails pes = new PassengerDetails()
+            {
+                InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
+                FirstName = "Vikul",
+                LastName = "Rathod",
+                DOB = "09/16/1989",
+                Gender = "Male",
+                Emailid = "vrathod@tavisca.com"
+            };
+            _app.PassengerInfoPage.SubmitPassengerDetails(pes);
+            #endregion
+
+            Thread.Sleep(1000);
+
+            //check if itinerary available or price not changed before actual payment
+            Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_CreditCard(), "Itinerary not available or Price has changed.");
+
+            #region pay by credit card
+            PaymentFields paymentFields = new PaymentFields()
+            {
+                EmailAddress = "vrathod@tavisca.com",
+                CreditCard = new CreditCard()
                 {
-                    //if results available add first flight to cart
-                    Assert.IsTrue(_app.AirResultsPage.AddToCart(), "Itinerary not available.");
-
-                    Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
-
-                    #region Guest User Registration
-                    //for guest user asks for login on checkout page and he will register here
-                    //please change email id before run this test case
-                    NewUserRegistration newUser = new NewUserRegistration()
-                    {
-                        FName = "Vikul",LName = "Rathod",
-                        EmailId = "vikulr@gmail.com",DOB ="09/16/1989",
-                        Password = "Vikul1989"
-                    };
-                    Assert.IsTrue(_app.LoginDetailsPage.NewUserRegistration(newUser), "Registration Failed");
-
-                    Assert.IsTrue(_app.LoginDetailsPage.PreferedCustomerRegistration(),"Error during pref cust registration");
-
-                    #endregion
-
-                    #region submit passenger details
-                    PassengerDetails pes = new PassengerDetails()
-                    {
-                        InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
-                        FirstName = "Vikul",
-                        LastName = "Rathod",
-                        DOB = "09/16/1989",
-                        Gender = "Male",
-                        Emailid = "vrathod@tavisca.com"
-                    };
-                    _app.PassengerInfoPage.SubmitPassengerDetails(pes);
-                    #endregion
-
-                    Thread.Sleep(1000);
-
-                    //check if itinerary available or price not changed before actual payment
-                    Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_CreditCard(), "Itinerary not available or Price has changed.");
-
-                    #region pay by credit card
-                    PaymentFields paymentFields = new PaymentFields()
-                    {
-                        EmailAddress = "vrathod@tavisca.com",
-                        CreditCard = new CreditCard()
-                        {
-                            NameOnCard = "Vikul Rathod",
-                            CardNumber = "4111111111111111",
-                            SecurityCode = 999,
-                            ExpirationMonth = 10,
-                            ExpirationYear = 2015
-                        },
-                        Address = new Address()
-                        {
-                            Address1 = "888 main",
-                            City = "Plano",
-                            Country = "US",
-                            PostalCode = "77777",
-                            Provinces = "TX"
-                        },
-                        PhoneNumber = new PhoneNumber()
-                        {
-                            PhoneNumberArea = "222",
-                            PhoneNumberExchange = "223",
-                            PhoneNumberDigits = "7777",
-                        }
-                    };
-
-                    Assert.IsTrue(_app.CheckoutPage.MakePayment_CreditCard(paymentFields), "Payment Failed");
-                    #endregion
-
-                    break;
+                    NameOnCard = "Vikul Rathod",
+                    CardNumber = "4111111111111111",
+                    SecurityCode = 999,
+                    ExpirationMonth = 10,
+                    ExpirationYear = 2015
+                },
+                Address = new Address()
+                {
+                    Address1 = "888 main",
+                    City = "Plano",
+                    Country = "US",
+                    PostalCode = "77777",
+                    Provinces = "TX"
+                },
+                PhoneNumber = new PhoneNumber()
+                {
+                    PhoneNumberArea = "222",
+                    PhoneNumberExchange = "223",
+                    PhoneNumberDigits = "7777",
                 }
-            }
+            };
+
+            Assert.IsTrue(_app.CheckoutPage.MakePayment_CreditCard(paymentFields), "Payment Failed");
+            #endregion
+
         }
 
         [TestMethod]
@@ -270,62 +196,48 @@ namespace Rovia.UI.Automation.Tests.Tests
         {
             TestHelper.SetCriteria(TestContext.DataRow);
             TestHelper.Search();
-           
-            while (_app.AirResultsPage.IsWaitingVisible())
+            TestHelper.AddToCart();
+            Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
+        
+            TestHelper.Login();
+
+            #region submit passenger details
+            PassengerDetails pes = new PassengerDetails()
             {
-                Thread.Sleep(2000);
+                InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
+                FirstName = "Vikul",
+                LastName = "Rathod",
+                DOB = "09/16/1989",
+                Gender = "Male",
+                Emailid = "vrathod@tavisca.com"
+            };
+            _app.PassengerInfoPage.SubmitPassengerDetails(pes);
+            #endregion
 
-                if (_app.AirResultsPage.IsResultsVisible())
+            Thread.Sleep(1000);
+
+            #region pay by credit card
+            PaymentFields paymentFields = new PaymentFields()
+            {
+                EmailAddress = "vrathod@tavisca.com",
+                Address = new Address()
                 {
-                    //if results available add first flight to cart
-                    Assert.IsTrue(_app.AirResultsPage.AddToCart(), "Itinerary not available.");
-
-                    Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
-
-                    //for registered user can login
-                    Assert.IsTrue(_app.LoginDetailsPage.Login(), "Login Failed");
-
-                    #region submit passenger details
-                    PassengerDetails pes = new PassengerDetails()
-                    {
-                        InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
-                        FirstName = "Vikul",
-                        LastName = "Rathod",
-                        DOB = "09/16/1989",
-                        Gender = "Male",
-                        Emailid = "vrathod@tavisca.com"
-                    };
-                    _app.PassengerInfoPage.SubmitPassengerDetails(pes);
-                    #endregion
-
-                    Thread.Sleep(1000);
-                    
-                    #region pay by credit card
-                    PaymentFields paymentFields = new PaymentFields()
-                    {
-                        EmailAddress = "vrathod@tavisca.com",
-                        Address = new Address()
-                        {
-                            Address1 = "888 main",
-                            City = "Plano",
-                            Country = "US",
-                            PostalCode = "77777",
-                            Provinces = "TX"
-                        },
-                        PhoneNumber = new PhoneNumber()
-                        {
-                            PhoneNumberArea = "222",
-                            PhoneNumberExchange = "223",
-                            PhoneNumberDigits = "7777",
-                        }
-                    };
-
-                    Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_RB(paymentFields), "Booking failed with Rovia Bucks");
-                    #endregion
-
-                    break;
+                    Address1 = "888 main",
+                    City = "Plano",
+                    Country = "US",
+                    PostalCode = "77777",
+                    Provinces = "TX"
+                },
+                PhoneNumber = new PhoneNumber()
+                {
+                    PhoneNumberArea = "222",
+                    PhoneNumberExchange = "223",
+                    PhoneNumberDigits = "7777",
                 }
-            }
+            };
+
+            Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_RB(paymentFields), "Booking failed with Rovia Bucks");
+            #endregion
         }
     }
 }

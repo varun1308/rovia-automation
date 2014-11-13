@@ -2,7 +2,7 @@ divHome,.home_header_utility
 country,select.span12.jCountrySelect
 saveCountry,a.btn.btn-primary.span12.jSaveBtn
 lnkLogIn,a#ucPWP_ctl09_5270_ucHeaderMenu_lnkLogin
-logOut,a#ucPWP_ctl08_13082_ucHeaderMenu_lnkLogout
+logOut,a#ucPWP_ctl09_5270_ucHeaderMenu_lnkLogout 
 flights,ul.nav.fontUpperCase li.ico_flights
 flightsSearchPanel,div[data-producttype="flight"]
 flightJourneyTypeOneWay,div.tripbuttons button[data-triptype="0"]
