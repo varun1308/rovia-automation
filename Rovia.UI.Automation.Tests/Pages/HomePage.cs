@@ -18,82 +18,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 {
     public class HomePage : UIPage
     {
-        //internal void DoAirSearch(AirSearchScenario airScenario)
-        //{
-        //    var flights = WaitAndGetBySelector("flights", ApplicationSettings.TimeOut.Slow);
-        //    if (flights == null || !flights.Displayed)
-        //    {
-        //        Assert.Fail("Flights Nav Bar not displayed.");
-        //    }
-        //    flights.Click();
-
-        //    var flightPanel = WaitAndGetBySelector("flightsSearchPanel", ApplicationSettings.TimeOut.Safe);
-
-        //    if(flightPanel==null || !flightPanel.Displayed)
-        //        Assert.Fail("Flights Panel not displayed.");
-            
-        //    //check if journey is multicity
-        //    if (airScenario.SearchType == SearchType.Multicity)
-        //    {
-        //        var btnMulticity = WaitAndGetBySelector("flightJourneyTypeMulticity", ApplicationSettings.TimeOut.Fast);
-
-        //        if (btnMulticity == null || !btnMulticity.Displayed)
-        //            Assert.Fail("Multicity journey button not displayed.");
-        //        btnMulticity.Click();
-        //        for (int i = 0; i < airScenario.AirportPairs.Count; i++)
-        //        {
-        //            ExecuteJavascript("$('#depAP"+(i+1)+"').val('"+airScenario.AirportPairs[i].FromLocation+"')");
-        //            ExecuteJavascript("$('#retAP" + (i + 1) + "').val('" + airScenario.AirportPairs[i].ToLocation + "')");
-        //            ExecuteJavascript("$('input[val-rule=\"MDDepartureDate" + (i + 1) + "\"]').val('" + airScenario.AirportPairs[i].DepartureDateTime.ToString("MM/dd/yyyy") + "')");
-
-        //            if (i < airScenario.AirportPairs.Count-1)
-        //            {
-        //                WaitAndGetBySelector("btnaddflight", ApplicationSettings.TimeOut.Fast).Click();
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //check if return or one way
-        //        if (airScenario.SearchType == SearchType.OneWay)
-        //        {
-        //            var btnOneway = WaitAndGetBySelector("flightJourneyTypeOneWay", ApplicationSettings.TimeOut.Fast);
-
-        //            if (btnOneway == null || !btnOneway.Displayed)
-        //                Assert.Fail("One way journey button not displayed.");
-
-        //            btnOneway.Click();
-        //        }
-
-        //        //Enter from/to airports
-
-        //        var input = WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Fast);
-
-        //        input.SendKeys(airScenario.AirportPairs[0].FromLocation);
-
-        //        input = WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Fast);
-        //        input.SendKeys(airScenario.AirportPairs[0].ToLocation);
-
-        //        //enter date
-
-        //        input = WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Fast);
-
-        //        input.SendKeys(airScenario.AirportPairs[0].DepartureDateTime.ToString("MM/dd/yyyy"));
-
-        //        if (airScenario.SearchType == SearchType.Return)
-        //        {
-        //            input = WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Fast);
-
-        //            input.SendKeys(airScenario.AirportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
-        //        }
-        //    }
-
-        //    WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Adults.ToString());
-        //    WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Childs.ToString());
-        //    WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(airScenario.Infants.ToString());
-
-        //    WaitAndGetBySelector("btnSearch", ApplicationSettings.TimeOut.Fast).Click();
-        //}
+        
 
         #region Common
         internal bool IsVisible()
@@ -262,7 +187,6 @@ namespace Rovia.UI.Automation.Tests.Pages
         internal void Search(AirSearchCriteria airSearchCriteria)
         {
             SelectFlightPanel();
-            SelectCabinType(airSearchCriteria);
             SetFlightType(airSearchCriteria.SearchType);
             //check if return or one way
             EnterAirports(airSearchCriteria.SearchType, airSearchCriteria.AirportPairs);
@@ -281,11 +205,6 @@ namespace Rovia.UI.Automation.Tests.Pages
                 ExecuteJavascript("$('#ulNonStopFlights').find('[data-value=\"NS\"]').click()");
             if (filters.AirLines != null && filters.AirLines.Count != 0)
                 filters.AirLines.ForEach(x => ExecuteJavascript("$('#ulAirlines').find('[data-text=\"" + x + "\"]').click()"));
-
-        }
-
-        private void SelectCabinType(AirSearchCriteria airSearchCriteria)
-        {
 
         }
 
@@ -325,9 +244,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                 ExecuteJavascript("$('#depAP" + i + "').val('" + airportPairs[i - 1].DepartureAirport + "')");
                 ExecuteJavascript("$('#retAP" + i + "').val('" + airportPairs[i - 1].ArrivalAirport + "')");
-                //WaitAndGetBySelector("$('.jsMDDepDate1')", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[i].DepartureDateTime.ToString("MM/dd/yyyy"));
-
-                //ExecuteJavascript("$('input[val-rule=MDDepartureDate" + i + "]').val('" + airportPairs[i - 1].DepartureDateTime.ToString("MM/dd/yyyy") + "')");//.val('" + airportPairs[i].DepartureDateTime.ToString("MM/dd/yyyy") + "')");
+                
                 if (i == airportPairs.Count)
                     break;
                 WaitAndGetBySelector("addFlight", ApplicationSettings.TimeOut.Fast).Click();

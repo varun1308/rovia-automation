@@ -10,5 +10,7 @@ namespace Rovia.UI.Automation.Tests.Application
     {
         public string CurrentPage { get; set; }
         public User CurrentUser { get; set; }
+        public string CurrentProduct { get; set; }
+        
     }
 }

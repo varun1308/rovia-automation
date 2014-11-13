@@ -17,6 +17,7 @@ namespace Rovia.UI.Automation.DataBinder
         
             return new AirSearchCriteria()
             {
+                ProductType = ProductType.Air,
                 UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
                 Description = (string)dataRow["Description"],
                 AirportPairs = ParseAirPorts(dataRow["AirPortPairs"].ToString(), dataRow["TravelDates"].ToString(), searchType),

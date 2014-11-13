@@ -82,6 +82,7 @@
     <Compile Include="Pages\AirResultsPage.cs" />
     <Compile Include="Pages\CheckoutPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Pages\IResultsPage.cs" />
     <Compile Include="Pages\LoginDetailsPage.cs" />
     <Compile Include="Pages\PassengerInfoPage.cs" />
     <Compile Include="Pages\TripFolderPage.cs" />
@@ -91,7 +92,9 @@
     <Compile Include="Utility\Testhelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Controls\AirResultsControls.csv" />
     <None Include="Controls\CheckoutControls.csv" />
     <None Include="Controls\HomeControls.csv" />

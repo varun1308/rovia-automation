@@ -81,5 +81,10 @@ namespace Rovia.UI.Automation.Tests.Pages
 
 
         }
+
+        internal void ContinueAsGuest()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

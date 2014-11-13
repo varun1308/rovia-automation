@@ -21,7 +21,9 @@ namespace Rovia.UI.Automation.Tests.Application
                 {
                     Type = UserType.Guest,
                     IsLoggedIn = false
-                }
+                },
+                CurrentProduct = "AIR"
+                
             };
         }
 
@@ -30,9 +32,17 @@ namespace Rovia.UI.Automation.Tests.Application
             get { return InitializePage<HomePage>("HomeControls"); }
         }
 
-        public AirResultsPage AirResultsPage
+        public IResultsPage ResultsPage
         {
-            get { return InitializePage<AirResultsPage>("AirResultsControls"); }
+            get
+            {
+                switch (State.CurrentProduct)
+                {
+                    case "AIR": return InitializePage<AirResultsPage>("AirResultsControls");
+                    default:
+                        return null;
+                }
+            }
         }
 
         public LoginDetailsPage LoginDetailsPage
@@ -77,9 +87,6 @@ namespace Rovia.UI.Automation.Tests.Application
             return false;
         }
 
-        public void GoToHomePage()
-        {
-            Launch(ApplicationSettings.Url);
-        }
+        
     }
 }
