@@ -9,6 +9,6 @@ titleAirLines,div.text-boxtitle
 subTitleAirLines,div.text-subtitle
 suppliers,div.jsSupplierName
 btnAddToCart,a.btn_AddToCart
-btnCancel,a#btnCloseFlightPopup
+btnCancel,button#btnCloseFlightPopup
 btnContinue,button.jsContinue
 alerts,#dvAddToCartAir .alert

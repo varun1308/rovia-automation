@@ -49,12 +49,14 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.Login();
                 TestHelper.Search();
                 TestHelper.AddToCart();
+                TestHelper.CheckOut();
+                TestHelper.EnterPassengerDetails();
+                TestHelper.ConfirmPassengerDetails();
                 //_app.HomePage.Search(criteria);
                 //_app.AirResultsPage.AddToCart(TestHelper.ApplySpecialCriteria(criteria.SpecialCriteria));
             }
             catch (Exception exception)
             {
-                
                 Assert.Fail(exception.Message);
             }
         }

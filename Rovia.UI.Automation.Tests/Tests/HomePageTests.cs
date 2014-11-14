@@ -50,27 +50,13 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void PreferedCust_BookingFlow_CreditCard_Success()
         {
             TestHelper.SetCriteria(TestContext.DataRow);
+            TestHelper.Login();
             TestHelper.Search();
             TestHelper.AddToCart();
-
-            Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
-
-            //for registered user can login
-            Assert.IsTrue(_app.LoginDetailsPage.Login(), "Login Failed");
-
-            #region submit passenger details
-            PassengerDetails pes = new PassengerDetails()
-            {
-                InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
-                FirstName = "Vikul",
-                LastName = "Rathod",
-                DOB = "09/16/1989",
-                Gender = "Male",
-                Emailid = "vrathod@tavisca.com"
-            };
-            _app.PassengerInfoPage.SubmitPassengerDetails(pes);
-            #endregion
-
+            TestHelper.CheckOut();
+            TestHelper.EnterPassengerDetails();
+            TestHelper.ConfirmPassengerDetails();
+            
             Thread.Sleep(1000);
 
             //check if itinerary available or price not changed before actual payment
@@ -148,7 +134,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                 Gender = "Male",
                 Emailid = "vrathod@tavisca.com"
             };
-            _app.PassengerInfoPage.SubmitPassengerDetails(pes);
+            //_app.PassengerInfoPage.SubmitPassengerDetails(pes);
             #endregion
 
             Thread.Sleep(1000);
@@ -195,26 +181,30 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void PreferedCust_BookingFlow_RoviaBucks_Success()
         {
             TestHelper.SetCriteria(TestContext.DataRow);
+            TestHelper.Login();
             TestHelper.Search();
             TestHelper.AddToCart();
+            TestHelper.CheckOut();
+            TestHelper.EnterPassengerDetails();
+
             Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
         
-            TestHelper.Login();
+            
 
-            #region submit passenger details
-            PassengerDetails pes = new PassengerDetails()
-            {
-                InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
-                FirstName = "Vikul",
-                LastName = "Rathod",
-                DOB = "09/16/1989",
-                Gender = "Male",
-                Emailid = "vrathod@tavisca.com"
-            };
-            _app.PassengerInfoPage.SubmitPassengerDetails(pes);
-            #endregion
+            //#region submit passenger details
+            //PassengerDetails pes = new PassengerDetails()
+            //{
+            //    InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
+            //    FirstName = "Vikul",
+            //    LastName = "Rathod",
+            //    DOB = "09/16/1989",
+            //    Gender = "Male",
+            //    Emailid = "vrathod@tavisca.com"
+            //};
+            //_app.PassengerInfoPage.SubmitPassengerDetails(pes);
+            //#endregion
 
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
 
             #region pay by credit card
             PaymentFields paymentFields = new PaymentFields()

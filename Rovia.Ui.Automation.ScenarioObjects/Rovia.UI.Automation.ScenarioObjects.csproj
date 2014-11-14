@@ -39,12 +39,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adult.cs" />
     <Compile Include="AirFilters.cs" />
     <Compile Include="AirportPair.cs" />
     <Compile Include="AirResult.cs" />
     <Compile Include="Amount.cs" />
     <Compile Include="CabinType.cs" />
+    <Compile Include="Child.cs" />
     <Compile Include="FlightLegs.cs" />
+    <Compile Include="Infant.cs" />
+    <Compile Include="Passenger.cs" />
+    <Compile Include="PassengerDetails.cs" />
     <Compile Include="Passengers.cs" />
     <Compile Include="PaymentMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

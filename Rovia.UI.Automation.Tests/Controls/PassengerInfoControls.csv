@@ -1,16 +1,15 @@
 divCartLoaded,#dvDispOnCartLoaded
-countryInsurance,select.jsInsCountry.span12
-divInsuranceAvailable,div.jsTravelInsurance
-checkforInsurance,input[type="checkbox"]
-firstname,input.span12.jsFName
-middlename,input.span12.jsMName
-lastname,input.span12.jsLName
+country,select.jsInsCountry.span12
+selectInsurance,.jsTravelInsurance input[type="checkbox"]
+fNames,.jsFName
+mNames,.jsMName
+lNames,.jsLName
+eMail,.jsEmail
+vEmail,.jsVEmail
+gender,.jsGender
+dob,.jsDob
 pxsuffix,select.span10.jsSuffix
 selfholder,div.jsSelfHolder input[type="checkbox"]
-DOB,input.span7.jsDob
-emailid,input.span11.jsEmail
-verifyemailid,input.span11.jsVEmail
-gender,select.span10.jsGender
 redressnum,input.span12.jsRedressNo
 PassId,input.span12.jsPassId
 airline,select.span10.font12.jsAirline

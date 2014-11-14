@@ -1,41 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Model;
 using Rovia.UI.Automation.Tests.Utility;
+using Rovia.Ui.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.Tests.Pages
 {
    public class PassengerInfoPage : UIPage
     {
-       internal bool SubmitPassengerDetails(PassengerDetails passenger)
-       {
-           var spinningDiv = WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Slow);
-           while (spinningDiv != null && spinningDiv.Displayed);
-
-           Thread.Sleep(500);
-           var divCartLoaded= WaitAndGetBySelector("divCartLoaded", ApplicationSettings.TimeOut.Slow);
-           if (divCartLoaded != null && divCartLoaded.Displayed)
-           {
-               Thread.Sleep(2000);
-               WaitAndGetBySelector("countryInsurance", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passenger.InsuranceData.Country);
-               ExecuteJavascript("$('input.span7.jsDob').prop('disabled', false);");
-               ExecuteJavascript("$('input.span12.jsFName').val('"+passenger.FirstName+"')");
-               ExecuteJavascript("$('input.span12.jsLName').val('"+passenger.LastName+"')");
-               ExecuteJavascript("$('input.span7.jsDob').val('"+passenger.DOB+"')");
-               ExecuteJavascript("$('input.span11.jsEmail').val('"+passenger.Emailid+"')");
-               ExecuteJavascript("$('input.span11.jsVEmail').val('"+passenger.Emailid+"')");
-               ExecuteJavascript("$('select.span10.jsGender').val('"+passenger.Gender+"')");
-               Thread.Sleep(5000);
-               WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
-               ConfirmPassengers();
-               return true;
-           }
-           return false;
-       }
 
        internal void ConfirmPassengers()
        {
@@ -43,6 +19,67 @@ namespace Rovia.UI.Automation.Tests.Pages
            WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
            //var SpinningDiv = WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Slow);
            //if (SpinningDiv != null && SpinningDiv.Displayed)
+       }
+
+       public void WaitForPageLoad()
+       {
+           try
+           {
+               while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Slow).Displayed);
+           }
+           catch (Exception exception)
+           {
+               throw new Exception("PassengerDetailsPage Load Failed", exception);
+           }
+       }
+
+       public void SubmitPassengerDetails(PassengerDetails passengerDetails)
+       {
+           try
+           {
+               WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengerDetails.Country);
+               if (passengerDetails.IsInsuranceRequired)
+                   WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
+               EnterPassengerDetails(passengerDetails);
+               WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
+           }
+           catch (NullReferenceException exception)
+           {
+               throw new Exception("Passenger detail Elements not Loaded properly",exception);
+           }
+       }
+
+       private void EnterPassengerDetails(PassengerDetails passengerDetails)
+       {
+           ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
+           var inputForm = GetInputForm();
+           (new List<List<IUIWebElement>>(inputForm.Values)).ForEach(x => x.ForEach(y => y.Clear()));
+           var i = 0;
+           passengerDetails.Passengers.ForEach(x =>
+           {
+               inputForm["fNames"][i].SendKeys(x.FirstName);
+               inputForm["mNames"][i].SendKeys(x.MiddleName);
+               inputForm["lNames"][i].SendKeys(x.LastName);
+               inputForm["eMail"][i].SendKeys(x.Emailid);
+               inputForm["dob"][i].SendKeys(DateTime.Now.AddYears(-1 * x.Age).AddDays(-6).ToString("MM/dd/yyyy"));
+               inputForm["gender"][i].SelectFromDropDown(x.Gender);
+               inputForm["verficationEmail"][i].SendKeys(x.Emailid);
+               ++i;
+           });
+       }
+
+       private Dictionary<string, List<IUIWebElement>> GetInputForm()
+       {
+           return new Dictionary<string, List<IUIWebElement>>()
+               {
+                   {"fNames", GetUIElements("fNames")},
+                   {"mNames", GetUIElements("mNames")},
+                   {"lNames", GetUIElements("lNames")},
+                   {"eMail", GetUIElements("eMail")},
+                   {"vEmail", GetUIElements("vEmail")},
+                   {"dob", GetUIElements("dob")},
+                   {"gender", GetUIElements("gender")},
+               };
        }
     }
 }
