@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.DataBinder;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.Ui.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -17,6 +18,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         public static RoviaApp App { get; set; }
         private static SearchCriteria _criteria;
         public static IScenarioDataBinder DataBinder { get; set; }
+        public static TripFolder Trip { get; set; }
 
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext testContext)
@@ -42,9 +44,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             _criteria = DataBinder.GetCriteria(dataRow);
         }
 
-        internal static List<Results> ApplySpecialCriteria()
+        private static List<Results> ApplySpecialCriteria()
         {
-
             var selectedResults = App.ResultsPage.ParseResults();
             if (_criteria != null)
             {
@@ -107,7 +108,6 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-
                 throw new Exception("Login page failed to Load", exception);
             }
         }
@@ -126,7 +126,6 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-
                 throw new Exception("LogOut Failed", exception);
             }
 
@@ -134,7 +133,6 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         internal static void Search()
         {
-
             try
             {
                 if (!App.State.CurrentPage.Equals("HomePage"))
@@ -146,7 +144,6 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                
                 throw new Exception("SearchFailed",exception);
             }
         }
@@ -168,12 +165,137 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!App.State.CurrentPage.EndsWith("ResultsPage"))
                     throw new Exception("AddToCart is not available on "+App.State.CurrentPage);
                 App.ResultsPage.AddToCart(ApplySpecialCriteria());
+                App.State.CurrentPage = "TripFolderPage";
             }
             catch (Exception exception)
             {
                 throw new Exception("AddToCart Failed",exception);
             }
         }
+
+        #region TripFolder Calls
+
+        public static void ParseTripFolder()
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip can not be parse on " + App.State.CurrentPage);
+               Trip =  App.TripFolderPage.ParseTripFolder();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in parsing trip details.", exception);
+            }
+        }
+
+        public static void SaveTrip()
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip can not be save on " + App.State.CurrentPage);
+                // to implement
+                Trip.TripSettingsButton.Click();
+                Trip.SaveTripButton.Click();
+
+                //2 cases
+                //1. If already logged in directly save the trip
+                //2. If not, ask for login and then save the trip
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in saving trip.", exception);
+            }
+        }
+
+        public static void TripStartOver()
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip can not be start over on " + App.State.CurrentPage);
+                Trip.TripSettingsButton.Click();
+                Trip.StartoverButton.Click();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in trip start over", exception);
+            }
+        }
+
+        public static void EditTripName()
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip name can not be edit on " + App.State.CurrentPage);
+                Trip.TripSettingsButton.Click();
+                App.TripFolderPage.EditTripName();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in editing trip name.", exception);
+            }
+        }
+
+        public static void ModifyProduct(int index)
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip product can not be modified on " + App.State.CurrentPage);
+                Trip.TripProducts[index].ModifyProductButton.Click();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in modifying trip product.", exception);
+            }
+        }
+
+        public static void RemoveProduct(int index)
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip product can not be removed on " + App.State.CurrentPage);
+                Trip.TripProducts[index].RemoveProductButton.Click();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in removing trip product.", exception);
+            }
+        }
+
+        public static void CheckoutTrip()
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip can not be checkout on " + App.State.CurrentPage);
+                Trip.CheckoutTripButton.Click();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in trip checkout.", exception);
+            }
+        }
+
+        public static void ContinueShopping()
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Can not able to continue shopping on " + App.State.CurrentPage);
+                Trip.ContinueShoppingButton.Click();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in continue shopping", exception);
+            }
+        }
+
+        #endregion
     }
 
 }

@@ -9,3 +9,11 @@ modifyItemClick,a.font12.mrl.jsModifyItem
 removeItemClick,a.font12.mhl.jsDeleteCartItem
 continueShopping,a#aSearchHome
 checkoutButton,a#aCheckout
+tripSettings,i.caret
+saveTripButton,a.jsSaveTripFolder
+startOver,a.jsEmptyCart
+editTripName,span.icon-pencil
+tripNameTextbox,input#inputError
+cancelEditTripName,div.txtAlignRight .btn.btn-cancel.mrm
+SaveTripName,a.btn.btn-success.jsSaveCart
+tripStartOverCheck,div.jTopBarCartCount

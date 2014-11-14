@@ -52,8 +52,8 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.SetCriteria(TestContext.DataRow);
             TestHelper.Search();
             TestHelper.AddToCart();
-
-            Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
+            TestHelper.ParseTripFolder();
+            TestHelper.CheckoutTrip();
 
             //for registered user can login
             Assert.IsTrue(_app.LoginDetailsPage.Login(), "Login Failed");
@@ -116,10 +116,9 @@ namespace Rovia.UI.Automation.Tests.Tests
         {
             TestHelper.SetCriteria(TestContext.DataRow);
             TestHelper.Search();
-
             TestHelper.AddToCart();
-
-            Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
+            TestHelper.ParseTripFolder();
+            TestHelper.CheckoutTrip();
 
             #region Guest User Registration
             //for guest user asks for login on checkout page and he will register here
@@ -197,7 +196,8 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.SetCriteria(TestContext.DataRow);
             TestHelper.Search();
             TestHelper.AddToCart();
-            Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
+            TestHelper.ParseTripFolder();
+            TestHelper.CheckoutTrip();
         
             TestHelper.Login();
 

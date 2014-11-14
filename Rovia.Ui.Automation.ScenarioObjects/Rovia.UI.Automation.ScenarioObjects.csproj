@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppacitiveAutomationFramework">
+      <HintPath>..\References\AppacitiveLoggingFramework\AppacitiveAutomationFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,6 +47,7 @@
     <Compile Include="AirResult.cs" />
     <Compile Include="Amount.cs" />
     <Compile Include="CabinType.cs" />
+    <Compile Include="Fare.cs" />
     <Compile Include="FlightLegs.cs" />
     <Compile Include="Passengers.cs" />
     <Compile Include="PaymentMode.cs" />
@@ -52,13 +56,9 @@
     <Compile Include="SearchType.cs" />
     <Compile Include="SpecialCriteria.cs" />
     <Compile Include="Supplier.cs" />
+    <Compile Include="TripFolder.cs" />
+    <Compile Include="TripProduct.cs" />
     <Compile Include="UserType.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Rovia.UI.Automation.Constants\Rovia.UI.Automation.Constants.csproj">
-      <Project>{c9de78a7-df44-43e5-9af3-eee7fb439fef}</Project>
-      <Name>Rovia.UI.Automation.Constants</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
