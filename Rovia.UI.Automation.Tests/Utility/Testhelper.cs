@@ -166,6 +166,8 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!App.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
                     throw new Exception("PassengerDetails-Confirmation is not available on " + App.State.CurrentPage);
                 App.PassengerInfoPage.ConfirmPassengers();
+                App.CheckoutPage.WaitForLoad();
+                App.State.CurrentPage = "CheckOutPage";
             }
             catch (Exception exception)
             {
@@ -355,6 +357,34 @@ namespace Rovia.UI.Automation.Tests.Utility
         }
 
         #endregion
+
+        public static void PayNow()
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("CheckOutPage"))
+                    throw new Exception("Pay-Now is not available on " + App.State.CurrentPage);
+                if (_criteria.PaymentMode == PaymentMode.RoviaBucks)
+                    App.CheckoutPage.PayNow(GetPaymentInfo(_criteria.PaymentInfo));
+                else
+                {
+                    App.CheckoutPage.PayNow(_criteria.PaymentInfo.PaymentMode);
+                    //todo app.bfcPage.PayNow(_criteria.PaymentInfo);
+                }
+                App.CheckoutPage.ConfirmPayment();
+                App.State.CurrentPage = "PaymentConfirmationPage";
+            }
+            catch (Exception exception)
+            {
+
+                throw new Exception("Pay Now failed");
+            }
+        }
+
+        private static PaymentInfo GetPaymentInfo(PaymentInfo paymentInfo)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

@@ -42,19 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adult.cs" />
+    <Compile Include="PassengerInfo\Adult.cs" />
     <Compile Include="AirFilters.cs" />
     <Compile Include="AirportPair.cs" />
     <Compile Include="AirResult.cs" />
     <Compile Include="Amount.cs" />
     <Compile Include="CabinType.cs" />
     <Compile Include="Fare.cs" />
-    <Compile Include="Child.cs" />
+    <Compile Include="PassengerInfo\Child.cs" />
     <Compile Include="FlightLegs.cs" />
-    <Compile Include="Infant.cs" />
-    <Compile Include="Passenger.cs" />
-    <Compile Include="PassengerDetails.cs" />
-    <Compile Include="Passengers.cs" />
+    <Compile Include="PassengerInfo\Infant.cs" />
+    <Compile Include="PassengerInfo\Passenger.cs" />
+    <Compile Include="PassengerInfo\PassengerDetails.cs" />
+    <Compile Include="PassengerInfo\Passengers.cs" />
+    <Compile Include="PaymentInfo\PaymentInfo.cs" />
     <Compile Include="PaymentMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results.cs" />

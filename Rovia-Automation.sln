@@ -30,7 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataBinders", "DataBinders"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovia.UI.Automation.DataBinder", "Rovia.UI.Automation.DataBinder\Rovia.UI.Automation.DataBinder.csproj", "{8F7B95ED-5702-4388-A0A3-A974107E80CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovia.UI.Automation.ScenarioObjects", "Rovia.Ui.Automation.ScenarioObjects\Rovia.UI.Automation.ScenarioObjects.csproj", "{21AE4471-A960-447B-B736-803EC7A64E0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovia.UI.Automation.ScenarioObjects", "Rovia.UI.Automation.ScenarioObjects\Rovia.UI.Automation.ScenarioObjects.csproj", "{21AE4471-A960-447B-B736-803EC7A64E0A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovia.UI.Automation.Criteria", "Rovia.UI.Automation.Criteria\Rovia.UI.Automation.Criteria.csproj", "{D8F99AF7-EBAF-431D-9BC9-8A47A42E217F}"
 EndProject

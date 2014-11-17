@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Threading;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Model;
@@ -135,6 +136,90 @@ namespace Rovia.UI.Automation.Tests.Pages
                     return false;
             }
             return false;
+        }
+
+        internal void WaitForLoad()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PayNow(PaymentInfo paymentInfo)
+        {
+            try
+            {
+                WaitAndGetBySelector("roviaBucksCheck", ApplicationSettings.TimeOut.Fast).Click();
+                SetAddress(paymentInfo.Address);
+
+                WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
+                WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Roviabucks Payment Failed");
+            }
+        }
+
+        internal void ConfirmPayment()
+        {
+            try
+            {
+                var preLoadingDiv = WaitAndGetBySelector("preloading", ApplicationSettings.TimeOut.Slow);
+                while (preLoadingDiv != null && preLoadingDiv.Displayed)
+                {
+                    Thread.Sleep(2000);
+
+                    var confirmationDiv = WaitAndGetBySelector("ConfirmationDiv", ApplicationSettings.TimeOut.Safe);
+
+                    if (confirmationDiv != null && confirmationDiv.Displayed)
+                        break;
+                }
+
+                var divPayNowfailed = WaitAndGetBySelector("divPayNowfailed", ApplicationSettings.TimeOut.Slow);
+                if (divPayNowfailed != null && divPayNowfailed.Displayed)
+                    throw new Exception();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Payment Confirmation Failed",exception);
+            }
+        }
+
+        private void SetAddress(BillingAddress billingAddress)
+        {
+            try
+            {
+                WaitAndGetBySelector("typeRB", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(billingAddress.Type);
+                WaitAndGetBySelector("address1", ApplicationSettings.TimeOut.Fast).SendKeys(billingAddress.Line1);
+                WaitAndGetBySelector("address2", ApplicationSettings.TimeOut.Fast).SendKeys(billingAddress.Line2);
+                WaitAndGetBySelector("address_Country", ApplicationSettings.TimeOut.Fast)
+                    .SelectFromDropDown(billingAddress.Country);
+
+                if (billingAddress.Country.Equals("United States"))
+                    WaitAndGetBySelector("address_drpState", ApplicationSettings.TimeOut.Fast)
+                        .SelectFromDropDown(billingAddress.State);
+                else
+                    WaitAndGetBySelector("address_txtState", ApplicationSettings.TimeOut.Fast).SendKeys(billingAddress.State);
+
+                WaitAndGetBySelector("address_txtCity", ApplicationSettings.TimeOut.Fast).SendKeys(billingAddress.City);
+
+                WaitAndGetBySelector("address_txtZipcode", ApplicationSettings.TimeOut.Fast).SendKeys(billingAddress.ZipCode);
+
+                WaitAndGetBySelector("address_phnArea", ApplicationSettings.TimeOut.Fast)
+                    .SendKeys(billingAddress.PhoneNumber.Substring(0, 3));
+                WaitAndGetBySelector("address_phnExchange", ApplicationSettings.TimeOut.Fast)
+                    .SendKeys(billingAddress.PhoneNumber.Substring(3, 3));
+                WaitAndGetBySelector("address_phnDigits", ApplicationSettings.TimeOut.Fast)
+                    .SendKeys(billingAddress.PhoneNumber.Substring(6, 4));
+            }
+            catch (Exception exception )
+            {
+                throw new Exception("Error While Entering billing Address",exception);
+            }
+        }
+
+        internal void PayNow(PaymentMode paymentMode)
+        {
+            //todo implement checking creditcard checkbox
         }
     }
 }

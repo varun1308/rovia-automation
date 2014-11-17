@@ -23,3 +23,7 @@ SubmitPayment,a#SubmitPayment
 ConfirmationDiv,div.alert-success.mal.pvm.phl
 Country,select#Country
 Provinces,select#Provinces
+address_Country,select#drpCountry
+address_drptxtState,select#drpState
+address_txtState,input#txtState
+address_txtCity,input#txtCity

@@ -46,6 +46,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.EnterPassengerDetails();
                 TestHelper.EditPassengerInfoAndContinue();
                 TestHelper.ConfirmPassengerDetails();
+                TestHelper.PayNow();
                 //_app.HomePage.Search(criteria);
                 //_app.AirResultsPage.AddToCart(TestHelper.ApplySpecialCriteria(criteria.SpecialCriteria));
             }
