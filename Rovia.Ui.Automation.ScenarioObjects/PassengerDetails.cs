@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rovia.UI.Automation.ScenarioObjects;
 
-namespace Rovia.Ui.Automation.ScenarioObjects
+namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class PassengerDetails
     {

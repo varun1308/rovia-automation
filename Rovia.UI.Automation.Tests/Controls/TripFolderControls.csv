@@ -1,0 +1,19 @@
+totalItems,div.mhl .span7 .font14 strong
+divTripsHolder,div.jsItemsHolder
+pruductType, div.border-grey.mal
+productName, span.text-boxtitle
+totalFare,span.price
+totalPassengers,div.font11.mbl
+fareBreakup,div[class="font11"]
+modifyItemClick,a.font12.mrl.jsModifyItem
+removeItemClick,a.font12.mhl.jsDeleteCartItem
+continueShopping,a#aSearchHome
+checkoutButton,a#aCheckout
+tripSettings,i.caret
+saveTripButton,a.jsSaveTripFolder
+startOver,a.jsEmptyCart
+editTripName,span.icon-pencil
+tripNameTextbox,input#inputError
+cancelEditTripName,div.txtAlignRight .btn.btn-cancel.mrm
+SaveTripName,a.btn.btn-success.jsSaveCart
+tripStartOverCheck,div.jTopBarCartCount

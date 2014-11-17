@@ -5,14 +5,9 @@ using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Model;
-using Rovia.UI.Automation.Tests.Utility;
 using System.Threading;
 
-//using AirportPair = Rovia.UI.Automation.Tests.Model.AirportPair;
-//using SearchType = Rovia.UI.Automation.Tests.Model.SearchType;
 
 namespace Rovia.UI.Automation.Tests.Pages
 {

@@ -103,6 +103,7 @@
     <Content Include="DataSheet\AirScenarios.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Controls\TripFolderControls.csv" />
     <None Include="Utility\KillChromeDriver.bat" />
   </ItemGroup>
   <ItemGroup>

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.ScenarioObjects;
 

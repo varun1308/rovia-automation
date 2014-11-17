@@ -102,10 +102,9 @@ namespace Rovia.UI.Automation.Tests.Tests
         {
             TestHelper.SetCriteria(TestContext.DataRow);
             TestHelper.Search();
-
             TestHelper.AddToCart();
-
-            Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
+            TestHelper.CheckOut();
+            
 
             #region Guest User Registration
             //for guest user asks for login on checkout page and he will register here
@@ -124,18 +123,8 @@ namespace Rovia.UI.Automation.Tests.Tests
 
             #endregion
 
-            #region submit passenger details
-            PassengerDetails pes = new PassengerDetails()
-            {
-                InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
-                FirstName = "Vikul",
-                LastName = "Rathod",
-                DOB = "09/16/1989",
-                Gender = "Male",
-                Emailid = "vrathod@tavisca.com"
-            };
-            //_app.PassengerInfoPage.SubmitPassengerDetails(pes);
-            #endregion
+            TestHelper.EnterPassengerDetails();
+            TestHelper.ConfirmPassengerDetails();
 
             Thread.Sleep(1000);
 
