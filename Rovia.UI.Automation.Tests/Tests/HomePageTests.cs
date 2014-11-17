@@ -53,7 +53,7 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.Login();
             TestHelper.Search();
             TestHelper.AddToCart();
-            TestHelper.CheckOut();
+            TestHelper.CheckoutTrip();
             TestHelper.EnterPassengerDetails();
             TestHelper.ConfirmPassengerDetails();
             
@@ -103,7 +103,7 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.SetCriteria(TestContext.DataRow);
             TestHelper.Search();
             TestHelper.AddToCart();
-            TestHelper.CheckOut();
+            TestHelper.CheckoutTrip();
             
 
             #region Guest User Registration
@@ -173,10 +173,8 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.Login();
             TestHelper.Search();
             TestHelper.AddToCart();
-            TestHelper.CheckOut();
+            TestHelper.CheckoutTrip();
             TestHelper.EnterPassengerDetails();
-
-            Assert.IsTrue(_app.TripFolderPage.Checkout(), "Error on loading TripFolder.");
         
             
 

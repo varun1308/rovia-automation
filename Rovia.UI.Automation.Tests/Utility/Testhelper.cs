@@ -121,6 +121,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new Exception("AddToCart is not available on " + App.State.CurrentPage);
                 App.ResultsPage.AddToCart(ApplySpecialCriteria());
                 App.State.CurrentPage = "TripFolderPage";
+                ParseTripFolder();
             }
             catch (Exception exception)
             {
@@ -155,26 +156,6 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 
                 throw new Exception("Passenger Confirmation failed");
-            }
-        }
-
-        internal static void CheckOut()
-        {
-            try
-            {
-                if (!App.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("CheckOut is not available on " + App.State.CurrentPage);
-
-                //Todo add Proper TripFolderPage Handling
-
-                if (!App.TripFolderPage.Checkout())
-                    throw new Exception("Error while loading TripFolder");
-                App.PassengerInfoPage.WaitForPageLoad();
-                App.State.CurrentPage = "PassengerInfoPage";
-            }
-            catch (Exception exception)
-            {
-                throw new Exception("CheckOut failed",exception);
             }
         }
 
@@ -236,7 +217,7 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         #region TripFolder Calls
 
-        public static void ParseTripFolder()
+        private static void ParseTripFolder()
         {
             try
             {
@@ -335,6 +316,8 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!App.State.CurrentPage.Equals("TripFolderPage"))
                     throw new Exception("Trip can not be checkout on " + App.State.CurrentPage);
                 Trip.CheckoutTripButton.Click();
+                App.PassengerInfoPage.WaitForPageLoad();
+                App.State.CurrentPage = "PassengerInfoPage";
             }
             catch (Exception exception)
             {

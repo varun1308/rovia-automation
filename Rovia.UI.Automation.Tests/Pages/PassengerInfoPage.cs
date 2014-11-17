@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -53,7 +54,7 @@ namespace Rovia.UI.Automation.Tests.Pages
        {
            ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
            var inputForm = GetInputForm();
-           (new List<List<IUIWebElement>>(inputForm.Values)).ForEach(x => x.ForEach(y => y.Clear()));
+           (new List<List<IUIWebElement>>(inputForm.Values.Take(6))).ForEach(x => x.ForEach(y => y.Clear()));
            var i = 0;
            passengerDetails.Passengers.ForEach(x =>
            {
@@ -63,7 +64,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                inputForm["eMail"][i].SendKeys(x.Emailid);
                inputForm["dob"][i].SendKeys(DateTime.Now.AddYears(-1 * x.Age).AddDays(-6).ToString("MM/dd/yyyy"));
                inputForm["gender"][i].SelectFromDropDown(x.Gender);
-               inputForm["verficationEmail"][i].SendKeys(x.Emailid);
+               inputForm["vEmail"][i].SendKeys(x.Emailid);
                ++i;
            });
        }

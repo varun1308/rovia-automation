@@ -42,7 +42,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.Login();
                 TestHelper.Search();
                 TestHelper.AddToCart();
-                TestHelper.CheckOut();
+                TestHelper.CheckoutTrip();
                 TestHelper.EnterPassengerDetails();
                 TestHelper.ConfirmPassengerDetails();
                 //_app.HomePage.Search(criteria);
