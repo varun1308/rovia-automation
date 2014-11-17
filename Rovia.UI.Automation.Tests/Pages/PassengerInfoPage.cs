@@ -12,25 +12,76 @@ using Rovia.UI.Automation.ScenarioObjects;
 namespace Rovia.UI.Automation.Tests.Pages
 {
    public class PassengerInfoPage : UIPage
-    {
+   {
+       private static PassengerDetails _passengerDetails;
+       internal void EditPassengerInfo()
+       {
+           try
+           {
+               WaitAndGetBySelector("lnkEditPassengerInfo", ApplicationSettings.TimeOut.Slow).Click();
+               if(IsInputFormVisible()==false)
+                   throw new Exception("InputForm failed To load");
+               WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
+               if (IsPassengerInfoConfirmationPageVisible() == false)
+                   throw new Exception("Passenger Confirmation Page failed to load");
+           }
+           catch (NullReferenceException exception)
+           {
+               throw new Exception("Edit PassengerInfo Button not visible", exception);
+           }
+       }
+
+       
 
        internal void ConfirmPassengers()
        {
-           Thread.Sleep(3000);
-           WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
-           //var SpinningDiv = WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Slow);
-           //if (SpinningDiv != null && SpinningDiv.Displayed)
+           try
+           {
+               //todo Confirm Passenger Details
+               WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
+           }
+           catch (NullReferenceException exception)
+           {
+               throw new Exception("Confirmation Button not visible", exception);
+           }
        }
 
        public void WaitForPageLoad()
        {
            try
            {
-               while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Slow).Displayed);
+               while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Slow).Displayed) ;
+               if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Slow).Displayed == false)
+                   throw new Exception();
            }
            catch (Exception exception)
            {
                throw new Exception("PassengerDetailsPage Load Failed", exception);
+           }
+       }
+       private bool IsInputFormVisible()
+       {
+           try
+           {
+               return WaitAndGetBySelector("divPassengerDetailInput", ApplicationSettings.TimeOut.Slow).Displayed ;
+
+           }
+           catch (Exception exception)
+           {
+               throw new Exception("PassengerDetailsPage InputForm Load Failed", exception);
+           }
+       }
+
+       private bool IsPassengerInfoConfirmationPageVisible()
+       {
+           try
+           {
+               return WaitAndGetBySelector("divConfirmPassengerDetails", ApplicationSettings.TimeOut.Slow).Displayed;
+
+           }
+           catch (Exception exception)
+           {
+               throw new Exception("PassengerDetailsPage InputForm Load Failed", exception);
            }
        }
 
@@ -38,11 +89,15 @@ namespace Rovia.UI.Automation.Tests.Pages
        {
            try
            {
+               Thread.Sleep(800);
+               _passengerDetails = passengerDetails;
                WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengerDetails.Country);
                if (passengerDetails.IsInsuranceRequired)
                    WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
-               EnterPassengerDetails(passengerDetails);
+               EnterPassengerDetails();
                WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
+               if(IsPassengerInfoConfirmationPageVisible()==false)
+                   throw new Exception("Passenger Confirmation Page failed to load");
            }
            catch (NullReferenceException exception)
            {
@@ -50,13 +105,13 @@ namespace Rovia.UI.Automation.Tests.Pages
            }
        }
 
-       private void EnterPassengerDetails(PassengerDetails passengerDetails)
+       private void EnterPassengerDetails()
        {
            ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
            var inputForm = GetInputForm();
            (new List<List<IUIWebElement>>(inputForm.Values.Take(6))).ForEach(x => x.ForEach(y => y.Clear()));
            var i = 0;
-           passengerDetails.Passengers.ForEach(x =>
+           _passengerDetails.Passengers.ForEach(x =>
            {
                inputForm["fNames"][i].SendKeys(x.FirstName);
                inputForm["mNames"][i].SendKeys(x.MiddleName);

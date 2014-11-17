@@ -35,6 +35,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         internal static void GoToHomePage()
         {
             App.Launch(ApplicationSettings.Url);
+            App.HomePage.WaitForHomePage();
             App.State.CurrentPage = "HomePage";
         }
 
@@ -56,6 +57,20 @@ namespace Rovia.UI.Automation.Tests.Utility
                 }
             }
             return selectedResults;
+        }
+
+        internal static void EditPassengerInfoAndContinue()
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
+                    throw new Exception("PassengerDetails-Editing is not available on " + App.State.CurrentPage);
+                App.PassengerInfoPage.EditPassengerInfo();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("PassengerDetail-Submission failed", exception);
+            }
         }
 
         internal static void Search()
@@ -141,7 +156,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             catch (Exception exception)
             {
                 throw new Exception("PassengerDetail-Submission failed",exception);
-        }
+            }
         }
 
         internal static void ConfirmPassengerDetails()

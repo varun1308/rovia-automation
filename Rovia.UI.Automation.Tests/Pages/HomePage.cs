@@ -16,17 +16,30 @@ namespace Rovia.UI.Automation.Tests.Pages
         
 
         #region Common
+        internal void WaitForHomePage()
+        {
+            try
+            {
+                while (!IsVisible());
+                SetCountry();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("HomePage failed to load", exception);
+            }
+        }
         internal bool IsVisible()
         {
-            var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow);
-            Thread.Sleep(500);
-            if (country != null && country.Displayed)
-            {
-                country.SendKeys("United States");
-                WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.Slow).Click();
-            }
-            var div = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Slow);
+            var div = WaitAndGetBySelector("divNavigationBar", ApplicationSettings.TimeOut.Slow);
             return div != null && div.Displayed;
+        }
+
+        internal void SetCountry()
+        {
+            var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow);
+            if (country == null || !country.Displayed) return;
+            country.SendKeys("United States");
+            WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.Slow).Click();
         }
 
         internal bool IsUserLoggedIn()
