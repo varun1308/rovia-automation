@@ -17,3 +17,7 @@ freqflyernum,input.span8.jsFFNumber
 Submitbutton,a#lnkSubmitPax
 ConfirmPxButton,a.btn.btn-warning.pull-right.jsBtnConfirm
 SpinningDiv,div#divCartLoadProgress
+lnkEditPassengerInfo,a.jsBtnEdit
+divPassengerHolder,div#dvPassengerWidgetHolder
+divConfirmPassengerDetails,div.checkOutPassengerDetails
+divPassengerDetailInput,div#dvPassengerProdHolder
