@@ -11,10 +11,12 @@ using Rovia.UI.Automation.Tests.Utility;
 
 namespace Rovia.UI.Automation.Tests.Pages
 {
-    public class AirResultsPage : UIPage,IResultsPage
+    public class AirResultsPage : UIPage, IResultsPage
     {
-        
+
         private static Dictionary<Results, IUIWebElement> _results;
+
+        public static AirPostSearchFilters AirPostSearchFilter { get; set; }
 
         #region private member functions
         private bool IsWaitingVisible()
@@ -41,7 +43,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 Thread.Sleep(1000);
             }
             var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Slow);
-            if (btnCheckOut != null && btnCheckOut.Displayed )
+            if (btnCheckOut != null && btnCheckOut.Displayed)
             {
                 btnCheckOut.Click();
                 return true;
@@ -90,7 +92,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 TotalAmount = double.Parse(total[0].Remove(0, 1)),
                 AmountPerPerson = double.Parse(perHead[0].Remove(0, 1))
             };
-        } 
+        }
         #endregion
 
         #region IResultsPage Member Functions
@@ -138,9 +140,103 @@ namespace Rovia.UI.Automation.Tests.Pages
                 _results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], null), addToCartControl[i]);
             }
             return _results.Keys.ToList();
-        } 
+        }
+
+       #endregion
+
+        #region Filter calls
+
+        public void ParseFilters()
+        {
+            AirPostSearchFilter = new AirPostSearchFilters()
+            {
+                FlightStops = new FlightStops()
+                {
+                    NonStop = WaitAndGetBySelector("nonStop", ApplicationSettings.TimeOut.SuperFast),
+                    OneStop = WaitAndGetBySelector("oneStop", ApplicationSettings.TimeOut.SuperFast),
+                    OnePlusStop = WaitAndGetBySelector("onePlusStops", ApplicationSettings.TimeOut.SuperFast)
+                },
+                Airlines = GetUIElements("airlinesFilter"),
+                CabinType = GetUIElements("cabinTypeFilter")
+            };
+        }
+
+        public void SetAirFilters()
+        {
+            SetTimeDuration();
+            SetPriceRange();
+            SetStops();
+            SetCabinTypes(new List<string>() { "economy", "business" });
+            SetAirlines(new List<string>() { "AS", "AA", "DL", "NK", "UA" });
+        }
+
+        public void SetPriceRange()
+        {
+            var minPrice =
+                float.Parse(WaitAndGetBySelector("minPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
+            var maxPrice =
+               float.Parse(WaitAndGetBySelector("maxPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
+
+            minPrice += minPrice * 20 / 100;
+            maxPrice -= maxPrice * 20 / 100;
+
+            ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (minPrice * 100) + "," + (maxPrice * 100) + "]})");
+        }
+
+        public void SetTimeDuration()
+        {
+            var maxTimeDuration =
+                int.Parse(WaitAndGetBySelector("maxTimeDuration", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0]);
+
+            maxTimeDuration -= 4;
+
+            ExecuteJavascript("$('#sliderTripDuration').trigger({type:'slideStop',value:[" + (maxTimeDuration * 60) + "]})");
+        }
+
+        private static void SetStops()
+        {
+            AirPostSearchFilter.FlightStops.NonStop.Click();
+
+            if (AirPostSearchFilter.FlightStops.OneStop.Displayed)
+            {
+                AirPostSearchFilter.FlightStops.OneStop.Click();
+                Thread.Sleep(500);
+                AirPostSearchFilter.FlightStops.OneStop.Click();
+            }
+        }
+
+        private static void SetCabinTypes(List<string> cabinTypes)
+        {
+            AirPostSearchFilter.CabinType[0].Click();
+            AirPostSearchFilter.CabinType.ForEach(x =>
+            {
+                if (cabinTypes.Contains(x.GetAttribute("data-name")) && x.Displayed)
+                    x.Click();
+            });
+        }
+
+        private static void SetAirlines(List<string> airlines)
+        {
+            AirPostSearchFilter.CabinType[0].Click();
+            AirPostSearchFilter.CabinType.ForEach(x =>
+            {
+                if (airlines.Contains(x.GetAttribute("data-name")) && x.Displayed)
+                    x.Click();
+            });
+        }
+
+        public void SetMatrixAirline(string airline)
+        {
+            var divMatrixAirlines = GetUIElements("divMatrixAirlines");
+
+            divMatrixAirlines.ForEach(x =>
+            {
+                if (airline.Contains(x.GetAttribute("title")) && x.Displayed)
+                    x.Click();
+            });
+        }
+
         #endregion
 
-        
     }
 }

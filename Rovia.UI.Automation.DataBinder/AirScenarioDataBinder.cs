@@ -26,7 +26,7 @@ namespace Rovia.UI.Automation.DataBinder
                         Children = int.Parse(dataRow["Children"].ToString())
                     },
                 SearchType = searchType,
-                Filters = new AirFilters()
+                Filters = new AirPreSearchFilters()
                     {
                         IncludeNearByAirPorts = (bool)dataRow["IncludeNearByAirPorts"],
                         CabinType = StringToEnum<CabinType>((string)dataRow["CabinType"]),

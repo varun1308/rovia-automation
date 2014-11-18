@@ -216,5 +216,41 @@ namespace Rovia.UI.Automation.Tests.Tests
             Assert.IsTrue(_app.CheckoutPage.IsPayNowSuccess_RB(paymentFields), "Booking failed with Rovia Bucks");
             #endregion
         }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("AirGeneralDataSource")]
+        public void SetAirFilters_AirResultPage()
+        {
+            try
+            {
+                TestHelper.SetCriteria(TestContext.DataRow);
+                TestHelper.Search();
+                TestHelper.ParseAirFilters();
+                TestHelper.SetAirFilters();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("AirGeneralDataSource")]
+        public void SetAirline_Matrix_AirResultPage()
+        {
+            try
+            {
+                TestHelper.SetCriteria(TestContext.DataRow);
+                TestHelper.Search();
+                TestHelper.ParseAirFilters();
+                TestHelper.SetMatrixAirline("Spirit Airlines");
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
     }
 }

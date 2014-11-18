@@ -7,6 +7,6 @@ namespace Rovia.UI.Automation.Criteria
     {
         public List<AirportPair> AirportPairs { get; set; }
         public SearchType SearchType { get; set; }
-        public AirFilters Filters { get; set; }
+        public AirPreSearchFilters Filters { get; set; }
     }
 }
