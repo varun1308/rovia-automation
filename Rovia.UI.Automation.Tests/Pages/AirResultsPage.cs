@@ -142,93 +142,98 @@ namespace Rovia.UI.Automation.Tests.Pages
             return _results.Keys.ToList();
         }
 
-       #endregion
+        #endregion
 
         #region Filter calls
 
-        public void ParseFilters()
+        public void SetAirFilters(AirPostSearchFilters airPostSearchFilters)
         {
-            AirPostSearchFilter = new AirPostSearchFilters()
-            {
-                FlightStops = new FlightStops()
-                {
-                    NonStop = WaitAndGetBySelector("nonStop", ApplicationSettings.TimeOut.SuperFast),
-                    OneStop = WaitAndGetBySelector("oneStop", ApplicationSettings.TimeOut.SuperFast),
-                    OnePlusStop = WaitAndGetBySelector("onePlusStops", ApplicationSettings.TimeOut.SuperFast)
-                },
-                Airlines = GetUIElements("airlinesFilter"),
-                CabinType = GetUIElements("cabinTypeFilter")
-            };
+            SetPriceRange(airPostSearchFilters.PriceRange);
+            SetTakeOffTime(airPostSearchFilters.TakeOffTimeRange);
+            SetLandingTime(airPostSearchFilters.LandingTimeRange);
+            SetTimeDuration(airPostSearchFilters.MaxTimeDurationDiff);
+            SetStops(airPostSearchFilters.Stop);
+            SetCabinTypes(airPostSearchFilters.CabinTypes);
+            SetAirlines(airPostSearchFilters.Airlines);
         }
 
-        public void SetAirFilters()
-        {
-            SetTimeDuration();
-            SetPriceRange();
-            SetStops();
-            SetCabinTypes(new List<string>() { "economy", "business" });
-            SetAirlines(new List<string>() { "AS", "AA", "DL", "NK", "UA" });
-        }
-
-        public void SetPriceRange()
+        private void SetPriceRange(PriceRange priceRange)
         {
             var minPrice =
                 float.Parse(WaitAndGetBySelector("minPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
             var maxPrice =
                float.Parse(WaitAndGetBySelector("maxPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
 
-            minPrice += minPrice * 20 / 100;
-            maxPrice -= maxPrice * 20 / 100;
+            minPrice += minPrice * priceRange.Min / 100;
+            maxPrice -= maxPrice * priceRange.Max / 100;
 
             ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (minPrice * 100) + "," + (maxPrice * 100) + "]})");
         }
 
-        public void SetTimeDuration()
+        private void SetTimeDuration(int maxTimeDurationDiff)
         {
             var maxTimeDuration =
                 int.Parse(WaitAndGetBySelector("maxTimeDuration", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0]);
 
-            maxTimeDuration -= 4;
+            maxTimeDuration -= maxTimeDurationDiff;
 
             ExecuteJavascript("$('#sliderTripDuration').trigger({type:'slideStop',value:[" + (maxTimeDuration * 60) + "]})");
         }
 
-        private static void SetStops()
+        private void SetStops(string stop)
         {
-            AirPostSearchFilter.FlightStops.NonStop.Click();
-
-            if (AirPostSearchFilter.FlightStops.OneStop.Displayed)
+            var stops = GetUIElements("stopsFilter").ToList();
+            stops.ForEach(x => x.Click());
+            stops.ForEach(x =>
             {
-                AirPostSearchFilter.FlightStops.OneStop.Click();
-                Thread.Sleep(500);
-                AirPostSearchFilter.FlightStops.OneStop.Click();
-            }
+                if (x.GetAttribute("data-name").Equals(stop))
+                    x.Click();
+            });
         }
 
-        private static void SetCabinTypes(List<string> cabinTypes)
+        private void SetCabinTypes(List<string> cabinTypes)
         {
-            AirPostSearchFilter.CabinType[0].Click();
-            AirPostSearchFilter.CabinType.ForEach(x =>
+           var cabinTypeList = GetUIElements("cabinTypeFilter").ToList();
+           cabinTypeList[0].Click();
+           cabinTypeList.ForEach(x =>
             {
                 if (cabinTypes.Contains(x.GetAttribute("data-name")) && x.Displayed)
                     x.Click();
             });
         }
 
-        private static void SetAirlines(List<string> airlines)
+        private void SetAirlines(List<string> airlines)
         {
-            AirPostSearchFilter.CabinType[0].Click();
-            AirPostSearchFilter.CabinType.ForEach(x =>
+           var airlinesList = GetUIElements("airlinesFilter").ToList();
+           airlinesList[0].Click();
+           airlinesList.ForEach(x =>
             {
-                if (airlines.Contains(x.GetAttribute("data-name")) && x.Displayed)
+                if (airlines.Contains(x.GetAttribute("data-code")) && x.Displayed)
                     x.Click();
             });
+        }
+
+        private void SetTakeOffTime(TakeOffTimeRange takeOffTimeRange)
+        {
+            var jsTslider = WaitAndGetBySelector("jsTslider", ApplicationSettings.TimeOut.Fast);
+            if (jsTslider != null && jsTslider.Displayed)
+            ExecuteJavascript("var maxTime=parseInt($('.jsTslider').data('slider').max);" +
+                              "var minTime =maxTime- maxTime * " + takeOffTimeRange.Max + " / 100;maxTime -= maxTime * " + takeOffTimeRange.Min + " / 100;" +
+                              "$('.jsTslider').trigger({type:'slide',value:[minTime,maxTime]}).trigger({type:'slideStop',value:[minTime,maxTime]})");
+        }
+
+        private void SetLandingTime(LandingTimeRange landingTimeRange)
+        {
+            var jsLslider = WaitAndGetBySelector("jsLslider", ApplicationSettings.TimeOut.Fast);
+            if (jsLslider != null && jsLslider.Displayed)
+            ExecuteJavascript("var maxTime=parseInt($('.jsLslider').data('slider').max);" +
+                              "var minTime =maxTime- maxTime * " + landingTimeRange.Max + " / 100;maxTime -= maxTime * " + landingTimeRange .Min+ " / 100;" +
+                              "$('.jsLslider').trigger({type:'slide',value:[minTime,maxTime]}).trigger({type:'slideStop',value:[minTime,maxTime]})");
         }
 
         public void SetMatrixAirline(string airline)
         {
             var divMatrixAirlines = GetUIElements("divMatrixAirlines");
-
             divMatrixAirlines.ForEach(x =>
             {
                 if (airline.Contains(x.GetAttribute("title")) && x.Displayed)

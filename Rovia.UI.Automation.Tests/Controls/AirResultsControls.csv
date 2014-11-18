@@ -12,13 +12,13 @@ btnAddToCart,a.btn_AddToCart
 btnCancel,button#btnCloseFlightPopup
 btnContinue,button.jsContinue
 alerts,#dvAddToCartAir .alert
-nonStop,input[data-name="none"]
-oneStop,input[data-name="one"]
-onePlusStops,input[data-name="one-plus"]
-airlinesFilter,div.pull-left.width50p .checkbox.font11
+stopsFilter,label.checkbox.pull-left.mrl.font12 input
+airlinesFilter,div.pull-left.width50p .checkbox.font11 input
 cabinTypeFilter,div.jsCOSFilter .well-small div .checkbox.font11 input
 priceRangeSlider,div#sliderRangePrice
 minPrice,div.jsMinPrice
 maxPrice,div.jsMaxPrice
 maxTimeDuration,span.jsSliderValue1
 divMatrixAirlines,div.flightDetailsHeading
+jsTslider,div.jsTslider
+jsLslider,div.jsLslider

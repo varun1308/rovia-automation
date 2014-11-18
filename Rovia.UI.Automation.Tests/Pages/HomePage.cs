@@ -13,8 +13,6 @@ namespace Rovia.UI.Automation.Tests.Pages
 {
     public class HomePage : UIPage
     {
-        
-
         #region Common
         internal void WaitForHomePage()
         {

@@ -104,7 +104,6 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.Search();
             TestHelper.AddToCart();
             TestHelper.CheckoutTrip();
-            
 
             #region Guest User Registration
             //for guest user asks for login on checkout page and he will register here
@@ -175,23 +174,6 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.AddToCart();
             TestHelper.CheckoutTrip();
             TestHelper.EnterPassengerDetails();
-        
-            
-
-            //#region submit passenger details
-            //PassengerDetails pes = new PassengerDetails()
-            //{
-            //    InsuranceData = new Insurance() { Country = "United States", IsInsuared = false },
-            //    FirstName = "Vikul",
-            //    LastName = "Rathod",
-            //    DOB = "09/16/1989",
-            //    Gender = "Male",
-            //    Emailid = "vrathod@tavisca.com"
-            //};
-            //_app.PassengerInfoPage.SubmitPassengerDetails(pes);
-            //#endregion
-
-            //Thread.Sleep(1000);
 
             #region pay by credit card
             PaymentFields paymentFields = new PaymentFields()
@@ -218,7 +200,6 @@ namespace Rovia.UI.Automation.Tests.Tests
         }
 
         [TestMethod]
-        [TestCategory("Sanity")]
         [DataSource("AirGeneralDataSource")]
         public void SetAirFilters_AirResultPage()
         {
@@ -226,7 +207,7 @@ namespace Rovia.UI.Automation.Tests.Tests
             {
                 TestHelper.SetCriteria(TestContext.DataRow);
                 TestHelper.Search();
-                TestHelper.ParseAirFilters();
+                //as of now values are static need to take from data sheet
                 TestHelper.SetAirFilters();
             }
             catch (Exception exception)
@@ -236,16 +217,14 @@ namespace Rovia.UI.Automation.Tests.Tests
         }
 
         [TestMethod]
-        [TestCategory("Sanity")]
         [DataSource("AirGeneralDataSource")]
-        public void SetAirline_Matrix_AirResultPage()
+        public void SetAirMatrix_AirResultPage()
         {
             try
             {
                 TestHelper.SetCriteria(TestContext.DataRow);
                 TestHelper.Search();
-                TestHelper.ParseAirFilters();
-                TestHelper.SetMatrixAirline("Spirit Airlines");
+                TestHelper.SetMatrixAirline();
             }
             catch (Exception exception)
             {
