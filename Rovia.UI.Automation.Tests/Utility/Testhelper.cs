@@ -59,6 +59,20 @@ namespace Rovia.UI.Automation.Tests.Utility
             return selectedResults;
         }
 
+        internal static void EditPassengerInfoAndContinue()
+        {
+            try
+            {
+                if (!App.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
+                    throw new Exception("PassengerDetails-Editing is not available on " + App.State.CurrentPage);
+                App.PassengerInfoPage.EditPassengerInfo();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("PassengerDetail-Submission failed", exception);
+            }
+        }
+
         internal static void Search()
         {
 
@@ -368,7 +382,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
         }
 
-       public static void SetMatrixAirline(string airline)
+        public static void SetMatrixAirline(string airline)
         {
             try
             {
@@ -381,6 +395,8 @@ namespace Rovia.UI.Automation.Tests.Utility
         }
 
         #endregion
+
+
     }
 
 }
