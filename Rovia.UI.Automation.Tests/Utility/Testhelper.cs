@@ -36,6 +36,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         internal static void GoToHomePage()
         {
             App.Launch(ApplicationSettings.Url);
+            App.HomePage.WaitForHomePage();
             App.State.CurrentPage = "HomePage";
         }
 
@@ -358,23 +359,22 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         #region Air Filters Call
 
-        public static void ParseAirFilters()
-        {
-            try
-            {
-                App.ResultsPage.ParseFilters();
-            }
-            catch (Exception exception)
-            {
-                throw new Exception("Error in parsing air filter details",exception);
-            }
-        }
-
         public static void SetAirFilters()
         {
             try
             {
-                App.ResultsPage.SetAirFilters();
+                var airPostSearchFilters = new AirPostSearchFilters()
+                {
+                    PriceRange = new PriceRange(){Max = 20,Min = 20},
+                    TakeOffTimeRange = new TakeOffTimeRange(){Min = 20,Max = 80},
+                    LandingTimeRange = new LandingTimeRange(){Min = 20,Max = 80},
+                    MaxTimeDurationDiff = 4,
+                    Stop = "one", //field can be none/one/one-plus
+                    CabinTypes = new List<string>(){"economy","business"},
+                    Airlines = new List<string>(){"AA","NK","UA","US"}
+                };
+
+                App.ResultsPage.SetAirFilters(airPostSearchFilters);
             }
             catch (Exception exception)
             {
@@ -382,11 +382,11 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
         }
 
-        public static void SetMatrixAirline(string airline)
+        public static void SetMatrixAirline()
         {
             try
             {
-                App.ResultsPage.SetMatrixAirline(airline);
+                App.ResultsPage.SetMatrixAirline("Spirit Airlines");
             }
             catch (Exception exception)
             {
