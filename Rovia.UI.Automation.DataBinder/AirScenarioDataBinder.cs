@@ -33,7 +33,8 @@ namespace Rovia.UI.Automation.DataBinder
                         NonStopFlight = (bool)dataRow["NonStopFlight"],
                         AirLines = string.IsNullOrEmpty( dataRow["AirLines"].ToString())? null: new List<string>(((string) dataRow["AirLines"]).Split('|'))
                     },
-                PaymentMode = StringToEnum<PaymentMode>((string)dataRow["PaymentMode"]),
+                PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
+                CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|")?((string)dataRow["PaymentMode"]).Split('|')[1]:"Visa"),
                 SpecialCriteria = string.IsNullOrEmpty(dataRow["SpecialFilterName"].ToString()) ? null : ParseSpecialCriteria((string)dataRow["SpecialFilterName"], (string)dataRow["SpecialFilterValues"])
             };
         }

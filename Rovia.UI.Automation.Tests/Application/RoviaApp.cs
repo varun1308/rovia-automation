@@ -65,6 +65,11 @@ namespace Rovia.UI.Automation.Tests.Application
             get { return InitializePage<CheckoutPage>("CheckoutControls"); }
         }
 
+        public BFCPaymentPage BFCPaymentPage
+        {
+            get { return InitializePage<BFCPaymentPage>("BFCPaymentControls"); }
+        }
+
         public bool SaveScreenshot(TestContext context)
         {
             try

@@ -194,6 +194,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void Search(AirSearchCriteria airSearchCriteria)
         {
+            Thread.Sleep(2000);
             SelectFlightPanel();
             SetFlightType(airSearchCriteria.SearchType);
             //check if return or one way
@@ -224,9 +225,9 @@ namespace Rovia.UI.Automation.Tests.Pages
                 WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Children.ToString());
                 WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Infants.ToString());
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                throw new Exception("Error while entering passenger details", Ex);
+                throw new Exception("Error while entering passenger details", ex);
             }
         }
 

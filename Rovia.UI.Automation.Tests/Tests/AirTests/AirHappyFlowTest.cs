@@ -49,7 +49,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.PayNow();
                 //_app.HomePage.Search(criteria);
                 //_app.AirResultsPage.AddToCart(TestHelper.ApplySpecialCriteria(criteria.SpecialCriteria));
-            }
+             }
             catch (Exception exception)
             {
                 Assert.Fail(exception.Message);

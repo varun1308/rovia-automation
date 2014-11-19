@@ -118,6 +118,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                         App.State.CurrentUser.ReSetUser();
                         break;
                 }
+                App.HomePage.WaitForHomePage();
                 App.State.CurrentPage = "HomePage";
 
             }
@@ -172,7 +173,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             catch (Exception exception)
             {
                 
-                throw new Exception("Passenger Confirmation failed");
+                throw new Exception("Passenger Confirmation failed",exception);
             }
         }
 
@@ -365,26 +366,25 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!App.State.CurrentPage.Equals("CheckOutPage"))
                     throw new Exception("Pay-Now is not available on " + App.State.CurrentPage);
                 if (_criteria.PaymentMode == PaymentMode.RoviaBucks)
-                    App.CheckoutPage.PayNow(GetPaymentInfo(_criteria.PaymentInfo));
+                    App.CheckoutPage.PayNow(new PaymentInfo(_criteria.PaymentMode));
                 else
                 {
-                    App.CheckoutPage.PayNow(_criteria.PaymentInfo.PaymentMode);
-                    //todo app.bfcPage.PayNow(_criteria.PaymentInfo);
+                    App.CheckoutPage.PayNow(_criteria.PaymentMode);
+                    App.BFCPaymentPage.WaitForLoad();
+                    App.State.CurrentPage = "BFCPaymentPage";
+                    App.BFCPaymentPage.PayNow(new PaymentInfo(_criteria.PaymentMode,_criteria.CardType));
                 }
-                App.CheckoutPage.ConfirmPayment();
-                App.State.CurrentPage = "PaymentConfirmationPage";
+                App.CheckoutPage.CheckPaymentStatus();
+
             }
             catch (Exception exception)
             {
 
-                throw new Exception("Pay Now failed");
+                throw new Exception("Pay Now failed",exception);
             }
         }
 
-        private static PaymentInfo GetPaymentInfo(PaymentInfo paymentInfo)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 
 }

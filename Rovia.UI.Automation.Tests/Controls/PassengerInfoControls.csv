@@ -21,3 +21,4 @@ lnkEditPassengerInfo,a.jsBtnEdit
 divPassengerHolder,div#dvPassengerWidgetHolder
 divConfirmPassengerDetails,div.checkOutPassengerDetails
 divPassengerDetailInput,div#dvPassengerProdHolder
+alertError,div.alert-error

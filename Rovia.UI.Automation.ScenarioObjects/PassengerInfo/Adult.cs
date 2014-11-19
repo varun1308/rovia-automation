@@ -6,7 +6,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
     {
         public Adult()
         {
-            Age =(new Random()).Next(18, 99);
+            Age =(new Random()).Next(19, 99);
         }
     }
 }

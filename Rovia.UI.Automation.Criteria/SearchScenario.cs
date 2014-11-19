@@ -10,7 +10,7 @@ namespace Rovia.UI.Automation.Criteria
         public UserType UserType { get; set; }
         public List<SpecialCriteria>  SpecialCriteria { get; set; }
         public PaymentMode PaymentMode { get; set; }
+        public CreditCardType CardType { get; set; }
         public Passengers Passengers { get; set; }
-        public PaymentInfo PaymentInfo { get; set; }
     }
 }

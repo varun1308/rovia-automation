@@ -79,6 +79,7 @@
     <Compile Include="Model\NewUserRegistration.cs" />
     <Compile Include="Model\PaymentFields.cs" />
     <Compile Include="Pages\AirResultsPage.cs" />
+    <Compile Include="Pages\BFCPaymentPage.cs" />
     <Compile Include="Pages\CheckoutPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\IResultsPage.cs" />
@@ -95,7 +96,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Controls\AirResultsControls.csv" />
+    <None Include="Controls\BFCPaymentControls.csv" />
     <None Include="Controls\CheckoutControls.csv" />
+    <None Include="Controls\ConfirmationControls.csv" />
     <None Include="Controls\HomeControls.csv" />
     <None Include="Controls\LoginDetailsControls.csv" />
     <None Include="Controls\PassengerInfoControls.csv" />

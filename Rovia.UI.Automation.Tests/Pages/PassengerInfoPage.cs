@@ -22,16 +22,13 @@ namespace Rovia.UI.Automation.Tests.Pages
                if(IsInputFormVisible()==false)
                    throw new Exception("InputForm failed To load");
                WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
-               if (IsPassengerInfoConfirmationPageVisible() == false)
-                   throw new Exception("Passenger Confirmation Page failed to load");
+               WaitForConfirmationPageLoad();
            }
            catch (NullReferenceException exception)
            {
                throw new Exception("Edit PassengerInfo Button not visible", exception);
            }
        }
-
-       
 
        internal void ConfirmPassengers()
        {
@@ -59,6 +56,26 @@ namespace Rovia.UI.Automation.Tests.Pages
                throw new Exception("PassengerDetailsPage Load Failed", exception);
            }
        }
+       public void WaitForConfirmationPageLoad()
+       {
+           try
+           {
+               while (IsPassengerInfoConfirmationPageVisible() == false)
+               {
+                   var alertError = WaitAndGetBySelector("alertError", ApplicationSettings.TimeOut.Fast);
+                   if (alertError!=null && alertError.Displayed)
+                   {
+                       throw new Exception(alertError.Text);
+                       
+                   }
+               }
+
+           }
+           catch (Exception exception)
+           {
+               throw new Exception("PassengerCOnfirmationPage Load Failed", exception);
+           }
+       }
        private bool IsInputFormVisible()
        {
            try
@@ -77,11 +94,10 @@ namespace Rovia.UI.Automation.Tests.Pages
            try
            {
                return WaitAndGetBySelector("divConfirmPassengerDetails", ApplicationSettings.TimeOut.Slow).Displayed;
-
            }
            catch (Exception exception)
            {
-               throw new Exception("PassengerDetailsPage InputForm Load Failed", exception);
+               return false;
            }
        }
 
@@ -95,9 +111,8 @@ namespace Rovia.UI.Automation.Tests.Pages
                if (passengerDetails.IsInsuranceRequired)
                    WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
                EnterPassengerDetails();
-               WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
-               if(IsPassengerInfoConfirmationPageVisible()==false)
-                   throw new Exception("Passenger Confirmation Page failed to load");
+               WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Slow).Click();
+               WaitForConfirmationPageLoad();
            }
            catch (NullReferenceException exception)
            {
@@ -117,7 +132,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                inputForm["mNames"][i].SendKeys(x.MiddleName);
                inputForm["lNames"][i].SendKeys(x.LastName);
                inputForm["eMail"][i].SendKeys(x.Emailid);
-               inputForm["dob"][i].SendKeys(DateTime.Now.AddYears(-1 * x.Age).AddDays(-6).ToString("MM/dd/yyyy"));
+               inputForm["dob"][i].SendKeys(DateTime.Now.AddYears(-1 * x.Age).AddMonths(3).ToString("MM/dd/yyyy"));
                inputForm["gender"][i].SelectFromDropDown(x.Gender);
                inputForm["vEmail"][i].SendKeys(x.Emailid);
                ++i;

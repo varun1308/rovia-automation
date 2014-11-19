@@ -55,6 +55,9 @@
     <Compile Include="PassengerInfo\Passenger.cs" />
     <Compile Include="PassengerInfo\PassengerDetails.cs" />
     <Compile Include="PassengerInfo\Passengers.cs" />
+    <Compile Include="PaymentInfo\BillingAddress.cs" />
+    <Compile Include="PaymentInfo\CreditCardInfo.cs" />
+    <Compile Include="PaymentInfo\CreditCardType.cs" />
     <Compile Include="PaymentInfo\PaymentInfo.cs" />
     <Compile Include="PaymentMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
