@@ -13,15 +13,14 @@ namespace Rovia.UI.Automation.Tests.Pages
 {
     public class HomePage : UIPage
     {
-        
-
         #region Common
         internal void WaitForHomePage()
         {
             try
             {
-                while (!IsVisible());
                 SetCountry();
+                while (!IsVisible());
+                
             }
             catch (Exception exception)
             {
@@ -205,7 +204,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Fast).Click();
         }
 
-        private void ApplyFilters(AirFilters filters)
+        private void ApplyFilters(AirPreSearchFilters filters)
         {
             ExecuteJavascript("$('.jCabinClass').siblings('div').find('.filter-option').text('" + filters.CabinType.ToString().Replace('_', ' ') + "')");
             if (filters.IncludeNearByAirPorts)

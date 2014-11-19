@@ -60,9 +60,9 @@ namespace Rovia.UI.Automation.Tests.Tests
             Thread.Sleep(1000);
 
             //check if itinerary available or price not changed before actual payment
-           
 
-            
+
+
 
         }
 
@@ -93,6 +93,39 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.EnterPassengerDetails();
             TestHelper.ConfirmPassengerDetails();
             TestHelper.PayNow();
+        }
+
+        [TestMethod]
+        [DataSource("AirGeneralDataSource")]
+        public void SetAirFilters_AirResultPage()
+        {
+            try
+            {
+                TestHelper.SetCriteria(TestContext.DataRow);
+                TestHelper.Search();
+                //as of now values are static need to take from data sheet
+                TestHelper.SetAirFilters();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("AirGeneralDataSource")]
+        public void SetAirMatrix_AirResultPage()
+        {
+            try
+            {
+                TestHelper.SetCriteria(TestContext.DataRow);
+                TestHelper.Search();
+                TestHelper.SetMatrixAirline();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
         }
     }
 }

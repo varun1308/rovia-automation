@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Rovia.UI.Automation.ScenarioObjects
 {
-    public class AirFilters
+    public class AirPreSearchFilters:PreSearchFilters
     {
         public CabinType CabinType { get; set; }
         public bool NonStopFlight { get; set; }

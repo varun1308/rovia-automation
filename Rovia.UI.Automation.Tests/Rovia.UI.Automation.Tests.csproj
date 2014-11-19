@@ -98,7 +98,6 @@
     <None Include="Controls\AirResultsControls.csv" />
     <None Include="Controls\BFCPaymentControls.csv" />
     <None Include="Controls\CheckoutControls.csv" />
-    <None Include="Controls\ConfirmationControls.csv" />
     <None Include="Controls\HomeControls.csv" />
     <None Include="Controls\LoginDetailsControls.csv" />
     <None Include="Controls\PassengerInfoControls.csv" />

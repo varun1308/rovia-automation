@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.DataBinder;
@@ -156,7 +157,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                throw new Exception("PassengerDetail-Submission failed",exception);
+                throw new Exception("PassengerDetail-Submission failed", exception);
             }
         }
 
@@ -218,16 +219,16 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             return new PassengerDetails(_criteria.Passengers)
             {
-                    Country = "United States",
-                    IsInsuranceRequired = false
-                };
+                Country = "United States",
+                IsInsuranceRequired = false
+            };
         }
 
         private static void WaitForResultLoad()
         {
             switch (_criteria.ProductType)
             {
-                    case ProductType.Air:App.ResultsPage.WaitForResultLoad();
+                case ProductType.Air: App.ResultsPage.WaitForResultLoad();
                     App.State.CurrentPage = "AirResultsPage";
                     break;
             }
@@ -241,7 +242,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 if (!App.State.CurrentPage.Equals("TripFolderPage"))
                     throw new Exception("Trip can not be parse on " + App.State.CurrentPage);
-               Trip =  App.TripFolderPage.ParseTripFolder();
+                Trip = App.TripFolderPage.ParseTripFolder();
             }
             catch (Exception exception)
             {
@@ -355,6 +356,45 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 throw new Exception("Error in continue shopping", exception);
             }
+        }
+
+        #endregion
+
+        #region Air Filters Call
+
+        public static void SetAirFilters()
+        {
+            try
+            {
+                var airPostSearchFilters = new AirPostSearchFilters()
+                {
+                    PriceRange = new PriceRange(){Max = 20,Min = 20},
+                    TakeOffTimeRange = new TakeOffTimeRange(){Min = 20,Max = 80},
+                    LandingTimeRange = new LandingTimeRange(){Min = 20,Max = 80},
+                    MaxTimeDurationDiff = 4,
+                    Stop = "one", //field can be none/one/one-plus
+                    CabinTypes = new List<string>(){"economy","business"},
+                    Airlines = new List<string>(){"AA","NK","UA","US"}
+                };
+
+                App.ResultsPage.SetAirFilters(airPostSearchFilters);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in setting air filters", exception);
+            }
+        }
+
+        public static void SetMatrixAirline()
+        {
+            try
+            {
+                App.ResultsPage.SetMatrixAirline("Spirit Airlines");
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Error in setting airlines from matrix", exception);
+        }
         }
 
         #endregion
