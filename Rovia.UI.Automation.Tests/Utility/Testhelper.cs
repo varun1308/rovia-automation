@@ -9,51 +9,65 @@ using Rovia.UI.Automation.DataBinder;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
+using Rovia.UI.Automation.Tests.Tests.AirTests;
+using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.Tests.Utility
 {
     [TestClass]
     public class TestHelper
     {
-        public static RoviaApp App { get; set; }
+        private static RoviaApp _app;
         private static SearchCriteria _criteria;
-        public static IScenarioDataBinder DataBinder { get; set; }
         public static TripFolder Trip { get; set; }
+
+        public static TripProductType TripProductType
+        {
+            get { return _app.State.CurrentProduct; }
+            set { _app.State.CurrentProduct = value; }
+        }
 
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext testContext)
         {
-            App = new RoviaApp();
+            _app = new RoviaApp();
             GoToHomePage();
         }
 
         [AssemblyCleanup]
         public static void AssemblyCleanup()
         {
-            App.Dispose();
+            _app.Dispose();
         }
 
         internal static void GoToHomePage()
         {
-            App.Launch(ApplicationSettings.Url);
-            App.HomePage.WaitForHomePage();
-            App.State.CurrentPage = "HomePage";
+            _app.Launch(ApplicationSettings.Url);
+            _app.HomePage.WaitForHomePage();
+            _app.State.CurrentPage = "HomePage";
         }
 
-        internal static void SetCriteria(DataRow dataRow)
+        internal static void SetCriteria(SearchCriteria criteria)
         {
-            _criteria = DataBinder.GetCriteria(dataRow);
+            _criteria = criteria;
         }
 
         private static List<Results> ApplySpecialCriteria()
         {
-            var selectedResults = App.ResultsPage.ParseResults();
+            var selectedResults = _app.ResultsPage.ParseResults();
             if (_criteria != null)
             {
+                var criteria = "";
                 foreach (var criterium in _criteria.SpecialCriteria)
                 {
+                    
                     if (criterium.Name.Equals("Supplier"))
+                    {
                         selectedResults = selectedResults.Where(x => x.Supplier.SupplierName.Equals(criterium.Value)).ToList();
+                        criteria += " | Supplier:" + criterium.Value;
+                        if (selectedResults.Count==0)
+                            throw new Exception("No Results found for "+criteria);
+                    }
                     //todo add handling for other criteria
                 }
             }
@@ -64,9 +78,9 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
-                    throw new Exception("PassengerDetails-Editing is not available on " + App.State.CurrentPage);
-                App.PassengerInfoPage.EditPassengerInfo();
+                if (!_app.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
+                    throw new Exception("PassengerDetails-Editing is not available on " + _app.State.CurrentPage);
+                _app.PassengerInfoPage.EditPassengerInfo();
             }
             catch (Exception exception)
             {
@@ -79,10 +93,10 @@ namespace Rovia.UI.Automation.Tests.Utility
 
             try
             {
-                if (!App.State.CurrentPage.Equals("HomePage"))
-                    throw new Exception("Search is not available on " + App.State.CurrentPage);
-                var criteria = _criteria is AirSearchCriteria ? _criteria as AirSearchCriteria : null;
-                App.HomePage.Search(criteria);
+                if (!_app.State.CurrentPage.Equals("HomePage"))
+                    throw new Exception("Search is not available on " + _app.State.CurrentPage);
+                _app.HomePage.Search(_criteria);
+                
                 WaitForResultLoad();
 
             }
@@ -97,30 +111,30 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (App.State.CurrentUser.IsLoggedIn)
+                if (_app.State.CurrentUser.IsLoggedIn)
                     LogOut();
                 GoToLoginPage();
                 switch (_criteria.UserType)
                 {
                     case UserType.Registered:
-                        App.LoginDetailsPage.LogIn("vrathod@tavisca.com", "zaq1ZAQ!");
-                        App.State.CurrentUser.UserName = "vrathod@tavisca.com";
-                        App.State.CurrentUser.Type = _criteria.UserType;
-                        App.State.CurrentUser.IsLoggedIn = true;
+                        _app.LoginDetailsPage.LogIn("vrathod@tavisca.com", "zaq1ZAQ!");
+                        _app.State.CurrentUser.UserName = "vrathod@tavisca.com";
+                        _app.State.CurrentUser.Type = _criteria.UserType;
+                        _app.State.CurrentUser.IsLoggedIn = true;
                         break;
                     case UserType.Preferred:
-                        App.LoginDetailsPage.LogIn("PreferredUser", "Password");
-                        App.State.CurrentUser.UserName = "RegisteredUserUserName";
-                        App.State.CurrentUser.Type = _criteria.UserType;
-                        App.State.CurrentUser.IsLoggedIn = true;
+                        _app.LoginDetailsPage.LogIn("PreferredUser", "Password");
+                        _app.State.CurrentUser.UserName = "RegisteredUserUserName";
+                        _app.State.CurrentUser.Type = _criteria.UserType;
+                        _app.State.CurrentUser.IsLoggedIn = true;
                         break;
                     case UserType.Guest:
-                        App.LoginDetailsPage.ContinueAsGuest();
-                        App.State.CurrentUser.ReSetUser();
+                        _app.LoginDetailsPage.ContinueAsGuest();
+                        _app.State.CurrentUser.ResetUser();
                         break;
                 }
-                App.HomePage.WaitForHomePage();
-                App.State.CurrentPage = "HomePage";
+                _app.HomePage.WaitForHomePage();
+                _app.State.CurrentPage = "HomePage";
 
             }
             catch (Exception exception)
@@ -134,10 +148,10 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.EndsWith("ResultsPage"))
-                    throw new Exception("AddToCart is not available on " + App.State.CurrentPage);
-                App.ResultsPage.AddToCart(ApplySpecialCriteria());
-                App.State.CurrentPage = "TripFolderPage";
+                if (!_app.State.CurrentPage.EndsWith("ResultsPage"))
+                    throw new Exception("AddToCart is not available on " + _app.State.CurrentPage);
+                _app.ResultsPage.AddToCart(ApplySpecialCriteria());
+                _app.State.CurrentPage = "TripFolderPage";
                 ParseTripFolder();
             }
             catch (Exception exception)
@@ -150,10 +164,10 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("PassengerInfoPage"))
-                    throw new Exception("PassengerDetails-Submission is not available on " + App.State.CurrentPage);
-                App.PassengerInfoPage.SubmitPassengerDetails(GetPassengerDetails());
-                App.State.CurrentPage = "PassengerDetails-ConfirmationPage";
+                if (!_app.State.CurrentPage.Equals("PassengerInfoPage"))
+                    throw new Exception("PassengerDetails-Submission is not available on " + _app.State.CurrentPage);
+                _app.PassengerInfoPage.SubmitPassengerDetails(GetPassengerDetails());
+                _app.State.CurrentPage = "PassengerDetails-ConfirmationPage";
             }
             catch (Exception exception)
             {
@@ -165,11 +179,11 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
-                    throw new Exception("PassengerDetails-Confirmation is not available on " + App.State.CurrentPage);
-                App.PassengerInfoPage.ConfirmPassengers();
-                App.CheckoutPage.WaitForLoad();
-                App.State.CurrentPage = "CheckOutPage";
+                if (!_app.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
+                    throw new Exception("PassengerDetails-Confirmation is not available on " + _app.State.CurrentPage);
+                _app.PassengerInfoPage.ConfirmPassengers();
+                _app.CheckoutPage.WaitForLoad();
+                _app.State.CurrentPage = "CheckOutPage";
             }
             catch (Exception exception)
             {
@@ -182,12 +196,12 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                switch (App.State.CurrentPage)
+                switch (_app.State.CurrentPage)
                 {
-                    case "HomePage": App.HomePage.GoToLoginPage();
+                    case "HomePage": _app.HomePage.GoToLoginPage();
                         break;
                 }
-                App.State.CurrentPage = "LogInPage";
+                _app.State.CurrentPage = "LogInPage";
             }
             catch (Exception exception)
             {
@@ -196,14 +210,17 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
         }
 
-        private static void LogOut()
+        public static void LogOut()
         {
             try
             {
-                switch (App.State.CurrentPage)
+                if (_app.State.CurrentUser.Type==UserType.Guest)
+                    return;
+                switch (_app.State.CurrentPage)
                 {
-                    case "HomePage": App.HomePage.LogOut();
-                        App.State.CurrentPage = "LogInPage";
+                    case "HomePage": _app.HomePage.LogOut();
+                        _app.State.CurrentPage = "LogInPage";
+                        _app.State.CurrentUser.ResetUser();
                         GoToHomePage();
                         break;
                 }
@@ -226,10 +243,10 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         private static void WaitForResultLoad()
         {
-            switch (_criteria.ProductType)
+            switch (TripProductType)
             {
-                case ProductType.Air: App.ResultsPage.WaitForResultLoad();
-                    App.State.CurrentPage = "AirResultsPage";
+                case TripProductType.Air: _app.ResultsPage.WaitForResultLoad();
+                    _app.State.CurrentPage = "AirResultsPage";
                     break;
             }
         }
@@ -240,9 +257,9 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip can not be parse on " + App.State.CurrentPage);
-                Trip = App.TripFolderPage.ParseTripFolder();
+                if (!_app.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip can not be parse on " + _app.State.CurrentPage);
+                Trip = _app.TripFolderPage.ParseTripFolder();
             }
             catch (Exception exception)
             {
@@ -254,8 +271,8 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip can not be save on " + App.State.CurrentPage);
+                if (!_app.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip can not be save on " + _app.State.CurrentPage);
                 // to implement
                 Trip.TripSettingsButton.Click();
                 Trip.SaveTripButton.Click();
@@ -274,8 +291,8 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip can not be start over on " + App.State.CurrentPage);
+                if (!_app.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip can not be start over on " + _app.State.CurrentPage);
                 Trip.TripSettingsButton.Click();
                 Trip.StartoverButton.Click();
             }
@@ -289,10 +306,10 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip name can not be edit on " + App.State.CurrentPage);
+                if (!_app.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip name can not be edit on " + _app.State.CurrentPage);
                 Trip.TripSettingsButton.Click();
-                App.TripFolderPage.EditTripName();
+                _app.TripFolderPage.EditTripName();
             }
             catch (Exception exception)
             {
@@ -304,8 +321,8 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip product can not be modified on " + App.State.CurrentPage);
+                if (!_app.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip product can not be modified on " + _app.State.CurrentPage);
                 Trip.TripProducts[index].ModifyProductButton.Click();
             }
             catch (Exception exception)
@@ -318,8 +335,8 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip product can not be removed on " + App.State.CurrentPage);
+                if (!_app.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip product can not be removed on " + _app.State.CurrentPage);
                 Trip.TripProducts[index].RemoveProductButton.Click();
             }
             catch (Exception exception)
@@ -332,11 +349,11 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip can not be checkout on " + App.State.CurrentPage);
+                if (!_app.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Trip can not be checkout on " + _app.State.CurrentPage);
                 Trip.CheckoutTripButton.Click();
-                App.PassengerInfoPage.WaitForPageLoad();
-                App.State.CurrentPage = "PassengerInfoPage";
+                _app.PassengerInfoPage.WaitForPageLoad();
+                _app.State.CurrentPage = "PassengerInfoPage";
             }
             catch (Exception exception)
             {
@@ -348,8 +365,8 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Can not able to continue shopping on " + App.State.CurrentPage);
+                if (!_app.State.CurrentPage.Equals("TripFolderPage"))
+                    throw new Exception("Can not able to continue shopping on " + _app.State.CurrentPage);
                 Trip.ContinueShoppingButton.Click();
             }
             catch (Exception exception)
@@ -377,7 +394,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     Airlines = new List<string>(){"AA","NK","UA","US"}
                 };
 
-                App.ResultsPage.SetAirFilters(airPostSearchFilters);
+                _app.ResultsPage.SetPostSearchFilters(airPostSearchFilters);
             }
             catch (Exception exception)
             {
@@ -389,7 +406,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                App.ResultsPage.SetMatrixAirline("Spirit Airlines");
+                _app.ResultsPage.SetMatrix("Spirit Airlines");
             }
             catch (Exception exception)
             {
@@ -403,18 +420,18 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
-                if (!App.State.CurrentPage.Equals("CheckOutPage"))
-                    throw new Exception("Pay-Now is not available on " + App.State.CurrentPage);
+                if (!_app.State.CurrentPage.Equals("CheckOutPage"))
+                    throw new Exception("Pay-Now is not available on " + _app.State.CurrentPage);
                 if (_criteria.PaymentMode == PaymentMode.RoviaBucks)
-                    App.CheckoutPage.PayNow(new PaymentInfo(_criteria.PaymentMode));
+                    _app.CheckoutPage.PayNow(new PaymentInfo(_criteria.PaymentMode));
                 else
                 {
-                    App.CheckoutPage.PayNow(_criteria.PaymentMode);
-                    App.BFCPaymentPage.WaitForLoad();
-                    App.State.CurrentPage = "BFCPaymentPage";
-                    App.BFCPaymentPage.PayNow(new PaymentInfo(_criteria.PaymentMode,_criteria.CardType));
+                    _app.CheckoutPage.PayNow(_criteria.PaymentMode);
+                    _app.BFCPaymentPage.WaitForLoad();
+                    _app.State.CurrentPage = "BFCPaymentPage";
+                    _app.BFCPaymentPage.PayNow(new PaymentInfo(_criteria.PaymentMode,_criteria.CardType));
                 }
-                App.CheckoutPage.CheckPaymentStatus();
+                _app.CheckoutPage.CheckPaymentStatus();
 
             }
             catch (Exception exception)
@@ -424,7 +441,12 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
         }
 
-        
+
+
+        internal static void SetTripProductType(TripProductType tripProductType)
+        {
+            _app.State.CurrentProduct = tripProductType;
+        }
     }
 
 }

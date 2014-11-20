@@ -3,7 +3,7 @@ using Rovia.UI.Automation.Criteria;
 
 namespace Rovia.UI.Automation.DataBinder
 {
-    public interface IScenarioDataBinder
+    public interface ICriteriaDataBinder
     {
         SearchCriteria GetCriteria(DataRow dataRow);
     }

@@ -13,7 +13,7 @@ namespace Rovia.UI.Automation.Tests.Pages
         void AddToCart(List<Results> result);
         void WaitForResultLoad();
         List<Results> ParseResults();
-        void SetAirFilters(AirPostSearchFilters airPostSearchFilters);
-        void SetMatrixAirline(string airline);
+        void SetPostSearchFilters(PostSearchFilters postSearchFilters);
+        void SetMatrix(string product);
     }
 }

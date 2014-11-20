@@ -12,7 +12,7 @@ namespace Rovia.UI.Automation.Tests.Application
         public string UserName { get; set; }
         public bool IsLoggedIn { get; set; }
 
-        public void ReSetUser()
+        public void ResetUser()
         {
             Type = UserType.Guest;
             UserName = "";

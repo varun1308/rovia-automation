@@ -1,0 +1,17 @@
+navBar,ul.nav.fontUpperCase li.ico_flights
+searchPanel,div[data-producttype="flight"]
+flightJourneyTypeOneWay,div.tripbuttons button[data-triptype="0"]
+flightJourneyTypeRoundTrip,div.tripbuttons button[data-triptype="1"]
+flightJourneyTypeMulticity,div.tripbuttons button[data-triptype="2"]
+fromAp,input#depAP
+toAp,input#retAP
+onwardDate,input#depDate
+returnDate,input#retDate
+adults,select#drpAdultCount
+children,select#drpChildCount
+infants,select.jInfant
+btnAirSearch,button#btnAirSearch
+addFlight,a#addflight
+cabinType,select.jCabinClass
+includeNearByAirports,input.jsIncludeNearbyAirports
+dates,.timepicker_arrow

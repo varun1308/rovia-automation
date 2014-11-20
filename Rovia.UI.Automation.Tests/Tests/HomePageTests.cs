@@ -6,6 +6,7 @@ using Rovia.UI.Automation.DataBinder;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Model;
+using Rovia.UI.Automation.Tests.Tests.AirTests;
 using Rovia.UI.Automation.Tests.Utility;
 
 namespace Rovia.UI.Automation.Tests.Tests
@@ -14,21 +15,19 @@ namespace Rovia.UI.Automation.Tests.Tests
     public class HomePageTests
     {
         public TestContext TestContext { get; set; }
-        private static RoviaApp _app;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            TestHelper.DataBinder = new AirScenarioDataBinder();
-            _app = TestHelper.App;
+            AirHappyFlowTest.DataBinder = new AirCriteriaDataBinder();
             
         }
 
         [TestInitialize]
         public void TestInitialize()
         {
-            Assert.IsTrue(_app.HomePage.IsVisible(), "Could not Load Home Page!");
-            Thread.Sleep(500);
+            //Assert.IsTrue(_app.HomePage.IsVisible(), "Could not Load Home Page!");
+            //Thread.Sleep(500);
         }
 
         [TestCleanup]
@@ -40,7 +39,14 @@ namespace Rovia.UI.Automation.Tests.Tests
         [TestCategory("Sanity")]
         public void ShouldShowHomePage()
         {
-            Assert.IsTrue(_app.HomePage.IsVisible(), "Home was unavailable");
+            try
+            {
+                TestHelper.GoToHomePage();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
         }
 
 
@@ -49,7 +55,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         [DataSource("AirGeneralDataSource")]
         public void PreferedCust_BookingFlow_CreditCard_Success()
         {
-            TestHelper.SetCriteria(TestContext.DataRow);
+            TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
             TestHelper.Login();
             TestHelper.Search();
             TestHelper.AddToCart();
@@ -71,7 +77,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         [DataSource("AirGeneralDataSource")]
         public void GuestUser_BookingFlow_CreditCard_Success()
         {
-            TestHelper.SetCriteria(TestContext.DataRow);
+            TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
             TestHelper.Search();
             TestHelper.AddToCart();
             TestHelper.CheckoutTrip();
@@ -85,7 +91,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         [DataSource("AirGeneralDataSource")]
         public void PreferedCust_BookingFlow_RoviaBucks_Success()
         {
-            TestHelper.SetCriteria(TestContext.DataRow);
+            TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
             TestHelper.Login();
             TestHelper.Search();
             TestHelper.AddToCart();
@@ -101,7 +107,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         {
             try
             {
-                TestHelper.SetCriteria(TestContext.DataRow);
+                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
                 TestHelper.Search();
                 //as of now values are static need to take from data sheet
                 TestHelper.SetAirFilters();
@@ -118,7 +124,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         {
             try
             {
-                TestHelper.SetCriteria(TestContext.DataRow);
+                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
                 TestHelper.Search();
                 TestHelper.SetMatrixAirline();
             }

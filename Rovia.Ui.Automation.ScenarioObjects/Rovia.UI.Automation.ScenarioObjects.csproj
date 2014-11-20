@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="AirPostSearchFilters.cs" />
     <Compile Include="AirPreSearchFilters.cs" />
+    <Compile Include="HotelPreSearchFilters.cs" />
     <Compile Include="PassengerInfo\Adult.cs" />
     <Compile Include="AirportPair.cs" />
     <Compile Include="AirResult.cs" />
@@ -70,10 +71,12 @@
     <Compile Include="Results.cs" />
     <Compile Include="SearchType.cs" />
     <Compile Include="SpecialCriteria.cs" />
+    <Compile Include="StayPeriod.cs" />
     <Compile Include="Supplier.cs" />
     <Compile Include="TakeOFFTimeRange.cs" />
     <Compile Include="TripFolder.cs" />
     <Compile Include="TripProduct.cs" />
+    <Compile Include="TripProductType.cs" />
     <Compile Include="UserType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

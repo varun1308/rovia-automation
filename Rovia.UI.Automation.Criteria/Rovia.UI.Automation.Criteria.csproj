@@ -40,9 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AirSearchCriteria.cs" />
-    <Compile Include="ProductType.cs" />
+    <Compile Include="HotelSearchCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchScenario.cs" />
+    <Compile Include="SearchCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rovia.Ui.Automation.ScenarioObjects\Rovia.UI.Automation.ScenarioObjects.csproj">

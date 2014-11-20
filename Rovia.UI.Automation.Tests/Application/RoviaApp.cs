@@ -6,6 +6,8 @@ using OpenQA.Selenium;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Pages;
+using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.Tests.Pages.SearchPanels;
 
 namespace Rovia.UI.Automation.Tests.Application
 {
@@ -22,14 +24,22 @@ namespace Rovia.UI.Automation.Tests.Application
                     Type = UserType.Guest,
                     IsLoggedIn = false
                 },
-                CurrentProduct = "AIR"
-                
+                CurrentProduct = TripProductType.Air
             };
         }
 
         public HomePage HomePage
         {
-            get { return InitializePage<HomePage>("HomeControls"); }
+            get 
+            { 
+                var homePage= InitializePage<HomePage>("HomeControls");
+                switch (State.CurrentProduct)
+                {
+                    case TripProductType.Air: homePage.SearchPanel = InitializePage<AirSearchPanel>("AirSearchPanelControls");
+                        break;
+                }
+                return homePage;
+            }
         }
 
         public IResultsPage ResultsPage
@@ -38,7 +48,8 @@ namespace Rovia.UI.Automation.Tests.Application
             {
                 switch (State.CurrentProduct)
                 {
-                    case "AIR": return InitializePage<AirResultsPage>("AirResultsControls");
+                    case TripProductType.Air: return InitializePage<AirResultsPage>("AirResultsControls");
+                    case TripProductType.Hotel: return InitializePage<HotelResultsPage>("HotelResultsControls");
                     default:
                         return null;
                 }

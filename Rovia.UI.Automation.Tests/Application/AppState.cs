@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Rovia.UI.Automation.Tests.Pages;
+﻿
+using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.Tests.Application
 {
@@ -10,7 +7,7 @@ namespace Rovia.UI.Automation.Tests.Application
     {
         public string CurrentPage { get; set; }
         public User CurrentUser { get; set; }
-        public string CurrentProduct { get; set; }
+        public TripProductType CurrentProduct { get; set; }
         
     }
 }

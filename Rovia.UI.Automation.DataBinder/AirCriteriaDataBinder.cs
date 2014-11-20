@@ -7,7 +7,7 @@ using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.DataBinder
 {
-    public class AirScenarioDataBinder:IScenarioDataBinder
+    public class AirCriteriaDataBinder:ICriteriaDataBinder
     {
         public SearchCriteria GetCriteria(DataRow dataRow)
         {
@@ -15,7 +15,6 @@ namespace Rovia.UI.Automation.DataBinder
         
             return new AirSearchCriteria()
             {
-                ProductType = ProductType.Air,
                 UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
                 Description = (string)dataRow["Description"],
                 AirportPairs = ParseAirPorts(dataRow["AirPortPairs"].ToString(), dataRow["TravelDates"].ToString(), searchType),
@@ -26,12 +25,15 @@ namespace Rovia.UI.Automation.DataBinder
                         Children = int.Parse(dataRow["Children"].ToString())
                     },
                 SearchType = searchType,
-                Filters = new AirPreSearchFilters()
+                Filters = new Filters()
                     {
-                        IncludeNearByAirPorts = (bool)dataRow["IncludeNearByAirPorts"],
-                        CabinType = StringToEnum<CabinType>((string)dataRow["CabinType"]),
-                        NonStopFlight = (bool)dataRow["NonStopFlight"],
-                        AirLines = string.IsNullOrEmpty( dataRow["AirLines"].ToString())? null: new List<string>(((string) dataRow["AirLines"]).Split('|'))
+                        PreSearchFilters = new AirPreSearchFilters()
+                        {
+                            IncludeNearByAirPorts = (bool)dataRow["IncludeNearByAirPorts"],
+                            CabinType = StringToEnum<CabinType>((string)dataRow["CabinType"]),
+                            NonStopFlight = (bool)dataRow["NonStopFlight"],
+                            AirLines = string.IsNullOrEmpty(dataRow["AirLines"].ToString()) ? null : new List<string>(((string)dataRow["AirLines"]).Split('|'))
+                        }
                     },
                 PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
                 CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|")?((string)dataRow["PaymentMode"]).Split('|')[1]:"Visa"),

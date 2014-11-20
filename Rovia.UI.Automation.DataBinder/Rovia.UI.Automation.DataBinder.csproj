@@ -39,8 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AirScenarioDataBinder.cs" />
-    <Compile Include="IScenarioDataBinder.cs" />
+    <Compile Include="AirCriteriaDataBinder.cs" />
+    <Compile Include="HotelCriteriaDatabinder.cs" />
+    <Compile Include="ICriteriaDataBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
