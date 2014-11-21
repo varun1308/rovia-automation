@@ -34,6 +34,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         [TestCleanup]
         public void TestCleanup()
         {
+            TestHelper.GoToHomePage();
         }
 
         [TestMethod]

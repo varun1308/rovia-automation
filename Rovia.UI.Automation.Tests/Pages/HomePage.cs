@@ -35,7 +35,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void SetCountry()
         {
-            var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow);
+            var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Safe);
             if (country == null || !country.Displayed) return;
             country.SendKeys("United States");
             WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.Slow).Click();

@@ -7,6 +7,11 @@ namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class FlightLegs
     {
-        //todo implement flight leg structure
+        public string AirportPair { get; set; }
+        public int Duration { get; set; }
+        public string DepartTime { get; set; }
+        public string ArriveTime { get; set; }
+        public string Cabin { get; set; }
+        public int Stops { get; set; }
     }
 }

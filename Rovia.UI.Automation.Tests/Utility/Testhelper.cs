@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
@@ -92,11 +93,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                 throw new Exception("SearchFailed", exception);
             }
         }
-        
+
         internal static void Login()
         {
             try
             {
+                var requestingPage = App.State.CurrentPage;
                 if (App.State.CurrentUser.IsLoggedIn)
                     LogOut();
                 GoToLoginPage();
@@ -119,13 +121,15 @@ namespace Rovia.UI.Automation.Tests.Utility
                         App.State.CurrentUser.ReSetUser();
                         break;
                 }
-                App.HomePage.WaitForHomePage();
-                App.State.CurrentPage = "HomePage";
-
+                if (requestingPage.Equals("HomePage"))
+                {
+                    App.HomePage.WaitForHomePage();
+                    App.State.CurrentPage = "HomePage";
+                }
             }
             catch (Exception exception)
             {
-                
+
                 throw new Exception("LogIn Failed", exception);
             }
         }
@@ -173,8 +177,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                
-                throw new Exception("Passenger Confirmation failed",exception);
+
+                throw new Exception("Passenger Confirmation failed", exception);
             }
         }
 
@@ -312,7 +316,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 throw new Exception("Error in modifying trip product.", exception);
             }
-    }
+        }
 
         public static void RemoveProduct(int index)
         {
@@ -368,16 +372,17 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 var airPostSearchFilters = new AirPostSearchFilters()
                 {
-                    PriceRange = new PriceRange(){Max = 20,Min = 20},
-                    TakeOffTimeRange = new TakeOffTimeRange(){Min = 20,Max = 80},
-                    LandingTimeRange = new LandingTimeRange(){Min = 20,Max = 80},
-                    MaxTimeDurationDiff = 4,
+                    IsApplyFilter = true,
+                    PriceRange = new PriceRange() { Max = 20, Min = 20 },
+                    TakeOffTimeRange = new TakeOffTimeRange() { Min = 20, Max = 80 },
+                    LandingTimeRange = new LandingTimeRange() { Min = 20, Max = 80 },
+                    MaxTimeDurationDiff = 8,
                     Stop = "one", //field can be none/one/one-plus
-                    CabinTypes = new List<string>(){"economy","business"},
-                    Airlines = new List<string>(){"AA","NK","UA","US"}
+                    CabinTypes = new List<string>() { "economy", "business" },
+                    Airlines = new List<string>() { "AA", "NK", "UA", "US" }
                 };
-
-                App.ResultsPage.SetAirFilters(airPostSearchFilters);
+                if (airPostSearchFilters.IsApplyFilter)
+                    App.ResultsPage.SetAirFilters(airPostSearchFilters);
             }
             catch (Exception exception)
             {
@@ -387,14 +392,7 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         public static void SetMatrixAirline()
         {
-            try
-            {
-                App.ResultsPage.SetMatrixAirline("Spirit Airlines");
-            }
-            catch (Exception exception)
-            {
-                throw new Exception("Error in setting airlines from matrix", exception);
-        }
+            App.ResultsPage.SetMatrixAirline("Spirit Airlines");
         }
 
         #endregion
@@ -412,7 +410,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     App.CheckoutPage.PayNow(_criteria.PaymentMode);
                     App.BFCPaymentPage.WaitForLoad();
                     App.State.CurrentPage = "BFCPaymentPage";
-                    App.BFCPaymentPage.PayNow(new PaymentInfo(_criteria.PaymentMode,_criteria.CardType));
+                    App.BFCPaymentPage.PayNow(new PaymentInfo(_criteria.PaymentMode, _criteria.CardType));
                 }
                 App.CheckoutPage.CheckPaymentStatus();
 
@@ -420,11 +418,11 @@ namespace Rovia.UI.Automation.Tests.Utility
             catch (Exception exception)
             {
 
-                throw new Exception("Pay Now failed",exception);
+                throw new Exception("Pay Now failed", exception);
             }
         }
 
-        
+
     }
 
 }
