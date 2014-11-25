@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing.Imaging;
+using System.Threading;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
@@ -92,6 +93,10 @@ namespace Rovia.UI.Automation.Tests.Application
             return false;
         }
 
-        
+        public void ClearBrowserCache()
+        {
+            Driver.Manage().Cookies.DeleteAllCookies(); //delete all cookies
+            Thread.Sleep(5000); //wait 5 seconds to clear cookies.
+        }
     }
 }

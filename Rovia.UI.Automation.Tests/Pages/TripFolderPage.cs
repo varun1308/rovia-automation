@@ -17,7 +17,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                     Convert.ToInt32(WaitAndGetBySelector("totalItems", ApplicationSettings.TimeOut.Safe).Text),
                 TripProducts = new List<TripProduct>(),
                 ContinueShoppingButton = WaitAndGetBySelector("continueShopping", ApplicationSettings.TimeOut.Fast),
-                CheckoutTripButton = WaitAndGetBySelector("checkoutButton", ApplicationSettings.TimeOut.Fast),
+                CheckoutTripButton = WaitAndGetBySelector("checkoutButton", ApplicationSettings.TimeOut.Slow),
                 TripSettingsButton = WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast),
                 SaveTripButton = WaitAndGetBySelector("saveTripButton", ApplicationSettings.TimeOut.Fast),
                 StartoverButton = WaitAndGetBySelector("startOver", ApplicationSettings.TimeOut.Fast)
@@ -39,7 +39,6 @@ namespace Rovia.UI.Automation.Tests.Pages
                     Passengers = passengers[i],
                     ModifyProductButton = modifyProductButton[i],
                     RemoveProductButton = removeProductButton[i]
-
                 });
                 i++;
             }
@@ -48,23 +47,31 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private IEnumerable<Fare> ParseFares()
         {
-            return new List<Fare>()
+            var fares = new List<Fare>();
+            var i = 0;
+            var totalFare = GetUIElements("totalFare").Select(x => x.Text).ToArray();
+            var baseFare =
+                GetUIElements("fareBreakup")
+                    .Where((item, index) => index%2 == 0)
+                    .Select(x => x.Text.Split(':')[1].TrimStart(' '))
+                    .ToArray();
+            var taxes =
+                GetUIElements("fareBreakup")
+                    .Where((item, index) => index%2 != 0)
+                    .Select(x => x.Text.Split(':')[1].TrimStart(' '))
+                    .ToArray();
+
+            while (i<totalFare.Length)
             {
-                new Fare()
-                {
-                    TotalFare = GetUIElements("totalFare").Select(x => x.Text).ToList(),
-                    BaseFare =
-                        GetUIElements("fareBreakup")
-                            .Where((item, index) => index%2 == 0)
-                            .Select(x => x.Text.Split(':')[1].TrimStart(' '))
-                            .ToList(),
-                    Taxes =
-                        GetUIElements("fareBreakup")
-                            .Where((item, index) => index%2 != 0)
-                            .Select(x => x.Text.Split(':')[1].TrimStart(' '))
-                            .ToList()
-                }
-            };
+               fares.Add(new Fare()
+               {
+                   TotalFare = totalFare[i],
+                   BaseFare = baseFare[i],
+                   Taxes = taxes[i]
+               });
+                i++;
+            }
+            return fares;
         }
 
         private IEnumerable<Passengers> ParsePassengers()

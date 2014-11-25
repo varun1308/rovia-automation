@@ -5,6 +5,7 @@ using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 using System.Threading;
 
@@ -18,9 +19,10 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             try
             {
+               var divHome= WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Safe);
+               if (divHome!=null && divHome.Displayed)
                 SetCountry();
-                while (!IsVisible());
-                
+                while (!IsVisible()){}
             }
             catch (Exception exception)
             {
@@ -36,9 +38,12 @@ namespace Rovia.UI.Automation.Tests.Pages
         internal void SetCountry()
         {
             var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Safe);
-            if (country == null || !country.Displayed) return;
-            country.SendKeys("United States");
-            WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.Slow).Click();
+            Thread.Sleep(500);
+            if (country != null && country.Displayed)
+            {
+                country.SelectFromDropDown("United States");
+                WaitAndGetBySelector("saveCountry", ApplicationSettings.TimeOut.Slow).Click();
+            }
         }
 
         internal bool IsUserLoggedIn()
@@ -236,11 +241,16 @@ namespace Rovia.UI.Automation.Tests.Pages
                 InputMultiCityAirPorts(airportPairs);
             else
             {
+                ExecuteJavascript("$('#depAP').val('');$('#retAP').val('');$('#depDate').val('');");
                 WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].DepartureAirport);
                 WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].ArrivalAirport);
                 WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].DepartureDateTime.ToString("MM/dd/yyyy"));
                 if (searchType == SearchType.RoundTrip)
-                    WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
+                {
+                    ExecuteJavascript("$('#retDate').val('');");
+                    WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Slow)
+                        .SendKeys(airportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
+                }
             }
 
         }

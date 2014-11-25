@@ -70,21 +70,23 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void LogIn(string userId, string password)
         {
-            //Enter Credentials
-
             WaitAndGetBySelector("username", ApplicationSettings.TimeOut.Fast).SendKeys(userId);
 
             WaitAndGetBySelector("password", ApplicationSettings.TimeOut.Fast).SendKeys(password);
 
             WaitAndGetBySelector("btnLogIn", ApplicationSettings.TimeOut.Fast).Click();
-
-
-
         }
 
-        internal void ContinueAsGuest()
+        internal void ContinueAsGuest(string fname,string lname, string emailid)
         {
-            throw new NotImplementedException();
+            //ExecuteJavascript("$('input[value=\"register\"]').click()");
+            WaitAndGetBySelector("guestOption", 60).Click();
+            WaitAndGetBySelector("guestOptionContinue", ApplicationSettings.TimeOut.Safe).Click();
+            //ExecuteJavascript("$('input[value=\"guest\"]').click()");
+            WaitAndGetBySelector("guestFName", ApplicationSettings.TimeOut.SuperFast).SendKeys(fname);
+            WaitAndGetBySelector("guestLName", ApplicationSettings.TimeOut.SuperFast).SendKeys(lname);
+            WaitAndGetBySelector("guestEmailId", ApplicationSettings.TimeOut.SuperFast).SendKeys(emailid);
+            ExecuteJavascript("$('button[val-submit=\"guest\"]').click()");
         }
     }
 }

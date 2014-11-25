@@ -33,7 +33,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             App.Dispose();
         }
-
+        
         internal static void GoToHomePage()
         {
             App.Launch(ApplicationSettings.Url);
@@ -41,9 +41,10 @@ namespace Rovia.UI.Automation.Tests.Utility
             App.State.CurrentPage = "HomePage";
         }
 
-        internal static void SetCriteria(DataRow dataRow)
+        internal static void SetCriteria(SearchCriteria
+            criteria)
         {
-            _criteria = DataBinder.GetCriteria(dataRow);
+            _criteria =criteria;
         }
 
         private static List<Results> ApplySpecialCriteria()
@@ -117,7 +118,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                         App.State.CurrentUser.IsLoggedIn = true;
                         break;
                     case UserType.Guest:
-                        App.LoginDetailsPage.ContinueAsGuest();
+                        App.LoginDetailsPage.ContinueAsGuest("vikul","rathod","vrathod@tavisca.com");
                         App.State.CurrentUser.ReSetUser();
                         break;
                 }
@@ -125,6 +126,11 @@ namespace Rovia.UI.Automation.Tests.Utility
                 {
                     App.HomePage.WaitForHomePage();
                     App.State.CurrentPage = "HomePage";
+                }
+                else
+                {
+                    App.PassengerInfoPage.WaitForPageLoad();
+                    App.State.CurrentPage = "PassengerInfoPage";
                 }
             }
             catch (Exception exception)
@@ -339,7 +345,10 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!App.State.CurrentPage.Equals("TripFolderPage"))
                     throw new Exception("Trip can not be checkout on " + App.State.CurrentPage);
                 Trip.CheckoutTripButton.Click();
+
+                if (_criteria.UserType!=UserType.Guest)
                 App.PassengerInfoPage.WaitForPageLoad();
+
                 App.State.CurrentPage = "PassengerInfoPage";
             }
             catch (Exception exception)
