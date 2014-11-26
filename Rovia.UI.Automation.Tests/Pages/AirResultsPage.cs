@@ -139,7 +139,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                 return;
             }
-            throw new Exception("AddToCartFailed");
+            throw new Exception("Selected itineraries not Available");
         }
 
         public void WaitForResultLoad()

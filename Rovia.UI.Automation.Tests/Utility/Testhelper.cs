@@ -204,8 +204,10 @@ namespace Rovia.UI.Automation.Tests.Utility
                 {
                     case "HomePage": _app.HomePage.GoToLoginPage();
                         break;
+                    case "LoginDetailsPage":
+                        break;
                 }
-                _app.State.CurrentPage = "LogInPage";
+                _app.State.CurrentPage = "LoginDetailsPage";
             }
             catch (Exception exception)
             {
@@ -357,10 +359,16 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new Exception("Trip can not be checkout on " + _app.State.CurrentPage);
                 Trip.CheckoutTripButton.Click();
 
-                if (_criteria.UserType!=UserType.Guest)
-                _app.PassengerInfoPage.WaitForPageLoad();
-
-                _app.State.CurrentPage = "PassengerInfoPage";
+                if (_app.State.CurrentUser.Type != UserType.Guest)
+                {
+                    _app.PassengerInfoPage.WaitForPageLoad();
+                    _app.State.CurrentPage = "PassengerInfoPage";
+                }
+                else
+                {
+                    //_app.LoginDetailsPage.WaitForLoad();
+                    _app.State.CurrentPage = "LoginDetailsPage";
+                }
             }
             catch (Exception exception)
             {
