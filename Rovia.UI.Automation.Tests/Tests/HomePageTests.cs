@@ -21,13 +21,11 @@ namespace Rovia.UI.Automation.Tests.Tests
         public static void ClassInitialize(TestContext testContext)
         {
             AirHappyFlowTest.DataBinder = new AirCriteriaDataBinder();
-            
+
         }
 
         [TestInitialize]
-        public void TestInitialize()
-        {
-        }
+        public void TestInitialize(){}
 
         [TestCleanup]
         public void TestCleanup()
@@ -43,92 +41,6 @@ namespace Rovia.UI.Automation.Tests.Tests
             try
             {
                 TestHelper.GoToHomePage();
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-        }
-        }
-
-
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("AirGeneralDataSource")]
-        public void PreferedCust_BookingFlow_CreditCard_Success()
-        {
-            TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-            TestHelper.Login();
-            TestHelper.Search();
-            TestHelper.AddToCart();
-            TestHelper.CheckoutTrip();
-            TestHelper.EnterPassengerDetails();
-            TestHelper.ConfirmPassengerDetails();
-            TestHelper.PayNow();
-        }
-
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("AirGeneralDataSource")]
-        public void GuestUser_BookingFlow_CreditCard_Success()
-        {
-            try
-            {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
-                TestHelper.AddToCart();
-                TestHelper.CheckoutTrip();
-                TestHelper.Login();
-                TestHelper.EnterPassengerDetails();
-                TestHelper.ConfirmPassengerDetails();
-            TestHelper.PayNow();
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
-
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("AirGeneralDataSource")]
-        public void PreferedCust_BookingFlow_RoviaBucks_Success()
-        {
-            TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-            TestHelper.Login();
-            TestHelper.Search();
-            TestHelper.AddToCart();
-            TestHelper.CheckoutTrip();
-            TestHelper.EnterPassengerDetails();
-            TestHelper.ConfirmPassengerDetails();
-            TestHelper.PayNow();
-        }
-
-        [TestMethod]
-        [DataSource("AirGeneralDataSource")]
-        public void SetAirFilters_AirResultPage()
-        {
-            try
-            {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
-                //as of now values are static need to take from data sheet
-                TestHelper.SetFilters();
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
-
-        [TestMethod]
-        [DataSource("AirGeneralDataSource")]
-        public void SetAirMatrix_AirResultPage()
-        {
-            try
-            {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
-                TestHelper.SetMatrix();
             }
             catch (Exception exception)
             {
