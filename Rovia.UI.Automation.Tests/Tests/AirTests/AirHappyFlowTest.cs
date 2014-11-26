@@ -37,7 +37,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
 
         [TestMethod]
         [TestCategory("Sanity")]
-        [DataSource("AirGeneralDataSource")]
+        [DataSource("AirLoginCreditCard")]
         public void AirSearchTest()
         {
             try
