@@ -17,10 +17,10 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            DataBinder=new AirCriteriaDataBinder();
-            TestHelper.TripProductType=TripProductType.Air;
+            DataBinder = new AirCriteriaDataBinder();
+            TestHelper.TripProductType = TripProductType.Air;
         }
-       
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -31,14 +31,14 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         [TestCleanup]
         public void TestCleanup()
         {
+            TestHelper.CleanUp();
             TestHelper.GoToHomePage();
         }
-
 
         [TestMethod]
         [TestCategory("Sanity")]
         [DataSource("AirLoginCreditCard")]
-        public void AirSearchTest()
+        public void RegisteredUser_BookingFlow_CreditCard()
         {
             try
             {
@@ -51,13 +51,57 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.EditPassengerInfoAndContinue();
                 TestHelper.ConfirmPassengerDetails();
                 TestHelper.PayNow();
-                //_app.HomePage.Search(criteria);
-                //_app.AirResultsPage.AddToCart(TestHelper.ApplySpecialCriteria(criteria.SpecialCriteria));
-             }
+            }
             catch (Exception exception)
             {
                 Assert.Fail(exception.Message);
             }
         }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("AirGuestCreditCard")]
+        public void GuestUser_BookingFlow_CreditCard()
+        {
+            try
+            {
+                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
+                TestHelper.Search();
+                TestHelper.AddToCart();
+                TestHelper.CheckoutTrip();
+                TestHelper.Login();
+                TestHelper.EnterPassengerDetails();
+                TestHelper.ConfirmPassengerDetails();
+                TestHelper.PayNow();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("AirLoginRoviaBucks")]
+        public void RegisteredUser_BookingFlow_RoviaBucks()
+        {
+            try
+            {
+                TestHelper.SetCriteria(DataBinder.GetCriteria(TestContext.DataRow));
+                TestHelper.Login();
+                TestHelper.Search();
+                TestHelper.AddToCart();
+                TestHelper.CheckoutTrip();
+                TestHelper.EnterPassengerDetails();
+                TestHelper.EditPassengerInfoAndContinue();
+                TestHelper.ConfirmPassengerDetails();
+                TestHelper.PayNow();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
     }
 }

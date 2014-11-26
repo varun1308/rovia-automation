@@ -2,8 +2,8 @@ divHome,div#ucPWP_AP
 divNavigationBar,div.navbar.navbar-inverse
 country,select.span12.jCountrySelect
 saveCountry,a.btn.btn-primary.span12.jSaveBtn
-lnkLogIn,a#ucPWP_ctl09_5270_ucHeaderMenu_lnkLogin
-logOut,a#ucPWP_ctl09_5270_ucHeaderMenu_lnkLogout 
+lnkLogIn,a#ucPWP_ctl08_21232_ucHeaderMenu_lnkLogin
+logOut,a#ucPWP_ctl08_21232_ucHeaderMenu_lnkLogout 
 flights,ul.nav.fontUpperCase li.ico_flights
 flightsSearchPanel,div[data-producttype="flight"]
 flightJourneyTypeOneWay,div.tripbuttons button[data-triptype="0"]
