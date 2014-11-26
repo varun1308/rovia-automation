@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using AppacitiveAutomationFramework;
+using OpenQA.Selenium;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Model;
@@ -52,9 +53,13 @@ namespace Rovia.UI.Automation.Tests.Pages
                     preLoadingDiv = WaitAndGetBySelector("preloading", ApplicationSettings.TimeOut.Fast);
                 } while (preLoadingDiv != null && preLoadingDiv.Displayed);
             }
+            catch (StaleElementReferenceException exception)
+            {
+                //eat OpenQASelenium.StaleElementReferenceException 
+            }
             catch (Exception exception)
             {
-                
+
                 throw;
             }
         }
@@ -97,6 +102,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             SetPaymentMode(paymentMode);
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
             GetUIElements("paynow")[1].Click();
+            WaitForPayment();
             CheckAndThrowErrors();
         }
 
@@ -109,13 +115,20 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         public void CheckPaymentStatus()
         {
-            do
+            try
             {
-                var paymentStatus = WaitAndGetBySelector("alertSuccess", ApplicationSettings.TimeOut.Safe);
-                if (paymentStatus!=null && paymentStatus.Displayed)
-                    break;
-                CheckAndThrowErrors();
-            } while (true);
+                do
+                {
+                    var paymentStatus = WaitAndGetBySelector("alertSuccess", ApplicationSettings.TimeOut.Safe);
+                    if (paymentStatus != null && paymentStatus.Displayed)
+                        break;
+                    CheckAndThrowErrors();
+                } while (true);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("on CheckOut Page",exception);
+            }
         }
     }
 }

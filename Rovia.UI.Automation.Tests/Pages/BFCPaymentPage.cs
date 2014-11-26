@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using AppacitiveAutomationFramework;
+using OpenQA.Selenium;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -38,7 +39,6 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             try
             {
-                IUIWebElement divSpinner;
                 do
                 {
                     Thread.Sleep(1000);
@@ -46,10 +46,14 @@ namespace Rovia.UI.Automation.Tests.Pages
                         break;
                 } while (true);
             }
+            catch (StaleElementReferenceException exception)
+            {
+                //eat OpenQASelenium.StaleElementReferenceException 
+            }
             catch (Exception exception)
             {
                 
-                throw;
+                throw new Exception("on Bfc Page",exception);
             }
         }
 

@@ -4,9 +4,7 @@ using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Pages;
-using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Pages.SearchPanels;
 
 namespace Rovia.UI.Automation.Tests.Application

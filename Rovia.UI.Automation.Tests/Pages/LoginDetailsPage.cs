@@ -25,10 +25,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             Thread.Sleep(1000);
             //var isLoginSuccessHome = WaitAndGetBySelector("loginsuccessHome", ApplicationSettings.TimeOut.Slow);
             var isLoginSuccessTrip = WaitAndGetBySelector("loginsuccessTrip", ApplicationSettings.TimeOut.Safe);
-            if ((isLoginSuccessTrip != null && isLoginSuccessTrip.Displayed))
-                return true;
-            else
-                return false;
+            return (isLoginSuccessTrip != null && isLoginSuccessTrip.Displayed);
         }
 
         internal bool NewUserRegistration(NewUserRegistration user)
@@ -76,7 +73,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 
             WaitAndGetBySelector("password", ApplicationSettings.TimeOut.Fast).SendKeys(password);
 
-            WaitAndGetBySelector("btnLogIn", ApplicationSettings.TimeOut.Fast).Click();
+            WaitAndGetBySelector("btnLogIn", ApplicationSettings.TimeOut.Slow).Click();
 
 
 

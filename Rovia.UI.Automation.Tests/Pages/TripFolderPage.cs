@@ -17,7 +17,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                     Convert.ToInt32(WaitAndGetBySelector("totalItems", ApplicationSettings.TimeOut.Safe).Text),
                 TripProducts = new List<TripProduct>(),
                 ContinueShoppingButton = WaitAndGetBySelector("continueShopping", ApplicationSettings.TimeOut.Fast),
-                CheckoutTripButton = WaitAndGetBySelector("checkoutButton", ApplicationSettings.TimeOut.Fast),
+                CheckoutTripButton = WaitAndGetBySelector("checkoutButton", ApplicationSettings.TimeOut.Slow),
                 TripSettingsButton = WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast),
                 SaveTripButton = WaitAndGetBySelector("saveTripButton", ApplicationSettings.TimeOut.Fast),
                 StartoverButton = WaitAndGetBySelector("startOver", ApplicationSettings.TimeOut.Fast)

@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.DataBinder;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Tests.AirTests;
-using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.Tests.Utility
 {
@@ -447,6 +442,8 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             _app.State.CurrentProduct = tripProductType;
         }
+
+        
     }
 
 }

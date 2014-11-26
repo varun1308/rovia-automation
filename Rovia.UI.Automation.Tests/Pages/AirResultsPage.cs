@@ -184,7 +184,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                 return;
             }
-            throw new Exception("AddToCartFailed");
+            throw new Exception("Selected intinerary not availale");
         }
 
         public void WaitForResultLoad()

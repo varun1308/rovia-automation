@@ -121,7 +121,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             try
             {
                 var airSearchCriteria = searchCriteria as AirSearchCriteria;
-                Thread.Sleep(2000);
+                Thread.Sleep(4000);
                 SelectSearchPanel();
                 SetFlightType(airSearchCriteria.SearchType);
                 //check if return or one way
@@ -129,7 +129,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 //Enter from/to airports
                 EnterPassengerDetails(airSearchCriteria.Passengers);
                 ApplyPreSearchFilters(airSearchCriteria.Filters.PreSearchFilters as AirPreSearchFilters);
-                WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Fast).Click();
+                WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Slow).Click();
+                
             }
             catch (Exception exception)
             {

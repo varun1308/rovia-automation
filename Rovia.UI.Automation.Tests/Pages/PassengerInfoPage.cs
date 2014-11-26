@@ -105,7 +105,7 @@ namespace Rovia.UI.Automation.Tests.Pages
        {
            try
            {
-               Thread.Sleep(800);
+               Thread.Sleep(1500);
                _passengerDetails = passengerDetails;
                WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengerDetails.Country);
                if (passengerDetails.IsInsuranceRequired)

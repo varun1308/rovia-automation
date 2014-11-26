@@ -59,7 +59,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 SetStayPeriod(hotelSearchCriteria.StayPeriod);
                 SetPassengerDetails(hotelSearchCriteria.Passengers);
                 ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
-                WaitAndGetBySelector("btnHotelSearch",ApplicationSettings.TimeOut.Fast).Click();
+                WaitAndGetBySelector("btnHotelSearch",ApplicationSettings.TimeOut.Slow).Click();
             }
             catch (Exception exception)
             {
