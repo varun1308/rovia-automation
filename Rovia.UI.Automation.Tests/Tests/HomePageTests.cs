@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.DataBinder;
@@ -26,13 +27,13 @@ namespace Rovia.UI.Automation.Tests.Tests
         [TestInitialize]
         public void TestInitialize()
         {
-            //Assert.IsTrue(_app.HomePage.IsVisible(), "Could not Load Home Page!");
-            //Thread.Sleep(500);
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
+            TestHelper.CleanUp();
+            TestHelper.GoToHomePage();
         }
 
         [TestMethod]
@@ -46,7 +47,7 @@ namespace Rovia.UI.Automation.Tests.Tests
             catch (Exception exception)
             {
                 Assert.Fail(exception.Message);
-            }
+        }
         }
 
 
@@ -63,13 +64,6 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.EnterPassengerDetails();
             TestHelper.ConfirmPassengerDetails();
             TestHelper.PayNow();
-            Thread.Sleep(1000);
-
-            //check if itinerary available or price not changed before actual payment
-
-
-
-
         }
 
         [TestMethod]
@@ -77,13 +71,21 @@ namespace Rovia.UI.Automation.Tests.Tests
         [DataSource("AirGeneralDataSource")]
         public void GuestUser_BookingFlow_CreditCard_Success()
         {
-            TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-            TestHelper.Search();
-            TestHelper.AddToCart();
-            TestHelper.CheckoutTrip();
-            
+            try
+            {
+                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
+                TestHelper.Search();
+                TestHelper.AddToCart();
+                TestHelper.CheckoutTrip();
+                TestHelper.Login();
+                TestHelper.EnterPassengerDetails();
+                TestHelper.ConfirmPassengerDetails();
             TestHelper.PayNow();
-
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
         }
 
         [TestMethod]
@@ -110,7 +112,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                 TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
                 TestHelper.Search();
                 //as of now values are static need to take from data sheet
-                TestHelper.SetAirFilters();
+                TestHelper.SetFilters();
             }
             catch (Exception exception)
             {
@@ -126,7 +128,7 @@ namespace Rovia.UI.Automation.Tests.Tests
             {
                 TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
                 TestHelper.Search();
-                TestHelper.SetMatrixAirline();
+                TestHelper.SetMatrix();
             }
             catch (Exception exception)
             {

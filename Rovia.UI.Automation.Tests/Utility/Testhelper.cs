@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.DataBinder;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
@@ -106,6 +107,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
+                var requestingPage = _app.State.CurrentPage;
                 if (_app.State.CurrentUser.IsLoggedIn)
                     LogOut();
                 GoToLoginPage();
@@ -124,13 +126,20 @@ namespace Rovia.UI.Automation.Tests.Utility
                         _app.State.CurrentUser.IsLoggedIn = true;
                         break;
                     case UserType.Guest:
-                        _app.LoginDetailsPage.ContinueAsGuest();
+                        _app.LoginDetailsPage.ContinueAsGuest("vikul","rathod","vrathod@tavisca.com");
                         _app.State.CurrentUser.ResetUser();
                         break;
                 }
-                _app.HomePage.WaitForHomePage();
-                _app.State.CurrentPage = "HomePage";
-
+                if (requestingPage.Equals("HomePage"))
+                {
+                    _app.HomePage.WaitForHomePage();
+                    _app.State.CurrentPage = "HomePage";
+            }
+                else
+                {
+                    _app.PassengerInfoPage.WaitForPageLoad();
+                    _app.State.CurrentPage = "PassengerInfoPage";
+                }
             }
             catch (Exception exception)
             {
@@ -183,7 +192,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             catch (Exception exception)
             {
                 
-                throw new Exception("Passenger Confirmation failed",exception);
+                throw new Exception("Passenger Confirmation failed", exception);
             }
         }
 
@@ -347,7 +356,10 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new Exception("Trip can not be checkout on " + _app.State.CurrentPage);
                 Trip.CheckoutTripButton.Click();
+
+                if (_criteria.UserType!=UserType.Guest)
                 _app.PassengerInfoPage.WaitForPageLoad();
+
                 _app.State.CurrentPage = "PassengerInfoPage";
             }
             catch (Exception exception)
@@ -361,7 +373,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Can not able to continue shopping on " + _app.State.CurrentPage);
+                    throw new Exception("Can not continue shopping on " + _app.State.CurrentPage);
                 Trip.ContinueShoppingButton.Click();
             }
             catch (Exception exception)
@@ -374,22 +386,24 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         #region Air Filters Call
 
-        public static void SetAirFilters()
+        public static void SetFilters()
         {
             try
             {
+                //var postSearchFilters= GetPostSearchFilters(_app.State.Currentproduct);
                 var airPostSearchFilters = new AirPostSearchFilters()
                 {
-                    PriceRange = new PriceRange(){Max = 20,Min = 20},
-                    TakeOffTimeRange = new TakeOffTimeRange(){Min = 20,Max = 80},
-                    LandingTimeRange = new LandingTimeRange(){Min = 20,Max = 80},
-                    MaxTimeDurationDiff = 4,
+                    IsApplyFilter = true,
+                    PriceRange = new PriceRange() { Max = 20, Min = 20 },
+                    TakeOffTimeRange = new TakeOffTimeRange() { Min = 20, Max = 80 },
+                    LandingTimeRange = new LandingTimeRange() { Min = 20, Max = 80 },
+                    MaxTimeDurationDiff = 8,
                     Stop = "one", //field can be none/one/one-plus
-                    CabinTypes = new List<string>(){"economy","business"},
-                    Airlines = new List<string>(){"AA","NK","UA","US"}
+                    CabinTypes = new List<string>() { "economy", "business" },
+                    Airlines = new List<string>() { "AA", "NK", "UA", "US" }
                 };
-
-                _app.ResultsPage.SetPostSearchFilters(airPostSearchFilters);
+                if (airPostSearchFilters.IsApplyFilter)
+                    _app.ResultsPage.SetPostSearchFilters(airPostSearchFilters);
             }
             catch (Exception exception)
             {
@@ -397,7 +411,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
         }
 
-        public static void SetMatrixAirline()
+        public static void SetMatrix()
         {
             try
             {
@@ -405,8 +419,9 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                throw new Exception("Error in setting airlines from matrix", exception);
-        }
+                throw new Exception("SetMatrix Failed",exception);
+            }
+
         }
 
         #endregion
@@ -432,7 +447,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             catch (Exception exception)
             {
 
-                throw new Exception("Pay Now failed",exception);
+                throw new Exception("Pay Now failed", exception);
             }
         }
 
@@ -443,7 +458,11 @@ namespace Rovia.UI.Automation.Tests.Utility
             _app.State.CurrentProduct = tripProductType;
         }
 
-        
+        internal static void CleanUp()
+        {
+            _app.ClearBrowserCache();
+        }
+
     }
 
 }

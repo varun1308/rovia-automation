@@ -47,8 +47,8 @@ namespace Rovia.UI.Automation.Tests.Pages
        {
            try
            {
-               while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Slow).Displayed) ;
-               if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Slow).Displayed == false)
+               while (WaitAndGetBySelector("SpinningDiv", 60).Displayed) ;
+               if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Safe).Displayed == false)
                    throw new Exception();
            }
            catch (Exception exception)
