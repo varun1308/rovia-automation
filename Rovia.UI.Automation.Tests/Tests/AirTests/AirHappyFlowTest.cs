@@ -22,11 +22,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         }
 
         [TestInitialize]
-        public void TestInitialize()
-        {
-            //Assert.IsTrue(_app.HomePage.IsVisible(), "Could not Load Home Page!");
-            //Thread.Sleep(500);
-        }
+        public void TestInitialize(){}
 
         [TestCleanup]
         public void TestCleanup()
@@ -96,6 +92,55 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.EditPassengerInfoAndContinue();
                 TestHelper.ConfirmPassengerDetails();
                 TestHelper.PayNow();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+
+        [TestMethod]
+        [DataSource("AirLoginCreditCard")]
+        public void AirSearch()
+        {
+            try
+            {
+                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
+                TestHelper.Search();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("AirLoginCreditCard")]
+        public void SetAirFilters()
+        {
+            try
+            {
+                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
+                TestHelper.Search();
+                //as of now values are static need to take from data sheet
+                TestHelper.SetFilters();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("AirLoginCreditCard")]
+        public void SetAirMatrix()
+        {
+            try
+            {
+                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
+                TestHelper.Search();
+                TestHelper.SetMatrix();
             }
             catch (Exception exception)
             {

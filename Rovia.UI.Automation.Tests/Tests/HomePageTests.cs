@@ -25,9 +25,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         }
 
         [TestInitialize]
-        public void TestInitialize()
-        {
-        }
+        public void TestInitialize(){}
 
         [TestCleanup]
         public void TestCleanup()
@@ -43,54 +41,6 @@ namespace Rovia.UI.Automation.Tests.Tests
             try
             {
                 TestHelper.GoToHomePage();
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
-
-        [TestMethod]
-        [DataSource("AirLoginCreditCard")]
-        public void AirSearch()
-        {
-            try
-            {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
-
-        [TestMethod]
-        [DataSource("AirLoginCreditCard")]
-        public void SetAirFilters()
-        {
-            try
-            {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
-                //as of now values are static need to take from data sheet
-                TestHelper.SetFilters();
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
-
-        [TestMethod]
-        [DataSource("AirLoginCreditCard")]
-        public void SetAirMatrix()
-        {
-            try
-            {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
-                TestHelper.SetMatrix();
             }
             catch (Exception exception)
             {
