@@ -5,6 +5,7 @@ using Rovia.UI.Automation.DataBinder;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Utility;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.Validator;
 
 namespace Rovia.UI.Automation.Tests.Tests.AirTests
 {
@@ -19,6 +20,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         {
             DataBinder = new AirCriteriaDataBinder();
             TestHelper.TripProductType = TripProductType.Air;
+            TestHelper.Validator=new AirValidator();
         }
        
         [TestInitialize]
@@ -55,7 +57,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         {
             try
             {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                var criteria   = DataBinder.GetCriteria(TestContext.DataRow);
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
             }

@@ -11,7 +11,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public int Duration { get; set; }
         public string DepartTime { get; set; }
         public string ArriveTime { get; set; }
-        public string Cabin { get; set; }
+        public CabinType Cabin { get; set; }
         public int Stops { get; set; }
     }
 }

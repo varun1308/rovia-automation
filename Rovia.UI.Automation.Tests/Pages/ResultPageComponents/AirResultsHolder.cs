@@ -10,7 +10,7 @@ using Rovia.UI.Automation.Tests.Configuration;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
-    public class AirResultsHolder:UIPage,IResultsHolder
+    public class AirResultsHolder : UIPage, IResultsHolder
     {
         private Dictionary<Results, IUIWebElement> _results;
 
@@ -28,11 +28,15 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
             var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
             var addToCartControl = GetUIElements("btnAddToCart");
+            var flightLegs = ParseFlightLegs();
+            var legsPerResult = flightLegs.Count / supplier.Length;
             ProcessairLines(airLines, subair);
+
             _results = new Dictionary<Results, IUIWebElement>();
+
             for (var i = 0; i < addToCartControl.Count; i++)
             {
-                _results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], null), addToCartControl[i]);
+                _results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
             }
             return _results.Keys.ToList();
         }
@@ -44,7 +48,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 return;
             }
             throw new Exception("Selected itineraries not Available");
-        } 
+        }
         #endregion
 
         #region Private Members
@@ -87,8 +91,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             {
                 Amount = ParseAmount(perHeadPrice.Split(), totalPrice.Split()),
                 AirLines = new List<string>(airLine.Split('/')),
-                Supplier = ParseSupplier(supplier.Split('|'))
-                //todo implemet leg parsing
+                Supplier = ParseSupplier(supplier.Split('|')),
+                Legs = legs
             };
         }
 
@@ -132,9 +136,27 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             return legDuration.Select((t, i) => new FlightLegs()
                 {
-                    AirportPair = legArrAirport[i] + "-" + legDepAirport[i], Duration = t, ArriveTime = legArrTime[i], DepartTime = legDepTime[i], Cabin = legCabins[i], Stops = int.Parse(legStops[i])
+                    AirportPair = legArrAirport[i] + "-" + legDepAirport[i],
+                    Duration = t,
+                    ArriveTime = legArrTime[i],
+                    DepartTime = legDepTime[i],
+                    Cabin = GetCabinType(legCabins[i]),
+                    Stops = int.Parse(legStops[i])
                 }).ToList();
-        } 
+        }
+
+        private CabinType GetCabinType(string cabinType)
+        {
+            if (cabinType.Contains(CabinType.Premium_Economy.ToString().Replace('_', ' ')))
+                return CabinType.Premium_Economy;
+            if (cabinType.Contains(CabinType.Business.ToString()))
+                return CabinType.Business;
+            if (cabinType.Contains(CabinType.First.ToString()))
+                return CabinType.First;
+
+            return CabinType.Economy;
+        }
+
         #endregion
     }
 }

@@ -142,6 +142,10 @@
       <Project>{21ae4471-a960-447b-b736-803ec7a64e0a}</Project>
       <Name>Rovia.UI.Automation.ScenarioObjects</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Rovia.UI.Automation.Validator\Rovia.UI.Automation.Validator.csproj">
+      <Project>{523266b7-d188-4126-ba51-35d80628f8f6}</Project>
+      <Name>Rovia.UI.Automation.Validator</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

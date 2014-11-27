@@ -10,6 +10,6 @@ namespace Rovia.UI.Automation.Validator
 {
    public interface IValidator
    {
-       bool ValidatePreSearchFilters(PreSearchFilters preSearchFilters,Results parseResults);
+       bool ValidatePreSearchFilters(PreSearchFilters preSearchFilters, List<Results> parseResults);
    }
 }

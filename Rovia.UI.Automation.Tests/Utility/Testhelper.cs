@@ -10,6 +10,7 @@ using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
+using Rovia.UI.Automation.Validator;
 
 namespace Rovia.UI.Automation.Tests.Utility
 {
@@ -20,6 +21,9 @@ namespace Rovia.UI.Automation.Tests.Utility
         private static ILogger _logger;
         private static SearchCriteria _criteria;
         public static TripFolder Trip { get; set; }
+        public static IValidator Validator { get; set; }
+
+        public static List<Results> Results; 
 
         public static TripProductType TripProductType
         {
@@ -57,7 +61,7 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         private static List<Results> ApplySpecialCriteria()
         {
-            var selectedResults = _app.ResultsPage.ParseResults();
+            var selectedResults = Results;
             if (_criteria != null)
             {
                 var criteria = "";
@@ -97,6 +101,9 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new PageNotFoundException("HomePage");
                 _app.HomePage.Search(_criteria);
                 WaitForResultLoad();
+                Results = _app.ResultsPage.ParseResults();
+            if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
+                throw new Exception("Result validation failed");
         }
 
         internal static void Login()

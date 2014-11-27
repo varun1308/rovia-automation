@@ -8,27 +8,38 @@ using Rovia.UI.Automation.Criteria;
 
 namespace Rovia.UI.Automation.Validator
 {
-    public class AirValidator:IValidator
+    public class AirValidator : IValidator
     {
-        public bool ValidatePreSearchFilters(PreSearchFilters preSearchFilters, Results parseResults)
+        #region private members
+        private  bool ValidateStops(IEnumerable<AirResult> appliedFilters)
         {
-
-            //var  expectedFilters= preSearchFilters as AirPreSearchFilters;
-            //var appliedFilters = parseResults as AirResult;
-
-            //if (expectedFilters != null && appliedFilters != null)
-            //{
-            //    if (expectedFilters.NonStopFlight)
-            //    {
-            //        if(appliedFilters.Legs.Select(x => x.Stops).Any(x => x > 0)) return false;
-            //    }
-
-            //    if (appliedFilters.Legs.Select(x => x.Cabin).Any(x => x.Equals(expectedFilters.CabinType.ToString()))) return true;
-                
-            //}
-
-
-            return true;
+            return !appliedFilters.Any(x=>x.Legs.Select(y => y.Stops).Any(z => z > 0));
         }
+
+        private  bool ValidateCabin(AirPreSearchFilters expectedFilters, IEnumerable<AirResult> appliedFilters)
+        {
+            return appliedFilters.Any(z=>z.Legs.Select(x => x.Cabin).Any(x => x.Equals(expectedFilters.CabinType)));
+        }
+
+        private  bool ValidateAirlines(IEnumerable<List<string>> appliedAirlines, List<string> expectedAirlines)
+        {
+             return  appliedAirlines.Any(y=>y.Any(expectedAirlines.Contains));
+        }
+
+        #endregion
+
+        #region public members
+
+        public bool ValidatePreSearchFilters(PreSearchFilters preSearchFilters,List<Results> parsedResults)
+        {
+            var filters = preSearchFilters as AirPreSearchFilters;
+            var results = parsedResults.Select(x => x as AirResult);
+
+            return (ValidateCabin(filters, results) 
+                && (filters.AirLines == null || ValidateAirlines(results.Select(x=> x.AirLines), filters.AirLines))
+                &&(!filters.NonStopFlight || ValidateStops(results)));
+        }
+
+        #endregion
     }
 }
