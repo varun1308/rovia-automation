@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
@@ -33,7 +34,6 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private bool AddToCart(IUIWebElement btnAddToCart)
         {
-
             btnAddToCart.Click();
             var divloader = WaitAndGetBySelector("divLoader", ApplicationSettings.TimeOut.Fast);
             while (true)
@@ -51,7 +51,6 @@ namespace Rovia.UI.Automation.Tests.Pages
 
             WaitAndGetBySelector("btnCancel", ApplicationSettings.TimeOut.Slow).Click();
             return false;
-
         }
 
         private void ProcessairLines(List<string> airLines, List<string> subair)
@@ -134,18 +133,15 @@ namespace Rovia.UI.Automation.Tests.Pages
         #region IResultsPage Member Functions
         public void AddToCart(List<Results> result)
         {
-
             if (result.Any(airResult => AddToCart(_results[airResult])))
             {
                 return;
             }
-            throw new Exception("Selected itineraries not Available");
+            throw new ItineraryNotAvailableException();
         }
 
         public void WaitForResultLoad()
         {
-            try
-            {
                 while (IsWaitingVisible())
                 {
                     Thread.Sleep(2000);
@@ -153,12 +149,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                         break;
                 }
                 if (!IsResultsVisible())
-                    throw new Exception("Results Not visible");
-            }
-            catch (Exception exception)
-            {
-                throw new Exception("Results failed to load", exception);
-            }
+                    throw new ResultsNotFoundException();
         }
 
         public List<Results> ParseResults()
@@ -203,6 +194,9 @@ namespace Rovia.UI.Automation.Tests.Pages
 
             minPrice += minPrice * priceRange.Min / 100;
             maxPrice -= maxPrice * priceRange.Max / 100;
+
+            priceRange.MinPrice = minPrice;
+            priceRange.MaxPrice = maxPrice;
 
             ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (minPrice * 100) + "," + (maxPrice * 100) + "]})");
 

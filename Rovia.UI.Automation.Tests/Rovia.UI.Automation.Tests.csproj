@@ -128,6 +128,10 @@
       <Project>{8f7b95ed-5702-4388-a0a3-a974107e80cd}</Project>
       <Name>Rovia.UI.Automation.DataBinder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Rovia.UI.Automation.Exceptions\Rovia.UI.Automation.Exceptions.csproj">
+      <Project>{B6E92EA1-26A1-40AB-A69E-84C980B5984B}</Project>
+      <Name>Rovia.UI.Automation.Exceptions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rovia.Ui.Automation.ScenarioObjects\Rovia.UI.Automation.ScenarioObjects.csproj">
       <Project>{21ae4471-a960-447b-b736-803ec7a64e0a}</Project>
       <Name>Rovia.UI.Automation.ScenarioObjects</Name>

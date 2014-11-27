@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
@@ -45,16 +46,9 @@ namespace Rovia.UI.Automation.Tests.Pages
 
        public void WaitForPageLoad()
        {
-           try
-           {
                while (WaitAndGetBySelector("SpinningDiv", 60).Displayed) ;
                if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Safe).Displayed == false)
-                   throw new Exception();
-           }
-           catch (Exception exception)
-           {
-               throw new Exception("PassengerDetailsPage Load Failed", exception);
-           }
+                   throw new PageNotFoundException("passengerinfo");
        }
        public void WaitForConfirmationPageLoad()
        {

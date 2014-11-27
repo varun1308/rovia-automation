@@ -6,7 +6,8 @@ namespace Rovia.UI.Automation.Tests.Configuration
     {
         public static string Url
         {
-            get { return ConfigurationManager.AppSettings["application.url"] ?? "http://corp.rovia.com/"; }
+            get { return ConfigurationManager.AppSettings["application.url"] ?? "http://corp.rovia.com/";
+        }
         }
 
         public static class WebUser
