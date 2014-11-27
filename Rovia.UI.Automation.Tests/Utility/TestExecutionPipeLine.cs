@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rovia.UI.Automation.Tests.Utility
 {
@@ -40,7 +37,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                             break;
                         case "TRIPSTARTOVER":
                             TestHelper.TripStartOver();
-                            break;
+                            break; 
                         case "CONTINUESHOPPING":
                             TestHelper.ContinueShopping();
                             break;
