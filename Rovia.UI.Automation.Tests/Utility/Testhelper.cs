@@ -205,7 +205,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
         }
 
-        public static void LogOut()
+        private static void LogOut()
         {
             try
             {
@@ -431,13 +431,6 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 throw new Exception("Pay Now failed", exception);
             }
-        }
-
-
-
-        internal static void SetTripProductType(TripProductType tripProductType)
-        {
-            _app.State.CurrentProduct = tripProductType;
         }
 
         internal static void CleanUp()

@@ -31,7 +31,7 @@ namespace Rovia.UI.Automation.Tests.Tests.HotelTests
         public void TestCleanup()
         {
             TestHelper.GoToHomePage();
-            TestHelper.LogOut();
+           
         }
 
 

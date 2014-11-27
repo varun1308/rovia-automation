@@ -38,15 +38,9 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         {
             try
             {
-                TestHelper.SetCriteria(DataBinder.GetCriteria(TestContext.DataRow));
-                TestHelper.Login();
-                TestHelper.Search();
-                TestHelper.AddToCart();
-                TestHelper.CheckoutTrip();
-                TestHelper.EnterPassengerDetails();
-                TestHelper.EditPassengerInfoAndContinue();
-                TestHelper.ConfirmPassengerDetails();
-                TestHelper.PayNow();
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
             }
             catch (Exception exception)
             {
@@ -61,14 +55,9 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         {
             try
             {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
-                TestHelper.AddToCart();
-                TestHelper.CheckoutTrip();
-                TestHelper.Login();
-                TestHelper.EnterPassengerDetails();
-                TestHelper.ConfirmPassengerDetails();
-                TestHelper.PayNow();
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
             }
             catch (Exception exception)
             {
@@ -106,8 +95,9 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         {
             try
             {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
             }
             catch (Exception exception)
             {

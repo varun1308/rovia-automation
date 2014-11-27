@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Pages;
+using Rovia.UI.Automation.Tests.Pages.ResultPageComponents;
 using Rovia.UI.Automation.Tests.Pages.SearchPanels;
 
 namespace Rovia.UI.Automation.Tests.Application
@@ -41,17 +42,24 @@ namespace Rovia.UI.Automation.Tests.Application
             }
         }
 
-        public IResultsPage ResultsPage
+        public ResultsPage ResultsPage
         {
             get
             {
+                var resultsPage = InitializePage<ResultsPage>("ResultControls");
                 switch (State.CurrentProduct)
                 {
-                    case TripProductType.Air: return InitializePage<AirResultsPage>("AirResultsControls");
-                    case TripProductType.Hotel: return InitializePage<HotelResultsPage>("HotelResultsControls");
+                    case TripProductType.Air:
+                        resultsPage.Initialze(InitializePage<AirResultsHolder>("AirResultsHolderControls"), InitializePage<AirResultFilters>("AirResultsFiltersControls"));
+                        break;
+                    //case TripProductType.Hotel:
+                    //    resultsPage.Initialze(InitializePage<HotelResultsHolder>("AirResultsHolderControls"), InitializePage<HotelResultFilters>("AirResultsFiltersControls"));
+                    //    break;
+                    //case TripProductType.Hotel: return InitializePage<HotelResultsPage>("HotelResultsControls");
                     default:
                         return null;
                 }
+                return resultsPage;
             }
         }
 
