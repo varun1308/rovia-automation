@@ -13,7 +13,7 @@ namespace Rovia.UI.Automation.DataBinder
         public SearchCriteria GetCriteria(DataRow dataRow)
         {
             var searchType = StringToEnum<SearchType>((string)dataRow["TripType"]);
-
+        
             return new AirSearchCriteria()
             {
                 Pipeline = (string)dataRow["ExecutionPipeline"],
@@ -35,12 +35,12 @@ namespace Rovia.UI.Automation.DataBinder
                             CabinType = StringToEnum<CabinType>((string)dataRow["CabinType"]),
                             NonStopFlight = (bool)dataRow["NonStopFlight"],
                             AirLines = string.IsNullOrEmpty(dataRow["AirLines"].ToString()) ? null : new List<string>(((string)dataRow["AirLines"]).Split('|'))
-                        },
+                    },
                         PostSearchFilters = string.IsNullOrEmpty(dataRow["PostFilters"].ToString()) ? null : GetPostSearchFilters((string)dataRow["PostFilters"], (string)dataRow["PostFiltersValues"])
                     },
                 PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
-                CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|") ? ((string)dataRow["PaymentMode"]).Split('|')[1] : "Visa"),
-                SpecialCriteria = string.IsNullOrEmpty(dataRow["SpecialFilterName"].ToString()) ? null : ParseSpecialCriteria((string)dataRow["SpecialFilterName"], (string)dataRow["SpecialFilterValues"])
+                CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|")?((string)dataRow["PaymentMode"]).Split('|')[1]:"Visa"),
+                Supplier = dataRow["Supplier"].ToString()
             };
         }
 
@@ -94,17 +94,17 @@ namespace Rovia.UI.Automation.DataBinder
             return filterCriteria;
         }
 
-        private List<SpecialCriteria> ParseSpecialCriteria(string criteria, string value)
-        {
-            var criteriaList = criteria.Split('|');
-            var values = value.Split('|');
-            var i = 0;
-            return criteriaList.Select(s => new SpecialCriteria()
-                {
-                    Name = s,
-                    Value = values[i++]
-                }).ToList();
-        }
+        //private List<SpecialCriteria> ParseSpecialCriteria(string criteria, string value)
+        //{
+        //    var criteriaList = criteria.Split('|');
+        //    var values = value.Split('|');
+        //    var i = 0;
+        //    return criteriaList.Select(s => new AddToCartCriteria()
+        //        {
+        //            Name = s,
+        //            Value = values[i++]
+        //        }).ToList();
+        //}
 
         private List<AirportPair> ParseAirPorts(string airPorts, string dates, SearchType tripType)
         {
@@ -118,10 +118,10 @@ namespace Rovia.UI.Automation.DataBinder
                     DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i++]))
                 }).ToList();
             if (tripType == SearchType.RoundTrip)
-                airPortPairs.Add(new AirportPair()
-                    {
-                        DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i]))
-                    });
+            airPortPairs.Add(new AirportPair()
+                {
+                    DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i]))
+                });
             return airPortPairs;
         }
         private static T StringToEnum<T>(string name)
