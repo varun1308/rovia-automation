@@ -11,14 +11,14 @@ namespace Rovia.UI.Automation.Validator
     public class AirValidator : IValidator
     {
         #region private members
-        private  bool ValidateStops(IEnumerable<AirResult> appliedFilters)
+        private  bool ValidateStops(IEnumerable<AirResult> filters)
         {
-            return !appliedFilters.Any(x=>x.Legs.Select(y => y.Stops).Any(z => z > 0));
+            return !filters.Any(x=>x.Legs.Select(y => y.Stops).Any(z => z > 0));
         }
 
-        private  bool ValidateCabin(AirPreSearchFilters expectedFilters, IEnumerable<AirResult> appliedFilters)
+        private  bool ValidateCabin(AirPreSearchFilters filters, IEnumerable<AirResult> results)
         {
-            return appliedFilters.Any(z=>z.Legs.Select(x => x.Cabin).Any(x => x.Equals(expectedFilters.CabinType)));
+            return results.Any(z=>z.Legs.Select(x => x.Cabin).Any(x => x.Equals(filters.CabinType)));
         }
 
         private  bool ValidateAirlines(IEnumerable<List<string>> appliedAirlines, List<string> expectedAirlines)
