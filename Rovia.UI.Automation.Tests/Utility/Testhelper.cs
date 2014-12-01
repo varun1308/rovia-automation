@@ -100,7 +100,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("HomePage"))
                     throw new PageNotFoundException("HomePage");
                 _app.HomePage.Search(_criteria);
-                WaitForResultLoad();
+                _app.ResultsPage.WaitForResultLoad();
                 Results = _app.ResultsPage.ParseResults();
             if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
                 throw new Exception("Result validation failed");
@@ -243,16 +243,6 @@ namespace Rovia.UI.Automation.Tests.Utility
             };
         }
 
-        private static void WaitForResultLoad()
-        {
-            switch (TripProductType)
-            {
-                case TripProductType.Air: _app.ResultsPage.WaitForResultLoad();
-                    _app.State.CurrentPage = "AirResultsPage";
-                    break;
-            }
-        }
-
         #region TripFolder Calls
 
         private static void ParseTripFolder()
@@ -376,42 +366,9 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         #region Air Filters Call
 
-        public static void SetFilters()
+        public static bool SetFilters()
         {
-            try
-            {
-                //var postSearchFilters= GetPostSearchFilters(_app.State.Currentproduct);
-                var airPostSearchFilters = new AirPostSearchFilters()
-                {
-                    IsApplyFilter = true,
-                    PriceRange = new PriceRange() { Max = 20, Min = 20 },
-                    TakeOffTimeRange = new TakeOffTimeRange() { Min = 20, Max = 80 },
-                    LandingTimeRange = new LandingTimeRange() { Min = 20, Max = 80 },
-                    MaxTimeDurationDiff = 8,
-                    Stop = "one", //field can be none/one/one-plus
-                    CabinTypes = new List<string>() { "economy", "business" },
-                    Airlines = new List<string>() { "AA", "NK", "UA", "US" }
-                };
-                if (airPostSearchFilters.IsApplyFilter)
-                    _app.ResultsPage.SetPostSearchFilters(airPostSearchFilters);
-            }
-            catch (Exception exception)
-            {
-                throw new Exception("Error in setting air filters", exception);
-            }
-        }
-
-        public static void SetMatrix()
-        {
-            try
-            {
-                _app.ResultsPage.SetMatrix("Spirit Airlines");
-            }
-            catch (Exception exception)
-            {
-                throw new Exception("SetMatrix Failed", exception);
-            }
-
+            return _app.ResultsPage.SetPostSearchFilters(_criteria.Filters.PostSearchFilters);
         }
 
         #endregion

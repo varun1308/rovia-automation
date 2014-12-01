@@ -40,6 +40,12 @@ namespace Rovia.UI.Automation.Validator
                 &&(!filters.NonStopFlight || ValidateStops(results)));
         }
 
+        private bool ValidateMatrix(string filterAirline,IEnumerable<Results> parsedResults )
+        {
+            var results = parsedResults.Select(x => x as AirResult);
+            return results.All(x => x.AirLines.All(y=>y.Equals(filterAirline) || y.Contains("Multiple")));
+        }
+
         #endregion
     }
 }

@@ -11,4 +11,5 @@ jsLslider,div.jsLslider
 amount,p.price.font-weight700
 legDuration,div.span3.text-flighttime
 titleAirLines,div.text-boxtitle
-zeroAiritineraryDiv,div.alert.alert-error
+zeroAiritineraryDiv,div#AirListHolder .alert.alert-error
+appliedFilters,span.filter_badge  span a

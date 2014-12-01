@@ -44,9 +44,6 @@ namespace Rovia.UI.Automation.Tests.Utility
                         case "SETFILTERS":
                             TestHelper.SetFilters();
                             break;
-                        case "SETMATRIX":
-                            TestHelper.SetMatrix();
-                            break;
                         case "PAYNOW":
                             TestHelper.PayNow();
                             break;

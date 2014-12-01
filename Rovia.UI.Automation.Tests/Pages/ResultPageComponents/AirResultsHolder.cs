@@ -12,7 +12,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
     public class AirResultsHolder : UIPage, IResultsHolder
     {
-        private Dictionary<Results, IUIWebElement> _results;
+        private static Dictionary<Results, IUIWebElement> _results;
 
         #region IResultHolder Members
         public bool IsVisible()

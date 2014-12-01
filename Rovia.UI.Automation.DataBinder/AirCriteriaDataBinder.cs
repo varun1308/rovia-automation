@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -7,12 +8,12 @@ using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.DataBinder
 {
-    public class AirCriteriaDataBinder:ICriteriaDataBinder
+    public class AirCriteriaDataBinder : ICriteriaDataBinder
     {
         public SearchCriteria GetCriteria(DataRow dataRow)
         {
-            var searchType = StringToEnum<SearchType>((string) dataRow["TripType"]);
-        
+            var searchType = StringToEnum<SearchType>((string)dataRow["TripType"]);
+
             return new AirSearchCriteria()
             {
                 Pipeline = (string)dataRow["ExecutionPipeline"],
@@ -34,12 +35,63 @@ namespace Rovia.UI.Automation.DataBinder
                             CabinType = StringToEnum<CabinType>((string)dataRow["CabinType"]),
                             NonStopFlight = (bool)dataRow["NonStopFlight"],
                             AirLines = string.IsNullOrEmpty(dataRow["AirLines"].ToString()) ? null : new List<string>(((string)dataRow["AirLines"]).Split('|'))
-                        }
+                        },
+                        PostSearchFilters = string.IsNullOrEmpty(dataRow["PostFilters"].ToString()) ? null : GetPostSearchFilters((string)dataRow["PostFilters"], (string)dataRow["PostFiltersValues"])
                     },
                 PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
-                CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|")?((string)dataRow["PaymentMode"]).Split('|')[1]:"Visa"),
+                CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|") ? ((string)dataRow["PaymentMode"]).Split('|')[1] : "Visa"),
                 SpecialCriteria = string.IsNullOrEmpty(dataRow["SpecialFilterName"].ToString()) ? null : ParseSpecialCriteria((string)dataRow["SpecialFilterName"], (string)dataRow["SpecialFilterValues"])
             };
+        }
+
+        private AirPostSearchFilters GetPostSearchFilters(string filter, string value)
+         {
+            var filterList = filter.Split('|');
+            var valueList = value.Split('|');
+            var i = 0;
+            var filterCriteria = new AirPostSearchFilters {IsApplyFilter = true};
+            while (i < filterList.Length)
+            {
+                switch (filterList[i].ToUpper())
+                {
+                    case "PRICE":
+                        filterCriteria.PriceRange = new PriceRange()
+                        {
+                            Min = int.Parse(valueList[i].Split('-')[0]),
+                            Max = int.Parse(valueList[i].Split('-')[1])
+                        };
+                        break;
+
+                    case "STOP":
+                        filterCriteria.Stop = valueList[i];
+                        break;
+                    case "DURATION":
+                        filterCriteria.MaxTimeDurationDiff = int.Parse(valueList[i]);
+                        break;
+                    case "CABIN":
+                        filterCriteria.CabinTypes = new List<string>(valueList[i].Split(','));                
+                        break;
+                    case "AIRLINES":
+                        filterCriteria.Airlines = new List<string>(valueList[i].Split(','));
+                        break;
+                    case "TAKEOFFTIME":
+                        filterCriteria.TakeOffTimeRange = new TakeOffTimeRange()
+                        {
+                            Min = int.Parse(valueList[i].Split('-')[0]),
+                            Max = int.Parse(valueList[i].Split('-')[1])
+                        };
+                        break;
+                    case "LANDINGTIME":
+                        filterCriteria.LandingTimeRange = new LandingTimeRange()
+                        {
+                            Min = int.Parse(valueList[i].Split('-')[0]),
+                            Max = int.Parse(valueList[i].Split('-')[1])
+                        };
+                        break;
+                }
+                i++;
+            }
+            return filterCriteria;
         }
 
         private List<SpecialCriteria> ParseSpecialCriteria(string criteria, string value)
@@ -49,7 +101,8 @@ namespace Rovia.UI.Automation.DataBinder
             var i = 0;
             return criteriaList.Select(s => new SpecialCriteria()
                 {
-                    Name = s, Value = values[i++]
+                    Name = s,
+                    Value = values[i++]
                 }).ToList();
         }
 
@@ -60,13 +113,15 @@ namespace Rovia.UI.Automation.DataBinder
             var i = 0;
             var airPortPairs = airports.Select(airport => new AirportPair()
                 {
-                    DepartureAirport = airport[0], ArrivalAirport = airport[1], DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i++]))
+                    DepartureAirport = airport[0],
+                    ArrivalAirport = airport[1],
+                    DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i++]))
                 }).ToList();
-            if (tripType==SearchType.RoundTrip)
-            airPortPairs.Add(new AirportPair()
-                {
-                    DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i]))
-                });
+            if (tripType == SearchType.RoundTrip)
+                airPortPairs.Add(new AirportPair()
+                    {
+                        DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i]))
+                    });
             return airPortPairs;
         }
         private static T StringToEnum<T>(string name)

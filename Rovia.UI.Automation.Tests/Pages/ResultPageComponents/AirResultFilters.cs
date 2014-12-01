@@ -14,39 +14,40 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     public class AirResultFilters : UIPage, IResultFilters
     {
         #region IResultPage Members
-        public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
+
+        public bool SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
             var airPostSearchFilters = postSearchFilters as AirPostSearchFilters;
-            SetStops(airPostSearchFilters.Stop);
-            SetPriceRange(airPostSearchFilters.PriceRange);
-            SetTimeDuration(airPostSearchFilters.MaxTimeDurationDiff);
-            SetTakeOffTime(airPostSearchFilters.TakeOffTimeRange);
-            SetLandingTime(airPostSearchFilters.LandingTimeRange);
-            SetCabinTypes(airPostSearchFilters.CabinTypes);
-            SetAirlines(airPostSearchFilters.Airlines);
+            if (airPostSearchFilters != null && airPostSearchFilters.IsApplyFilter)
+            {
+                var stop = airPostSearchFilters.Stop == null || SetStops(airPostSearchFilters.Stop);
+                ExecuteJavascript("$('.jsResetAll').click()");
+                var price = airPostSearchFilters.PriceRange == null || SetPriceRange(airPostSearchFilters.PriceRange);
+                ExecuteJavascript("$('.jsResetAll').click()");
+                var timeDuration = airPostSearchFilters.MaxTimeDurationDiff > 0 ||
+                                   SetTimeDuration(airPostSearchFilters.MaxTimeDurationDiff);
+                ExecuteJavascript("$('.jsResetAll').click()");
+                var takeOff = airPostSearchFilters.TakeOffTimeRange == null ||
+                              SetTakeOffTime(airPostSearchFilters.TakeOffTimeRange);
+                ExecuteJavascript("$('.jsResetAll').click()");
+                var landing = airPostSearchFilters.LandingTimeRange == null ||
+                              SetLandingTime(airPostSearchFilters.LandingTimeRange);
+                ExecuteJavascript("$('.jsResetAll').click()");
+                var cabin = airPostSearchFilters.CabinTypes == null || SetCabinTypes(airPostSearchFilters.CabinTypes);
+                ExecuteJavascript("$('.jsResetAll').click()");
+                var airline = airPostSearchFilters.Airlines == null || SetAirlines(airPostSearchFilters.Airlines);
+                ExecuteJavascript("$('.jsResetAll').click()");
+                var matrix = SetMatrix();
+                return stop && price && timeDuration && takeOff && landing && cabin && airline && matrix;
+            }
+            throw new Exception("Criteria not found");
         }
 
-        public void SetMatrix(string matrixField)
-        {
-            var divMatrixAirlines = GetUIElements("divMatrixAirlines");
-            if (divMatrixAirlines.Exists(x => matrixField.Equals(x.GetAttribute("title")) && x.Displayed))
-                divMatrixAirlines.ForEach(x =>
-                {
-                    if (matrixField.Equals(x.GetAttribute("title")) && x.Displayed)
-                        x.Click();
-                });
-            else
-                throw new Exception("Expected airline not present in the results");
-
-            if (!IsResultsAvailableOnFilter())
-                Assert.IsTrue(VerifyMatrix(matrixField), "Matrix not applied.");
-            else
-                throw new Exception("Results not found for a given matrix");
-        } 
         #endregion
 
         #region private Air Specific members
-        private void SetPriceRange(PriceRange priceRange)
+
+        private bool SetPriceRange(PriceRange priceRange)
         {
             var minPrice =
                 float.Parse(WaitAndGetBySelector("minPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
@@ -58,13 +59,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (minPrice * 100) + "," + (maxPrice * 100) + "]})");
 
-            if (!IsResultsAvailableOnFilter())
-                Assert.IsTrue(VerifyPriceFilter(minPrice, maxPrice), "Price filter not applied.");
-            else
-                throw new Exception("Results not found for a given price range");
+            return IsPostResultsFilterApplied(new List<string> { "Price" });// && !IsResultsNotAvailableOnFilter();
         }
 
-        private void SetTimeDuration(int maxTimeDurationCustom)
+        private bool SetTimeDuration(int maxTimeDurationCustom)
         {
             //taken out the max duration from slider
             var maxTimeDurationMins =
@@ -73,25 +71,121 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             ExecuteJavascript("$('#sliderTripDuration').trigger({type:'slideStop',value:[" + (maxTimeDurationCustom * 60) + "]})");
 
-            if (!IsResultsAvailableOnFilter())
-                Assert.IsTrue(VerifyDurationFilter(maxTimeDurationCustom), "Duration filter not applied.");
-            else
-                throw new Exception("Results not found for a given duration");
+            return IsPostResultsFilterApplied(new List<string> { "Trip Duration" });// && !IsResultsNotAvailableOnFilter();
         }
 
-        private void SetStops(string stop)
+        private bool SetStops(string stop)
         {
             var stops = GetUIElements("stopsFilter").ToList();
             stops.ForEach(x => x.Click());
+
             stops.ForEach(x =>
             {
                 if (x.GetAttribute("data-name").Equals(stop))
                     x.Click();
             });
-            if (IsResultsAvailableOnFilter())
-                throw new Exception("Results not found for a given matrix");
-                Assert.IsTrue(stop.Equals(VerifyStopsFilter()), "Stops filter not applied");
+
+            return IsPostResultsFilterApplied(new List<string> { "Stops" }) && !IsResultsNotAvailableOnFilter();
         }
+
+        private bool SetCabinTypes(List<string> cabinTypes)
+        {
+            var cabinTypeList = GetUIElements("cabinTypeFilter").ToList();
+            cabinTypeList[0].Click();
+
+            cabinTypeList.ForEach(x =>
+            {
+                if (cabinTypes.Contains(x.GetAttribute("data-name")) && x.Displayed)
+                    x.Click();
+            });
+            return IsPostResultsFilterApplied(new List<string> { "Cabin/Class" }) && !IsResultsNotAvailableOnFilter();
+        }
+
+        private bool SetAirlines(List<string> airlines)
+        {
+            var airlinesList = GetUIElements("airlinesFilter").ToList();
+            airlinesList[0].Click();
+            airlinesList.ForEach(x =>
+            {
+                if (airlines.Contains(x.GetAttribute("data-code").ToUpper()) && x.Displayed)
+                    x.Click();
+            });
+
+            return IsPostResultsFilterApplied(new List<string> { "Airlines" }) && !IsResultsNotAvailableOnFilter();
+        }
+
+        private bool SetTakeOffTime(TakeOffTimeRange takeOffTimeRange)
+        {
+            var jsTslider = WaitAndGetBySelector("jsTslider", ApplicationSettings.TimeOut.Fast);
+            if (jsTslider != null && jsTslider.Displayed)
+                ExecuteJavascript("var maxTime=parseInt($('.jsTslider').data('slider').max);" +
+                                  "var minTime =maxTime- maxTime * " + takeOffTimeRange.Max +
+                                  " / 100;maxTime -= maxTime * " + takeOffTimeRange.Min + " / 100;" +
+                                  "$('.jsTslider').trigger({type:'slide',value:[minTime,maxTime]}).trigger({type:'slideStop',value:[minTime,maxTime]})");
+            return IsPostResultsFilterApplied(new List<string> { "Times" }); // && !IsResultsNotAvailableOnFilter();
+        }
+
+        private bool SetLandingTime(LandingTimeRange landingTimeRange)
+        {
+            var jsLslider = WaitAndGetBySelector("jsLslider", ApplicationSettings.TimeOut.Fast);
+            if (jsLslider != null && jsLslider.Displayed)
+                ExecuteJavascript("var maxTime=parseInt($('.jsLslider').data('slider').max);" +
+                                      "var minTime =maxTime- maxTime * " + landingTimeRange.Max + " / 100;maxTime -= maxTime * " + landingTimeRange.Min + " / 100;" +
+                                  "$('.jsLslider').trigger({type:'slide',value:[minTime,maxTime]}).trigger({type:'slideStop',value:[minTime,maxTime]})");
+
+            return IsPostResultsFilterApplied(new List<string> { "Times" });// && !IsResultsNotAvailableOnFilter();
+        }
+
+        private float GetFirstItineraryPrice(string sortBy)
+        {
+            ExecuteJavascript(sortBy.ToLower().Equals("asc") ? "$('#Price-Asc').click()" : "$('#Price-Desc').click()");
+            Thread.Sleep(3000);
+            return float.Parse(GetUIElements("amount").Select(x => x.Text.Split()[0].TrimStart('$')).ToArray()[0]);
+        }
+
+        private float GetMaxDurationFlight()
+        {
+            ExecuteJavascript("$('#Duration-Desc').click()");
+            Thread.Sleep(3000);
+            var legDuration = GetUIElements("legDuration").Select(x =>
+            {
+                var arr = x.Text.Split();
+                return (arr[1] + "." + (arr[3] ?? "0"));
+            }).ToArray()[0];
+            return float.Parse(legDuration);
+        }
+
+        private bool IsResultsNotAvailableOnFilter()
+        {
+            var resultDiv = WaitAndGetBySelector("zeroAiritineraryDiv", ApplicationSettings.TimeOut.Slow);
+            return resultDiv != null && resultDiv.Displayed;
+        }
+
+        private bool IsPostResultsFilterApplied(IEnumerable<string> filterType)
+        {
+            var isFiltered = GetUIElements("appliedFilters").ToList();
+            return isFiltered.Exists(x => filterType.Contains(x.GetAttribute("data-fid")));
+        }
+
+        private bool SetMatrix()
+        {
+            var divMatrixAirlines = GetUIElements("divMatrixAirlines");
+
+            divMatrixAirlines[0].Click();
+
+            return IsResultsNotAvailableOnFilter() &&
+                            IsPostResultsFilterApplied(new List<string> { "Airlines", "Price" });
+
+            // uncomment below if wants to test all matrix
+            //return !divMatrixAirlines.Any(x =>
+            //{
+            //    x.Click();
+            //    return IsResultsNotAvailableOnFilter() &&
+            //           IsPostResultsFilterApplied(new List<string> { "Airlines", "Price" });
+            //});
+        }
+
+        #region need this methods in validations
 
         private string VerifyStopsFilter()
         {
@@ -120,53 +214,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             });
         }
 
-        private void SetCabinTypes(List<string> cabinTypes)
+        private bool VerifyDurationFilter(float maxSliderDuration)
         {
-            var cabinTypeList = GetUIElements("cabinTypeFilter").ToList();
-            cabinTypeList[0].Click();
-            cabinTypeList.ForEach(x =>
-            {
-                if (cabinTypes.Contains(x.GetAttribute("data-name")) && x.Displayed)
-                    x.Click();
-            });
-            if (IsResultsAvailableOnFilter())
-                throw new Exception("Results not found for a given matrix");
-        }
-
-        private void SetAirlines(List<string> airlines)
-        {
-            var airlinesList = GetUIElements("airlinesFilter").ToList();
-            airlinesList[0].Click();
-            airlinesList.ForEach(x =>
-            {
-                if (airlines.Contains(x.GetAttribute("data-code")) && x.Displayed)
-                    x.Click();
-            });
-
-            if (IsResultsAvailableOnFilter())
-                throw new Exception("Results not found for a given matrix");
-        }
-
-        private void SetTakeOffTime(TakeOffTimeRange takeOffTimeRange)
-        {
-            var jsTslider = WaitAndGetBySelector("jsTslider", ApplicationSettings.TimeOut.Fast);
-            if (jsTslider != null && jsTslider.Displayed)
-                ExecuteJavascript("var maxTime=parseInt($('.jsTslider').data('slider').max);" +
-                                  "var minTime =maxTime- maxTime * " + takeOffTimeRange.Max + " / 100;maxTime -= maxTime * " + takeOffTimeRange.Min + " / 100;" +
-                                  "$('.jsTslider').trigger({type:'slide',value:[minTime,maxTime]}).trigger({type:'slideStop',value:[minTime,maxTime]})");
-            if (IsResultsAvailableOnFilter())
-                throw new Exception("Results not found for a given matrix");
-        }
-
-        private void SetLandingTime(LandingTimeRange landingTimeRange)
-        {
-            var jsLslider = WaitAndGetBySelector("jsLslider", ApplicationSettings.TimeOut.Fast);
-            if (jsLslider != null && jsLslider.Displayed)
-                ExecuteJavascript("var maxTime=parseInt($('.jsLslider').data('slider').max);" +
-                                      "var minTime =maxTime- maxTime * " + landingTimeRange.Max + " / 100;maxTime -= maxTime * " + landingTimeRange.Min + " / 100;" +
-                                  "$('.jsLslider').trigger({type:'slide',value:[minTime,maxTime]}).trigger({type:'slideStop',value:[minTime,maxTime]})");
-            if (IsResultsAvailableOnFilter())
-                throw new Exception("Results not found for a given matrix");
+            return maxSliderDuration >= GetMaxDurationFlight();
         }
 
         private bool VerifyPriceFilter(float minSliderPrice, float maxSliderPrice)
@@ -174,43 +224,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return minSliderPrice <= GetFirstItineraryPrice("asc") && maxSliderPrice >= GetFirstItineraryPrice("desc");
         }
 
-        private float GetFirstItineraryPrice(string sortBy)
-        {
-            ExecuteJavascript(sortBy.ToLower().Equals("asc") ? "$('#Price-Asc').click()" : "$('#Price-Desc').click()");
-            Thread.Sleep(3000);
-            return float.Parse(GetUIElements("amount").Select(x => x.Text.Split()[0].TrimStart('$')).ToArray()[0]);
-        }
+        #endregion
 
-        private bool VerifyDurationFilter(float maxSliderDuration)
-        {
-            return maxSliderDuration >= GetMaxDurationFlight();
-        }
-
-        private float GetMaxDurationFlight()
-        {
-            ExecuteJavascript("$('#Duration-Desc').click()");
-            Thread.Sleep(3000);
-            var legDuration = GetUIElements("legDuration").Select(x =>
-            {
-                var arr = x.Text.Split();
-                return (arr[1] + "." + (arr[3] ?? "0"));
-            }).ToArray()[0];
-            return float.Parse(legDuration);
-        }
-
-        private bool VerifyMatrix(string airline)
-        {
-            var titleAirLines = GetUIElements("titleAirLines");
-            if (titleAirLines[0].Text.Equals(airline))
-                return true;
-            return false;
-        }
-
-        private bool IsResultsAvailableOnFilter()
-        {
-            var resultDiv = WaitAndGetBySelector("zeroAiritineraryDiv", ApplicationSettings.TimeOut.Slow);
-            return resultDiv != null && resultDiv.Displayed;
-        }
         #endregion
     }
 }

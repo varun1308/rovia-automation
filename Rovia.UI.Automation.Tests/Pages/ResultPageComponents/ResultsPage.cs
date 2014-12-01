@@ -45,6 +45,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 while (IsWaitingVisible())
                 {
                     Thread.Sleep(2000);
+
                     if (_resultsHolder.IsVisible())
                         break;
                 }
@@ -62,15 +63,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return _resultsHolder.ParseResults();
         }
 
-        public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
+        public bool SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
-            _resultFilters.SetPostSearchFilters(postSearchFilters);
+         return _resultFilters.SetPostSearchFilters(postSearchFilters);
         }
-
-        public void SetMatrix(string product)
-        {
-            _resultFilters.SetMatrix(product);
-        } 
+ 
         #endregion
     }
 }

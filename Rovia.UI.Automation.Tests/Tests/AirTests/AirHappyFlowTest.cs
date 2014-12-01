@@ -74,15 +74,9 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         {
             try
             {
-                TestHelper.SetCriteria(DataBinder.GetCriteria(TestContext.DataRow));
-                TestHelper.Login();
-                TestHelper.Search();
-                TestHelper.AddToCart();
-                TestHelper.CheckoutTrip();
-                TestHelper.EnterPassengerDetails();
-                TestHelper.EditPassengerInfoAndContinue();
-                TestHelper.ConfirmPassengerDetails();
-                TestHelper.PayNow();
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
             }
             catch (Exception exception)
             {
@@ -108,37 +102,19 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         }
 
         [TestMethod]
-        [DataSource("AirLoginCreditCard")]
-        public void SetAirFilters()
+        [DataSource("AirGuestCreditCard")]
+        public void SetAirFiltersAndMatrix()
         {
             try
             {
                 TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
                 TestHelper.Search();
-                //as of now values are static need to take from data sheet
-                TestHelper.SetFilters();
+                Assert.IsTrue(TestHelper.SetFilters(),"Set Filter Matrix failed");
             }
             catch (Exception exception)
             {
                 Assert.Fail(exception.Message);
             }
         }
-
-        [TestMethod]
-        [DataSource("AirLoginCreditCard")]
-        public void SetAirMatrix()
-        {
-            try
-            {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
-                TestHelper.SetMatrix();
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
-
     }
 }
