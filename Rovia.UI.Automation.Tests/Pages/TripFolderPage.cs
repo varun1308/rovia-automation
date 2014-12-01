@@ -4,6 +4,8 @@ using System.Linq;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
+using Rovia.UI.Automation.Tests.Utility;
+
 
 namespace Rovia.UI.Automation.Tests.Pages
 {
@@ -29,17 +31,46 @@ namespace Rovia.UI.Automation.Tests.Pages
             var removeProductButton = GetUIElements("removeItemClick").ToArray();
             var passengers = ParsePassengers().ToArray();
             var i = 0;
+
+            //trip.TripProducts.AddRange(
+            //    productTypes.Select(UtilityFunctions.GetTripProduct)
+            //    .Zip(productTitle, (x, y) =>
+            //    {
+            //        x.ProductTitle = y;
+            //        return x;
+            //    })
+            //    .Zip(fares, (x, y) =>
+            //        {
+            //            x.Fares = y;
+            //            return x;
+            //        })
+            //    .Zip(passengers, (x, y) =>
+            //        {
+            //            x.Passengers = y;
+            //            return x;
+            //        })
+            //    .Zip(modifyProductButton, (x, y) =>
+            //        {
+            //            x.ModifyProductButton = y;
+            //            return x;
+            //        })
+            //    .Zip(removeProductButton, (x, y) =>
+            //        {
+            //            x.RemoveProductButton = y;
+            //            return x;
+            //        })
+            //    );
+
+
             while (i < trip.TotalTripProducts)
             {
-                trip.TripProducts.Add(new TripProduct()
-                {
-                    ProductType = productTypes[i],
-                    ProductTitle = productTitle[i],
-                    Fares = fares[i],
-                    Passengers = passengers[i],
-                    ModifyProductButton = modifyProductButton[i],
-                    RemoveProductButton = removeProductButton[i]
-                });
+                var product = UtilityFunctions.GetTripProduct(productTypes[i]);
+                product.ProductTitle = productTitle[i];
+                product.Fares = fares[i];
+                product.Passengers = passengers[i];
+                product.ModifyProductButton = modifyProductButton[i];
+                product.RemoveProductButton = removeProductButton[i];
+                trip.TripProducts.Add(product);
                 i++;
             }
             return trip;

@@ -12,6 +12,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     {
         bool IsVisible();
         List<Results> ParseResults();
-        void AddToCart(List<Results> result);
+        Results AddToCart(string result);
     }
 }

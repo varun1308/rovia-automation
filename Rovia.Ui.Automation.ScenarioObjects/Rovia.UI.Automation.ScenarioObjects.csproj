@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="AirPostSearchFilters.cs" />
     <Compile Include="AirPreSearchFilters.cs" />
+    <Compile Include="AirTripProduct.cs" />
     <Compile Include="HotelPreSearchFilters.cs" />
     <Compile Include="PassengerInfo\Adult.cs" />
     <Compile Include="AirportPair.cs" />

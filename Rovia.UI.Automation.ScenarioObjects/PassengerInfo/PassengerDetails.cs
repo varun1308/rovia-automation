@@ -8,9 +8,9 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public string Country { get; set; }
         public bool IsInsuranceRequired { get; set; }
         public List<Passenger> Passengers { get; private set; }
-        private static readonly string[] FirstName = { "Vikul", "Ashish", "Pooja", "Priya","Asmita","Gatum","Ramesh", "Suresh","Aarti","Sneha","Astha","Diksha" };
-        private static readonly string[] LastName = {"Rathod", "Guliya","Singh","Roy","Singh", "Dabur", "Gupta","Sharma","Trivedi", "Paswaan","Fernandis","Silva","Lol"};
-        private static readonly string[] MiddleName = { "", "Kumar", "", "", "Ram", "Vir", "", "Vijay", "K", "", "", "D", "" };
+        private static readonly string[] FirstName = { "VIKUL", "ASHISH", "POOJA", "PRIYA","ASMITA","GATUM","RAMESH", "SURESH","AARTI","SNEHA","ASTHA","DIKSHA" };
+        private static readonly string[] LastName = {"RATHOD", "GULIYA","SINGH","ROY","SINGH", "DABUR", "GUPTA","SHARMA","TRIVEDI", "PASWAAN","FERNANDIS","SILVA","LOL"};
+        private static readonly string[] MiddleName = { "", "KUMAR", "", "", "RAM", "VIR", "", "VIJAY", "K", "", "", "D", "" };
         private static readonly string[] EmailId = { "vrathod@tavisca.com", "aguliya@tavisca.com"};
 
         public PassengerDetails(Passengers passengers)
@@ -52,6 +52,10 @@ namespace Rovia.UI.Automation.ScenarioObjects
                 });
             }
 
+        }
+
+        public PassengerDetails()
+        {
         }
     }
 

@@ -33,9 +33,25 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             _resultFilters = resultFilter;
         }
 
-        public void AddToCart(List<Results> result)
+        public Results AddToCart(string supplier)
         {
-            _resultsHolder.AddToCart(result);
+            var selectedResult=_resultsHolder.AddToCart(supplier);
+            if (selectedResult == null && IsNextPageAvailable())
+            {
+                GoToNextPage();
+                selectedResult = AddToCart(supplier);
+            }
+            return selectedResult;
+        }
+
+        private void GoToNextPage()
+        {
+            WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).Click();
+        }
+
+        private bool IsNextPageAvailable()
+        {
+            return WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("#AirResultHolder");
         }
 
         public void WaitForResultLoad()

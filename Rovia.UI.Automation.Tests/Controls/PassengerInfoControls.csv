@@ -22,3 +22,4 @@ divPassengerHolder,div#dvPassengerWidgetHolder
 divConfirmPassengerDetails,div.checkOutPassengerDetails
 divPassengerDetailInput,div#dvPassengerProdHolder
 alertError,div.alert-error
+paxConfDiv,div.jsPaxConfDetails

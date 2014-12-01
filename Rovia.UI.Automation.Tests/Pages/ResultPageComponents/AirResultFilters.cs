@@ -173,7 +173,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             divMatrixAirlines[0].Click();
 
-            return IsResultsNotAvailableOnFilter() &&
+            return !IsResultsNotAvailableOnFilter() &&
                             IsPostResultsFilterApplied(new List<string> { "Airlines", "Price" });
 
             // uncomment below if wants to test all matrix

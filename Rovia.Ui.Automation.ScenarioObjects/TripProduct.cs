@@ -3,9 +3,9 @@ using AppacitiveAutomationFramework;
 
 namespace Rovia.UI.Automation.ScenarioObjects
 {
-   public class TripProduct
+   public abstract class TripProduct
     {
-        public string ProductType { get; set; }
+        public TripProductType ProductType { get; protected set; }
         public string ProductTitle { get; set; }
         public Fare Fares { get; set; }
         public Passengers Passengers { get; set; }
