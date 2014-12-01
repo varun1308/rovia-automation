@@ -96,8 +96,10 @@
     <Compile Include="Tests\HomePageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\HotelTests\HotelHappyFlowTest.cs" />
+    <Compile Include="Utility\MarkUpGenerator.cs" />
     <Compile Include="Utility\TestExecutionPipeLine.cs" />
     <Compile Include="Utility\Testhelper.cs" />
+    <Compile Include="Utility\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

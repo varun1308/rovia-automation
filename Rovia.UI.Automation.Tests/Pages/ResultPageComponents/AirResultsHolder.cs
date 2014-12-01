@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
+using Rovia.UI.Automation.Tests.Utility;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
     public class AirResultsHolder : UIPage, IResultsHolder
     {
-        private Dictionary<Results, IUIWebElement> _results;
+        private static Dictionary<Results, IUIWebElement> _results;
 
         #region IResultHolder Members
         public bool IsVisible()
@@ -140,23 +141,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     Duration = t,
                     ArriveTime = legArrTime[i],
                     DepartTime = legDepTime[i],
-                    Cabin = GetCabinType(legCabins[i]),
+                    Cabin = legCabins[i].Split()[0].ToCabinType(),
                     Stops = int.Parse(legStops[i])
                 }).ToList();
         }
-
-        private CabinType GetCabinType(string cabinType)
-        {
-            if (cabinType.Contains(CabinType.Premium_Economy.ToString().Replace('_', ' ')))
-                return CabinType.Premium_Economy;
-            if (cabinType.Contains(CabinType.Business.ToString()))
-                return CabinType.Business;
-            if (cabinType.Contains(CabinType.First.ToString()))
-                return CabinType.First;
-
-            return CabinType.Economy;
-        }
-
         #endregion
     }
 }

@@ -80,7 +80,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.AddToCart();
                 TestHelper.CheckoutTrip();
                 TestHelper.EnterPassengerDetails();
-                TestHelper.EditPassengerInfoAndContinue();
+               // TestHelper.EditPassengerInfoAndContinue();
                 TestHelper.ConfirmPassengerDetails();
                 TestHelper.PayNow();
             }

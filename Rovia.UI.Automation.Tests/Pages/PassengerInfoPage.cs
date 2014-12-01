@@ -36,6 +36,7 @@ namespace Rovia.UI.Automation.Tests.Pages
            try
            {
                //todo Confirm Passenger Details
+               ParsePassengerDetails();
                WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
            }
            catch (NullReferenceException exception)
@@ -126,11 +127,39 @@ namespace Rovia.UI.Automation.Tests.Pages
                inputForm["mNames"][i].SendKeys(x.MiddleName);
                inputForm["lNames"][i].SendKeys(x.LastName);
                inputForm["eMail"][i].SendKeys(x.Emailid);
-               inputForm["dob"][i].SendKeys(DateTime.Now.AddYears(-1 * x.Age).AddMonths(3).ToString("MM/dd/yyyy"));
+               inputForm["dob"][i].SendKeys(x.BirthDate);
                inputForm["gender"][i].SelectFromDropDown(x.Gender);
                inputForm["vEmail"][i].SendKeys(x.Emailid);
                ++i;
            });
+       }
+
+       private void ParsePassengerDetails()
+       {
+           var paxConfDetails = GetUIElements("paxConfDiv").Select(x => x.Text.Split(new []{'\r','\n'}).ToList()).ToList();
+
+          paxConfDetails.ForEach(x=>x.RemoveAll(string.IsNullOrEmpty));
+           VerifyPaxDetails(paxConfDetails.Select(GetPassenger));
+           
+       }
+
+       private static void VerifyPaxDetails(IEnumerable<Passenger> passengers)
+       {
+           if (_passengerDetails.Passengers.Zip(passengers, (x, y) => x.Equals(y)).Any(x=>x.Equals(false)))
+                throw new Exception("InvalidPaxDetails");
+       }
+
+       private static Passenger GetPassenger(List<string> passengerElements)
+       {
+           var today = DateTime.Today;
+           var bday = DateTime.Parse(passengerElements[passengerElements.IndexOf("BIRTHDATE") + 1]);
+           var age = today.Year-bday.Year;
+           if (bday > today.AddYears(-age)) age--;
+           if (age <= 2)
+               return new Infant(passengerElements);
+           if (age < 18)
+               return new Child(passengerElements);
+           return new Adult(passengerElements);
        }
 
        private Dictionary<string, List<IUIWebElement>> GetInputForm()
