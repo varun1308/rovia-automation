@@ -20,6 +20,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         private static RoviaApp _app;
         private static ILogger _logger;
         private static SearchCriteria _criteria;
+        private static Results _selectedItineary;
         public static TripFolder Trip { get; set; }
         public static IValidator Validator { get; set; }
 
@@ -59,27 +60,27 @@ namespace Rovia.UI.Automation.Tests.Utility
             _criteria = criteria;
         }
 
-        private static List<Results> ApplySpecialCriteria()
-        {
-            var selectedResults = Results;
-            if (_criteria != null)
-            {
-                var criteria = "";
-                foreach (var criterium in _criteria.SpecialCriteria)
-                {
+        //private static List<Results> ApplySpecialCriteria()
+        //{
+        //    var selectedResults = Results;
+        //    if (_criteria != null)
+        //    {
+        //        var criteria = "";
+        //        foreach (var criterium in _criteria.SpecialCriteria)
+        //        {
 
-                    if (criterium.Name.Equals("Supplier"))
-                    {
-                        selectedResults = selectedResults.Where(x => x.Supplier.SupplierName.Equals(criterium.Value)).ToList();
-                        criteria += " | Supplier:" + criterium.Value;
-                        if (selectedResults.Count == 0)
-                            throw new Exception("No Results found for " + criteria);
-                    }
-                    //todo add handling for other criteria
-                }
-            }
-            return selectedResults;
-        }
+        //            if (criterium.Name.Equals("Supplier"))
+        //            {
+        //                selectedResults = selectedResults.Where(x => x.Supplier.SupplierName.Equals(criterium.Value)).ToList();
+        //                criteria += " | Supplier:" + criterium.Value;
+        //                if (selectedResults.Count == 0)
+        //                    throw new Exception("No Results found for " + criteria);
+        //            }
+        //            //todo add handling for other criteria
+        //        }
+        //    }
+        //    return selectedResults;
+        //}
 
         internal static void EditPassengerInfoAndContinue()
         {
@@ -101,9 +102,9 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new PageNotFoundException("HomePage");
                 _app.HomePage.Search(_criteria);
                 WaitForResultLoad();
-                Results = _app.ResultsPage.ParseResults();
-            if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
-                throw new Exception("Result validation failed");
+            //    Results = _app.ResultsPage.ParseResults();
+            //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
+            //    throw new Exception("Result validation failed");
         }
 
         internal static void Login()
@@ -155,7 +156,9 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
                 if (!_app.State.CurrentPage.EndsWith("ResultsPage"))
                     throw new PageNotFoundException("ResultsPage");
-                _app.ResultsPage.AddToCart(ApplySpecialCriteria());
+                _selectedItineary=_app.ResultsPage.AddToCart(_criteria.Supplier);
+            if (_selectedItineary==null)
+                throw new Exception("NoValidResultFound");
                 _app.State.CurrentPage = "TripFolderPage";
                 ParseTripFolder();
         }

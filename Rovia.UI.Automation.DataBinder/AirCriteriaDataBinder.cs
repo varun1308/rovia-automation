@@ -15,7 +15,7 @@ namespace Rovia.UI.Automation.DataBinder
         
             return new AirSearchCriteria()
             {
-                //Pipeline = (string)dataRow["ExecutionPipeline"],
+                Pipeline = (string)dataRow["ExecutionPipeline"],
                 UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
                 Description = (string)dataRow["Description"],
                 AirportPairs = ParseAirPorts(dataRow["AirPortPairs"].ToString(), dataRow["TravelDates"].ToString(), searchType),
@@ -38,16 +38,16 @@ namespace Rovia.UI.Automation.DataBinder
                     },
                 PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
                 CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|")?((string)dataRow["PaymentMode"]).Split('|')[1]:"Visa"),
-                SpecialCriteria = string.IsNullOrEmpty(dataRow["SpecialFilterName"].ToString()) ? null : ParseSpecialCriteria((string)dataRow["SpecialFilterName"], (string)dataRow["SpecialFilterValues"])
+                Supplier = dataRow["Supplier"].ToString()
             };
         }
 
-        private List<SpecialCriteria> ParseSpecialCriteria(string criteria, string value)
+        private List<AddToCartCriteria> ParseSpecialCriteria(string criteria, string value)
         {
             var criteriaList = criteria.Split('|');
             var values = value.Split('|');
             var i = 0;
-            return criteriaList.Select(s => new SpecialCriteria()
+            return criteriaList.Select(s => new AddToCartCriteria()
                 {
                     Name = s, Value = values[i++]
                 }).ToList();

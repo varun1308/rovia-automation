@@ -14,7 +14,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     public class AirResultsHolder : UIPage, IResultsHolder
     {
         private static Dictionary<Results, IUIWebElement> _results;
-
         #region IResultHolder Members
         public bool IsVisible()
         {
@@ -42,13 +41,32 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return _results.Keys.ToList();
         }
 
-        public void AddToCart(List<ScenarioObjects.Results> result)
+
+        public Dictionary<AirResult, IUIWebElement> GetParsedResults()
         {
-            if (result.Any(airResult => AddToCart(_results[airResult])))
+            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
+            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
+            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
+            var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
+            var addToCartControl = GetUIElements("btnAddToCart");
+            var flightLegs = ParseFlightLegs();
+            var legsPerResult = flightLegs.Count / supplier.Length;
+            ProcessairLines(airLines, subair);
+
+            var results = new Dictionary<AirResult, IUIWebElement>();
+
+            for (var i = 0; i < addToCartControl.Count; i++)
             {
-                return;
+                results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
             }
-            throw new Exception("Selected itineraries not Available");
+            return results;
+        }
+        public Results AddToCart(string supplier)
+        {
+            return
+                GetParsedResults()
+                    .Where(x => string.IsNullOrEmpty(supplier)||x.Key.Supplier.SupplierName.Equals(supplier))
+                    .FirstOrDefault(x => AddToCart(x.Value)).Key;
         }
         #endregion
 
