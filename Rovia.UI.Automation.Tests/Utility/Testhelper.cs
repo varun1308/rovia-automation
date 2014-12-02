@@ -61,7 +61,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             _criteria = criteria;
         }
 
-      
+
 
         internal static void EditPassengerInfoAndContinue()
         {
@@ -85,11 +85,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("HomePage"))
                     throw new InvalidOperationException("Search",_app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
-                _app.ResultsPage.WaitForResultLoad();
-                //    Results = _app.ResultsPage.ParseResults();
-                //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
+            _app.ResultsPage.WaitForResultLoad();
+            _app.State.CurrentPage = "ResultsPage";
+            //    Results = _app.ResultsPage.ParseResults();
+            //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
                 //     throw new ValidationException("Results ");
-            }
+        }
             catch (Exception)
             {
                 //todo Log
@@ -153,7 +154,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new AddToCartFailedException();
                 _app.State.CurrentPage = "TripFolderPage";
                 ParseTripFolder();
-            }
+        }
             catch (Exception)
             {
                 //todo log
@@ -255,7 +256,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("ParseTripFolder", _app.State.CurrentPage);
                 Trip = _app.TripFolderPage.ParseTripFolder();
-            }
+        }
             catch (Exception exception)
             {
                 //todo log
@@ -364,7 +365,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     //_app.LoginDetailsPage.WaitForLoad();
                     _app.State.CurrentPage = "LoginDetailsPage";
                 }
-            }
+        }
             catch (Exception exception)
             {
                 //Todo Log
