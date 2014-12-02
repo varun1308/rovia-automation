@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -33,7 +34,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
             catch (Exception ex)
             {
-                throw new Exception("One way journey button not displayed", ex);
+                throw new UIElementNullOrNotVisible("One-way journey button", ex);
             }
         }
         private void SelectMulticityFlight()
@@ -44,7 +45,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
             catch (Exception ex)
             {
-                throw new Exception("Multicity journey button not displayed", ex);
+                throw new UIElementNullOrNotVisible("Multicity journey button", ex);
             }
         }
         private void SelectRoundTripFlight()
@@ -55,7 +56,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
             catch (Exception ex)
             {
-                throw new Exception("RoundTrip journey button not displayed", ex);
+                throw new UIElementNullOrNotVisible("RoundTrip journey button", ex);
             }
         }
         protected override void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
@@ -80,7 +81,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while entering passenger details", ex);
+                //todo log
+                throw;// new Exception("Error while entering passenger details", ex);
             }
         }
         private void EnterAirports(SearchType searchType, List<AirportPair> airportPairs)
@@ -134,7 +136,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
             catch (Exception exception)
             {
-                throw new Exception("AirSearch failed", exception);
+                //todo log 
+                throw;
             }
         }
     }

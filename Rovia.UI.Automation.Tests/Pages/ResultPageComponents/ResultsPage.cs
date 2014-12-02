@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -65,12 +66,18 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     if (_resultsHolder.IsVisible())
                         break;
                 }
+                GetUIElements("txtError").ForEach(x =>
+                    {
+                        if(x.Displayed)
+                            throw new Alert(x.Text);
+                    });
                 if (!_resultsHolder.IsVisible())
-                    throw new Exception("Results Not visible");
+                    throw new Alert("Results Not visible");
             }
             catch (Exception exception)
             {
-                throw new Exception("Results failed to load", exception);
+                //todo log
+                throw;// new Exception("Results failed to load", exception);
             }
         }
 

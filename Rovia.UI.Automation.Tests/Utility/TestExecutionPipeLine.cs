@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Rovia.UI.Automation.Exceptions;
+using InvalidOperationException = Rovia.UI.Automation.Exceptions.InvalidOperationException;
 
 namespace Rovia.UI.Automation.Tests.Utility
 {
@@ -47,7 +49,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                         case "PAYNOW":
                             TestHelper.PayNow();
                             break;
-                        default:throw new Exception(string.Format("Invalid Operation {0} in Pipeline",x));
+                        default:throw new InvalidOperationException(string.Format("{0} in Pipeline",x));
                     }
                 });
         }

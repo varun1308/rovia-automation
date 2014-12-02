@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using AppacitiveAutomationFramework;
 using OpenQA.Selenium;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -31,7 +32,8 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception)
             {
-                throw new Exception("payNow failed", exception);
+                //todo log
+                throw;// new Exception("payNow failed", exception);
             }
         }
 
@@ -52,8 +54,8 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception)
             {
-                
-                throw new Exception("on Bfc Page",exception);
+                //todo log
+                throw;// new Exception("on Bfc Page", exception);
             }
         }
 
@@ -61,7 +63,7 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             var errors = WaitAndGetBySelector("divError", ApplicationSettings.TimeOut.Slow);
             if (errors.Displayed)
-                throw new Exception(errors.Text);
+                throw new Alert(errors.Text);
         }
 
         private void SetBillingAddress(BillingAddress address)
@@ -79,9 +81,10 @@ namespace Rovia.UI.Automation.Tests.Pages
                 WaitAndGetBySelector("inpPhoneNumberDigits", ApplicationSettings.TimeOut.Fast).SendKeys(address.PhoneNumber.Substring(6));
                 WaitAndGetBySelector("inpPostalCode", ApplicationSettings.TimeOut.Fast).SendKeys(address.ZipCode);
 	        }
-	        catch (NullReferenceException exception)
+	        catch (Exception exception)
 	        {
-		        throw new Exception("Exception while setting Address Info", exception);
+                //todo log
+                throw;// new Exception("Exception while setting CreditCard Info", exception);
 	        }
         }
 
@@ -97,9 +100,10 @@ namespace Rovia.UI.Automation.Tests.Pages
                 WaitAndGetBySelector("selectExpirationYear", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(creditCardInfo.ExpiryDate.Year.ToString());
                 WaitAndGetBySelector("inpEmailAddresse", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.CardHolderEmailId);
             }
-            catch (NullReferenceException exception)
+            catch (Exception exception)
             {
-                throw new Exception("Exception while setting CreditCard Info", exception);
+                //todo log
+                throw;// new Exception("Exception while setting CreditCard Info", exception);
             }
         }
     }

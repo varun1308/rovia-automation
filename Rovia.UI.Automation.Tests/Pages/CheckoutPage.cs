@@ -2,6 +2,7 @@
 using System.Threading;
 using AppacitiveAutomationFramework;
 using OpenQA.Selenium;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Model;
@@ -32,7 +33,8 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception)
             {
-                throw new Exception("Roviabucks Payment Failed",exception);
+                //todo log
+                throw;// new Exception("Roviabucks Payment Failed", exception);
             }
         }
 
@@ -55,11 +57,12 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (StaleElementReferenceException exception)
             {
+                //todo log
                 //eat OpenQASelenium.StaleElementReferenceException 
             }
             catch (Exception exception)
             {
-
+                //todo log
                 throw;
             }
         }
@@ -93,7 +96,8 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception )
             {
-                throw new Exception("Error While Entering billing Address",exception);
+                //todo log
+                throw; //new Exception("Error While Entering billing Address", exception);
             }
         }
 
@@ -110,7 +114,7 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             var divErrors = WaitAndGetBySelector("divErrors", ApplicationSettings.TimeOut.Slow);
             if(divErrors!=null&&divErrors.Displayed)
-                throw new Exception(divErrors.Text);
+                throw new Alert(divErrors.Text);
         }
 
         public void CheckPaymentStatus()
@@ -127,7 +131,8 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception)
             {
-                throw new Exception("on CheckOut Page",exception);
+                //todo log
+                throw;// new Exception("on CheckOut Page", exception);
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
@@ -27,7 +28,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception)
             {
-                throw new Exception("HomePage failed to load", exception);
+                throw new PageLoadFailed("HomePage", exception);
             }
         }
         internal bool IsVisible()

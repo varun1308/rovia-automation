@@ -25,7 +25,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while entering passenger details", ex);
+                //todo log
+                throw;// new Exception("Error while entering passenger details", ex);
             }
         }
 
@@ -63,7 +64,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
             catch (Exception exception)
             {
-                throw new Exception("Hotel Search Failed",exception);
+                //todo log
+                throw;// new Exception("Hotel Search Failed", exception);
             }
         }
 

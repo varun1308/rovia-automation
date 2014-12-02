@@ -11,6 +11,7 @@ using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Validator;
+using InvalidOperationException = Rovia.UI.Automation.Exceptions.InvalidOperationException;
 
 namespace Rovia.UI.Automation.Tests.Utility
 {
@@ -60,51 +61,40 @@ namespace Rovia.UI.Automation.Tests.Utility
             _criteria = criteria;
         }
 
-        //private static List<Results> ApplySpecialCriteria()
-        //{
-        //    var selectedResults = Results;
-        //    if (_criteria != null)
-        //    {
-        //        var criteria = "";
-        //        foreach (var criterium in _criteria.SpecialCriteria)
-        //        {
-
-        //            if (criterium.Name.Equals("Supplier"))
-        //            {
-        //                selectedResults = selectedResults.Where(x => x.Supplier.SupplierName.Equals(criterium.Value)).ToList();
-        //                criteria += " | Supplier:" + criterium.Value;
-        //                if (selectedResults.Count == 0)
-        //                    throw new Exception("No Results found for " + criteria);
-        //            }
-        //            //todo add handling for other criteria
-        //        }
-        //    }
-        //    return selectedResults;
-        //}
+      
 
         internal static void EditPassengerInfoAndContinue()
         {
             try
             {
                 if (!_app.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
-                    throw new Exception("PassengerDetails-Editing is not available on " + _app.State.CurrentPage);
+                    throw new InvalidOperationException("EditPassengerInfoAndContinue", _app.State.CurrentPage);
                 _app.PassengerInfoPage.EditPassengerInfo();
             }
             catch (Exception exception)
             {
-                throw new Exception("PassengerDetail-Submission failed", exception);
+                //Todo log
+                throw;// new Exception("PassengerDetail-Submission failed", exception);
             }
         }
 
         internal static void Search()
         {
+            try
+            {
                 if (!_app.State.CurrentPage.Equals("HomePage"))
-                    throw new PageNotFoundException("HomePage");
+                    throw new InvalidOperationException("Search",_app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
-            _app.ResultsPage.WaitForResultLoad();
-            //    Results = _app.ResultsPage.ParseResults();
-            //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
-            //    throw new Exception("Result validation failed");
+                _app.ResultsPage.WaitForResultLoad();
+                //    Results = _app.ResultsPage.ParseResults();
+                //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
+                //     throw new ValidationException("Results ");
+            }
+            catch (Exception)
+            {
+                //todo Log
+                throw;
+            }
         }
 
         internal static void Login()
@@ -147,20 +137,28 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-
-                throw new Exception("LogIn Failed", exception);
+                //todo log
+                throw; // new Exception("LogIn Failed", exception);
             }
         }
 
         internal static void AddToCart()
         {
+            try
+            {
                 if (!_app.State.CurrentPage.EndsWith("ResultsPage"))
-                    throw new PageNotFoundException("ResultsPage");
-                _selectedItineary=_app.ResultsPage.AddToCart(_criteria.Supplier);
-            if (_selectedItineary==null)
-                throw new Exception("NoValidResultFound");
+                    throw new InvalidOperationException("AddToCart", _app.State.CurrentPage);
+                _selectedItineary = _app.ResultsPage.AddToCart(_criteria.Supplier);
+                if (_selectedItineary == null)
+                    throw new AddToCartFailedException();
                 _app.State.CurrentPage = "TripFolderPage";
                 ParseTripFolder();
+            }
+            catch (Exception)
+            {
+                //todo log
+                throw;
+            }
         }
 
         internal static void EnterPassengerDetails()
@@ -168,13 +166,14 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("PassengerInfoPage"))
-                    throw new PageNotFoundException("PassengerInfoPage");
+                    throw new InvalidOperationException("EnterPassengerDetails", _app.State.CurrentPage);
                 _app.PassengerInfoPage.SubmitPassengerDetails(GetPassengerDetails());
                 _app.State.CurrentPage = "PassengerDetails-ConfirmationPage";
             }
             catch (Exception exception)
             {
-                throw new Exception("PassengerDetail-Submission failed", exception);
+                //todo log
+                throw; //new Exception("PassengerDetail-Submission failed", exception);
             }
         }
 
@@ -183,15 +182,15 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
-                    throw new Exception("PassengerDetails-Confirmation is not available on " + _app.State.CurrentPage);
+                    throw new InvalidOperationException("ConfirmPassengerDetails", _app.State.CurrentPage);
                 _app.PassengerInfoPage.ConfirmPassengers();
                 _app.CheckoutPage.WaitForLoad();
                 _app.State.CurrentPage = "CheckOutPage";
             }
             catch (Exception exception)
             {
-
-                throw new Exception("Passenger Confirmation failed", exception);
+                //todo log
+                throw;// new Exception("Passenger Confirmation failed", exception);
             }
         }
 
@@ -210,8 +209,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-
-                throw new Exception("Login page failed to Load", exception);
+                //todo log
+                throw; // new Exception("Login page failed to Load", exception);
             }
         }
 
@@ -232,7 +231,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                throw new Exception("LogOut Failed", exception);
+                //todo log
+                throw;// new Exception("LogOut Failed", exception);
             }
 
         }
@@ -250,9 +250,17 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         private static void ParseTripFolder()
         {
+            try
+            {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new PageNotFoundException("TripFolderPage");
+                    throw new InvalidOperationException("ParseTripFolder", _app.State.CurrentPage);
                 Trip = _app.TripFolderPage.ParseTripFolder();
+            }
+            catch (Exception exception)
+            {
+                //todo log
+                throw;
+            }
         }
 
         public static void SaveTrip()
@@ -260,7 +268,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip can not be save on " + _app.State.CurrentPage);
+                    throw new InvalidOperationException("SaveTrip", _app.State.CurrentPage);
                 // to implement
                 Trip.TripSettingsButton.Click();
                 Trip.SaveTripButton.Click();
@@ -271,7 +279,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                throw new Exception("Error in saving trip.", exception);
+                //todo log
+                throw;// new Exception("Error in saving trip.", exception);
             }
         }
 
@@ -280,13 +289,14 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip can not be start over on " + _app.State.CurrentPage);
+                    throw new InvalidOperationException("TripStartOver", _app.State.CurrentPage);
                 Trip.TripSettingsButton.Click();
                 Trip.StartoverButton.Click();
             }
             catch (Exception exception)
             {
-                throw new Exception("Error in trip start over", exception);
+                //Todo Log
+                throw;// new Exception("Error in trip start over", exception);
             }
         }
 
@@ -295,13 +305,14 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip name can not be edit on " + _app.State.CurrentPage);
+                    throw new InvalidOperationException("EditTripName", _app.State.CurrentPage);
                 Trip.TripSettingsButton.Click();
                 _app.TripFolderPage.EditTripName();
             }
             catch (Exception exception)
             {
-                throw new Exception("Error in editing trip name.", exception);
+                //todo log
+                throw;// new Exception("Error in editing trip name.", exception);
             }
         }
 
@@ -310,12 +321,13 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip product can not be modified on " + _app.State.CurrentPage);
+                    throw new InvalidOperationException("ModifyProduct", _app.State.CurrentPage);
                 Trip.TripProducts[index].ModifyProductButton.Click();
             }
             catch (Exception exception)
             {
-                throw new Exception("Error in modifying trip product.", exception);
+                //todo log
+                throw;// new Exception("Error in modifying trip product.", exception);
             }
         }
 
@@ -324,19 +336,22 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Trip product can not be removed on " + _app.State.CurrentPage);
+                    throw new InvalidOperationException("RemoveProduct", _app.State.CurrentPage);
                 Trip.TripProducts[index].RemoveProductButton.Click();
             }
             catch (Exception exception)
             {
-                throw new Exception("Error in removing trip product.", exception);
+                //todo log
+                throw;// new Exception("Error in removing trip product.", exception);
             }
         }
 
         public static void CheckoutTrip()
         {
+            try
+            {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new PageNotFoundException("TripFolderPage");
+                    throw new InvalidOperationException("CheckoutTrip", _app.State.CurrentPage);
                 Trip.CheckoutTripButton.Click();
 
                 if (_app.State.CurrentUser.Type != UserType.Guest)
@@ -349,6 +364,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                     //_app.LoginDetailsPage.WaitForLoad();
                     _app.State.CurrentPage = "LoginDetailsPage";
                 }
+            }
+            catch (Exception exception)
+            {
+                //Todo Log
+                throw;
+            }
         }
 
         public static void ContinueShopping()
@@ -356,12 +377,13 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new Exception("Can not continue shopping on " + _app.State.CurrentPage);
+                    throw new InvalidOperationException("ContinueShopping", _app.State.CurrentPage);
                 Trip.ContinueShoppingButton.Click();
             }
             catch (Exception exception)
             {
-                throw new Exception("Error in continue shopping", exception);
+                //todo log
+                throw;// new Exception("Error in continue shopping", exception);
             }
         }
 
@@ -381,7 +403,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("CheckOutPage"))
-                    throw new Exception("Pay-Now is not available on " + _app.State.CurrentPage);
+                    throw new InvalidOperationException("PayNow", _app.State.CurrentPage);
                 if (_criteria.PaymentMode == PaymentMode.RoviaBucks)
                     _app.CheckoutPage.PayNow(new PaymentInfo(_criteria.PaymentMode));
                 else
@@ -396,7 +418,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                throw new Exception("Pay Now failed", exception);
+                //todo log
+                throw;// new Exception("Pay Now failed", exception);
             }
         }
 

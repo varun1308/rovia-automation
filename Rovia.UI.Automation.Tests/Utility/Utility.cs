@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.Tests.Utility
@@ -17,7 +18,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 case "flight":
                     return TripProductType.Air;
                 default:
-                    throw new Exception("Unhandled TripProductType");
+                    throw new InvalidInputException(productType+" To UtilityFunctions.ToTripPRoductType");
 
             }
         }
@@ -40,7 +41,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 case "business":
                     return CabinType.Business;
                 default:
-                    throw new Exception("Unhandled TripProductType");
+                    throw new InvalidInputException(cabinType + " To UtilityFunctions.ToCabinType");
 
             }
         }
@@ -52,7 +53,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 case TripProductType.Air:
                     return new AirTripProduct();
                 default:
-                    throw new Exception("Unhandled TripProductType");
+                    throw new InvalidInputException(tripProductType + " To UtilityFunctions.GetTripProduct");
 
             }
         }

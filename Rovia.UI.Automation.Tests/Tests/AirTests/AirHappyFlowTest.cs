@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.DataBinder;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Utility;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -111,7 +112,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.Search();
                 Assert.IsTrue(TestHelper.SetFilters(),"Set Filter Matrix failed");
             }
-            catch (Exception exception)
+            catch (BaseException exception)
             {
                 Assert.Fail(exception.Message);
             }

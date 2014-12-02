@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -21,14 +22,14 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
             if (navBar == null || !navBar.Displayed)
-                throw new Exception(" Nav Bar not displayed.");
+                throw new UIElementNullOrNotVisible("Navigation Bar ");
             navBar.Click();
 
             Thread.Sleep(500);
 
             var searchPanel = WaitAndGetBySelector("searchPanel", ApplicationSettings.TimeOut.Slow);
             if (searchPanel == null || !searchPanel.Displayed)
-                throw new Exception("searchPanel not displayed.");
+                throw new UIElementNullOrNotVisible("SearchPanel");
         }
 
         public abstract void Search(SearchCriteria searchCriteria);

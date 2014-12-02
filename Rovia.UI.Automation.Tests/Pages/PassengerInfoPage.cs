@@ -21,35 +21,29 @@ namespace Rovia.UI.Automation.Tests.Pages
            {
                WaitAndGetBySelector("lnkEditPassengerInfo", ApplicationSettings.TimeOut.Slow).Click();
                if(IsInputFormVisible()==false)
-                   throw new Exception("InputForm failed To load");
+                   throw new UIElementNullOrNotVisible("PassengerDetails InputForm");
                WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
                WaitForConfirmationPageLoad();
            }
-           catch (NullReferenceException exception)
+           catch (Exception exception)
            {
-               throw new Exception("Edit PassengerInfo Button not visible", exception);
+               //todo log
+               throw;// new Exception("Edit PassengerInfo Button not visible", exception);
            }
        }
 
        internal void ConfirmPassengers()
        {
-           try
-           {
-               //todo Confirm Passenger Details
-               ParsePassengerDetails();
-               WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
-           }
-           catch (NullReferenceException exception)
-           {
-               throw new Exception("Confirmation Button not visible", exception);
-           }
+           VerifyPassengerDetails();
+           WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
+           
        }
 
        public void WaitForPageLoad()
        {
                while (WaitAndGetBySelector("SpinningDiv", 60).Displayed) ;
                if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Safe).Displayed == false)
-                   throw new PageNotFoundException("passengerinfo");
+                   throw new PageLoadFailed("PassengerInfoPage");
        }
        public void WaitForConfirmationPageLoad()
        {
@@ -60,7 +54,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                    var alertError = WaitAndGetBySelector("alertError", ApplicationSettings.TimeOut.Fast);
                    if (alertError!=null && alertError.Displayed)
                    {
-                       throw new Exception(alertError.Text);
+                       throw new Alert(alertError.Text);
                        
                    }
                }
@@ -68,7 +62,7 @@ namespace Rovia.UI.Automation.Tests.Pages
            }
            catch (Exception exception)
            {
-               throw new Exception("PassengerCOnfirmationPage Load Failed", exception);
+               throw new PageLoadFailed("PassengerCOnfirmationPage", exception);
            }
        }
        private bool IsInputFormVisible()
@@ -76,11 +70,11 @@ namespace Rovia.UI.Automation.Tests.Pages
            try
            {
                return WaitAndGetBySelector("divPassengerDetailInput", ApplicationSettings.TimeOut.Slow).Displayed ;
-
            }
            catch (Exception exception)
            {
-               throw new Exception("PassengerDetailsPage InputForm Load Failed", exception);
+               //todo log
+               return false;
            }
        }
 
@@ -111,7 +105,8 @@ namespace Rovia.UI.Automation.Tests.Pages
            }
            catch (NullReferenceException exception)
            {
-               throw new Exception("Passenger detail Elements not Loaded properly",exception);
+               //todo log
+               throw; //new Exception("Passenger detail Elements not Loaded properly",exception);
            }
        }
 
@@ -134,11 +129,10 @@ namespace Rovia.UI.Automation.Tests.Pages
            });
        }
 
-       private void ParsePassengerDetails()
+       private void VerifyPassengerDetails()
        {
            var paxConfDetails = GetUIElements("paxConfDiv").Select(x => x.Text.Split(new []{'\r','\n'}).ToList()).ToList();
-
-          paxConfDetails.ForEach(x=>x.RemoveAll(string.IsNullOrEmpty));
+           paxConfDetails.ForEach(x=>x.RemoveAll(string.IsNullOrEmpty));
            VerifyPaxDetails(paxConfDetails.Select(GetPassenger));
            
        }
@@ -146,7 +140,7 @@ namespace Rovia.UI.Automation.Tests.Pages
        private static void VerifyPaxDetails(IEnumerable<Passenger> passengers)
        {
            if (_passengerDetails.Passengers.Zip(passengers, (x, y) => x.Equals(y)).Any(x=>x.Equals(false)))
-                throw new Exception("InvalidPaxDetails");
+               throw new ValidationException("Passenger Details");
        }
 
        private static Passenger GetPassenger(List<string> passengerElements)

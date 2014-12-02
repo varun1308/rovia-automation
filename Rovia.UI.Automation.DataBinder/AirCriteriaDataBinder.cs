@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.DataBinder
@@ -13,35 +14,43 @@ namespace Rovia.UI.Automation.DataBinder
         public SearchCriteria GetCriteria(DataRow dataRow)
         {
             var searchType = StringToEnum<SearchType>((string)dataRow["TripType"]);
-        
-            return new AirSearchCriteria()
+
+            try
             {
-                Pipeline = (string)dataRow["ExecutionPipeline"],
-                UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
-                Description = (string)dataRow["Description"],
-                AirportPairs = ParseAirPorts(dataRow["AirPortPairs"].ToString(), dataRow["TravelDates"].ToString(), searchType),
-                Passengers = new Passengers()
+                return new AirSearchCriteria()
                     {
-                        Adults = int.Parse(dataRow["Adults"].ToString()),
-                        Infants = int.Parse(dataRow["Infants"].ToString()),
-                        Children = int.Parse(dataRow["Children"].ToString())
-                    },
-                SearchType = searchType,
-                Filters = new Filters()
-                    {
-                        PreSearchFilters = new AirPreSearchFilters()
-                        {
-                            IncludeNearByAirPorts = (bool)dataRow["IncludeNearByAirPorts"],
-                            CabinType = StringToEnum<CabinType>((string)dataRow["CabinType"]),
-                            NonStopFlight = (bool)dataRow["NonStopFlight"],
-                            AirLines = string.IsNullOrEmpty(dataRow["AirLines"].ToString()) ? null : new List<string>(((string)dataRow["AirLines"]).Split('|'))
-                    },
-                        PostSearchFilters = string.IsNullOrEmpty(dataRow["PostFilters"].ToString()) ? null : GetPostSearchFilters((string)dataRow["PostFilters"], (string)dataRow["PostFiltersValues"])
-                    },
-                PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
-                CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|")?((string)dataRow["PaymentMode"]).Split('|')[1]:"Visa"),
-                Supplier = dataRow["Supplier"].ToString()
-            };
+                        Pipeline = (string)dataRow["ExecutionPipeline"],
+                        UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
+                        Description = (string)dataRow["Description"],
+                        AirportPairs = ParseAirPorts(dataRow["AirPortPairs"].ToString(), dataRow["TravelDates"].ToString(), searchType),
+                        Passengers = new Passengers()
+                            {
+                                Adults = int.Parse(dataRow["Adults"].ToString()),
+                                Infants = int.Parse(dataRow["Infants"].ToString()),
+                                Children = int.Parse(dataRow["Children"].ToString())
+                            },
+                        SearchType = searchType,
+                        Filters = new Filters()
+                            {
+                                PreSearchFilters = new AirPreSearchFilters()
+                                {
+                                    IncludeNearByAirPorts = (bool)dataRow["IncludeNearByAirPorts"],
+                                    CabinType = StringToEnum<CabinType>((string)dataRow["CabinType"]),
+                                    NonStopFlight = (bool)dataRow["NonStopFlight"],
+                                    AirLines = string.IsNullOrEmpty(dataRow["AirLines"].ToString()) ? null : new List<string>(((string)dataRow["AirLines"]).Split('|'))
+                                },
+                                PostSearchFilters = string.IsNullOrEmpty(dataRow["PostFilters"].ToString()) ? null : GetPostSearchFilters((string)dataRow["PostFilters"], (string)dataRow["PostFiltersValues"])
+                            },
+                        PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
+                        CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|") ? ((string)dataRow["PaymentMode"]).Split('|')[1] : "Visa"),
+                        Supplier = dataRow["Supplier"].ToString()
+                    };
+            }
+            catch (Exception exception)
+            {
+
+                throw new InvalidInputException("DataRow to AirCriteriaDataBinder.GetCriteria", exception);
+            }
         }
 
         private AirPostSearchFilters GetPostSearchFilters(string filter, string value)

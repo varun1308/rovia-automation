@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B6E92EA1-26A1-40AB-A69E-84C980B5984B}</ProjectGuid>
+    <ProjectGuid>{2433E2F8-ADCC-4B6E-87FA-2BDB60FD67E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Rovia.UI.Automation.Exceptions</RootNamespace>
@@ -39,10 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ItineraryNotFoundException.cs" />
-    <Compile Include="PageNotFoundException.cs" />
+    <Compile Include="AddToCartFailedException.cs" />
+    <Compile Include="Alert.cs" />
+    <Compile Include="BaseException.cs" />
+    <Compile Include="InvalidInputException.cs" />
+    <Compile Include="InvalidOperationException.cs" />
+    <Compile Include="PageLoadFailed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResultsNotFoundException.cs" />
+    <Compile Include="UIElementNullOrNotVisible.cs" />
+    <Compile Include="ValidationException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
@@ -44,23 +45,31 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public Dictionary<AirResult, IUIWebElement> GetParsedResults()
         {
-            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
-            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
-            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
-            var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
-            var addToCartControl = GetUIElements("btnAddToCart");
-            var flightLegs = ParseFlightLegs();
-            var legsPerResult = flightLegs.Count / supplier.Length;
-            ProcessairLines(airLines, subair);
-
-            var results = new Dictionary<AirResult, IUIWebElement>();
-
-            for (var i = 0; i < addToCartControl.Count; i++)
+            try
             {
-                results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
+                var price = GetUIElements("amount").Select(x => x.Text).ToArray();
+                var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
+                var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
+                var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
+                var addToCartControl = GetUIElements("btnAddToCart");
+                var flightLegs = ParseFlightLegs();
+                var legsPerResult = flightLegs.Count / supplier.Length;
+                ProcessairLines(airLines, subair);
+
+                var results = new Dictionary<AirResult, IUIWebElement>();
+
+                for (var i = 0; i < addToCartControl.Count; i++)
+                {
+                    results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
+                }
+                return results;
             }
-            return results;
+            catch (Exception exception)
+            {
+                //todo log
+                throw;
             }
+        }
         public Results AddToCart(string supplier)
         {
             return
@@ -76,11 +85,22 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             btnAddToCart.Click();
             var divloader = WaitAndGetBySelector("divLoader", ApplicationSettings.TimeOut.Fast);
-            while (true)
+            try
             {
-                if ((GetUIElements("alerts").Any(x => x.Displayed)))
-                    break;
-                Thread.Sleep(1000);
+                while (true)
+                {
+                    GetUIElements("alerts").ForEach(x => 
+                    {
+                        if(x.Displayed)
+                            throw new Alert(x.Text);
+                    });
+                        
+                    Thread.Sleep(1000);
+                }
+            }
+            catch (Exception exception)
+            {
+                //todo log
             }
             var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Slow);
             if (btnCheckOut != null && btnCheckOut.Displayed)
