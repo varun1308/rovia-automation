@@ -33,31 +33,5 @@ namespace Rovia.UI.Automation.Tests.Tests.HotelTests
             TestHelper.GoToHomePage();
            
         }
-
-
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("AirGeneralDataSource")]
-        public void AirSearchTest()
-        {
-            try
-            {
-                TestHelper.SetCriteria(DataBinder.GetCriteria(TestContext.DataRow));
-                TestHelper.Login();
-                TestHelper.Search();
-                //TestHelper.AddToCart();
-                //TestHelper.CheckoutTrip();
-                //TestHelper.EnterPassengerDetails();
-                //TestHelper.EditPassengerInfoAndContinue();
-                //TestHelper.ConfirmPassengerDetails();
-                //TestHelper.PayNow();
-                //_app.HomePage.Search(criteria);
-                //_app.AirResultsPage.AddToCart(TestHelper.ApplySpecialCriteria(criteria.SpecialCriteria));
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
     }
 }

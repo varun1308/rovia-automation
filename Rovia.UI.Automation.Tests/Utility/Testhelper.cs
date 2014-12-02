@@ -102,6 +102,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new PageNotFoundException("HomePage");
                 _app.HomePage.Search(_criteria);
             _app.ResultsPage.WaitForResultLoad();
+            _app.State.CurrentPage = "ResultsPage";
             //    Results = _app.ResultsPage.ParseResults();
             //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
             //    throw new Exception("Result validation failed");
@@ -154,7 +155,7 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         internal static void AddToCart()
         {
-                if (!_app.State.CurrentPage.EndsWith("ResultsPage"))
+            if (!_app.State.CurrentPage.Equals("ResultsPage"))
                     throw new PageNotFoundException("ResultsPage");
                 _selectedItineary=_app.ResultsPage.AddToCart(_criteria.Supplier);
             if (_selectedItineary==null)

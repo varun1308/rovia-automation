@@ -83,38 +83,5 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 Assert.Fail(exception.Message);
             }
         }
-
-
-        [TestMethod]
-        [DataSource("AirLoginCreditCard")]
-        public void AirSearch()
-        {
-            try
-            {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                TestHelper.SetCriteria(criteria);
-                TestExecutionPipeLine.Execute(criteria.Pipeline);
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
-
-        [TestMethod]
-        [DataSource("AirGuestCreditCard")]
-        public void SetAirFiltersAndMatrix()
-        {
-            try
-            {
-                TestHelper.SetCriteria(new AirCriteriaDataBinder().GetCriteria(TestContext.DataRow));
-                TestHelper.Search();
-                Assert.IsTrue(TestHelper.SetFilters(),"Set Filter Matrix failed");
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
     }
 }

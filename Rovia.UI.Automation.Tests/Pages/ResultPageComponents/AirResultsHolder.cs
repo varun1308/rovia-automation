@@ -80,7 +80,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             {
                 if ((GetUIElements("alerts").Any(x => x.Displayed)))
                     break;
-                Thread.Sleep(1000);
             }
             var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Slow);
             if (btnCheckOut != null && btnCheckOut.Displayed)

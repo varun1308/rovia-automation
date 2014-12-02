@@ -40,7 +40,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 case "business":
                     return CabinType.Business;
                 default:
-                    throw new Exception("Unhandled TripProductType");
+                    throw new Exception("Unhandled CabinType");
 
             }
         }
