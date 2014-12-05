@@ -3,6 +3,7 @@ using System.Threading;
 using AppacitiveAutomationFramework;
 using OpenQA.Selenium;
 using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Model;
@@ -22,20 +23,11 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void PayNow(PaymentInfo paymentInfo)
         {
-            try
-            {
-                SetPaymentMode(paymentInfo.PaymentMode);
-                SetAddress(paymentInfo.BillingAddress);
+            SetPaymentMode(paymentInfo.PaymentMode);
+            SetAddress(paymentInfo.BillingAddress);
 
-                WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
-                WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click();
-               // WaitForPayment();
-            }
-            catch (Exception exception)
-            {
-                //todo log
-                throw;// new Exception("Roviabucks Payment Failed", exception);
-            }
+            WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
+            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click(); 
         }
 
         private void SetPaymentMode(PaymentMode paymentMode )
@@ -57,14 +49,10 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (StaleElementReferenceException exception)
             {
-                //todo log
+                LogManager.GetInstance().LogInformation("StaleElementReferenceException caught and suppressed"); 
                 //eat OpenQASelenium.StaleElementReferenceException 
             }
-            catch (Exception exception)
-            {
-                //todo log
-                throw;
-            }
+            
         }
         
         private void SetAddress(BillingAddress billingAddress)
@@ -96,8 +84,8 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception )
             {
-                //todo log
-                throw; //new Exception("Error While Entering billing Address", exception);
+                LogManager.GetInstance().LogInformation("Set Address Failed");
+                throw;
             }
         }
 
@@ -131,8 +119,8 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception)
             {
-                //todo log
-                throw;// new Exception("on CheckOut Page", exception);
+                LogManager.GetInstance().LogInformation("Payment Failed"); 
+                throw;
             }
         }
     }

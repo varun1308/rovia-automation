@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -17,7 +18,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private static IResultFilters _resultFilters;
         private static IResultsHolder _resultsHolder;
-
+        private static int _currentPageNo = 1;
         private bool IsWaitingVisible()
         {
             var div = WaitAndGetBySelector("divWaiting", ApplicationSettings.TimeOut.Fast);
@@ -48,11 +49,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         private void GoToNextPage()
         {
             WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).Click();
+            ++_currentPageNo;
         }
 
         private bool IsNextPageAvailable()
         {
-            return WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("#AirResultHolder");
+            return (_currentPageNo<ApplicationSettings.MaxSearchDepth) && (WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("#AirResultHolder"));
         }
 
         public void WaitForResultLoad()
@@ -73,10 +75,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     });
                 if (!_resultsHolder.IsVisible())
                     throw new Alert("Results Not visible");
+                _currentPageNo = 1;
             }
             catch (Exception exception)
             {
-                //todo log
+                LogManager.GetInstance().LogInformation("Results Failed To Load");
                 throw;// new Exception("Results failed to load", exception);
             }
         }

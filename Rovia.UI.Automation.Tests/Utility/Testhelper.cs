@@ -11,6 +11,7 @@ using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Validator;
+using Rovia.UI.Automation.Logger;
 using InvalidOperationException = Rovia.UI.Automation.Exceptions.InvalidOperationException;
 
 namespace Rovia.UI.Automation.Tests.Utility
@@ -19,7 +20,7 @@ namespace Rovia.UI.Automation.Tests.Utility
     public class TestHelper
     {
         private static RoviaApp _app;
-        private static ILogger _logger;
+        private static LogManager _logger;
         private static SearchCriteria _criteria;
         private static Results _selectedItineary;
         public static TripFolder Trip { get; set; }
@@ -36,8 +37,9 @@ namespace Rovia.UI.Automation.Tests.Utility
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext testContext)
         {
-            _app = new RoviaApp();
-            _logger=new ConsoleLogger();
+            LogManager.Initialise();
+            _logger = LogManager.GetInstance();
+            _app=new RoviaApp();
             GoToHomePage();
         }
 
@@ -53,7 +55,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             _app.Launch(ApplicationSettings.Url);
             _app.HomePage.WaitForHomePage();
             _app.State.CurrentPage = "HomePage";
-            _logger.Log("OnHomePage");
+            //_logger.Log("OnHomePage");
         }
 
         internal static void SetCriteria(SearchCriteria criteria)
@@ -70,11 +72,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("PassengerDetails-ConfirmationPage"))
                     throw new InvalidOperationException("EditPassengerInfoAndContinue", _app.State.CurrentPage);
                 _app.PassengerInfoPage.EditPassengerInfo();
+                _logger.LogStatus("EditPassengerInfoAndContinue", "Passed");
             }
             catch (Exception exception)
             {
-                //Todo log
-                throw;// new Exception("PassengerDetail-Submission failed", exception);
+                _logger.LogStatus("EditPassengerInfoAndContinue", "Failed");
+                throw; // new Exception("LogIn Failed", exception);
             }
         }
 
@@ -85,15 +88,16 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("HomePage"))
                     throw new InvalidOperationException("Search",_app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
-            _app.ResultsPage.WaitForResultLoad();
-            _app.State.CurrentPage = "ResultsPage";
-            //    Results = _app.ResultsPage.ParseResults();
-            //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
+                _app.ResultsPage.WaitForResultLoad();
+                _app.State.CurrentPage = "ResultsPage";
+                //    Results = _app.ResultsPage.ParseResults();
+                //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
                 //     throw new ValidationException("Results ");
-        }
-            catch (Exception)
+                _logger.LogStatus("Search", "Passed");
+            }
+            catch (Exception exception)
             {
-                //todo Log
+                _logger.LogStatus("Search", "Failed");
                 throw;
             }
         }
@@ -135,10 +139,11 @@ namespace Rovia.UI.Automation.Tests.Utility
                     _app.PassengerInfoPage.WaitForPageLoad();
                     _app.State.CurrentPage = "PassengerInfoPage";
                 }
+                _logger.LogStatus("Login", "Passed");
             }
             catch (Exception exception)
             {
-                //todo log
+                _logger.LogStatus("Login","Failed");
                 throw; // new Exception("LogIn Failed", exception);
             }
         }
@@ -154,10 +159,11 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new AddToCartFailedException();
                 _app.State.CurrentPage = "TripFolderPage";
                 ParseTripFolder();
-        }
-            catch (Exception)
+                _logger.LogStatus("AddToCart", "Passed");
+            }
+            catch (Exception exception)
             {
-                //todo log
+                _logger.LogStatus("AddToCart", "Failed");
                 throw;
             }
         }
@@ -170,11 +176,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new InvalidOperationException("EnterPassengerDetails", _app.State.CurrentPage);
                 _app.PassengerInfoPage.SubmitPassengerDetails(GetPassengerDetails());
                 _app.State.CurrentPage = "PassengerDetails-ConfirmationPage";
+                _logger.LogStatus("EnterPassengerDetails", "Passed");
             }
             catch (Exception exception)
             {
-                //todo log
-                throw; //new Exception("PassengerDetail-Submission failed", exception);
+                _logger.LogStatus("EnterPassengerDetails", "Failed");
+                throw;
             }
         }
 
@@ -187,11 +194,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                 _app.PassengerInfoPage.ConfirmPassengers();
                 _app.CheckoutPage.WaitForLoad();
                 _app.State.CurrentPage = "CheckOutPage";
+                _logger.LogStatus("ConfirmPassengerDetails", "Passed");
             }
             catch (Exception exception)
             {
-                //todo log
-                throw;// new Exception("Passenger Confirmation failed", exception);
+                _logger.LogStatus("ConfirmPassengerDetails", "Failed");
+                throw;
             }
         }
 
@@ -210,7 +218,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                //todo log
+                _logger.LogInformation("GoToLoginPage Failed");
                 throw; // new Exception("Login page failed to Load", exception);
             }
         }
@@ -232,7 +240,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                //todo log
+                _logger.LogInformation("LogOut Failed");
                 throw;// new Exception("LogOut Failed", exception);
             }
 
@@ -256,10 +264,10 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("ParseTripFolder", _app.State.CurrentPage);
                 Trip = _app.TripFolderPage.ParseTripFolder();
-        }
+            }
             catch (Exception exception)
             {
-                //todo log
+                _logger.LogInformation("TripFolder Parsing Failed");
                 throw;
             }
         }
@@ -277,11 +285,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                 //2 cases
                 //1. If already logged in directly save the trip
                 //2. If not, ask for login and then save the trip
+                _logger.LogStatus("SaveTrip", "Passed");
             }
             catch (Exception exception)
             {
-                //todo log
-                throw;// new Exception("Error in saving trip.", exception);
+                _logger.LogStatus("SaveTrip", "Failed");
+                throw;
             }
         }
 
@@ -293,11 +302,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new InvalidOperationException("TripStartOver", _app.State.CurrentPage);
                 Trip.TripSettingsButton.Click();
                 Trip.StartoverButton.Click();
+                _logger.LogStatus("TripStartOver", "Passed");
             }
             catch (Exception exception)
             {
-                //Todo Log
-                throw;// new Exception("Error in trip start over", exception);
+                _logger.LogStatus("TripStartOver", "Failed");
+                throw;
             }
         }
 
@@ -309,11 +319,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new InvalidOperationException("EditTripName", _app.State.CurrentPage);
                 Trip.TripSettingsButton.Click();
                 _app.TripFolderPage.EditTripName();
+                _logger.LogStatus("EditTripName", "Passed");
             }
             catch (Exception exception)
             {
-                //todo log
-                throw;// new Exception("Error in editing trip name.", exception);
+                _logger.LogStatus("EditTripName", "Failed");
+                throw;
             }
         }
 
@@ -324,11 +335,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("ModifyProduct", _app.State.CurrentPage);
                 Trip.TripProducts[index].ModifyProductButton.Click();
+                _logger.LogStatus("ModifyProduct", "Passed");
             }
             catch (Exception exception)
             {
-                //todo log
-                throw;// new Exception("Error in modifying trip product.", exception);
+                _logger.LogStatus("ModifyProduct", "Failed");
+                throw;
             }
         }
 
@@ -339,11 +351,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("RemoveProduct", _app.State.CurrentPage);
                 Trip.TripProducts[index].RemoveProductButton.Click();
+                _logger.LogStatus("RemoveProduct", "Passed");
             }
             catch (Exception exception)
             {
-                //todo log
-                throw;// new Exception("Error in removing trip product.", exception);
+                _logger.LogStatus("RemoveProduct", "Failed");
+                throw;
             }
         }
 
@@ -365,10 +378,11 @@ namespace Rovia.UI.Automation.Tests.Utility
                     //_app.LoginDetailsPage.WaitForLoad();
                     _app.State.CurrentPage = "LoginDetailsPage";
                 }
-        }
+                _logger.LogStatus("CheckoutTrip", "Passed");
+            }
             catch (Exception exception)
             {
-                //Todo Log
+                _logger.LogStatus("CheckoutTrip", "Failed");
                 throw;
             }
         }
@@ -380,11 +394,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("ContinueShopping", _app.State.CurrentPage);
                 Trip.ContinueShoppingButton.Click();
+                _logger.LogStatus("ContinueShopping", "Passed");
             }
             catch (Exception exception)
             {
-                //todo log
-                throw;// new Exception("Error in continue shopping", exception);
+                _logger.LogStatus("ContinueShopping", "Failed");
+                throw; // new Exception("LogIn Failed", exception);
             }
         }
 
@@ -415,18 +430,20 @@ namespace Rovia.UI.Automation.Tests.Utility
                     _app.BFCPaymentPage.PayNow(new PaymentInfo(_criteria.PaymentMode, _criteria.CardType));
                 }
                 _app.CheckoutPage.CheckPaymentStatus();
-
+                _logger.LogStatus("PayNow", "Passed");
             }
             catch (Exception exception)
             {
-                //todo log
-                throw;// new Exception("Pay Now failed", exception);
+                _logger.LogStatus("PayNow", "Failed");
+                throw; // new Exception("LogIn Failed", exception);
             }
         }
 
         internal static void CleanUp()
         {
             _app.ClearBrowserCache();
+            _app.State.CurrentUser.ResetUser();
+            GoToHomePage();
         }
 
     }

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
@@ -66,7 +67,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
             catch (Exception exception)
             {
-                //todo log
+                LogManager.GetInstance().LogInformation("Result parsing failed");
                 throw;
             }
         }
@@ -100,7 +101,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
             catch (Exception exception)
             {
-                //todo log
+                LogManager.GetInstance().LogWarning(exception.Message);
             }
             var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Slow);
             if (btnCheckOut != null && btnCheckOut.Displayed)

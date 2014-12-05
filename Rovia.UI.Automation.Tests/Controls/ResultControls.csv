@@ -1,2 +1,3 @@
 divWaiting,div.loading.mbl
 aNext,a#next
+divErrors,div.alert-error span

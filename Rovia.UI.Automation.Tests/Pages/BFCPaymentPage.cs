@@ -4,6 +4,7 @@ using System.Threading;
 using AppacitiveAutomationFramework;
 using OpenQA.Selenium;
 using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -22,19 +23,11 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         public void PayNow(PaymentInfo paymentInfo)
         {
-            try
-            {
-                SetCreditCardInfo(paymentInfo.CreditCardInfo);
-                SetBillingAddress(paymentInfo.BillingAddress);
-                WaitAndGetBySelector("payNow", ApplicationSettings.TimeOut.Fast).Click();
-                //WaitForPayment();
-                CheckErrors();
-            }
-            catch (Exception exception)
-            {
-                //todo log
-                throw;// new Exception("payNow failed", exception);
-            }
+            SetCreditCardInfo(paymentInfo.CreditCardInfo);
+            SetBillingAddress(paymentInfo.BillingAddress);
+            WaitAndGetBySelector("payNow", ApplicationSettings.TimeOut.Fast).Click();
+            WaitForPayment();
+            CheckErrors();
         }
 
         private void WaitForPayment()
@@ -50,12 +43,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (StaleElementReferenceException exception)
             {
-                //eat OpenQASelenium.StaleElementReferenceException 
-            }
-            catch (Exception exception)
-            {
-                //todo log
-                throw;// new Exception("on Bfc Page", exception);
+                LogManager.GetInstance().LogInformation("StaleElementReferenceException caught and suppressed"); 
             }
         }
 
@@ -83,7 +71,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 	        }
 	        catch (Exception exception)
 	        {
-                //todo log
+                LogManager.GetInstance().LogInformation("Set Billing Address Failed");
                 throw;// new Exception("Exception while setting CreditCard Info", exception);
 	        }
         }
@@ -102,7 +90,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception)
             {
-                //todo log
+                LogManager.GetInstance().LogInformation("Setting CrediCard Info Failed"); 
                 throw;// new Exception("Exception while setting CreditCard Info", exception);
             }
         }

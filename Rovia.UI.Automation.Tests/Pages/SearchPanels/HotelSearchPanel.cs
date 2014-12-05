@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -14,20 +15,14 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
         private void SetPassengerDetails(Passengers passengers)
         {
-            try
-            {
+            
                 WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Adults.ToString());
                 if (passengers.Children==0)
                     return;
                 WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Children.ToString());
                 var i = 0;
                 GetUIElements("divChildAgeHolder").ForEach(x=>x.SelectFromDropDown(passengers.ChildrenAges[i++]));
-            }
-            catch (Exception ex)
-            {
-                //todo log
-                throw;// new Exception("Error while entering passenger details", ex);
-            }
+            
         }
 
         private void SetStayPeriod(StayPeriod stayPeriod)
@@ -52,21 +47,13 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
         }
         public override void Search(SearchCriteria searchCriteria)
         {
-            try
-            {
-                var hotelSearchCriteria = searchCriteria as HotelSearchCriteria;
-                SelectSearchPanel();
-                SetLocation(hotelSearchCriteria.Location);
-                SetStayPeriod(hotelSearchCriteria.StayPeriod);
-                SetPassengerDetails(hotelSearchCriteria.Passengers);
-                ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
-                WaitAndGetBySelector("btnHotelSearch",ApplicationSettings.TimeOut.Slow).Click();
-            }
-            catch (Exception exception)
-            {
-                //todo log
-                throw;// new Exception("Hotel Search Failed", exception);
-            }
+            var hotelSearchCriteria = searchCriteria as HotelSearchCriteria;
+            SelectSearchPanel();
+            SetLocation(hotelSearchCriteria.Location);
+            SetStayPeriod(hotelSearchCriteria.StayPeriod);
+            SetPassengerDetails(hotelSearchCriteria.Passengers);
+            ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
+            WaitAndGetBySelector("btnHotelSearch",ApplicationSettings.TimeOut.Slow).Click();
         }
 
     }

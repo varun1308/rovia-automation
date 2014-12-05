@@ -44,10 +44,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             ExecuteJavascript("$('button[val-submit=\"register\"]').click()");
 
             var divPrefCust = WaitAndGetBySelector("divPrefCust", ApplicationSettings.TimeOut.Slow);
-            if (divPrefCust != null && divPrefCust.Displayed)
-                return true;
-            else
-                return false;
+            return divPrefCust != null && divPrefCust.Displayed;
         }
 
         internal bool PreferedCustomerRegistration()

@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using Rovia.UI.Automation.Logger;
 
 namespace Rovia.UI.Automation.Tests.Configuration
 {
@@ -22,6 +24,11 @@ namespace Rovia.UI.Automation.Tests.Configuration
                 get { return ConfigurationManager.AppSettings["application.webuser.password"]; }
             }
 
+        }
+
+        public static int MaxSearchDepth
+        {
+            get { return int.Parse(ConfigurationManager.AppSettings["application.maxSearchDepth"]); }
         }
 
         public static class TimeOut

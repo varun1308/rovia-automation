@@ -140,6 +140,10 @@
       <Project>{2433e2f8-adcc-4b6e-87fa-2bdb60fd67e4}</Project>
       <Name>Rovia.UI.Automation.Exceptions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Rovia.UI.Automation.Logger\Rovia.UI.Automation.Logger.csproj">
+      <Project>{6537dee2-bb5f-4f94-b774-bd2b8a079ec1}</Project>
+      <Name>Rovia.UI.Automation.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rovia.Ui.Automation.ScenarioObjects\Rovia.UI.Automation.ScenarioObjects.csproj">
       <Project>{21ae4471-a960-447b-b736-803ec7a64e0a}</Project>
       <Name>Rovia.UI.Automation.ScenarioObjects</Name>

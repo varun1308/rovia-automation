@@ -5,6 +5,7 @@ using System.Threading;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
@@ -17,26 +18,17 @@ namespace Rovia.UI.Automation.Tests.Pages
        private static PassengerDetails _passengerDetails;
        internal void EditPassengerInfo()
        {
-           try
-           {
-               WaitAndGetBySelector("lnkEditPassengerInfo", ApplicationSettings.TimeOut.Slow).Click();
-               if(IsInputFormVisible()==false)
-                   throw new UIElementNullOrNotVisible("PassengerDetails InputForm");
-               WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
-               WaitForConfirmationPageLoad();
-           }
-           catch (Exception exception)
-           {
-               //todo log
-               throw;// new Exception("Edit PassengerInfo Button not visible", exception);
-           }
+            WaitAndGetBySelector("lnkEditPassengerInfo", ApplicationSettings.TimeOut.Slow).Click();
+            if(IsInputFormVisible()==false)
+                throw new UIElementNullOrNotVisible("PassengerDetails InputForm");
+            WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
+            WaitForConfirmationPageLoad();
        }
 
        internal void ConfirmPassengers()
        {
            VerifyPassengerDetails();
            WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
-           
        }
 
        public void WaitForPageLoad()
@@ -73,7 +65,7 @@ namespace Rovia.UI.Automation.Tests.Pages
            }
            catch (Exception exception)
            {
-               //todo log
+               LogManager.GetInstance().LogDebug("passenger details InputForm not visible"); 
                return false;
            }
        }
@@ -86,28 +78,21 @@ namespace Rovia.UI.Automation.Tests.Pages
            }
            catch (Exception exception)
            {
+               LogManager.GetInstance().LogDebug("passenger details Confirmation page not visible"); 
                return false;
            }
        }
 
        public void SubmitPassengerDetails(PassengerDetails passengerDetails)
        {
-           try
-           {
-               Thread.Sleep(1500);
-               _passengerDetails = passengerDetails;
-               WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengerDetails.Country);
-               if (passengerDetails.IsInsuranceRequired)
-                   WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
-               EnterPassengerDetails();
-               WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Slow).Click();
-               WaitForConfirmationPageLoad();
-           }
-           catch (NullReferenceException exception)
-           {
-               //todo log
-               throw; //new Exception("Passenger detail Elements not Loaded properly",exception);
-           }
+            Thread.Sleep(1500);
+            _passengerDetails = passengerDetails;
+            WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengerDetails.Country);
+            if (passengerDetails.IsInsuranceRequired)
+                WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
+            EnterPassengerDetails();
+            WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Slow).Click();
+            WaitForConfirmationPageLoad();
        }
 
        private void EnterPassengerDetails()

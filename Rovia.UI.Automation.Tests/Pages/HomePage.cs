@@ -5,6 +5,7 @@ using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
@@ -71,6 +72,18 @@ namespace Rovia.UI.Automation.Tests.Pages
         internal void Search(SearchCriteria searchCriteria)
         {
             SearchPanel.Search(searchCriteria);
+            CheckForErrors();
+        }
+
+        private void CheckForErrors()
+        {
+            GetUIElements("divErrors").ForEach(x =>
+                {
+                    if (x.Displayed)
+                    {
+                        throw new Alert(x.Text);
+                    }
+                });
         }
 
         public SearchPanel SearchPanel { get; set; }

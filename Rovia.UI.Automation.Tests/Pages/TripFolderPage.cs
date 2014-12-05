@@ -32,36 +32,6 @@ namespace Rovia.UI.Automation.Tests.Pages
             var passengers = ParsePassengers().ToArray();
             var i = 0;
 
-            //trip.TripProducts.AddRange(
-            //    productTypes.Select(UtilityFunctions.GetTripProduct)
-            //    .Zip(productTitle, (x, y) =>
-            //    {
-            //        x.ProductTitle = y;
-            //        return x;
-            //    })
-            //    .Zip(fares, (x, y) =>
-            //        {
-            //            x.Fares = y;
-            //            return x;
-            //        })
-            //    .Zip(passengers, (x, y) =>
-            //        {
-            //            x.Passengers = y;
-            //            return x;
-            //        })
-            //    .Zip(modifyProductButton, (x, y) =>
-            //        {
-            //            x.ModifyProductButton = y;
-            //            return x;
-            //        })
-            //    .Zip(removeProductButton, (x, y) =>
-            //        {
-            //            x.RemoveProductButton = y;
-            //            return x;
-            //        })
-            //    );
-
-
             while (i < trip.TotalTripProducts)
             {
                 var product = UtilityFunctions.GetTripProduct(productTypes[i]);

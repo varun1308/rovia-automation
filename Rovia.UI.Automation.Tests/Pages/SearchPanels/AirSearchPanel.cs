@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
@@ -81,7 +82,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
             catch (Exception ex)
             {
-                //todo log
+                LogManager.GetInstance().LogInformation("Error While Entering Passenger Details");
                 throw;// new Exception("Error while entering passenger details", ex);
             }
         }
@@ -120,25 +121,17 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
         public override void Search(SearchCriteria searchCriteria)
         {
-            try
-            {
-                var airSearchCriteria = searchCriteria as AirSearchCriteria;
-                Thread.Sleep(4000);
-                SelectSearchPanel();
-                SetFlightType(airSearchCriteria.SearchType);
-                //check if return or one way
-                EnterAirports(airSearchCriteria.SearchType, airSearchCriteria.AirportPairs);
-                //Enter from/to airports
-                EnterPassengerDetails(airSearchCriteria.Passengers);
-                ApplyPreSearchFilters(airSearchCriteria.Filters.PreSearchFilters as AirPreSearchFilters);
-                WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Slow).Click();
-                
-            }
-            catch (Exception exception)
-            {
-                //todo log 
-                throw;
-            }
+            var airSearchCriteria = searchCriteria as AirSearchCriteria;
+            Thread.Sleep(4000);
+            SelectSearchPanel();
+            SetFlightType(airSearchCriteria.SearchType);
+            //check if return or one way
+            EnterAirports(airSearchCriteria.SearchType, airSearchCriteria.AirportPairs);
+            //Enter from/to airports
+            EnterPassengerDetails(airSearchCriteria.Passengers);
+            ApplyPreSearchFilters(airSearchCriteria.Filters.PreSearchFilters as AirPreSearchFilters);
+            WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Slow).Click();
+            
         }
     }
 }
