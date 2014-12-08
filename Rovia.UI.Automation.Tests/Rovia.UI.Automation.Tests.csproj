@@ -46,6 +46,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
     <Reference Include="Tavisca.Testing.Platform">
       <HintPath>..\References\AppacitiveLoggingFramework\Tavisca.Testing.Platform.dll</HintPath>
     </Reference>
@@ -120,6 +121,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Controls\TripFolderControls.csv" />
+    <Content Include="DataSheet\AirLoginCreditCardData.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="DataSheet\HotelScenarios.xlsx" />
     <None Include="Utility\KillChromeDriver.bat" />
   </ItemGroup>

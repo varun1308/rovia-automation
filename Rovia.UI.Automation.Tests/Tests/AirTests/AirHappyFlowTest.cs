@@ -23,7 +23,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         {
             DataBinder = new AirCriteriaDataBinder();
             TestHelper.TripProductType = TripProductType.Air;
-            TestHelper.Validator=new AirValidator();
+            TestHelper.Validator = new AirValidator();
             _logManager = LogManager.GetInstance();
         }
        
@@ -41,6 +41,26 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         [TestCategory("Sanity")]
         [DataSource("AirLoginCreditCard")]
         public void RegisteredUser_BookingFlow_CreditCard()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Passed!!!!!!!!!");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Failed!!!!!!!!");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("AirLoginCreditCardCsv")]
+        public void RegisteredUser_BookingFlow_CreditCard_CSV()
         {
             try
             {
@@ -93,6 +113,22 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
             catch (Exception exception)
             {
                 _logManager.LogInformation("Failed!!!!!!!!");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("MyCSVSource")]
+        public void CsvDatSourceDummyTest()
+        {
+            try
+            {
+                var str1 = TestContext.DataRow["column1"] as string;
+
+            }
+            catch (Exception exception)
+            {
                 Assert.Fail(exception.Message);
             }
         }

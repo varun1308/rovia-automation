@@ -39,7 +39,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             LogManager.Initialise();
             _logger = LogManager.GetInstance();
-            _app=new RoviaApp();
+            _app = new RoviaApp();
             GoToHomePage();
         }
 

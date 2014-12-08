@@ -34,9 +34,9 @@ namespace Rovia.UI.Automation.DataBinder
                             {
                                 PreSearchFilters = new AirPreSearchFilters()
                                 {
-                                    IncludeNearByAirPorts = (bool)dataRow["IncludeNearByAirPorts"],
+                                    IncludeNearByAirPorts = bool.Parse(dataRow["IncludeNearByAirPorts"].ToString()),
                                     CabinType = StringToEnum<CabinType>((string)dataRow["CabinType"]),
-                                    NonStopFlight = (bool)dataRow["NonStopFlight"],
+                                    NonStopFlight = bool.Parse(dataRow["NonStopFlight"].ToString()),
                                     AirLines = string.IsNullOrEmpty(dataRow["AirLines"].ToString()) ? null : new List<string>(((string)dataRow["AirLines"]).Split('|'))
                                 },
                                 PostSearchFilters = string.IsNullOrEmpty(dataRow["PostFilters"].ToString()) ? null : GetPostSearchFilters((string)dataRow["PostFilters"], (string)dataRow["PostFiltersValues"])
@@ -48,7 +48,6 @@ namespace Rovia.UI.Automation.DataBinder
             }
             catch (Exception exception)
             {
-
                 throw new InvalidInputException("DataRow to AirCriteriaDataBinder.GetCriteria", exception);
             }
         }
@@ -78,10 +77,10 @@ namespace Rovia.UI.Automation.DataBinder
                         filterCriteria.MaxTimeDurationDiff = int.Parse(valueList[i]);
                         break;
                     case "CABIN":
-                        filterCriteria.CabinTypes = new List<string>(valueList[i].Split(','));                
+                        filterCriteria.CabinTypes = new List<string>(valueList[i].Split('/'));                
                         break;
                     case "AIRLINES":
-                        filterCriteria.Airlines = new List<string>(valueList[i].Split(','));
+                        filterCriteria.Airlines = new List<string>(valueList[i].Split('/'));
                         break;
                     case "TAKEOFFTIME":
                         filterCriteria.TakeOffTimeRange = new TakeOffTimeRange()
