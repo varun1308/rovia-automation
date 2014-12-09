@@ -9,11 +9,11 @@ namespace Rovia.UI.Automation.Logger
 
         public FileLogger(string target)
         {
-            _path = target;
+            _path = GetFileName(target);
         }
         public void Log(string message)
         {
-            File.AppendAllText(GetFileName(_path), message + Environment.NewLine);
+            File.AppendAllText(_path, message + Environment.NewLine);
         }
 
         private static string GetFileName(string path)

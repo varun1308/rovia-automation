@@ -21,9 +21,8 @@ namespace Rovia.UI.Automation.Logger
 
         public override string ToString()
         {
-            _details.Insert(0,Id.ToString()+">> "+Description);
-            _details.Add("-------------------------------------------------------------------------------------------------------------------------------------------------------");
-            return string.Join("\n", _details);
+            return Id.ToString() + ">> " + Description + "\n" + string.Join("\n", _details) +
+                   "------------------------------------------------------------------------------------------------------------------------------------------------------";
         }
     }
 }
