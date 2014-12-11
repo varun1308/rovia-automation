@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<TestSettings name="Local" id="f296a2fa-3e1c-418b-bef3-1e80314ddeb2" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+<TestSettings name="Remote" id="f296a2fa-3e1c-418b-bef3-1e80314ddeb2" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
     <DeploymentItem filename="Rovia.UI.Automation.Tests\App.config" />
@@ -10,7 +10,8 @@
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\AirLoginCreditCardData.csv" />
   </Deployment>
   <NamingScheme baseName="ClarifiUI" />
-  <Execution>
+  <RemoteController name="TavWITPD047" />
+  <Execution location="Remote">
     <Timeouts testTimeout="0" />
     <TestTypeSpecific>
       <UnitTestRunConfig testTypeId="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b">
@@ -29,7 +30,7 @@
         </Browser>
       </WebTestRunConfiguration>
     </TestTypeSpecific>
-    <AgentRule name="LocalMachineDefaultRole">
+    <AgentRule name="AllAgentsDefaultRole">
     </AgentRule>
   </Execution>
 </TestSettings>
