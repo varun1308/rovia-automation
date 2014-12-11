@@ -9,7 +9,7 @@
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\AirLoginCreditCardData.csv" />
   </Deployment>
-  <NamingScheme baseName="ClarifiUI" />
+  <NamingScheme baseName="RoviaUI" />
   <RemoteController name="TavWITPD047" />
   <Execution location="Remote">
     <Timeouts testTimeout="0" />

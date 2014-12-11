@@ -119,7 +119,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                         _app.State.CurrentUser.IsLoggedIn = true;
                         break;
                     case UserType.Preferred:
-                        _app.LoginDetailsPage.LogIn("PreferredUser", "Password");
+                        _app.LoginDetailsPage.LogIn("3285301", "test");
                         _app.State.CurrentUser.UserName = "RegisteredUserUserName";
                         _app.State.CurrentUser.Type = _criteria.UserType;
                         _app.State.CurrentUser.IsLoggedIn = true;
