@@ -59,26 +59,6 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
 
         [TestMethod]
         [TestCategory("Sanity")]
-        [DataSource("AirLoginCreditCardCsv")]
-        public void RegisteredUser_BookingFlow_CreditCard_CSV()
-        {
-            try
-            {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                _logManager.StartNewLog(criteria.Description);
-                TestHelper.SetCriteria(criteria);
-                TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Passed!!!!!!!!!");
-            }
-            catch (Exception exception)
-            {
-                _logManager.LogInformation("Failed!!!!!!!!");
-                Assert.Fail(exception.Message);
-            }
-        }
-
-        [TestMethod]
-        [TestCategory("Sanity")]
         [DataSource("AirGuestCreditCard")]
         public void GuestUser_BookingFlow_CreditCard()
         {
@@ -116,22 +96,5 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 Assert.Fail(exception.Message);
             }
         }
-
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("MyCSVSource")]
-        public void CsvDatSourceDummyTest()
-        {
-            try
-            {
-                var str1 = TestContext.DataRow["column1"] as string;
-
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
-
     }
 }
