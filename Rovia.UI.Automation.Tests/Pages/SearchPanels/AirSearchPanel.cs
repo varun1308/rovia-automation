@@ -119,6 +119,20 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             dates[0].Click();
         }
 
+        protected override void SelectSearchPanel()
+        {
+            var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
+            if (navBar == null || !navBar.Displayed)
+                throw new UIElementNullOrNotVisible("Navigation Bar ");
+            navBar.Click();
+
+            Thread.Sleep(500);
+
+            var searchPanel = WaitAndGetBySelector("searchPanel", ApplicationSettings.TimeOut.Slow);
+            if (searchPanel == null || !searchPanel.Displayed)
+                throw new UIElementNullOrNotVisible("SearchPanel");
+        }
+
         public override void Search(SearchCriteria searchCriteria)
         {
             var airSearchCriteria = searchCriteria as AirSearchCriteria;

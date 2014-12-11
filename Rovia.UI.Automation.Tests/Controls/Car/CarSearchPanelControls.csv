@@ -1,0 +1,26 @@
+navBar,ul.nav.fontUpperCase li.ico_rentals
+searchPanel,div[data-producttype="car"]
+icoCar,li.ico_rentals
+autoSuggestBoxOriginLoc, div.ac_results:first-child
+autoSuggestOptionsOriginLoc, div.ac_results:first-child li
+autoSuggestBoxDestinationLoc, div.ac_results:first-child+div.ac_results
+autoSuggestOptionsDestinationLoc, div.ac_results:first-child+div.ac_results li
+pickUpAirport,input[value="Airport"][name="pickup"]
+pickUpCity,input[value="City"][name="pickup"]
+pickUpLoc,input#txtPickUpLoc
+pickUpRadius,select#selCarPickRadius
+pickUpDate,input#txtPickupDate
+pickUpTime,select#drpPickupTime
+dropoffAirport,input[value="Airport"][name="dropoff"]
+dropoffCity,input[value="City"][name="dropoff"]
+dropoffSameAsPickUp,input[value="SameAsPickUp"][name="dropoff"]
+dropoffLoc,input#txtDropOffLoc
+dropoffRadius,select#selCarDropRadius
+dropoffDate,input#txtDropoffDate
+dropoffTime,select#drpDropoffTime
+buttonCarSearch,button#btnCarSearch
+selectCorpDiscCodeRentalAgency,select#ddlDiscountedRentalCompany
+txtcorporateDiscountCode,input#txtDiscountCode
+txtPromotionalCOde,input#txtPromoCode
+btnaddCorporateCode,a#addnew
+CorporateCodePopupClick,span:contains(\"Corporate Discount\")

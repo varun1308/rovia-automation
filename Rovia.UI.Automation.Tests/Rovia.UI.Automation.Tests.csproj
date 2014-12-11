@@ -81,10 +81,13 @@
     <Compile Include="Model\PaymentFields.cs" />
     <Compile Include="Pages\ResultPageComponents\AirResultFilters.cs" />
     <Compile Include="Pages\ResultPageComponents\AirResultsHolder.cs" />
+    <Compile Include="Pages\ResultPageComponents\CarResultFilters.cs" />
+    <Compile Include="Pages\ResultPageComponents\CarResultHolder.cs" />
     <Compile Include="Pages\ResultPageComponents\IResultFilters.cs" />
     <Compile Include="Pages\ResultPageComponents\IResultsHolder.cs" />
     <Compile Include="Pages\ResultPageComponents\ResultsPage.cs" />
     <Compile Include="Pages\SearchPanels\AirSearchPanel.cs" />
+    <Compile Include="Pages\SearchPanels\CarSearchPanel.cs" />
     <Compile Include="Pages\SearchPanels\HotelSearchPanel.cs" />
     <Compile Include="Pages\SearchPanels\SearchPanel.cs" />
     <Compile Include="Pages\BFCPaymentPage.cs" />
@@ -94,6 +97,7 @@
     <Compile Include="Pages\PassengerInfoPage.cs" />
     <Compile Include="Pages\TripFolderPage.cs" />
     <Compile Include="Tests\AirTests\AirHappyFlowTest.cs" />
+    <Compile Include="Tests\CarTestFixture.cs" />
     <Compile Include="Tests\HomePageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\HotelTests\HotelHappyFlowTest.cs" />
@@ -106,11 +110,12 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Controls\Car\CarResultsControls.csv" />
+    <None Include="Controls\Car\CarSearchPanelControls.csv" />
     <None Include="Controls\ResultControls.csv" />
-    <None Include="Controls\AirResultsFiltersControls.csv" />
-    <None Include="Controls\AirResultsHolderControls.csv" />
-    <None Include="Controls\AirResultsControls.csv" />
-    <None Include="Controls\AirSearchPanelControls.csv" />
+    <None Include="Controls\Air\AirResultsFiltersControls.csv" />
+    <None Include="Controls\Air\AirResultsHolderControls.csv" />
+    <None Include="Controls\Air\AirSearchPanelControls.csv" />
     <None Include="Controls\BFCPaymentControls.csv" />
     <None Include="Controls\CheckoutControls.csv" />
     <None Include="Controls\HomeControls.csv" />
@@ -124,6 +129,7 @@
     <Content Include="DataSheet\AirLoginCreditCardData.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="DataSheet\CarScenarios.xlsx" />
     <None Include="DataSheet\HotelScenarios.xlsx" />
     <None Include="Utility\KillChromeDriver.bat" />
   </ItemGroup>

@@ -37,6 +37,8 @@ namespace Rovia.UI.Automation.Tests.Application
                 {
                     case TripProductType.Air: homePage.SearchPanel = InitializePage<AirSearchPanel>("AirSearchPanelControls");
                         break;
+                    case TripProductType.Car: homePage.SearchPanel = InitializePage<CarSearchPanel>("CarSearchPanelControls");
+                        break;
                 }
                 return homePage;
             }
@@ -52,10 +54,9 @@ namespace Rovia.UI.Automation.Tests.Application
                     case TripProductType.Air:
                         resultsPage.Initialze(InitializePage<AirResultsHolder>("AirResultsHolderControls"), InitializePage<AirResultFilters>("AirResultsFiltersControls"));
                         break;
-                    //case TripProductType.Hotel:
-                    //    resultsPage.Initialze(InitializePage<HotelResultsHolder>("AirResultsHolderControls"), InitializePage<HotelResultFilters>("AirResultsFiltersControls"));
-                    //    break;
-                    //case TripProductType.Hotel: return InitializePage<HotelResultsPage>("HotelResultsControls");
+                    case TripProductType.Car:
+                        resultsPage.Initialze(InitializePage<CarResultHolder>("CarResultsControls"), InitializePage<CarResultFilters>("CarResultsControls"));
+                        break;
                     default:
                         return null;
                 }

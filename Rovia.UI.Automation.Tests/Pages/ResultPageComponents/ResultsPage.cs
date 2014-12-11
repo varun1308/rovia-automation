@@ -68,7 +68,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     if (_resultsHolder.IsVisible())
                         break;
                 }
-                GetUIElements("txtError").ForEach(x =>
+                GetUIElements("divErrors").ForEach(x =>
                     {
                         if(x.Displayed)
                             throw new Alert(x.Text);

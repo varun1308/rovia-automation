@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Security.Policy;
+using System.Threading;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.Ui.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.Ui.Automation.ScenarioObjects.Car;
+using Rovia.UI.Automation.Tests.Configuration;
+
+namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
+{
+    public class CarSearchPanel : SearchPanel
+    {
+        protected override void SelectSearchPanel()
+        {
+            var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
+            if (navBar == null || !navBar.Displayed)
+                throw new UIElementNullOrNotVisible("Navigation Bar ");
+            navBar.Click();
+
+            Thread.Sleep(500);
+
+            var searchPanel = WaitAndGetBySelector("searchPanel", ApplicationSettings.TimeOut.Slow);
+            if (searchPanel == null || !searchPanel.Displayed)
+                throw new UIElementNullOrNotVisible("SearchPanel");
+        }
+
+        public override void Search(SearchCriteria searchCriteria)
+        {
+            var carSearchCriteria = searchCriteria as CarSearchCriteria;
+            SelectSearchPanel();
+
+            EnterPickUpDetails(carSearchCriteria);
+            EnterDropOffDetails(carSearchCriteria);
+
+            ApplyPreSearchFilters(carSearchCriteria.Filters.PreSearchFilters);
+
+            WaitAndGetBySelector("buttonCarSearch", ApplicationSettings.TimeOut.Fast).Click();
+        }
+
+        private void EnterPickUpDetails(CarSearchCriteria carSearchCriteria)
+        {
+            if (carSearchCriteria.PickUp.PickUpType.Equals(PickUpType.Airport))
+            {
+                WaitAndGetBySelector("pickUpLoc", ApplicationSettings.TimeOut.Slow).SendKeys(carSearchCriteria.PickUp.PickUpLocCode);
+                if (!string.IsNullOrEmpty(carSearchCriteria.PickUp.PickUpLocation)) SetOriginLocation(carSearchCriteria.PickUp.PickUpLocation);
+                var pickUpDate = WaitAndGetBySelector("pickUpDate", ApplicationSettings.TimeOut.Slow);
+                pickUpDate.SendKeys(carSearchCriteria.PickUp.PickUpTime.ToString("MM/dd/yyyy"));
+                pickUpDate.Click();
+            }
+            else
+            {
+                WaitAndGetBySelector("pickUpLoc", ApplicationSettings.TimeOut.Slow).SendKeys(carSearchCriteria.PickUp.PickUpLocCode);
+                if (!string.IsNullOrEmpty(carSearchCriteria.PickUp.PickUpLocation)) SetOriginLocation(carSearchCriteria.PickUp.PickUpLocation);
+                var pickUpDate = WaitAndGetBySelector("pickUpDate", ApplicationSettings.TimeOut.Slow);
+                pickUpDate.SendKeys(carSearchCriteria.PickUp.PickUpTime.ToString("MM/dd/yyyy"));
+                pickUpDate.Click();
+            }
+        }
+
+        private void EnterDropOffDetails(CarSearchCriteria carSearchCriteria)
+        {
+            if (!carSearchCriteria.DropOff.DropOffType.Equals(DropOffType.SameAsPickUp))
+            {
+                WaitAndGetBySelector("dropoffLoc", ApplicationSettings.TimeOut.Slow)
+                    .SendKeys(carSearchCriteria.DropOff.DropOffLocCode);
+                if (!string.IsNullOrEmpty(carSearchCriteria.DropOff.DropOffLocation)) SetDestinationLocation(carSearchCriteria.DropOff.DropOffLocation);
+            }
+            var dropoffDate = WaitAndGetBySelector("dropoffDate", ApplicationSettings.TimeOut.Slow);
+            dropoffDate.SendKeys(carSearchCriteria.DropOff.DropOffTime.ToString("MM/dd/yyyy"));
+            dropoffDate.Click();
+        }
+
+        protected override void ApplyPreSearchFilters(PreSearchFilters filters)
+        {
+            var carFilters = filters as CarPreSearchFilters;
+            if (!string.IsNullOrEmpty(carFilters.RentalAgency))
+                ExecuteJavascript("$('#ulRentalCompany').find('[data-value=\"" + carFilters.RentalAgency +
+                                  "\"]').click()");
+
+            if (!string.IsNullOrEmpty(carFilters.CarType))
+                ExecuteJavascript("$('#ulCarType').find('[data-value=\"" + carFilters.CarType +
+                                      "\"]').click()");
+
+            ExecuteJavascript("$('#ulAirConditioning').find('[data-value=\"" + carFilters.AirConditioning +
+                               "\"]').click()");
+
+            ExecuteJavascript("$('#ulTransmission').find('[data-value=\"" + carFilters.Transmission +
+                              "\"]').click()");
+
+            ApplyDiscountCode(carFilters.CorporateDiscount);
+        }
+
+        private void ApplyDiscountCode(List<CorporateDiscount> corporateDiscounts)
+        {
+            ExecuteJavascript("$('span:contains(\"Corporate Discount\")').click()");
+            foreach (var corpDisc in corporateDiscounts)
+            {
+                WaitAndGetBySelector("selectCorpDiscCodeRentalAgency", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(corpDisc.RentalAgency);
+                WaitAndGetBySelector("txtcorporateDiscountCode", ApplicationSettings.TimeOut.SuperFast).SendKeys(corpDisc.CorpDiscountCode);
+                WaitAndGetBySelector("txtPromotionalCOde", ApplicationSettings.TimeOut.SuperFast).SendKeys(corpDisc.PromotionalCode);
+                WaitAndGetBySelector("btnaddCorporateCode", ApplicationSettings.TimeOut.SuperFast).Click();
+            }
+        }
+
+        private void SetOriginLocation(string location)
+        {
+            IUIWebElement autoSuggestBox;
+            do
+            {
+                autoSuggestBox = WaitAndGetBySelector("autoSuggestBoxOriginLoc", ApplicationSettings.TimeOut.Fast);
+            } while (autoSuggestBox == null || !autoSuggestBox.Displayed);
+            GetUIElements("autoSuggestOptionsOriginLoc").First(x => (x.Displayed && x.Text.Equals(location))).Click();
+        }
+
+        private void SetDestinationLocation(string location)
+        {
+            IUIWebElement autoSuggestBox;
+            do
+            {
+                autoSuggestBox = WaitAndGetBySelector("autoSuggestBoxDestinationLoc", ApplicationSettings.TimeOut.Fast);
+            } while (autoSuggestBox == null || !autoSuggestBox.Displayed);
+            GetUIElements("autoSuggestOptionsDestinationLoc").First(x => (x.Displayed && x.Text.Equals(location))).Click();
+        }
+    }
+}
