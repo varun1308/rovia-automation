@@ -446,6 +446,11 @@ namespace Rovia.UI.Automation.Tests.Utility
             GoToHomePage();
         }
 
+        public static void TakeScreenShot(TestContext context)
+        {
+            _app.SaveScreenshot(context);
+        }
+
     }
 
 }

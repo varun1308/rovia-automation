@@ -49,9 +49,11 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
                 _logManager.LogInformation("Passed!!!!!!!!!");
+                TestHelper.TakeScreenShot(TestContext);
             }
             catch (Exception exception)
             {
+                 TestHelper.TakeScreenShot(TestContext);
                 _logManager.LogInformation("Failed!!!!!!!!");
                 Assert.Fail(exception.Message);
             }
@@ -69,9 +71,11 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
                 _logManager.LogInformation("Passed!!!!!!!!!");
+                TestHelper.TakeScreenShot(TestContext);
             }
             catch (Exception exception)
             {
+                TestHelper.TakeScreenShot(TestContext);
                 _logManager.LogInformation("Failed!!!!!!!!");
                 Assert.Fail(exception.Message);
             }
@@ -89,9 +93,11 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
                 _logManager.LogInformation("Passed!!!!!!!!!");
+                TestHelper.TakeScreenShot(TestContext);
             }
             catch (Exception exception)
             {
+                 TestHelper.TakeScreenShot(TestContext);
                 _logManager.LogInformation("Failed!!!!!!!!");
                 Assert.Fail(exception.Message);
             }
