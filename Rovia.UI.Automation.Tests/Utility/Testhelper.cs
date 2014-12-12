@@ -19,20 +19,22 @@ namespace Rovia.UI.Automation.Tests.Utility
     [TestClass]
     public class TestHelper
     {
+        #region Datafields
+
         private static RoviaApp _app;
         private static LogManager _logger;
         private static SearchCriteria _criteria;
         private static Results _selectedItineary;
         public static TripFolder Trip { get; set; }
         public static IValidator Validator { get; set; }
-
         public static List<Results> Results; 
-
         public static TripProductType TripProductType
         {
             get { return _app.State.CurrentProduct; }
             set { _app.State.CurrentProduct = value; }
         }
+
+        #endregion
 
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext testContext)
@@ -49,6 +51,58 @@ namespace Rovia.UI.Automation.Tests.Utility
             _app.Dispose();
         }
 
+        private static void GoToLoginPage()
+        {
+            try
+            {
+                switch (_app.State.CurrentPage)
+                {
+                    case "HomePage": _app.HomePage.GoToLoginPage();
+                        break;
+                    case "LoginDetailsPage":
+                        break;
+                }
+                _app.State.CurrentPage = "LoginDetailsPage";
+            }
+            catch (Exception exception)
+            {
+                _logger.LogInformation("GoToLoginPage Failed");
+                throw; // new Exception("Login page failed to Load", exception);
+            }
+        }
+
+        private static void LogOut()
+        {
+            try
+            {
+                if (_app.State.CurrentUser.Type == UserType.Guest)
+                    return;
+                switch (_app.State.CurrentPage)
+                {
+                    case "HomePage": _app.HomePage.LogOut();
+                        _app.State.CurrentPage = "LogInPage";
+                        _app.State.CurrentUser.ResetUser();
+                        GoToHomePage();
+                        break;
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogInformation("LogOut Failed");
+                throw;// new Exception("LogOut Failed", exception);
+            }
+
+        }
+
+        private static PassengerDetails GetPassengerDetails()
+        {
+            return new PassengerDetails(_criteria.Passengers)
+            {
+                Country = "United States",
+                IsInsuranceRequired = false
+            };
+        }
+
         internal static void GoToHomePage()
         {
 
@@ -62,8 +116,6 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             _criteria = criteria;
         }
-
-
 
         internal static void EditPassengerInfoAndContinue()
         {
@@ -90,6 +142,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 _app.HomePage.Search(_criteria);
                 _app.ResultsPage.WaitForResultLoad();
                 _app.State.CurrentPage = "ResultsPage";
+               Assert.IsTrue(_app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters),"Addtional search filters not applied.");
                 //    Results = _app.ResultsPage.ParseResults();
                 //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
                 //     throw new ValidationException("Results ");
@@ -113,13 +166,13 @@ namespace Rovia.UI.Automation.Tests.Utility
                 switch (_criteria.UserType)
                 {
                     case UserType.Registered:
-                        _app.LoginDetailsPage.LogIn("vrathod@tavisca.com", "zaq1ZAQ!");
+                        _app.LoginDetailsPage.LogIn(ApplicationSettings.RegisteredCustomer.Username, ApplicationSettings.RegisteredCustomer.Password);
                         _app.State.CurrentUser.UserName = "vrathod@tavisca.com";
                         _app.State.CurrentUser.Type = _criteria.UserType;
                         _app.State.CurrentUser.IsLoggedIn = true;
                         break;
                     case UserType.Preferred:
-                        _app.LoginDetailsPage.LogIn("3285301", "test");
+                        _app.LoginDetailsPage.LogIn(ApplicationSettings.PreferredCustomer.Username,ApplicationSettings.PreferredCustomer.Password);
                         _app.State.CurrentUser.UserName = "RegisteredUserUserName";
                         _app.State.CurrentUser.Type = _criteria.UserType;
                         _app.State.CurrentUser.IsLoggedIn = true;
@@ -203,56 +256,11 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
         }
 
-        private static void GoToLoginPage()
+        internal static void CleanUp()
         {
-            try
-            {
-                switch (_app.State.CurrentPage)
-                {
-                    case "HomePage": _app.HomePage.GoToLoginPage();
-                        break;
-                    case "LoginDetailsPage":
-                        break;
-                }
-                _app.State.CurrentPage = "LoginDetailsPage";
-            }
-            catch (Exception exception)
-            {
-                _logger.LogInformation("GoToLoginPage Failed");
-                throw; // new Exception("Login page failed to Load", exception);
-            }
-        }
-
-        private static void LogOut()
-        {
-            try
-            {
-                if (_app.State.CurrentUser.Type == UserType.Guest)
-                    return;
-                switch (_app.State.CurrentPage)
-                {
-                    case "HomePage": _app.HomePage.LogOut();
-                        _app.State.CurrentPage = "LogInPage";
-                        _app.State.CurrentUser.ResetUser();
-                        GoToHomePage();
-                        break;
-                }
-            }
-            catch (Exception exception)
-            {
-                _logger.LogInformation("LogOut Failed");
-                throw;// new Exception("LogOut Failed", exception);
-            }
-
-        }
-
-        private static PassengerDetails GetPassengerDetails()
-        {
-            return new PassengerDetails(_criteria.Passengers)
-            {
-                Country = "United States",
-                IsInsuranceRequired = false
-            };
+            _app.ClearBrowserCache();
+            _app.State.CurrentUser.ResetUser();
+            GoToHomePage();
         }
 
         #region TripFolder Calls
@@ -405,14 +413,10 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         #endregion
 
-        #region Air Filters Call
-
         public static bool SetFilters()
         {
             return _app.ResultsPage.SetPostSearchFilters(_criteria.Filters.PostSearchFilters);
         }
-
-        #endregion
 
         public static void PayNow()
         {
@@ -439,18 +443,9 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
         }
 
-        internal static void CleanUp()
-        {
-            _app.ClearBrowserCache();
-            _app.State.CurrentUser.ResetUser();
-            GoToHomePage();
-        }
-
-        public static void TakeScreenShot(TestContext context)
+        public static void SaveScreenShot(TestContext context)
         {
             _app.SaveScreenshot(context);
         }
-
     }
-
 }

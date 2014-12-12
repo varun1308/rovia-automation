@@ -15,19 +15,6 @@ namespace Rovia.UI.Automation.Tests.Application
     {
         public AppState State { get; set; }
 
-        public RoviaApp()
-        {
-            State = new AppState()
-            {
-                CurrentUser = new User()
-                {
-                    Type = UserType.Guest,
-                    IsLoggedIn = false
-                },
-                CurrentProduct = TripProductType.Air
-            };
-        }
-
         public HomePage HomePage
         {
             get 
@@ -36,6 +23,8 @@ namespace Rovia.UI.Automation.Tests.Application
                 switch (State.CurrentProduct)
                 {
                     case TripProductType.Air: homePage.SearchPanel = InitializePage<AirSearchPanel>("AirSearchPanelControls");
+                        break;
+                    case TripProductType.Car: homePage.SearchPanel = InitializePage<CarSearchPanel>("CarSearchPanelControls");
                         break;
                 }
                 return homePage;
@@ -52,10 +41,9 @@ namespace Rovia.UI.Automation.Tests.Application
                     case TripProductType.Air:
                         resultsPage.Initialze(InitializePage<AirResultsHolder>("AirResultsHolderControls"), InitializePage<AirResultFilters>("AirResultsFiltersControls"));
                         break;
-                    //case TripProductType.Hotel:
-                    //    resultsPage.Initialze(InitializePage<HotelResultsHolder>("AirResultsHolderControls"), InitializePage<HotelResultFilters>("AirResultsFiltersControls"));
-                    //    break;
-                    //case TripProductType.Hotel: return InitializePage<HotelResultsPage>("HotelResultsControls");
+                    case TripProductType.Car:
+                        resultsPage.Initialze(InitializePage<CarResultHolder>("CarResultsControls"), InitializePage<CarResultFilters>("CarFiltersControls"));
+                        break;
                     default:
                         return null;
                 }
@@ -88,6 +76,19 @@ namespace Rovia.UI.Automation.Tests.Application
             get { return InitializePage<BFCPaymentPage>("BFCPaymentControls"); }
         }
 
+        public RoviaApp()
+        {
+            State = new AppState()
+            {
+                CurrentUser = new User()
+                {
+                    Type = UserType.Guest,
+                    IsLoggedIn = false
+                },
+                CurrentProduct = TripProductType.Air
+            };
+        }
+
         public bool SaveScreenshot(TestContext context)
         {
             try
@@ -99,7 +100,7 @@ namespace Rovia.UI.Automation.Tests.Application
                     var screenShot = driver.GetScreenshot();
 
                     var fileName = AppDomain.CurrentDomain.BaseDirectory + "\\" +
-                                   context.FullyQualifiedTestClassName.Replace(".", "_") + "_" + context.TestName +"_"+context.DataRow.Table.Rows.IndexOf(context.DataRow)+
+                                   context.FullyQualifiedTestClassName.Replace(".", "_") + "_" + context.TestName  +"_" + context.DataRow.Table.Rows.IndexOf(context.DataRow)+"_" + DateTime.Now.ToString().Replace(' ', '_').Replace(':', '-').Replace('/', '-') +
                                    ".jpg";
                     screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
                 }

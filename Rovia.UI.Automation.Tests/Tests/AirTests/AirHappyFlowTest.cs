@@ -33,6 +33,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         [TestCleanup]
         public void TestCleanup()
         {
+            TestHelper.SaveScreenShot(TestContext);
             TestHelper.CleanUp();
             _logManager.SubmitLog();
         }
@@ -41,7 +42,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         [TestCategory("Sanity")]
         [DataSource("AirLoginCreditCard")]
         public void RegisteredUser_BookingFlow_CreditCard()
-        {
+          {
             try
             {
                 var criteria = DataBinder.GetCriteria(TestContext.DataRow);
@@ -49,15 +50,33 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
                 _logManager.LogInformation("Passed!!!!!!!!!");
-                TestHelper.TakeScreenShot(TestContext);
             }
             catch (Exception exception)
             {
-                 TestHelper.TakeScreenShot(TestContext);
                 _logManager.LogInformation("Failed!!!!!!!!");
                 Assert.Fail(exception.Message);
             }
         }
+
+        //[TestMethod]
+        //[TestCategory("Sanity")]
+        //[DataSource("AirLoginCreditCardCsv")]
+        //public void RegisteredUser_BookingFlow_CreditCard_CSV()
+        //{
+        //    try
+        //    {
+        //        var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+        //        _logManager.StartNewLog(criteria.Description);
+        //        TestHelper.SetCriteria(criteria);
+        //        TestExecutionPipeLine.Execute(criteria.Pipeline);
+        //        _logManager.LogInformation("Passed!!!!!!!!!");
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        _logManager.LogInformation("Failed!!!!!!!!");
+        //        Assert.Fail(exception.Message);
+        //    }
+        //}
 
         [TestMethod]
         [TestCategory("Sanity")]
@@ -71,11 +90,9 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
                 _logManager.LogInformation("Passed!!!!!!!!!");
-                TestHelper.TakeScreenShot(TestContext);
             }
             catch (Exception exception)
             {
-                TestHelper.TakeScreenShot(TestContext);
                 _logManager.LogInformation("Failed!!!!!!!!");
                 Assert.Fail(exception.Message);
             }
@@ -93,14 +110,13 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
                 _logManager.LogInformation("Passed!!!!!!!!!");
-                TestHelper.TakeScreenShot(TestContext);
             }
             catch (Exception exception)
             {
-                 TestHelper.TakeScreenShot(TestContext);
                 _logManager.LogInformation("Failed!!!!!!!!");
                 Assert.Fail(exception.Message);
             }
         }
+
     }
 }
