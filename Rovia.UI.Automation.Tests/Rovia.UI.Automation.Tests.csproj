@@ -77,8 +77,6 @@
     <Compile Include="Application\RoviaApp.cs" />
     <Compile Include="Application\User.cs" />
     <Compile Include="Configuration\ApplicationSettings.cs" />
-    <Compile Include="Model\NewUserRegistration.cs" />
-    <Compile Include="Model\PaymentFields.cs" />
     <Compile Include="Pages\ResultPageComponents\AirResultFilters.cs" />
     <Compile Include="Pages\ResultPageComponents\AirResultsHolder.cs" />
     <Compile Include="Pages\ResultPageComponents\CarResultFilters.cs" />
@@ -110,6 +108,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Controls\Car\CarFiltersControls.csv" />
     <None Include="Controls\Car\CarResultsControls.csv" />
     <None Include="Controls\Car\CarSearchPanelControls.csv" />
     <None Include="Controls\ResultControls.csv" />

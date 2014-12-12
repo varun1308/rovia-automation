@@ -28,6 +28,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         [TestCleanup]
         public void TestCleanup()
         {
+            TestHelper.SaveScreenShot(TestContext);
             TestHelper.CleanUp();
             _logManager.SubmitLog();
         }
@@ -41,8 +42,8 @@ namespace Rovia.UI.Automation.Tests.Tests
                 var criteria = DataBinder.GetCriteria(TestContext.DataRow);
                 _logManager.StartNewLog(criteria.Description);
                 TestHelper.SetCriteria(criteria);
-                TestHelper.Search();
-                _logManager.LogInformation("Passed!!!!!!!!!");
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
             }
             catch (Exception exception)
             {

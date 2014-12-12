@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
@@ -14,6 +12,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
     public class AirSearchPanel:SearchPanel
     {
+        #region Private Members
+
         private void SetFlightType(SearchType searchType)
         {
             switch (searchType)
@@ -24,7 +24,6 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                     break;
                 case SearchType.MultiCity: SelectMulticityFlight();
                     break;
-
             }
         }
         private void SelectOneWayFlight()
@@ -60,18 +59,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("RoundTrip journey button", ex);
             }
         }
-        protected override void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
-        {
-            var filters = preSearchFilters as AirPreSearchFilters;
-            ExecuteJavascript("$('.jCabinClass').siblings('div').find('.filter-option').text('" + filters.CabinType.ToString().Replace('_', ' ') + "')");
-            if (filters.IncludeNearByAirPorts)
-                WaitAndGetBySelector("includeNearByAirports", ApplicationSettings.TimeOut.SuperFast).Click();
-            if (filters.NonStopFlight)
-                ExecuteJavascript("$('#ulNonStopFlights').find('[data-value=\"NS\"]').click()");
-            if (filters.AirLines != null && filters.AirLines.Count != 0)
-                filters.AirLines.ForEach(x => ExecuteJavascript("$('#ulAirlines').find('[data-text=\"" + x + "\"]').click()"));
 
-        }
         private void EnterPassengerDetails(Passengers passengers)
         {
             try
@@ -119,6 +107,10 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             dates[0].Click();
         }
 
+        #endregion
+
+        #region Protected Members
+
         protected override void SelectSearchPanel()
         {
             var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
@@ -132,6 +124,20 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             if (searchPanel == null || !searchPanel.Displayed)
                 throw new UIElementNullOrNotVisible("SearchPanel");
         }
+
+        protected override void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
+        {
+            var filters = preSearchFilters as AirPreSearchFilters;
+            ExecuteJavascript("$('.jCabinClass').siblings('div').find('.filter-option').text('" + filters.CabinType.ToString().Replace('_', ' ') + "')");
+            if (filters.IncludeNearByAirPorts)
+                WaitAndGetBySelector("includeNearByAirports", ApplicationSettings.TimeOut.SuperFast).Click();
+            if (filters.NonStopFlight)
+                ExecuteJavascript("$('#ulNonStopFlights').find('[data-value=\"NS\"]').click()");
+            if (filters.AirLines != null && filters.AirLines.Count != 0)
+                filters.AirLines.ForEach(x => ExecuteJavascript("$('#ulAirlines').find('[data-text=\"" + x + "\"]').click()"));
+
+        }
+        #endregion
 
         public override void Search(SearchCriteria searchCriteria)
         {

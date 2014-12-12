@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using AppacitiveAutomationFramework;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 using System.Threading;
 
@@ -16,8 +10,17 @@ namespace Rovia.UI.Automation.Tests.Pages
 {
     public class HomePage : UIPage
     {
-        
-        #region Common
+        private void CheckForErrors()
+        {
+            GetUIElements("divErrors").ForEach(x =>
+            {
+                if (x.Displayed)
+                {
+                    throw new Alert(x.Text);
+                }
+            });
+        }
+
         internal void WaitForHomePage()
         {
             try
@@ -32,6 +35,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 throw new PageLoadFailed("HomePage", exception);
             }
         }
+
         internal bool IsVisible()
         {
             var div = WaitAndGetBySelector("divNavigationBar", ApplicationSettings.TimeOut.Slow);
@@ -55,9 +59,6 @@ namespace Rovia.UI.Automation.Tests.Pages
             return anchor != null && anchor.Displayed;
         }
 
-        
-
-
         internal void GoToLoginPage()
         {
             WaitAndGetBySelector("lnkLogIn", ApplicationSettings.TimeOut.Fast).Click();
@@ -67,28 +68,14 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             WaitAndGetBySelector("logOut", ApplicationSettings.TimeOut.Fast).Click();
         }
-        #endregion
-
+        
         internal void Search(SearchCriteria searchCriteria)
         {
             SearchPanel.Search(searchCriteria);
             CheckForErrors();
         }
 
-        private void CheckForErrors()
-        {
-            GetUIElements("divErrors").ForEach(x =>
-                {
-                    if (x.Displayed)
-                    {
-                        throw new Alert(x.Text);
-                    }
-                });
-        }
-
         public SearchPanel SearchPanel { get; set; }
+
     }
-
-
-
 }

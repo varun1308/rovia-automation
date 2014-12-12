@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.DataBinder;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Application;
-using Rovia.UI.Automation.Tests.Model;
 using Rovia.UI.Automation.Tests.Tests.AirTests;
 using Rovia.UI.Automation.Tests.Utility;
 

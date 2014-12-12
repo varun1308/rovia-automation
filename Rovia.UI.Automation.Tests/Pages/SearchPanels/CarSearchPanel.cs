@@ -16,86 +16,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
     public class CarSearchPanel : SearchPanel
     {
-        protected override void SelectSearchPanel()
-        {
-            var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
-            if (navBar == null || !navBar.Displayed)
-                throw new UIElementNullOrNotVisible("Navigation Bar ");
-            navBar.Click();
-
-            Thread.Sleep(500);
-
-            var searchPanel = WaitAndGetBySelector("searchPanel", ApplicationSettings.TimeOut.Slow);
-            if (searchPanel == null || !searchPanel.Displayed)
-                throw new UIElementNullOrNotVisible("SearchPanel");
-        }
-
-        public override void Search(SearchCriteria searchCriteria)
-        {
-            var carSearchCriteria = searchCriteria as CarSearchCriteria;
-            SelectSearchPanel();
-
-            EnterPickUpDetails(carSearchCriteria);
-            EnterDropOffDetails(carSearchCriteria);
-
-            ApplyPreSearchFilters(carSearchCriteria.Filters.PreSearchFilters);
-
-            WaitAndGetBySelector("buttonCarSearch", ApplicationSettings.TimeOut.Fast).Click();
-        }
-
-        private void EnterPickUpDetails(CarSearchCriteria carSearchCriteria)
-        {
-            if (carSearchCriteria.PickUp.PickUpType.Equals(PickUpType.Airport))
-            {
-                WaitAndGetBySelector("pickUpLoc", ApplicationSettings.TimeOut.Slow).SendKeys(carSearchCriteria.PickUp.PickUpLocCode);
-                if (!string.IsNullOrEmpty(carSearchCriteria.PickUp.PickUpLocation)) SetOriginLocation(carSearchCriteria.PickUp.PickUpLocation);
-                var pickUpDate = WaitAndGetBySelector("pickUpDate", ApplicationSettings.TimeOut.Slow);
-                pickUpDate.SendKeys(carSearchCriteria.PickUp.PickUpTime.ToString("MM/dd/yyyy"));
-                pickUpDate.Click();
-            }
-            else
-            {
-                WaitAndGetBySelector("pickUpLoc", ApplicationSettings.TimeOut.Slow).SendKeys(carSearchCriteria.PickUp.PickUpLocCode);
-                if (!string.IsNullOrEmpty(carSearchCriteria.PickUp.PickUpLocation)) SetOriginLocation(carSearchCriteria.PickUp.PickUpLocation);
-                var pickUpDate = WaitAndGetBySelector("pickUpDate", ApplicationSettings.TimeOut.Slow);
-                pickUpDate.SendKeys(carSearchCriteria.PickUp.PickUpTime.ToString("MM/dd/yyyy"));
-                pickUpDate.Click();
-            }
-        }
-
-        private void EnterDropOffDetails(CarSearchCriteria carSearchCriteria)
-        {
-            if (!carSearchCriteria.DropOff.DropOffType.Equals(DropOffType.SameAsPickUp))
-            {
-                WaitAndGetBySelector("dropoffLoc", ApplicationSettings.TimeOut.Slow)
-                    .SendKeys(carSearchCriteria.DropOff.DropOffLocCode);
-                if (!string.IsNullOrEmpty(carSearchCriteria.DropOff.DropOffLocation)) SetDestinationLocation(carSearchCriteria.DropOff.DropOffLocation);
-            }
-            var dropoffDate = WaitAndGetBySelector("dropoffDate", ApplicationSettings.TimeOut.Slow);
-            dropoffDate.SendKeys(carSearchCriteria.DropOff.DropOffTime.ToString("MM/dd/yyyy"));
-            dropoffDate.Click();
-        }
-
-        protected override void ApplyPreSearchFilters(PreSearchFilters filters)
-        {
-            var carFilters = filters as CarPreSearchFilters;
-            if (!string.IsNullOrEmpty(carFilters.RentalAgency))
-                ExecuteJavascript("$('#ulRentalCompany').find('[data-value=\"" + carFilters.RentalAgency +
-                                  "\"]').click()");
-
-            if (!string.IsNullOrEmpty(carFilters.CarType))
-                ExecuteJavascript("$('#ulCarType').find('[data-value=\"" + carFilters.CarType +
-                                      "\"]').click()");
-
-            ExecuteJavascript("$('#ulAirConditioning').find('[data-value=\"" + carFilters.AirConditioning +
-                               "\"]').click()");
-
-            ExecuteJavascript("$('#ulTransmission').find('[data-value=\"" + carFilters.Transmission +
-                              "\"]').click()");
-
-            ApplyDiscountCode(carFilters.CorporateDiscount);
-        }
-
+        #region Private Members 
         private void ApplyDiscountCode(List<CorporateDiscount> corporateDiscounts)
         {
             ExecuteJavascript("$('span:contains(\"Corporate Discount\")').click()");
@@ -126,6 +47,109 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 autoSuggestBox = WaitAndGetBySelector("autoSuggestBoxDestinationLoc", ApplicationSettings.TimeOut.Fast);
             } while (autoSuggestBox == null || !autoSuggestBox.Displayed);
             GetUIElements("autoSuggestOptionsDestinationLoc").First(x => (x.Displayed && x.Text.Equals(location))).Click();
+        }
+
+        private void ResolveMultiLocationOptions()
+        {
+            var multiLocOption = WaitAndGetBySelector("multiLocOptionButton", ApplicationSettings.TimeOut.Fast);
+            if (multiLocOption != null && multiLocOption.Displayed)
+                multiLocOption.Click();
+        }
+
+        private void EnterPickUpDetails(CarSearchCriteria carSearchCriteria)
+        {
+            if (carSearchCriteria.PickUp.PickUpType.Equals(PickUpType.Airport))
+            {
+                WaitAndGetBySelector("pickUpLoc", ApplicationSettings.TimeOut.Slow).SendKeys(carSearchCriteria.PickUp.PickUpLocCode);
+                if (!string.IsNullOrEmpty(carSearchCriteria.PickUp.PickUpLocation)) SetOriginLocation(carSearchCriteria.PickUp.PickUpLocation);
+            }
+            else
+            {
+                WaitAndGetBySelector("pickUpCity", ApplicationSettings.TimeOut.SuperFast).Click();
+                WaitAndGetBySelector("pickUpCityLoc", ApplicationSettings.TimeOut.Slow).SendKeys(carSearchCriteria.PickUp.PickUpLocCode);
+                if (!string.IsNullOrEmpty(carSearchCriteria.PickUp.PickUpLocation)) SetOriginLocation(carSearchCriteria.PickUp.PickUpLocation);
+            }
+            var pickUpDate = WaitAndGetBySelector("pickUpDate", ApplicationSettings.TimeOut.Slow);
+            pickUpDate.SendKeys(carSearchCriteria.PickUp.PickUpTime.ToString("MM/dd/yyyy"));
+            pickUpDate.Click();
+        }
+
+        private void EnterDropOffDetails(CarSearchCriteria carSearchCriteria)
+        {
+            if (!carSearchCriteria.DropOff.DropOffType.Equals(DropOffType.SameAsPickUp))
+            {
+                if (carSearchCriteria.DropOff.DropOffType.Equals(DropOffType.Airport))
+                    WaitAndGetBySelector("dropoffLoc", ApplicationSettings.TimeOut.Slow)
+                        .SendKeys(carSearchCriteria.DropOff.DropOffLocCode);
+                else
+                {
+                    WaitAndGetBySelector("dropoffCity", ApplicationSettings.TimeOut.SuperFast).Click();
+                    WaitAndGetBySelector("dropoffCityLoc", ApplicationSettings.TimeOut.Slow)
+                        .SendKeys(carSearchCriteria.DropOff.DropOffLocCode);
+                }
+                if (!string.IsNullOrEmpty(carSearchCriteria.DropOff.DropOffLocation))
+                    SetDestinationLocation(carSearchCriteria.DropOff.DropOffLocation);
+            }
+            else
+                WaitAndGetBySelector("dropoffSameAsPickUp",ApplicationSettings.TimeOut.SuperFast).Click();
+            var dropoffDate = WaitAndGetBySelector("dropoffDate", ApplicationSettings.TimeOut.Slow);
+            dropoffDate.SendKeys(carSearchCriteria.DropOff.DropOffTime.ToString("MM/dd/yyyy"));
+            dropoffDate.Click();
+        }
+
+        #endregion
+
+        #region Protected Members
+
+        protected override void ApplyPreSearchFilters(PreSearchFilters filters)
+        {
+            var carFilters = filters as CarPreSearchFilters;
+            if (!string.IsNullOrEmpty(carFilters.RentalAgency))
+                ExecuteJavascript("$('#ulRentalCompany').find('[data-value=\"" + carFilters.RentalAgency +
+                                  "\"]').click()");
+
+            if (!string.IsNullOrEmpty(carFilters.CarType))
+                ExecuteJavascript("$('#ulCarType').find('[data-value=\"" + carFilters.CarType +
+                                      "\"]').click()");
+
+            ExecuteJavascript("$('#ulAirConditioning').find('[data-value=\"" + carFilters.AirConditioning +
+                               "\"]').click()");
+
+            ExecuteJavascript("$('#ulTransmission').find('[data-value=\"" + carFilters.Transmission +
+                              "\"]').click()");
+
+            ApplyDiscountCode(carFilters.CorporateDiscount);
+        }
+
+        protected override void SelectSearchPanel()
+        {
+            var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
+            if (navBar == null || !navBar.Displayed)
+                throw new UIElementNullOrNotVisible("Navigation Bar ");
+            navBar.Click();
+
+            Thread.Sleep(500);
+
+            var searchPanel = WaitAndGetBySelector("searchPanel", ApplicationSettings.TimeOut.Slow);
+            if (searchPanel == null || !searchPanel.Displayed)
+                throw new UIElementNullOrNotVisible("SearchPanel");
+        }
+
+        #endregion
+
+        public override void Search(SearchCriteria searchCriteria)
+        {
+            var carSearchCriteria = searchCriteria as CarSearchCriteria;
+            SelectSearchPanel();
+
+            EnterPickUpDetails(carSearchCriteria);
+            EnterDropOffDetails(carSearchCriteria);
+
+            ApplyPreSearchFilters(carSearchCriteria.Filters.PreSearchFilters);
+
+            WaitAndGetBySelector("buttonCarSearch", ApplicationSettings.TimeOut.Fast).Click();
+
+            ResolveMultiLocationOptions();
         }
     }
 }

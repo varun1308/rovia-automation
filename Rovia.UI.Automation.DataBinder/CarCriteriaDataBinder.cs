@@ -15,6 +15,8 @@ namespace Rovia.UI.Automation.DataBinder
 {
     public class CarCriteriaDataBinder : ICriteriaDataBinder
     {
+        #region Private Members
+
         private PickUp ParsePickUpDetails(string pickUp,string location, string travelDates)
         {
             try
@@ -44,7 +46,7 @@ namespace Rovia.UI.Automation.DataBinder
                 return new DropOff()
                 {
                     DropOffType = StringToEnum<DropOffType>(drop[0]),
-                    DropOffLocCode = string.IsNullOrEmpty(drop[1]) ? string.Empty : drop[1],
+                    DropOffLocCode = drop.Length > 1 && !string.IsNullOrEmpty(drop[1]) ? drop[1]: string.Empty,
                     DropOffTime = dropoffTime,
                     DropOffLocation = location
                 };
@@ -87,33 +89,6 @@ namespace Rovia.UI.Automation.DataBinder
             }
         }
 
-        public SearchCriteria GetCriteria(DataRow dataRow)
-        {
-            try
-            {
-                return new CarSearchCriteria()
-                {
-                    PickUp = ParsePickUpDetails(dataRow["PickUpType-Location"].ToString(), dataRow["OriginLocation"].ToString(), dataRow["TravelDates"].ToString()),
-                    DropOff = ParseDropOffDetails(dataRow["DropOffType-Location"].ToString(),dataRow["DestinationLocation"].ToString(), dataRow["TravelDates"].ToString()),
-                    Filters = new Filters()
-                    {
-                        PreSearchFilters = new CarPreSearchFilters()
-                        {
-                            RentalAgency = dataRow["RentalAgency"].ToString(),
-                            AirConditioning =ParseAirContioningPreference(dataRow["AirConditioning"].ToString()),
-                            CarType = dataRow["CarType"].ToString(),
-                            Transmission =ParseTransmission(dataRow["Transmission"].ToString()),
-                            CorporateDiscount = ParseCorporateDiscount(dataRow["CorpDiscRentalAgency"].ToString(), dataRow["CorpDiscCode"].ToString(), dataRow["CorpDiscPromotionalCode"].ToString())
-                        }
-                    }
-                };
-            }
-            catch (Exception exception)
-            {
-                throw new InvalidInputException("DataRow to CarCriteriaDataBinder.GetCriteria", exception);
-            }
-        }
-
         private int ParseTransmission(string transmission)
         {
             if(!string.IsNullOrEmpty(transmission))
@@ -131,6 +106,36 @@ namespace Rovia.UI.Automation.DataBinder
         {
             if (string.IsNullOrEmpty(isairconditioned)) return 0;
             return bool.Parse(isairconditioned) ? 1 : 2;
+        }
+
+        #endregion
+        
+        public SearchCriteria GetCriteria(DataRow dataRow)
+        {
+            try
+            {
+                return new CarSearchCriteria()
+                {
+                    Pipeline = (string)dataRow["ExecutionPipeline"],
+                    PickUp = ParsePickUpDetails(dataRow["PickUpType-Location"].ToString(), dataRow["OriginLocation"].ToString(), dataRow["TravelDates"].ToString()),
+                    DropOff = ParseDropOffDetails(dataRow["DropOffType-Location"].ToString(), dataRow["DestinationLocation"].ToString(), dataRow["TravelDates"].ToString()),
+                    Filters = new Filters()
+                    {
+                        PreSearchFilters = new CarPreSearchFilters()
+                        {
+                            RentalAgency = dataRow["RentalAgency"].ToString(),
+                            AirConditioning = ParseAirContioningPreference(dataRow["AirConditioning"].ToString()),
+                            CarType = dataRow["CarType"].ToString(),
+                            Transmission = ParseTransmission(dataRow["Transmission"].ToString()),
+                            CorporateDiscount = ParseCorporateDiscount(dataRow["CorpDiscRentalAgency"].ToString(), dataRow["CorpDiscCode"].ToString(), dataRow["CorpDiscPromotionalCode"].ToString())
+                        }
+                    }
+                };
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidInputException("DataRow to CarCriteriaDataBinder.GetCriteria", exception);
+            }
         }
     }
 }

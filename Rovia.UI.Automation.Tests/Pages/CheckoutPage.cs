@@ -1,38 +1,20 @@
 ﻿using System;
-using System.Threading;
 using AppacitiveAutomationFramework;
 using OpenQA.Selenium;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Model;
 
 namespace Rovia.UI.Automation.Tests.Pages
 {
     public class CheckoutPage : UIPage
     {
-        internal void WaitForLoad()
-        {
-            IUIWebElement fillCcDetailsDiv;
-            do
-            {
-                fillCcDetailsDiv = WaitAndGetBySelector("fillCCDetailsDiv", ApplicationSettings.TimeOut.Safe);
-            }while (fillCcDetailsDiv == null || !fillCcDetailsDiv.Displayed) ;
-        }
+        #region Private Members
 
-        internal void PayNow(PaymentInfo paymentInfo)
+        private void SetPaymentMode(PaymentMode paymentMode)
         {
-            SetPaymentMode(paymentInfo.PaymentMode);
-            SetAddress(paymentInfo.BillingAddress);
-
-            WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
-            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click(); 
-        }
-
-        private void SetPaymentMode(PaymentMode paymentMode )
-        {
-            var payOption = WaitAndGetBySelector(paymentMode==PaymentMode.RoviaBucks ? "roviaBucksCheck" : "creditCardCheck", ApplicationSettings.TimeOut.Fast);
+            var payOption = WaitAndGetBySelector(paymentMode == PaymentMode.RoviaBucks ? "roviaBucksCheck" : "creditCardCheck", ApplicationSettings.TimeOut.Fast);
             if (!payOption.Selected)
                 payOption.Click();
         }
@@ -49,12 +31,12 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (StaleElementReferenceException exception)
             {
-                LogManager.GetInstance().LogInformation("StaleElementReferenceException caught and suppressed"); 
+                LogManager.GetInstance().LogInformation("StaleElementReferenceException caught and suppressed");
                 //eat OpenQASelenium.StaleElementReferenceException 
             }
-            
+
         }
-        
+
         private void SetAddress(BillingAddress billingAddress)
         {
             try
@@ -82,12 +64,23 @@ namespace Rovia.UI.Automation.Tests.Pages
                 WaitAndGetBySelector("address_phnDigits", ApplicationSettings.TimeOut.Fast)
                     .SendKeys(billingAddress.PhoneNumber.Substring(6, 4));
             }
-            catch (Exception exception )
+            catch (Exception exception)
             {
                 LogManager.GetInstance().LogInformation("Set Address Failed");
                 throw;
             }
         }
+
+        private void CheckAndThrowErrors()
+        {
+            var divErrors = WaitAndGetBySelector("divErrors", ApplicationSettings.TimeOut.Slow);
+            if (divErrors != null && divErrors.Displayed)
+                throw new Alert(divErrors.Text);
+        }
+
+        #endregion
+
+        #region Protected Members
 
         internal void PayNow(PaymentMode paymentMode)
         {
@@ -98,12 +91,25 @@ namespace Rovia.UI.Automation.Tests.Pages
             CheckAndThrowErrors();
         }
 
-        private void CheckAndThrowErrors()
+        internal void WaitForLoad()
         {
-            var divErrors = WaitAndGetBySelector("divErrors", ApplicationSettings.TimeOut.Slow);
-            if(divErrors!=null&&divErrors.Displayed)
-                throw new Alert(divErrors.Text);
+            IUIWebElement fillCcDetailsDiv;
+            do
+            {
+                fillCcDetailsDiv = WaitAndGetBySelector("fillCCDetailsDiv", ApplicationSettings.TimeOut.Safe);
+            }while (fillCcDetailsDiv == null || !fillCcDetailsDiv.Displayed) ;
         }
+
+        internal void PayNow(PaymentInfo paymentInfo)
+        {
+            SetPaymentMode(paymentInfo.PaymentMode);
+            SetAddress(paymentInfo.BillingAddress);
+
+            WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
+            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click(); 
+        }
+
+        #endregion
 
         public void CheckPaymentStatus()
         {
