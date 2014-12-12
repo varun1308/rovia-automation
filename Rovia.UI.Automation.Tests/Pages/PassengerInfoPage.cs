@@ -15,48 +15,10 @@ namespace Rovia.UI.Automation.Tests.Pages
 {
    public class PassengerInfoPage : UIPage
    {
+       #region Private Members
+
        private static PassengerDetails _passengerDetails;
-       internal void EditPassengerInfo()
-       {
-            WaitAndGetBySelector("lnkEditPassengerInfo", ApplicationSettings.TimeOut.Slow).Click();
-            if(IsInputFormVisible()==false)
-                throw new UIElementNullOrNotVisible("PassengerDetails InputForm");
-            WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
-            WaitForConfirmationPageLoad();
-       }
 
-       internal void ConfirmPassengers()
-       {
-           VerifyPassengerDetails();
-           WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
-       }
-
-       public void WaitForPageLoad()
-       {
-               while (WaitAndGetBySelector("SpinningDiv", 60).Displayed) ;
-               if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Safe).Displayed == false)
-                   throw new PageLoadFailed("PassengerInfoPage");
-       }
-       public void WaitForConfirmationPageLoad()
-       {
-           try
-           {
-               while (IsPassengerInfoConfirmationPageVisible() == false)
-               {
-                   var alertError = WaitAndGetBySelector("alertError", ApplicationSettings.TimeOut.Fast);
-                   if (alertError!=null && alertError.Displayed)
-                   {
-                       throw new Alert(alertError.Text);
-                       
-                   }
-               }
-
-           }
-           catch (Exception exception)
-           {
-               throw new PageLoadFailed("PassengerCOnfirmationPage", exception);
-           }
-       }
        private bool IsInputFormVisible()
        {
            try
@@ -81,18 +43,6 @@ namespace Rovia.UI.Automation.Tests.Pages
                LogManager.GetInstance().LogDebug("passenger details Confirmation page not visible"); 
                return false;
            }
-       }
-
-       public void SubmitPassengerDetails(PassengerDetails passengerDetails)
-       {
-            Thread.Sleep(1500);
-            _passengerDetails = passengerDetails;
-            WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengerDetails.Country);
-            if (passengerDetails.IsInsuranceRequired)
-                WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
-            EnterPassengerDetails();
-            WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Slow).Click();
-            WaitForConfirmationPageLoad();
        }
 
        private void EnterPassengerDetails()
@@ -154,5 +104,63 @@ namespace Rovia.UI.Automation.Tests.Pages
                    {"gender", GetUIElements("gender")},
                };
        }
+
+       #endregion
+
+       internal void EditPassengerInfo()
+       {
+           WaitAndGetBySelector("lnkEditPassengerInfo", ApplicationSettings.TimeOut.Slow).Click();
+           if (IsInputFormVisible() == false)
+               throw new UIElementNullOrNotVisible("PassengerDetails InputForm");
+           WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
+           WaitForConfirmationPageLoad();
+       }
+
+       internal void ConfirmPassengers()
+       {
+           VerifyPassengerDetails();
+           WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
+       }
+
+       public void WaitForPageLoad()
+       {
+           while (WaitAndGetBySelector("SpinningDiv", 60).Displayed) ;
+           if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Safe).Displayed == false)
+               throw new PageLoadFailed("PassengerInfoPage");
+       }
+
+       public void WaitForConfirmationPageLoad()
+       {
+           try
+           {
+               while (IsPassengerInfoConfirmationPageVisible() == false)
+               {
+                   var alertError = WaitAndGetBySelector("alertError", ApplicationSettings.TimeOut.Fast);
+                   if (alertError != null && alertError.Displayed)
+                   {
+                       throw new Alert(alertError.Text);
+
+                   }
+               }
+
+           }
+           catch (Exception exception)
+           {
+               throw new PageLoadFailed("PassengerCOnfirmationPage", exception);
+           }
+       }
+
+       public void SubmitPassengerDetails(PassengerDetails passengerDetails)
+       {
+           Thread.Sleep(1500);
+           _passengerDetails = passengerDetails;
+           WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengerDetails.Country);
+           if (passengerDetails.IsInsuranceRequired)
+               WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
+           EnterPassengerDetails();
+           WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Slow).Click();
+           WaitForConfirmationPageLoad();
+       }
+
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
@@ -23,11 +20,22 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         {
             var div = WaitAndGetBySelector("divWaiting", ApplicationSettings.TimeOut.Fast);
             return div != null && div.Displayed;
-        } 
+        }
+
+        private void GoToNextPage()
+        {
+            WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).Click();
+            ++_currentPageNo;
+        }
+
+        private bool IsNextPageAvailable()
+        {
+            return (_currentPageNo < ApplicationSettings.MaxSearchDepth) && (WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("#AirResultHolder"));
+        }
+
         #endregion
 
         #region Public Members
-
 
         public void Initialze(IResultsHolder resultHolder, IResultFilters resultFilter)
         {
@@ -46,17 +54,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return selectedResult;
         }
 
-        private void GoToNextPage()
-        {
-            WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).Click();
-            ++_currentPageNo;
-        }
-
-        private bool IsNextPageAvailable()
-        {
-            return (_currentPageNo<ApplicationSettings.MaxSearchDepth) && (WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("#AirResultHolder"));
-        }
-
         public void WaitForResultLoad()
         {
             try
@@ -68,7 +65,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     if (_resultsHolder.IsVisible())
                         break;
                 }
-                GetUIElements("txtError").ForEach(x =>
+                GetUIElements("divErrors").ForEach(x =>
                     {
                         if(x.Displayed)
                             throw new Alert(x.Text);
@@ -92,6 +89,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         public bool SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
          return _resultFilters.SetPostSearchFilters(postSearchFilters);
+        }
+
+        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
+        {
+            return _resultFilters.VerifyPreSearchFilters(preSearchFilters);
         }
  
         #endregion

@@ -11,6 +11,51 @@ namespace Rovia.UI.Automation.Tests.Pages
 {
     public class TripFolderPage : UIPage
     {
+        private IEnumerable<Fare> ParseFares()
+        {
+            var fares = new List<Fare>();
+            var i = 0;
+            var totalFare = GetUIElements("totalFare").Select(x => x.Text).ToArray();
+            var baseFare =
+                GetUIElements("fareBreakup")
+                    .Where((item, index) => index % 2 == 0)
+                    .Select(x => x.Text.Split(':')[1].TrimStart(' '))
+                    .ToArray();
+            var taxes =
+                GetUIElements("fareBreakup")
+                    .Where((item, index) => index % 2 != 0)
+                    .Select(x => x.Text.Split(':')[1].TrimStart(' '))
+                    .ToArray();
+
+            while (i < totalFare.Length)
+            {
+                fares.Add(new Fare()
+                {
+                    TotalFare = totalFare[i],
+                    BaseFare = baseFare[i],
+                    Taxes = taxes[i]
+                });
+                i++;
+            }
+            return fares;
+        }
+
+        private IEnumerable<Passengers> ParsePassengers()
+        {
+            return GetUIElements("totalPassengers").Select(x =>
+            {
+
+                var passengers = x.Text.Split(new[] { ' ', ',' }).ToList();
+                return new Passengers()
+                {
+                    Adults = passengers.Contains("Adult") ? int.Parse(passengers[passengers.IndexOf("Adult") - 1]) : 0,
+                    Children = passengers.Contains("Child") ? int.Parse(passengers[passengers.IndexOf("Child") - 1]) : 0,
+                    Infants =
+                        passengers.Contains("Infant") ? int.Parse(passengers[passengers.IndexOf("Infant") - 1]) : 0
+                };
+            });
+        }
+
         internal TripFolder ParseTripFolder()
         {
             TripFolder trip = new TripFolder()
@@ -45,52 +90,6 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             return trip;
         }
-
-        private IEnumerable<Fare> ParseFares()
-        {
-            var fares = new List<Fare>();
-            var i = 0;
-            var totalFare = GetUIElements("totalFare").Select(x => x.Text).ToArray();
-            var baseFare =
-                GetUIElements("fareBreakup")
-                    .Where((item, index) => index%2 == 0)
-                    .Select(x => x.Text.Split(':')[1].TrimStart(' '))
-                    .ToArray();
-            var taxes =
-                GetUIElements("fareBreakup")
-                    .Where((item, index) => index%2 != 0)
-                    .Select(x => x.Text.Split(':')[1].TrimStart(' '))
-                    .ToArray();
-
-            while (i<totalFare.Length)
-            {
-               fares.Add(new Fare()
-               {
-                   TotalFare = totalFare[i],
-                   BaseFare = baseFare[i],
-                   Taxes = taxes[i]
-               });
-                i++;
-            }
-            return fares;
-        }
-
-        private IEnumerable<Passengers> ParsePassengers()
-        {
-            return GetUIElements("totalPassengers").Select(x =>
-            {
-
-                var passengers = x.Text.Split(new[] { ' ', ',' }).ToList();
-                return new Passengers()
-                {
-                    Adults = passengers.Contains("Adult") ? int.Parse(passengers[passengers.IndexOf("Adult") - 1]) : 0,
-                    Children = passengers.Contains("Child") ? int.Parse(passengers[passengers.IndexOf("Child") - 1]) : 0,
-                    Infants =
-                        passengers.Contains("Infant") ? int.Parse(passengers[passengers.IndexOf("Infant") - 1]) : 0
-                };
-            });
-        }
-
 
         internal void EditTripName()
         {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using InvalidOperationException = Rovia.UI.Automation.Exceptions.InvalidOperationException;
 

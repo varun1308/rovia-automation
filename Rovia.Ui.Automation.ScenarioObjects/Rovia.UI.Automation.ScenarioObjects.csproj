@@ -45,6 +45,10 @@
     <Compile Include="AirPostSearchFilters.cs" />
     <Compile Include="AirPreSearchFilters.cs" />
     <Compile Include="AirTripProduct.cs" />
+    <Compile Include="Car\CarPreSearchFilters.cs" />
+    <Compile Include="Car\CorporateDiscount.cs" />
+    <Compile Include="Car\DropOffType.cs" />
+    <Compile Include="Car\DropOff.cs" />
     <Compile Include="HotelPreSearchFilters.cs" />
     <Compile Include="PassengerInfo\Adult.cs" />
     <Compile Include="AirportPair.cs" />
@@ -65,6 +69,8 @@
     <Compile Include="PaymentInfo\PaymentInfo.cs" />
     <Compile Include="LandingTimeRange.cs" />
     <Compile Include="PaymentMode.cs" />
+    <Compile Include="Car\PickUpType.cs" />
+    <Compile Include="Car\PickUp.cs" />
     <Compile Include="PostSearchFilters.cs" />
     <Compile Include="PreSearchFilters.cs" />
     <Compile Include="PriceRange.cs" />

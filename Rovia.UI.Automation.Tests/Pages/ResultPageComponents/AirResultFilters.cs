@@ -1,51 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Utility;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
     public class AirResultFilters : UIPage, IResultFilters
     {
-        #region IResultPage Members
 
-        public bool SetPostSearchFilters(PostSearchFilters postSearchFilters)
-        {
-            var airPostSearchFilters = postSearchFilters as AirPostSearchFilters;
-            if (airPostSearchFilters == null || !airPostSearchFilters.IsApplyFilter)
-                return true;   
-            var stop = airPostSearchFilters.Stop == null || SetStops(airPostSearchFilters.Stop);
-            ExecuteJavascript("$('.jsResetAll').click()");
-            var price = airPostSearchFilters.PriceRange == null || SetPriceRange(airPostSearchFilters.PriceRange);
-            ExecuteJavascript("$('.jsResetAll').click()");
-            var timeDuration = airPostSearchFilters.MaxTimeDurationDiff > 0 ||
-                                SetTimeDuration(airPostSearchFilters.MaxTimeDurationDiff);
-            ExecuteJavascript("$('.jsResetAll').click()");
-            var takeOff = airPostSearchFilters.TakeOffTimeRange == null ||
-                            SetTakeOffTime(airPostSearchFilters.TakeOffTimeRange);
-            ExecuteJavascript("$('.jsResetAll').click()");
-            var landing = airPostSearchFilters.LandingTimeRange == null ||
-                            SetLandingTime(airPostSearchFilters.LandingTimeRange);
-            ExecuteJavascript("$('.jsResetAll').click()");
-            var cabin = airPostSearchFilters.CabinTypes == null || SetCabinTypes(airPostSearchFilters.CabinTypes);
-            ExecuteJavascript("$('.jsResetAll').click()");
-            var airline = airPostSearchFilters.Airlines == null || SetAirlines(airPostSearchFilters.Airlines);
-            ExecuteJavascript("$('.jsResetAll').click()");
-            var matrix = SetMatrix();
-            ExecuteJavascript("$('.jsResetAll').click()");
-            return stop && price && timeDuration && takeOff && landing && cabin && airline && matrix;
-            
-        }
-
-        #endregion
-
-        #region private Air Specific members
+        #region Private Members
 
         private bool SetPriceRange(PriceRange priceRange)
         {
@@ -185,6 +150,15 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             //});
         }
 
+        private void ResetFilters()
+        {
+            ExecuteJavascript("$('.jsResetAll').click()");
+        }
+
+        #endregion
+
+        #region private Air Specific members
+
         #region need this methods in validations
 
         private string VerifyStopsFilter()
@@ -227,5 +201,42 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         #endregion
 
         #endregion
+
+        #region IResultPage Members
+
+        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
+        {
+            return true;
+        }
+
+        public bool SetPostSearchFilters(PostSearchFilters postSearchFilters)
+        {
+            var airPostSearchFilters = postSearchFilters as AirPostSearchFilters;
+            if (airPostSearchFilters == null || !airPostSearchFilters.IsApplyFilter)
+                return true;   
+            var stop = airPostSearchFilters.Stop == null || SetStops(airPostSearchFilters.Stop);
+            ResetFilters();
+            var price = airPostSearchFilters.PriceRange == null || SetPriceRange(airPostSearchFilters.PriceRange);
+            ResetFilters();
+            var timeDuration = airPostSearchFilters.MaxTimeDurationDiff > 0 ||
+                                SetTimeDuration(airPostSearchFilters.MaxTimeDurationDiff);
+            ResetFilters();
+            var takeOff = airPostSearchFilters.TakeOffTimeRange == null ||
+                            SetTakeOffTime(airPostSearchFilters.TakeOffTimeRange);
+            ResetFilters();
+            var landing = airPostSearchFilters.LandingTimeRange == null ||
+                            SetLandingTime(airPostSearchFilters.LandingTimeRange);
+            ResetFilters();
+            var cabin = airPostSearchFilters.CabinTypes == null || SetCabinTypes(airPostSearchFilters.CabinTypes);
+            ResetFilters();
+            var airline = airPostSearchFilters.Airlines == null || SetAirlines(airPostSearchFilters.Airlines);
+            ResetFilters();
+            var matrix = SetMatrix();
+            ResetFilters();
+            return stop && price && timeDuration && takeOff && landing && cabin && airline && matrix;
+        }
+
+        #endregion
+
     }
 }
