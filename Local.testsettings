@@ -3,6 +3,7 @@
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\CarScenarios.xlsx" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\Air\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Tests\AirTests\AirHappyFlowTest.cs" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\AirLoginCreditCardData.csv" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Car\" />

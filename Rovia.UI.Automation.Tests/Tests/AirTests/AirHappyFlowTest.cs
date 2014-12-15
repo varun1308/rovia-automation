@@ -17,7 +17,7 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         public TestContext TestContext { get; set; }
         public static ICriteriaDataBinder DataBinder { get; set; }
         private static LogManager _logManager;
-        
+
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
@@ -26,9 +26,9 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
             TestHelper.Validator = new AirValidator();
             _logManager = LogManager.GetInstance();
         }
-       
+
         [TestInitialize]
-        public void TestInitialize(){}
+        public void TestInitialize() { }
 
         [TestCleanup]
         public void TestCleanup()
@@ -39,49 +39,8 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         }
 
         [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("AirLoginCreditCard")]
-        public void RegisteredUser_BookingFlow_CreditCard()
-          {
-            try
-            {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                _logManager.StartNewLog(criteria.Description);
-                TestHelper.SetCriteria(criteria);
-                TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Passed!!!!!!!!!");
-            }
-            catch (Exception exception)
-            {
-                _logManager.LogInformation("Failed!!!!!!!!");
-                Assert.Fail(exception.Message);
-            }
-        }
-
-        //[TestMethod]
-        //[TestCategory("Sanity")]
-        //[DataSource("AirLoginCreditCardCsv")]
-        //public void RegisteredUser_BookingFlow_CreditCard_CSV()
-        //{
-        //    try
-        //    {
-        //        var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-        //        _logManager.StartNewLog(criteria.Description);
-        //        TestHelper.SetCriteria(criteria);
-        //        TestExecutionPipeLine.Execute(criteria.Pipeline);
-        //        _logManager.LogInformation("Passed!!!!!!!!!");
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        _logManager.LogInformation("Failed!!!!!!!!");
-        //        Assert.Fail(exception.Message);
-        //    }
-        //}
-
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("AirGuestCreditCard")]
-        public void GuestUser_BookingFlow_CreditCard()
+        [DataSource("Air_Amadeus_OneWay")]
+        public void Air_Amadeus_OneWay()
         {
             try
             {
@@ -89,19 +48,18 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 _logManager.StartNewLog(criteria.Description);
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Passed!!!!!!!!!");
+                _logManager.LogInformation("Test Passed.");
             }
             catch (Exception exception)
             {
-                _logManager.LogInformation("Failed!!!!!!!!");
+                _logManager.LogInformation("Test Failed.");
                 Assert.Fail(exception.Message);
             }
         }
 
         [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("AirLoginRoviaBucks")]
-        public void RegisteredUser_BookingFlow_RoviaBucks()
+        [DataSource("Air_Amadeus_RoundTrip")]
+        public void Air_Amadeus_RoundTrip()
         {
             try
             {
@@ -109,11 +67,163 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
                 _logManager.StartNewLog(criteria.Description);
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Passed!!!!!!!!!");
+                _logManager.LogInformation("Test Passed.");
             }
             catch (Exception exception)
             {
-                _logManager.LogInformation("Failed!!!!!!!!");
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Air_Amadeus_Multicity")]
+        public void Air_Amadeus_Multicity()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Air_Mystifly_OneWay")]
+        public void Air_Mystifly_OneWay()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Air_Mystifly_RoundTrip")]
+        public void Air_Mystifly_RoundTrip()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Air_Mystifly_Multicity")]
+        public void Air_Mystifly_Multicity()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Air_Sabre_OneWay")]
+        public void Air_Sabre_OneWay()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Air_Sabre_RoundTrip")]
+        public void Air_Sabre_RoundTrip()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Air_WorldSpan_OneWay")]
+        public void Air_WorldSpan_OneWay()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Air_WorldSpan_RoundTrip")]
+        public void Air_WorldSpan_RoundTrip()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
                 Assert.Fail(exception.Message);
             }
         }

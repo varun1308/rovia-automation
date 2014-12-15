@@ -128,6 +128,18 @@
     <Content Include="DataSheet\AirLoginCreditCardData.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="DataSheet\Air\Air_Amadeus.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataSheet\Air\Air_Mystifly.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataSheet\Air\Air_Sabre.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataSheet\Air\Air_WorldSpan.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="DataSheet\CarScenarios.xlsx" />
     <None Include="DataSheet\HotelScenarios.xlsx" />
     <None Include="Utility\KillChromeDriver.bat" />
