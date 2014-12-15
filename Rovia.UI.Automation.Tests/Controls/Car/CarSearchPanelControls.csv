@@ -1,10 +1,10 @@
 navBar,ul.nav.fontUpperCase li.ico_rentals
 searchPanel,div[data-producttype="car"]
 icoCar,li.ico_rentals
-autoSuggestBoxOriginLoc, div.ac_results
-autoSuggestOptionsOriginLoc, div.ac_results li
-autoSuggestBoxDestinationLoc, div.ac_results:first-child+div.ac_results
-autoSuggestOptionsDestinationLoc, div.ac_results:first-child+div.ac_results li
+autoSuggestBoxOriginLoc,div.ac_results
+autoSuggestOptionsOriginLoc,div.ac_results li
+autoSuggestBoxDestinationLoc,div.ac_results:last
+autoSuggestOptionsDestinationLoc,div.ac_results:last li
 pickUpAirport,input[value="Airport"][name="pickup"]
 pickUpCity,input[value="City"][name="pickup"]
 pickUpLoc,input#txtPickUpLoc

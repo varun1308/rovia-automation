@@ -34,19 +34,20 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             IUIWebElement autoSuggestBox;
             do
             {
-                autoSuggestBox = WaitAndGetBySelector("autoSuggestBoxOriginLoc", ApplicationSettings.TimeOut.Fast);
+                autoSuggestBox =WaitAndGetBySelector("autoSuggestBoxOriginLoc", ApplicationSettings.TimeOut.Fast);
             } while (autoSuggestBox == null || !autoSuggestBox.Displayed);
             GetUIElements("autoSuggestOptionsOriginLoc").First(x => (x.Displayed && x.Text.Equals(location))).Click();
         }
 
         private void SetDestinationLocation(string location)
         {
-            IUIWebElement autoSuggestBox;
-            do
-            {
-                autoSuggestBox = WaitAndGetBySelector("autoSuggestBoxDestinationLoc", ApplicationSettings.TimeOut.Fast);
-            } while (autoSuggestBox == null || !autoSuggestBox.Displayed);
-            GetUIElements("autoSuggestOptionsDestinationLoc").First(x => (x.Displayed && x.Text.Equals(location))).Click();
+            //to implement
+            //IUIWebElement autoSuggestBox;
+            //do
+            //{
+            //    autoSuggestBox = WaitAndGetBySelector("autoSuggestBoxDestinationLoc", ApplicationSettings.TimeOut.Fast);
+            //} while (autoSuggestBox == null || !autoSuggestBox.Displayed);
+            //GetUIElements("autoSuggestOptionsDestinationLoc").First(x => (x.Displayed && x.Text.Equals(location))).Click();
         }
 
         private void ResolveMultiLocationOptions()

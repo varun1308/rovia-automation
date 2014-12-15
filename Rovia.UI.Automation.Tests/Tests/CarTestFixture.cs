@@ -34,8 +34,28 @@ namespace Rovia.UI.Automation.Tests.Tests
         }
 
         [TestMethod]
+        [TestCategory("CarSearch_City")]
         [DataSource("CarScenario")]
-        public void CarSearch()
+        public void CarSearch_City()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("CarSearch_City")]
+        [DataSource("CarScenario")]
+        public void CarSearch_Airport()
         {
             try
             {

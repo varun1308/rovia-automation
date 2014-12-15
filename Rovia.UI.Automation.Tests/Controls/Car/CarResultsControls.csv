@@ -1,1 +1,6 @@
 matrixHolder,div#CarMatrixHolder
+rentalAgency,img.phm.mtm.mlm                      
+carType,div.span4.borderRgt div .font10
+carOptions,div.mts .pull-left.font12
+price,span.price
+addToCartButton,a.jsAddToCart
