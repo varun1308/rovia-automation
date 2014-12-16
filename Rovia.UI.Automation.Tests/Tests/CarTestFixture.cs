@@ -29,14 +29,13 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void TestCleanup()
         {
             TestHelper.SaveScreenShot(TestContext);
-            TestHelper.CleanUp();
+            TestHelper.CleanUp(); 
             _logManager.SubmitLog();
         }
 
         [TestMethod]
-        [TestCategory("CarSearch_City")]
-        [DataSource("CarScenario")]
-        public void CarSearch_City()
+        [DataSource("Car_Airport_To_Airport")]
+        public void Car_Airport_To_Airport()
         {
             try
             {
@@ -48,14 +47,14 @@ namespace Rovia.UI.Automation.Tests.Tests
             }
             catch (Exception exception)
             {
+                _logManager.LogInformation("Test Failed.");
                 Assert.Fail(exception.Message);
             }
         }
 
         [TestMethod]
-        [TestCategory("CarSearch_City")]
-        [DataSource("CarScenario")]
-        public void CarSearch_Airport()
+        [DataSource("Car_Airport_To_City")]
+        public void Car_Airport_To_City()
         {
             try
             {
@@ -67,6 +66,83 @@ namespace Rovia.UI.Automation.Tests.Tests
             }
             catch (Exception exception)
             {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Car_Airport_To_SameAsPickUp")]
+        public void Car_Airport_To_SameAsPickUp()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Car_City_To_Airport")]
+        public void Car_City_To_Airport()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Car_City_To_City")]
+        public void Car_City_To_City()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [TestMethod]
+        [DataSource("Car_City_To_SameAsPickUp")]
+        public void Car_City_To_SameAsPickUp()
+        {
+            try
+            {
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
+                TestHelper.SetCriteria(criteria);
+                TestExecutionPipeLine.Execute(criteria.Pipeline);
+                _logManager.LogInformation("Test Passed.");
+            }
+            catch (Exception exception)
+            {
+                _logManager.LogInformation("Test Failed.");
                 Assert.Fail(exception.Message);
             }
         }

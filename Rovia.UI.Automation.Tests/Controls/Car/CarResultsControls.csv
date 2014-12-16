@@ -4,3 +4,8 @@ carType,div.span4.borderRgt div .font10
 carOptions,div.mts .pull-left.font12
 price,span.price
 addToCartButton,a.jsAddToCart
+divloader,div.txtAlignCenter.jsWaitMessage
+btnCancel,button#btnCloseFlightPopup
+btnContinue,button.jsContinue
+alerts,div#dvAddToCartCar .alert
+btnCheckOut,a#btnCheckout

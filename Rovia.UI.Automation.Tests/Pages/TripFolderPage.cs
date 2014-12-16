@@ -17,13 +17,13 @@ namespace Rovia.UI.Automation.Tests.Pages
             var i = 0;
             var totalFare = GetUIElements("totalFare").Select(x => x.Text).ToArray();
             var baseFare =
-                GetUIElements("fareBreakup")
-                    .Where((item, index) => index % 2 == 0)
-                    .Select(x => x.Text.Split(':')[1].TrimStart(' '))
-                    .ToArray();
+               GetUIElements("fareBreakup")
+                   .Where((item) => item.Text.Contains("Base "))
+                   .Select(x => x.Text.Split(':')[1].TrimStart(' '))
+                   .ToArray();
             var taxes =
                 GetUIElements("fareBreakup")
-                    .Where((item, index) => index % 2 != 0)
+                    .Where((item) => item.Text.Contains("Taxes & fees"))
                     .Select(x => x.Text.Split(':')[1].TrimStart(' '))
                     .ToArray();
 
@@ -82,7 +82,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 var product = UtilityFunctions.GetTripProduct(productTypes[i]);
                 product.ProductTitle = productTitle[i];
                 product.Fares = fares[i];
-                product.Passengers = passengers[i];
+                product.Passengers = passengers.Length > 0 ?passengers[i]: null ;
                 product.ModifyProductButton = modifyProductButton[i];
                 product.RemoveProductButton = removeProductButton[i];
                 trip.TripProducts.Add(product);

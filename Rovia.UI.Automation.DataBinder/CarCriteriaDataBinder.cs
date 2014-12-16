@@ -117,6 +117,7 @@ namespace Rovia.UI.Automation.DataBinder
                 return new CarSearchCriteria()
                 {
                     Pipeline = (string)dataRow["ExecutionPipeline"],
+                    UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
                     PickUp = ParsePickUpDetails(dataRow["PickUpType-Location"].ToString(), dataRow["OriginLocation"].ToString(), dataRow["TravelDates"].ToString()),
                     DropOff = ParseDropOffDetails(dataRow["DropOffType-Location"].ToString(), dataRow["DestinationLocation"].ToString(), dataRow["TravelDates"].ToString()),
                     Filters = new Filters()

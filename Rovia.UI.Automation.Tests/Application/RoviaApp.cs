@@ -99,7 +99,7 @@ namespace Rovia.UI.Automation.Tests.Application
                 {
                     var screenShot = driver.GetScreenshot();
 
-                    var fileName = AppDomain.CurrentDomain.BaseDirectory + "\\" +
+                    var fileName = "E:\\TestResults" + "\\" +
                                    context.FullyQualifiedTestClassName.Replace(".", "_") + "_" + context.TestName  +"_" + context.DataRow.Table.Rows.IndexOf(context.DataRow)+"_" + DateTime.Now.ToString().Replace(' ', '_').Replace(':', '-').Replace('/', '-') +
                                    ".jpg";
                     screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);

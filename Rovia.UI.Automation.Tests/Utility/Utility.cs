@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace Rovia.UI.Automation.Tests.Utility
                 case "air":
                 case "flight":
                     return TripProductType.Air;
+                case "car":
+                    return TripProductType.Car;
                 default:
                     throw new InvalidInputException(productType+" To UtilityFunctions.ToTripPRoductType");
 
@@ -52,6 +55,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 case TripProductType.Air:
                     return new AirTripProduct();
+                    case TripProductType.Car:
+                    return new CarTripProduct();
                 default:
                     throw new InvalidInputException(tripProductType + " To UtilityFunctions.GetTripProduct");
 
