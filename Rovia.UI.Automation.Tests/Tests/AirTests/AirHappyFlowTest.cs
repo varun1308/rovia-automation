@@ -49,12 +49,12 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         //    Execute();
         //}
 
-        //[TestMethod]
-        //[DataSource("Air_Amadeus_Multicity")]
-        //public void Air_Amadeus_Multicity()
-        //{
-        //    Execute();
-        //}
+        [TestMethod]
+        [DataSource("Air_Amadeus_Multicity")]
+        public void Air_Amadeus_Multicity()
+        {
+            Execute();
+        }
 
         //[TestMethod]
         //[DataSource("Air_Mystifly_OneWay")]
