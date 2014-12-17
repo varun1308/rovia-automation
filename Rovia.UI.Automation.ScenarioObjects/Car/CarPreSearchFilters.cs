@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Rovia.UI.Automation.ScenarioObjects;
 
-namespace Rovia.Ui.Automation.ScenarioObjects.Car
+namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class CarPreSearchFilters : PreSearchFilters
     {

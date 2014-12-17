@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
-using Rovia.Ui.Automation.ScenarioObjects;
 using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.Ui.Automation.ScenarioObjects.Car;
 
 namespace Rovia.UI.Automation.DataBinder
 {
@@ -116,6 +110,7 @@ namespace Rovia.UI.Automation.DataBinder
             {
                 return new CarSearchCriteria()
                 {
+                    Description = (string)dataRow["Description"],
                     Pipeline = (string)dataRow["ExecutionPipeline"],
                     UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
                     PickUp = ParsePickUpDetails(dataRow["PickUpType-Location"].ToString(), dataRow["OriginLocation"].ToString(), dataRow["TravelDates"].ToString()),

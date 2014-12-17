@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.DataBinder;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
@@ -27,7 +23,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         private static Results _selectedItineary;
         public static TripFolder Trip { get; set; }
         public static IValidator Validator { get; set; }
-        public static List<Results> Results; 
+        public static List<Results> Results;
         public static TripProductType TripProductType
         {
             get { return _app.State.CurrentProduct; }
@@ -138,14 +134,12 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("HomePage"))
-                    throw new InvalidOperationException("Search",_app.State.CurrentPage);
+                    throw new InvalidOperationException("Search", _app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
                 _app.ResultsPage.WaitForResultLoad();
                 _app.State.CurrentPage = "ResultsPage";
-               Assert.IsTrue(_app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters),"Addtional search filters not applied.");
-               Results = _app.ResultsPage.ParseResults();
-                //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
-                //     throw new ValidationException("Results ");
+                Results = _app.ResultsPage.ParseResults();
+                Assert.IsTrue(_app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters), "Addtional search filters not applied.");
                 _logger.LogStatus("Search", "Passed");
             }
             catch (Exception exception)
@@ -172,7 +166,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                         _app.State.CurrentUser.IsLoggedIn = true;
                         break;
                     case UserType.Preferred:
-                        _app.LoginDetailsPage.LogIn(ApplicationSettings.PreferredCustomer.Username,ApplicationSettings.PreferredCustomer.Password);
+                        _app.LoginDetailsPage.LogIn(ApplicationSettings.PreferredCustomer.Username, ApplicationSettings.PreferredCustomer.Password);
                         _app.State.CurrentUser.UserName = "RegisteredUserUserName";
                         _app.State.CurrentUser.Type = _criteria.UserType;
                         _app.State.CurrentUser.IsLoggedIn = true;
@@ -196,7 +190,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                _logger.LogStatus("Login","Failed");
+                _logger.LogStatus("Login", "Failed");
                 throw; // new Exception("LogIn Failed", exception);
             }
         }
@@ -211,7 +205,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (_selectedItineary == null)
                     throw new AddToCartFailedException();
                 _app.State.CurrentPage = "TripFolderPage";
-                ParseTripFolder();
+               Trip = ParseTripFolder();
                 _logger.LogStatus("AddToCart", "Passed");
             }
             catch (Exception exception)
@@ -265,13 +259,13 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         #region TripFolder Calls
 
-        private static void ParseTripFolder()
+        private static TripFolder ParseTripFolder()
         {
             try
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("ParseTripFolder", _app.State.CurrentPage);
-                Trip = _app.TripFolderPage.ParseTripFolder();
+                return _app.TripFolderPage.ParseTripFolder();
             }
             catch (Exception exception)
             {
@@ -374,6 +368,9 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("CheckoutTrip", _app.State.CurrentPage);
+
+               Assert.IsTrue(_app.TripFolderPage.VerifyAddedItinerary(_selectedItineary, Trip),"Itinerary added to cart is invalid on trip page.");
+
                 Trip.CheckoutTripButton.Click();
 
                 if (_app.State.CurrentUser.Type != UserType.Guest)
@@ -383,7 +380,6 @@ namespace Rovia.UI.Automation.Tests.Utility
                 }
                 else
                 {
-                    //_app.LoginDetailsPage.WaitForLoad();
                     _app.State.CurrentPage = "LoginDetailsPage";
                 }
                 _logger.LogStatus("CheckoutTrip", "Passed");

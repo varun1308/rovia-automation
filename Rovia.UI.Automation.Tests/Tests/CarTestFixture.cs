@@ -37,100 +37,45 @@ namespace Rovia.UI.Automation.Tests.Tests
         [DataSource("Car_Airport_To_Airport")]
         public void Car_Airport_To_Airport()
         {
-            try
-            {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                _logManager.StartNewLog(criteria.Description);
-                TestHelper.SetCriteria(criteria);
-                TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Test Passed.");
-            }
-            catch (Exception exception)
-            {
-                _logManager.LogInformation("Test Failed.");
-                Assert.Fail(exception.Message);
-            }
+            Execute();
         }
 
         [TestMethod]
         [DataSource("Car_Airport_To_City")]
         public void Car_Airport_To_City()
         {
-            try
-            {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                _logManager.StartNewLog(criteria.Description);
-                TestHelper.SetCriteria(criteria);
-                TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Test Passed.");
-            }
-            catch (Exception exception)
-            {
-                _logManager.LogInformation("Test Failed.");
-                Assert.Fail(exception.Message);
-            }
+            Execute();
         }
 
         [TestMethod]
         [DataSource("Car_Airport_To_SameAsPickUp")]
         public void Car_Airport_To_SameAsPickUp()
         {
-            try
-            {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                _logManager.StartNewLog(criteria.Description);
-                TestHelper.SetCriteria(criteria);
-                TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Test Passed.");
-            }
-            catch (Exception exception)
-            {
-                _logManager.LogInformation("Test Failed.");
-                Assert.Fail(exception.Message);
-            }
+            Execute();
         }
 
         [TestMethod]
         [DataSource("Car_City_To_Airport")]
         public void Car_City_To_Airport()
         {
-            try
-            {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                _logManager.StartNewLog(criteria.Description);
-                TestHelper.SetCriteria(criteria);
-                TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Test Passed.");
-            }
-            catch (Exception exception)
-            {
-                _logManager.LogInformation("Test Failed.");
-                Assert.Fail(exception.Message);
-            }
+            Execute();
         }
 
         [TestMethod]
         [DataSource("Car_City_To_City")]
         public void Car_City_To_City()
         {
-            try
-            {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                _logManager.StartNewLog(criteria.Description);
-                TestHelper.SetCriteria(criteria);
-                TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Test Passed.");
-            }
-            catch (Exception exception)
-            {
-                _logManager.LogInformation("Test Failed.");
-                Assert.Fail(exception.Message);
-            }
+            Execute();
         }
 
         [TestMethod]
         [DataSource("Car_City_To_SameAsPickUp")]
         public void Car_City_To_SameAsPickUp()
+        {
+            Execute();
+        }
+
+        public void Execute()
         {
             try
             {

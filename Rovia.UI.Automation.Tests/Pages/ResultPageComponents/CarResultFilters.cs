@@ -2,7 +2,6 @@
 using System.Linq;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.Ui.Automation.ScenarioObjects.Car;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
@@ -21,7 +20,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             if (!string.IsNullOrEmpty(carSearchFilters.CarType)) carType= IsPreSearchFilterApplied("Car type");
             if (!string.IsNullOrEmpty(carSearchFilters.RentalAgency)) rentalAgency= IsPreSearchFilterApplied("Rental Agency");
             //if (carSearchFilters.AirConditioning > 0 || carSearchFilters.Transmission > 0) carOptions= IsPreSearchFilterApplied("Car options");
-
             return carType && rentalAgency && carOptions;
         }
 

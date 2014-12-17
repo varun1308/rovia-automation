@@ -6,7 +6,6 @@ using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.ScenarioObjects.Car;
 using Rovia.UI.Automation.Tests.Configuration;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
@@ -74,8 +73,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 transmission[j] = carOptions[i].Text;
 
             var price = GetUIElements("price");
-            var pricePerWeek = price.Select(x => x.Text.Split(' ')[0].TrimStart('$')).Where((item, index) => index % 2 == 0).ToArray();
-            var totalPrice = price.Select(x => x.Text.Split(' ')[0].TrimStart('$')).Where((item, index) => index % 2 != 0).ToArray();
+            var pricePerWeek = price.Select(x => x.Text).Where((item, index) => index % 2 == 0).ToArray();
+            var totalPrice = price.Select(x => x.Text).Where((item, index) => index % 2 != 0).ToArray();
             var btnAddToCart = GetUIElements("addToCartButton").ToArray();
 
             _results = new Dictionary<CarResult, IUIWebElement>();
@@ -89,8 +88,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     CarType = carType[i],
                     AirConditioning = airconditioning[i],
                     Transmission = transmission[i],
-                    PricePerWeek = float.Parse(pricePerWeek[i]),
-                    TotalPrice = float.Parse(totalPrice[i])
+                    PricePerWeek = pricePerWeek[i],
+                    TotalPrice = totalPrice[i]
                 },btnAddToCart[i]);
                 i++;
             }

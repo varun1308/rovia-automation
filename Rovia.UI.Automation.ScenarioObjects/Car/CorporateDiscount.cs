@@ -1,5 +1,5 @@
 ﻿
-namespace Rovia.Ui.Automation.ScenarioObjects.Car
+namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class CorporateDiscount
     {

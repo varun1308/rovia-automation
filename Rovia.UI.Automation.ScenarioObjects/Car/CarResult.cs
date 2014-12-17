@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Rovia.UI.Automation.ScenarioObjects.Car
+﻿
+namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class CarResult :Results
     {
@@ -12,7 +7,7 @@ namespace Rovia.UI.Automation.ScenarioObjects.Car
         public string CarType { get; set; }
         public string AirConditioning { get; set; }
         public string Transmission { get; set; }
-        public float PricePerWeek { get; set; }
-        public float TotalPrice { get; set; }
+        public string PricePerWeek { get; set; }
+        public string TotalPrice { get; set; }
     }
 }

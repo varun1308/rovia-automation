@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
-using Rovia.Ui.Automation.ScenarioObjects;
 using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.Ui.Automation.ScenarioObjects.Car;
 using Rovia.UI.Automation.Tests.Configuration;
 
 namespace Rovia.UI.Automation.Tests.Pages.SearchPanels

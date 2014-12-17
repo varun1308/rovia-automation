@@ -45,7 +45,7 @@
     <Compile Include="AirPostSearchFilters.cs" />
     <Compile Include="AirPreSearchFilters.cs" />
     <Compile Include="AirTripProduct.cs" />
-    <Compile Include="CarTripProduct.cs" />
+    <Compile Include="Car\CarTripProduct.cs" />
     <Compile Include="Car\CarPreSearchFilters.cs" />
     <Compile Include="Car\CarResult.cs" />
     <Compile Include="Car\CorporateDiscount.cs" />
