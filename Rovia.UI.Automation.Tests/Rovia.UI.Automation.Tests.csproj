@@ -99,11 +99,11 @@
     <Compile Include="Pages\LoginDetailsPage.cs" />
     <Compile Include="Pages\PassengerInfoPage.cs" />
     <Compile Include="Pages\TripFolderPage.cs" />
-    <Compile Include="Tests\AirTests\AirHappyFlowTest.cs" />
+    <Compile Include="Tests\AirTextFixture.cs" />
     <Compile Include="Tests\CarTestFixture.cs" />
     <Compile Include="Tests\HomePageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\HotelTests\HotelHappyFlowTest.cs" />
+    <Compile Include="Tests\HotelTextFixture.cs" />
     <Compile Include="Utility\MarkUpGenerator.cs" />
     <Compile Include="Utility\TestExecutionPipeLine.cs" />
     <Compile Include="Utility\Testhelper.cs" />
@@ -113,10 +113,10 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Controls\HotelResultsFiltersControls.csv" />
-    <None Include="Controls\HotelResultsHolderControls.csv" />
-    <None Include="Controls\HotelResultsTitleControls.csv" />
-    <None Include="Controls\HotelRoomsHolderControls.csv" />
+    <None Include="Controls\Hotel\HotelResultsFiltersControls.csv" />
+    <None Include="Controls\Hotel\HotelResultsHolderControls.csv" />
+    <None Include="Controls\Hotel\HotelResultsTitleControls.csv" />
+    <None Include="Controls\Hotel\HotelRoomsHolderControls.csv" />
     <None Include="Controls\Car\CarFiltersControls.csv" />
     <None Include="Controls\Car\CarResultsControls.csv" />
     <None Include="Controls\Car\CarSearchPanelControls.csv" />
@@ -127,7 +127,7 @@
     <None Include="Controls\BFCPaymentControls.csv" />
     <None Include="Controls\CheckoutControls.csv" />
     <None Include="Controls\HomeControls.csv" />
-    <None Include="Controls\HotelSearchPanelControls.csv" />
+    <None Include="Controls\Hotel\HotelSearchPanelControls.csv" />
     <None Include="Controls\LoginDetailsControls.csv" />
     <None Include="Controls\PassengerInfoControls.csv" />
     <Content Include="DataSheet\AirScenarios.xlsx">
@@ -137,12 +137,21 @@
     <Content Include="DataSheet\AirLoginCreditCardData.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="DataSheet\Air\Air_Amadeus.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataSheet\Air\Air_Mystifly.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataSheet\Air\Air_Sabre.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataSheet\Air\Air_WorldSpan.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="DataSheet\CarScenarios.xlsx" />
     <None Include="DataSheet\HotelScenarios.xlsx" />
     <None Include="Utility\KillChromeDriver.bat" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Controls\chromedriver.exe" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

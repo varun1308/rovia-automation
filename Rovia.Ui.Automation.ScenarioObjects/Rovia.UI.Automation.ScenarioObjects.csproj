@@ -42,29 +42,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AirPostSearchFilters.cs" />
-    <Compile Include="AirPreSearchFilters.cs" />
-    <Compile Include="AirTripProduct.cs" />
+    <Compile Include="Air\AirPostSearchFilters.cs" />
+    <Compile Include="Air\AirPreSearchFilters.cs" />
+    <Compile Include="Air\AirTripProduct.cs" />
     <Compile Include="DistanceRange.cs" />
-    <Compile Include="HotelPostSearchFilters.cs" />
+    <Compile Include="Hotel\HotelPostSearchFilters.cs" />
     <Compile Include="Car\CarTripProduct.cs" />
     <Compile Include="Car\CarPreSearchFilters.cs" />
     <Compile Include="Car\CarResult.cs" />
     <Compile Include="Car\CorporateDiscount.cs" />
     <Compile Include="Car\DropOffType.cs" />
     <Compile Include="Car\DropOff.cs" />
-    <Compile Include="HotelPreSearchFilters.cs" />
-    <Compile Include="HotelResult.cs" />
-    <Compile Include="HotelTripProduct.cs" />
+    <Compile Include="Hotel\HotelPreSearchFilters.cs" />
+    <Compile Include="Hotel\HotelResult.cs" />
+    <Compile Include="Hotel\HotelTripProduct.cs" />
     <Compile Include="PassengerInfo\Adult.cs" />
-    <Compile Include="AirportPair.cs" />
-    <Compile Include="AirResult.cs" />
+    <Compile Include="Air\AirportPair.cs" />
+    <Compile Include="Air\AirResult.cs" />
     <Compile Include="Amount.cs" />
-    <Compile Include="CabinType.cs" />
+    <Compile Include="Air\CabinType.cs" />
     <Compile Include="Fare.cs" />
     <Compile Include="PassengerInfo\Child.cs" />
     <Compile Include="Filters.cs" />
-    <Compile Include="FlightLegs.cs" />
+    <Compile Include="Air\FlightLegs.cs" />
     <Compile Include="PassengerInfo\Infant.cs" />
     <Compile Include="PassengerInfo\Passenger.cs" />
     <Compile Include="PassengerInfo\PassengerDetails.cs" />
@@ -73,7 +73,7 @@
     <Compile Include="PaymentInfo\CreditCardInfo.cs" />
     <Compile Include="PaymentInfo\CreditCardType.cs" />
     <Compile Include="PaymentInfo\PaymentInfo.cs" />
-    <Compile Include="LandingTimeRange.cs" />
+    <Compile Include="Air\LandingTimeRange.cs" />
     <Compile Include="PaymentMode.cs" />
     <Compile Include="Car\PickUpType.cs" />
     <Compile Include="Car\PickUp.cs" />
@@ -81,18 +81,19 @@
     <Compile Include="PreSearchFilters.cs" />
     <Compile Include="PriceRange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RatingRange.cs" />
+    <Compile Include="Hotel\RatingRange.cs" />
     <Compile Include="Results.cs" />
-    <Compile Include="SearchType.cs" />
+    <Compile Include="Air\SearchType.cs" />
     <Compile Include="SpecialCriteria.cs" />
-    <Compile Include="StayPeriod.cs" />
+    <Compile Include="Hotel\StayPeriod.cs" />
     <Compile Include="Supplier.cs" />
-    <Compile Include="TakeOFFTimeRange.cs" />
+    <Compile Include="Air\TakeOFFTimeRange.cs" />
     <Compile Include="TripFolder.cs" />
     <Compile Include="TripProduct.cs" />
     <Compile Include="TripProductType.cs" />
     <Compile Include="UserType.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

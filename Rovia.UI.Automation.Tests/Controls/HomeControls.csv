@@ -1,5 +1,6 @@
 divHome,div#ucPWP_AP
 divNavigationBar,div.navbar.navbar-inverse
+sessionId,span#ucPWP_ctl15_21153_lblAPISessionId
 country,select.span12.jCountrySelect
 saveCountry,a.btn.btn-primary.span12.jSaveBtn
 lnkLogIn,a#ucPWP_ctl08_21232_ucHeaderMenu_lnkLogin

@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppacitiveLoggingFramework", "AppacitiveLoggingFramework", "{290CC6DB-3A94-4798-88D7-867A6D5D39FB}"
 	ProjectSection(SolutionItems) = preProject
 		References\AppacitiveLoggingFramework\AppacitiveAutomationFramework.dll = References\AppacitiveLoggingFramework\AppacitiveAutomationFramework.dll
+		References\AppacitiveLoggingFramework\chromedriver.exe = References\AppacitiveLoggingFramework\chromedriver.exe
 		References\AppacitiveLoggingFramework\Selenium.WebDriverBackedSelenium.dll = References\AppacitiveLoggingFramework\Selenium.WebDriverBackedSelenium.dll
 		References\AppacitiveLoggingFramework\Tavisca.Testing.Platform.dll = References\AppacitiveLoggingFramework\Tavisca.Testing.Platform.dll
 		References\AppacitiveLoggingFramework\ThoughtWorks.Selenium.Core.dll = References\AppacitiveLoggingFramework\ThoughtWorks.Selenium.Core.dll

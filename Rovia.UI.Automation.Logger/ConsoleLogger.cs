@@ -15,6 +15,7 @@ namespace Rovia.UI.Automation.Logger
 
         public void Log(string message)
         {
+            Console.WriteLine("---------------------------------------------------------------------------------");
             Console.WriteLine(message);
         }
     }

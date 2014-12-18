@@ -80,11 +80,6 @@ namespace Rovia.UI.Automation.Tests.Pages
             return carTripProduct;
         }
 
-        private bool VerifyAmount(string totalPriceOnCart, string totalPriceOnTrip)
-        {
-            return totalPriceOnCart.Equals(totalPriceOnTrip);
-        }
-
         private List<TripProduct> ParseTripProducts()
         {
             var tripProducts = new List<TripProduct>();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 
 namespace Rovia.UI.Automation.Logger
@@ -9,7 +10,7 @@ namespace Rovia.UI.Automation.Logger
 
         public FileLogger(string target)
         {
-            _path = GetFileName(target);
+            _path =GetDirectoryPath()+"\\"+ GetFileName(target);
         }
         public void Log(string message)
         {
@@ -18,8 +19,19 @@ namespace Rovia.UI.Automation.Logger
 
         private static string GetFileName(string path)
         {
-            var postFix = "_" + DateTime.Now.ToString().Replace(' ', '_').Replace(':', '-').Replace('/', '-') + ".log";
+            var postFix = "_" + DateTime.Now.ToShortDateString().Replace('/', '_') + ".log";
             return (path + postFix);
+        }
+
+        private string GetDirectoryPath()
+        {
+            var directoryPath = ConfigurationManager.AppSettings["application.loggedfilepath"] + "\\Dated_" +
+                                        DateTime.Now.ToShortDateString().Replace('/', '_');
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            return directoryPath;
         }
     }
 }

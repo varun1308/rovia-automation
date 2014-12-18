@@ -41,6 +41,11 @@ namespace Rovia.UI.Automation.Tests.Configuration
             get { return int.Parse(ConfigurationManager.AppSettings["application.maxSearchDepth"]??"1"); }
         }
 
+        public static string LoggedFilePath
+        {
+            get { return ConfigurationManager.AppSettings["application.loggedfilepath"]; }
+        }
+
         public static class TimeOut
         {
             public static int Safe { get { return 10; } }

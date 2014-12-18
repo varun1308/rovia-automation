@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Threading;
 using AppacitiveAutomationFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Pages;
 using Rovia.UI.Automation.Tests.Pages.ResultPageComponents;
 using Rovia.UI.Automation.Tests.Pages.SearchPanels;
-using Rovia.UI.Automation.Logger;
 
 namespace Rovia.UI.Automation.Tests.Application
 {
@@ -107,13 +108,13 @@ namespace Rovia.UI.Automation.Tests.Application
             try
             {
                 var driver = Driver as ITakesScreenshot;
-
+                var testClass = context.FullyQualifiedTestClassName.Split('.');
                 if (driver != null)
                 {
                     var screenShot = driver.GetScreenshot();
 
-                    var fileName = "E:\\TestResults" + "\\" +
-                                   context.FullyQualifiedTestClassName.Replace(".", "_") + "_" + context.TestName  +"_" + context.DataRow.Table.Rows.IndexOf(context.DataRow)+"_" + DateTime.Now.ToString().Replace(' ', '_').Replace(':', '-').Replace('/', '-') +
+                    var fileName = GetDirectoryPath() +"\\"+
+                                   testClass[testClass.Length - 1] + "_" + context.TestName + "_" + context.DataRow.Table.Rows.IndexOf(context.DataRow) +
                                    ".jpg";
                     screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
                 }
@@ -122,6 +123,22 @@ namespace Rovia.UI.Automation.Tests.Application
             {
             }
             return false;
+        }
+
+        private string GetDirectoryPath()
+        {
+            var directoryPath = ApplicationSettings.LoggedFilePath + "\\Dated_" +
+                                        DateTime.Now.ToShortDateString().Replace('/', '_');
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            return directoryPath;
+        }
+
+        public void SaveSessionId(TestContext context,string sessionId)
+        {
+            context.Properties.Add(context.TestName + "_" + (context.DataRow.Table.Rows.IndexOf(context.DataRow)+1), sessionId);
         }
 
         public void ClearBrowserCache()
@@ -136,11 +153,11 @@ namespace Rovia.UI.Automation.Tests.Application
             try
             {
                 Driver.SwitchTo().Alert().Accept();
-            }   //
+            }
             catch (NoAlertPresentException Ex)
             {
                
-            }   // catch 
+            }
         }
     }
 }

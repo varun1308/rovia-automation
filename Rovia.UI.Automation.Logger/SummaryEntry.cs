@@ -4,7 +4,7 @@ namespace Rovia.UI.Automation.Logger
 {
     class SummaryEntry
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         private readonly List<string> _passedSteps;
         private readonly List<string> _failedSteps;
         public SummaryEntry()
@@ -25,7 +25,7 @@ namespace Rovia.UI.Automation.Logger
 
         public override string ToString()
         {
-            return Id.ToString() + ',' + Description + ',' + string.Join("|", _passedSteps) + ',' + string.Join("|", _failedSteps) +
+            return "<< "+ Id + " >> " + Description + ',' + string.Join("|", _passedSteps) + ',' + string.Join("|", _failedSteps) +
                    ',' + (_failedSteps.Count > 0
                        ? "FAILED"
                        : "PASSED");

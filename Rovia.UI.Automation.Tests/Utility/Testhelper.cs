@@ -17,13 +17,14 @@ namespace Rovia.UI.Automation.Tests.Utility
     {
         #region Datafields
 
+        public static string SessionId { get; set; }
         private static RoviaApp _app;
         private static LogManager _logger;
         private static SearchCriteria _criteria;
         private static Results _selectedItineary;
         public static TripFolder Trip { get; set; }
         public static IValidator Validator { get; set; }
-        public static List<Results> Results; 
+        public static List<Results> Results;
         public static TripProductType TripProductType
         {
             get { return _app.State.CurrentProduct; }
@@ -136,6 +137,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("HomePage"))
                     throw new InvalidOperationException("Search", _app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
+                SessionId = _app.HomePage.GetSessionId();
                 _app.ResultsPage.WaitForResultLoad();
                 //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
@@ -206,7 +208,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (_selectedItineary == null)
                     throw new AddToCartFailedException();
                 _app.State.CurrentPage = "TripFolderPage";
-               Trip = ParseTripFolder();
+                Trip = ParseTripFolder();
                 _logger.LogStatus("AddToCart", "Passed");
             }
             catch (Exception exception)
@@ -364,7 +366,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("CheckoutTrip", _app.State.CurrentPage);
 
-               Assert.IsTrue(_app.TripFolderPage.VerifyAddedItinerary(_selectedItineary, Trip),"Itinerary added to cart is invalid on trip page.");
+                Assert.IsTrue(_app.TripFolderPage.VerifyAddedItinerary(_selectedItineary, Trip), "Itinerary added to cart is invalid on trip page.");
 
                 Trip.CheckoutTripButton.Click();
 
@@ -445,6 +447,11 @@ namespace Rovia.UI.Automation.Tests.Utility
         public static void SaveScreenShot(TestContext context)
         {
             _app.SaveScreenshot(context);
+        }
+
+        public static void SaveSessionId(TestContext context)
+        {
+            _app.SaveSessionId(context, _app.HomePage.GetSessionId());
         }
     }
 }
