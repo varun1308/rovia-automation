@@ -8,6 +8,7 @@ using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Pages;
 using Rovia.UI.Automation.Tests.Pages.ResultPageComponents;
 using Rovia.UI.Automation.Tests.Pages.SearchPanels;
+using Rovia.UI.Automation.Logger;
 
 namespace Rovia.UI.Automation.Tests.Application
 {
@@ -37,6 +38,8 @@ namespace Rovia.UI.Automation.Tests.Application
                 {
                     case TripProductType.Air: homePage.SearchPanel = InitializePage<AirSearchPanel>("AirSearchPanelControls");
                         break;
+                    case TripProductType.Hotel: homePage.SearchPanel = InitializePage<HotelSearchPanel>("HotelSearchPanelControls");
+                        break;
                 }
                 return homePage;
             }
@@ -50,11 +53,17 @@ namespace Rovia.UI.Automation.Tests.Application
                 switch (State.CurrentProduct)
                 {
                     case TripProductType.Air:
-                        resultsPage.Initialze(InitializePage<AirResultsHolder>("AirResultsHolderControls"), InitializePage<AirResultFilters>("AirResultsFiltersControls"));
+                        resultsPage.ResultsHolder = InitializePage<AirResultsHolder>("AirResultsHolderControls");
+                        resultsPage.ResultFilters = InitializePage<AirResultFilters>("AirResultsFiltersControls");
                         break;
-                    //case TripProductType.Hotel:
-                    //    resultsPage.Initialze(InitializePage<HotelResultsHolder>("AirResultsHolderControls"), InitializePage<HotelResultFilters>("AirResultsFiltersControls"));
-                    //    break;
+                    case TripProductType.Hotel:
+                        var resultHolder=InitializePage<HotelResultsHolder>("HotelResultsHolderControls");
+                        resultHolder.RoomsHolder= InitializePage<HotelRoomsHolder>("HotelRoomsHolderControls");
+                        resultHolder.WaitingFunction = resultsPage.WaitForResultLoad;
+                        resultsPage.ResultsHolder = resultHolder;
+                        resultsPage.ResultFilters = InitializePage<HotelResultFilters>("HotelResultsFiltersControls");
+                        resultsPage.ResultTitle = InitializePage<HotelResultsTitle>("HotelResultsTitleControls");
+                        break;
                     //case TripProductType.Hotel: return InitializePage<HotelResultsPage>("HotelResultsControls");
                     default:
                         return null;
@@ -112,8 +121,21 @@ namespace Rovia.UI.Automation.Tests.Application
 
         public void ClearBrowserCache()
         {
+
             Driver.Manage().Cookies.DeleteAllCookies(); //delete all cookies
             Thread.Sleep(5000); //wait 5 seconds to clear cookies.
+        }
+
+        public void ConfirmAlert()
+        {
+            try
+            {
+                Driver.SwitchTo().Alert().Accept();
+            }   //
+            catch (NoAlertPresentException Ex)
+            {
+               
+            }   // catch 
         }
     }
 }

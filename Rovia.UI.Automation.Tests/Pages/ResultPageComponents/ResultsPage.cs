@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
@@ -16,8 +13,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     {
         #region Private Members
 
-        private static IResultFilters _resultFilters;
-        private static IResultsHolder _resultsHolder;
+        public IResultFilters ResultFilters { private get; set; }
+        public IResultsHolder ResultsHolder { private get; set; }
+
+        public IResultsTitle ResultTitle{ private get; set; }
+
         private static int _currentPageNo = 1;
         private bool IsWaitingVisible()
         {
@@ -27,17 +27,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         #endregion
 
         #region Public Members
-
-
-        public void Initialze(IResultsHolder resultHolder, IResultFilters resultFilter)
-        {
-            _resultsHolder = resultHolder;
-            _resultFilters = resultFilter;
-        }
-
+        
         public Results AddToCart(string supplier)
         {
-            var selectedResult=_resultsHolder.AddToCart(supplier);
+            var selectedResult=ResultsHolder.AddToCart(supplier);
             if (selectedResult == null && IsNextPageAvailable())
             {
                 GoToNextPage();
@@ -50,11 +43,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         {
             WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).Click();
             ++_currentPageNo;
+            Thread.Sleep(3000);
         }
 
         private bool IsNextPageAvailable()
         {
-            return (_currentPageNo<ApplicationSettings.MaxSearchDepth) && (WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("#AirResultHolder"));
+            return (_currentPageNo<ApplicationSettings.MaxSearchDepth) && (WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("ResultHolder"));
         }
 
         public void WaitForResultLoad()
@@ -65,15 +59,15 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 {
                     Thread.Sleep(2000);
 
-                    if (_resultsHolder.IsVisible())
+                    if (ResultsHolder.IsVisible())
                         break;
                 }
-                GetUIElements("txtError").ForEach(x =>
+                GetUIElements("divError").ForEach(x =>
                     {
                         if(x.Displayed)
                             throw new Alert(x.Text);
                     });
-                if (!_resultsHolder.IsVisible())
+                if (!ResultsHolder.IsVisible())
                     throw new Alert("Results Not visible");
                 _currentPageNo = 1;
             }
@@ -86,14 +80,20 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public List<Results> ParseResults()
         {
-            return _resultsHolder.ParseResults();
+            return ResultsHolder.ParseResults();
         }
 
-        public bool SetPostSearchFilters(PostSearchFilters postSearchFilters)
+        public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
-         return _resultFilters.SetPostSearchFilters(postSearchFilters);
+             ResultFilters.SetPostSearchFilters(postSearchFilters);
         }
  
         #endregion
+
+        internal void ValidateSearch(Criteria.SearchCriteria criteria)
+        {
+            if (!ResultTitle.ValidateTitle(criteria))
+                throw new ValidationException("Invalid Results:");
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 {
    public class PassengerInfoPage : UIPage
    {
-       private static PassengerDetails _passengerDetails;
+       private static List<Passenger> _passengers;
        internal void EditPassengerInfo()
        {
             WaitAndGetBySelector("lnkEditPassengerInfo", ApplicationSettings.TimeOut.Slow).Click();
@@ -86,7 +86,8 @@ namespace Rovia.UI.Automation.Tests.Pages
        public void SubmitPassengerDetails(PassengerDetails passengerDetails)
        {
             Thread.Sleep(1500);
-            _passengerDetails = passengerDetails;
+           _passengers = passengerDetails.Passengers;
+
             WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengerDetails.Country);
             if (passengerDetails.IsInsuranceRequired)
                 WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
@@ -101,7 +102,7 @@ namespace Rovia.UI.Automation.Tests.Pages
            var inputForm = GetInputForm();
            (new List<List<IUIWebElement>>(inputForm.Values.Take(6))).ForEach(x => x.ForEach(y => y.Clear()));
            var i = 0;
-           _passengerDetails.Passengers.ForEach(x =>
+           _passengers.ForEach(x =>
            {
                inputForm["fNames"][i].SendKeys(x.FirstName);
                inputForm["mNames"][i].SendKeys(x.MiddleName);
@@ -124,7 +125,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 
        private static void VerifyPaxDetails(IEnumerable<Passenger> passengers)
        {
-           if (_passengerDetails.Passengers.Zip(passengers, (x, y) => x.Equals(y)).Any(x=>x.Equals(false)))
+           if (_passengers.Zip(passengers, (x, y) => x.Equals(y)).Any(x=>x.Equals(false)))
                throw new ValidationException("Passenger Details");
        }
 

@@ -81,8 +81,13 @@
     <Compile Include="Model\PaymentFields.cs" />
     <Compile Include="Pages\ResultPageComponents\AirResultFilters.cs" />
     <Compile Include="Pages\ResultPageComponents\AirResultsHolder.cs" />
+    <Compile Include="Pages\ResultPageComponents\HotelResultFilters.cs" />
+    <Compile Include="Pages\ResultPageComponents\HotelResultsHolder.cs" />
+    <Compile Include="Pages\ResultPageComponents\HotelResultsTitle.cs" />
+    <Compile Include="Pages\ResultPageComponents\HotelRoomsHolder.cs" />
     <Compile Include="Pages\ResultPageComponents\IResultFilters.cs" />
     <Compile Include="Pages\ResultPageComponents\IResultsHolder.cs" />
+    <Compile Include="Pages\ResultPageComponents\IResultsTitle.cs" />
     <Compile Include="Pages\ResultPageComponents\ResultsPage.cs" />
     <Compile Include="Pages\SearchPanels\AirSearchPanel.cs" />
     <Compile Include="Pages\SearchPanels\HotelSearchPanel.cs" />
@@ -106,6 +111,10 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Controls\HotelResultsFiltersControls.csv" />
+    <None Include="Controls\HotelResultsHolderControls.csv" />
+    <None Include="Controls\HotelResultsTitleControls.csv" />
+    <None Include="Controls\HotelRoomsHolderControls.csv" />
     <None Include="Controls\ResultControls.csv" />
     <None Include="Controls\AirResultsFiltersControls.csv" />
     <None Include="Controls\AirResultsHolderControls.csv" />

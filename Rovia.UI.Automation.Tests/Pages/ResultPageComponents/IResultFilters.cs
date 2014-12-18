@@ -4,6 +4,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
     public interface IResultFilters
     {
-        bool SetPostSearchFilters(PostSearchFilters postSearchFilters);
+        void SetPostSearchFilters(PostSearchFilters postSearchFilters);
     }
 }

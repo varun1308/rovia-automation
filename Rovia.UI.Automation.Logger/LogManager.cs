@@ -57,6 +57,7 @@ namespace Rovia.UI.Automation.Logger
             if (_logManagerInstance == null) throw new Exception("invalid call");
             return _logManagerInstance;
         }
+
         public void StartNewLog(String description)
         {
             ++_logId;

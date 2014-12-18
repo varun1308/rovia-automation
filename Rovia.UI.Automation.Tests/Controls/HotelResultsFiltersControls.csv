@@ -1,0 +1,17 @@
+minPrice,div.jsMinPrice
+maxPrice,div.jsMaxPrice
+minDistance,div.jsMinDistance
+maxDistance,div.jsMaxDistance
+textHotelName,input#Text2
+searchIcon,div.icon-search.pointer
+minStarRating,ul.jsMinStars a
+maxStarRating,ul.jsMaxStars a
+starRatingResetLink,div.jsStarRatingFilter a.jsResetLink
+amenities,div.jsAmenitiesContainer input
+amenitiesResetLink,div.jsAmenitiesFilter a.jsResetLink
+preferredLocationCategory,a.jsCatListItem
+categoryHolder,div.jsCategoryHolder a.btn
+preferredLocation,a.jsLocListItem
+locationHolder,div.jsLocationHolder a.btn
+zeroAiritineraryDiv,div#AirListHolder .alert.alert-error
+appliedFilters,div#HotelFilterHolder span.label

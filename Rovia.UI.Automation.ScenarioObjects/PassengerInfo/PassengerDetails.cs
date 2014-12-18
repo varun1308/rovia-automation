@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rovia.UI.Automation.ScenarioObjects
 {
@@ -13,7 +14,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
         private static readonly string[] MiddleName = { "", "KUMAR", "", "", "RAM", "VIR", "", "VIJAY", "K", "", "", "D", "" };
         private static readonly string[] EmailId = { "vrathod@tavisca.com", "aguliya@tavisca.com"};
 
-        public PassengerDetails(Passengers passengers)
+        public PassengerDetails(Passengers passengers, TripProductType tripProductType)
         {
             Passengers=new List<Passenger>();
             
@@ -28,6 +29,11 @@ namespace Rovia.UI.Automation.ScenarioObjects
                         Emailid = EmailId[randomGenerator.Next(EmailId.Length)],
                         Gender = DateTime.Now.Second % 2 == 0 ? "Male" : "Female"
                     });
+            }
+            if (tripProductType==TripProductType.Car||tripProductType==TripProductType.Hotel)
+            {
+                Passengers = Passengers.Take(1).ToList();
+                return;
             }
             for (var i = 0; i < passengers.Children; i++)
             {

@@ -17,6 +17,8 @@ namespace Rovia.UI.Automation.Tests.Utility
                 case "air":
                 case "flight":
                     return TripProductType.Air;
+                case "hotel":
+                    return TripProductType.Hotel;
                 default:
                     throw new InvalidInputException(productType+" To UtilityFunctions.ToTripPRoductType");
 
@@ -52,6 +54,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 case TripProductType.Air:
                     return new AirTripProduct();
+                case TripProductType.Hotel:
+                    return new HotelTripProduct();
                 default:
                     throw new InvalidInputException(tripProductType + " To UtilityFunctions.GetTripProduct");
 

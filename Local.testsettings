@@ -8,6 +8,7 @@
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Tests\AirTests\AirHappyFlowTest.cs" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\AirLoginCreditCardData.csv" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\HotelScenarios.xlsx" />
   </Deployment>
   <NamingScheme baseName="ClarifiUI" />
   <Execution>

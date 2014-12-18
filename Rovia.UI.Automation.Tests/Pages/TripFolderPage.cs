@@ -13,7 +13,7 @@ namespace Rovia.UI.Automation.Tests.Pages
     {
         internal TripFolder ParseTripFolder()
         {
-            TripFolder trip = new TripFolder()
+            var trip = new TripFolder()
             {
                 TotalTripProducts =
                     Convert.ToInt32(WaitAndGetBySelector("totalItems", ApplicationSettings.TimeOut.Safe).Text),
@@ -53,12 +53,12 @@ namespace Rovia.UI.Automation.Tests.Pages
             var totalFare = GetUIElements("totalFare").Select(x => x.Text).ToArray();
             var baseFare =
                 GetUIElements("fareBreakup")
-                    .Where((item, index) => index%2 == 0)
+                    .Where((item) => item.Text.Contains("Base fare"))
                     .Select(x => x.Text.Split(':')[1].TrimStart(' '))
                     .ToArray();
             var taxes =
                 GetUIElements("fareBreakup")
-                    .Where((item, index) => index%2 != 0)
+                    .Where((item) => item.Text.Contains("Taxes & fees"))
                     .Select(x => x.Text.Split(':')[1].TrimStart(' '))
                     .ToArray();
 

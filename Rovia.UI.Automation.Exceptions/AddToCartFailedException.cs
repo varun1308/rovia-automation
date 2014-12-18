@@ -13,5 +13,10 @@ namespace Rovia.UI.Automation.Exceptions
         {
 
         }
+        public AddToCartFailedException(string msg, Exception exception)
+            : base(msg,exception)
+        {
+
+        }
     }
 }

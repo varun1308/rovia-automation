@@ -39,7 +39,7 @@ namespace Rovia.UI.Automation.DataBinder
                                     NonStopFlight = bool.Parse(dataRow["NonStopFlight"].ToString()),
                                     AirLines = string.IsNullOrEmpty(dataRow["AirLines"].ToString()) ? null : new List<string>(((string)dataRow["AirLines"]).Split('|'))
                                 },
-                                PostSearchFilters = string.IsNullOrEmpty(dataRow["PostFilters"].ToString()) ? null : GetPostSearchFilters((string)dataRow["PostFilters"], (string)dataRow["PostFiltersValues"])
+                                PostSearchFilters = GetPostSearchFilters(dataRow["PostFilters"].ToString(), dataRow["PostFiltersValues"].ToString())
                             },
                         PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
                         CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|") ? ((string)dataRow["PaymentMode"]).Split('|')[1] : "Visa"),
@@ -53,11 +53,13 @@ namespace Rovia.UI.Automation.DataBinder
         }
 
         private AirPostSearchFilters GetPostSearchFilters(string filter, string value)
-         {
+        {
+            if (string.IsNullOrEmpty(filter))
+                return null;
             var filterList = filter.Split('|');
             var valueList = value.Split('|');
             var i = 0;
-            var filterCriteria = new AirPostSearchFilters {IsApplyFilter = true};
+            var filterCriteria = new AirPostSearchFilters();
             while (i < filterList.Length)
             {
                 switch (filterList[i].ToUpper())
@@ -77,7 +79,7 @@ namespace Rovia.UI.Automation.DataBinder
                         filterCriteria.MaxTimeDurationDiff = int.Parse(valueList[i]);
                         break;
                     case "CABIN":
-                        filterCriteria.CabinTypes = new List<string>(valueList[i].Split('/'));                
+                        filterCriteria.CabinTypes = new List<string>(valueList[i].Split('/'));
                         break;
                     case "AIRLINES":
                         filterCriteria.Airlines = new List<string>(valueList[i].Split('/'));
@@ -126,10 +128,10 @@ namespace Rovia.UI.Automation.DataBinder
                     DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i++]))
                 }).ToList();
             if (tripType == SearchType.RoundTrip)
-            airPortPairs.Add(new AirportPair()
-                {
-                    DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i]))
-                });
+                airPortPairs.Add(new AirportPair()
+                    {
+                        DepartureDateTime = DateTime.Now.AddDays(int.Parse(traveldates[i]))
+                    });
             return airPortPairs;
         }
         private static T StringToEnum<T>(string name)

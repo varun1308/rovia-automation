@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Rovia.UI.Automation.ScenarioObjects
 {
-    public abstract class PostSearchFilters
+    public class HotelTripProduct:TripProduct
     {
-        public PriceRange PriceRange { get; set; }
+
     }
 }

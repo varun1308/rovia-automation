@@ -48,22 +48,22 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         {
             try
             {
-            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
-            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
-            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
-            var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
-            var addToCartControl = GetUIElements("btnAddToCart");
-            var flightLegs = ParseFlightLegs();
-            var legsPerResult = flightLegs.Count / supplier.Length;
-            ProcessairLines(airLines, subair);
+                var price = GetUIElements("amount").Select(x => x.Text).ToArray();
+                var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
+                var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
+                var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
+                var addToCartControl = GetUIElements("btnAddToCart");
+                var flightLegs = ParseFlightLegs();
+                var legsPerResult = flightLegs.Count / supplier.Length;
+                ProcessairLines(airLines, subair);
 
-            var results = new Dictionary<AirResult, IUIWebElement>();
+                var results = new Dictionary<AirResult, IUIWebElement>();
 
-            for (var i = 0; i < addToCartControl.Count; i++)
-            {
-                results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
-            }
-            return results;
+                for (var i = 0; i < addToCartControl.Count; i++)
+                {
+                    results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
+                }
+                return results;
             }
             catch (Exception exception)
             {

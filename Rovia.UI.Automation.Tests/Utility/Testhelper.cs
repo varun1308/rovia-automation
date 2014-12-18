@@ -26,7 +26,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         public static TripFolder Trip { get; set; }
         public static IValidator Validator { get; set; }
 
-        public static List<Results> Results; 
+        public static List<Results> Results;
 
         public static TripProductType TripProductType
         {
@@ -51,8 +51,8 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         internal static void GoToHomePage()
         {
-
             _app.Launch(ApplicationSettings.Url);
+            _app.ConfirmAlert();
             _app.HomePage.WaitForHomePage();
             _app.State.CurrentPage = "HomePage";
             //_logger.Log("OnHomePage");
@@ -62,8 +62,6 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             _criteria = criteria;
         }
-
-
 
         internal static void EditPassengerInfoAndContinue()
         {
@@ -86,13 +84,11 @@ namespace Rovia.UI.Automation.Tests.Utility
             try
             {
                 if (!_app.State.CurrentPage.Equals("HomePage"))
-                    throw new InvalidOperationException("Search",_app.State.CurrentPage);
+                    throw new InvalidOperationException("Search", _app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
                 _app.ResultsPage.WaitForResultLoad();
+                //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
-                //    Results = _app.ResultsPage.ParseResults();
-                //if(!Validator.ValidatePreSearchFilters(_criteria.Filters.PreSearchFilters,Results))
-                //     throw new ValidationException("Results ");
                 _logger.LogStatus("Search", "Passed");
             }
             catch (Exception exception)
@@ -113,7 +109,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 switch (_criteria.UserType)
                 {
                     case UserType.Registered:
-                        _app.LoginDetailsPage.LogIn("vrathod@tavisca.com", "zaq1ZAQ!");
+                        _app.LoginDetailsPage.LogIn("3285301", "test");
                         _app.State.CurrentUser.UserName = "vrathod@tavisca.com";
                         _app.State.CurrentUser.Type = _criteria.UserType;
                         _app.State.CurrentUser.IsLoggedIn = true;
@@ -143,7 +139,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             catch (Exception exception)
             {
-                _logger.LogStatus("Login","Failed");
+                _logger.LogStatus("Login", "Failed");
                 throw; // new Exception("LogIn Failed", exception);
             }
         }
@@ -248,7 +244,7 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         private static PassengerDetails GetPassengerDetails()
         {
-            return new PassengerDetails(_criteria.Passengers)
+            return new PassengerDetails(_criteria.Passengers, TripProductType)
             {
                 Country = "United States",
                 IsInsuranceRequired = false
@@ -407,9 +403,9 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         #region Air Filters Call
 
-        public static bool SetFilters()
+        public static void SetFilters()
         {
-            return _app.ResultsPage.SetPostSearchFilters(_criteria.Filters.PostSearchFilters);
+            _app.ResultsPage.SetPostSearchFilters(_criteria.Filters.PostSearchFilters);
         }
 
         #endregion
@@ -443,6 +439,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             _app.ClearBrowserCache();
             _app.State.CurrentUser.ResetUser();
+
             GoToHomePage();
         }
 
