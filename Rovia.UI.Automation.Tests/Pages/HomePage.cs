@@ -25,10 +25,10 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             try
             {
-               var divHome= WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Safe);
-               if (divHome!=null && divHome.Displayed)
-                SetCountry();
-                while (!IsVisible()){}
+                var divHome = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Safe);
+                if (divHome != null && divHome.Displayed)
+                    SetCountry();
+                while (!IsVisible()) { }
             }
             catch (Exception exception)
             {
@@ -68,7 +68,7 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             WaitAndGetBySelector("logOut", ApplicationSettings.TimeOut.Fast).Click();
         }
-        
+
         internal void Search(SearchCriteria searchCriteria)
         {
             SearchPanel.Search(searchCriteria);
@@ -77,5 +77,9 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         public SearchPanel SearchPanel { get; set; }
 
+        public string GetSessionId()
+        {
+            return WaitAndGetBySelector("sessionId", ApplicationSettings.TimeOut.Fast).GetAttribute("title").ToString();
+        }
     }
 }

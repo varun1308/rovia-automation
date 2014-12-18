@@ -447,5 +447,10 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             _app.SaveScreenshot(context);
         }
+
+        public static void SaveSessionId(TestContext context)
+        {
+            _app.SaveSessionId(context,_app.HomePage.GetSessionId());
+        }
     }
 }

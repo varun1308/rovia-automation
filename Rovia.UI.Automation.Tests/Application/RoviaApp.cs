@@ -111,6 +111,11 @@ namespace Rovia.UI.Automation.Tests.Application
             return false;
         }
 
+        public void SaveSessionId(TestContext context,string sessionId)
+        {
+            context.Properties.Add("SessionId", sessionId);
+        }
+
         public void ClearBrowserCache()
         {
             Driver.Manage().Cookies.DeleteAllCookies(); //delete all cookies

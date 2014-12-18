@@ -25,11 +25,14 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         }
 
         [TestInitialize]
-        public void TestInitialize() { }
+        public void TestInitialize()
+        {
+        }
 
         [TestCleanup]
         public void TestCleanup()
         {
+            TestHelper.SaveSessionId(TestContext);
             TestHelper.SaveScreenShot(TestContext);
             TestHelper.CleanUp();
             _logManager.SubmitLog();
@@ -42,12 +45,12 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_Amadeus_RoundTrip")]
-        public void Air_Amadeus_RoundTrip()
-        {
-            Execute();
-        }
+        //[TestMethod]
+        //[DataSource("Air_Amadeus_RoundTrip")]
+        //public void Air_Amadeus_RoundTrip()
+        //{
+        //    Execute();
+        //}
 
         [TestMethod]
         [DataSource("Air_Amadeus_Multicity")]
@@ -56,54 +59,54 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_Mystifly_OneWay")]
-        public void Air_Mystifly_OneWay()
-        {
-            Execute();
-        }
+        //[TestMethod]
+        //[DataSource("Air_Mystifly_OneWay")]
+        //public void Air_Mystifly_OneWay()
+        //{
+        //    Execute();
+        //}
 
-        [TestMethod]
-        [DataSource("Air_Mystifly_RoundTrip")]
-        public void Air_Mystifly_RoundTrip()
-        {
-            Execute();
-        }
+        //[TestMethod]
+        //[DataSource("Air_Mystifly_RoundTrip")]
+        //public void Air_Mystifly_RoundTrip()
+        //{
+        //    Execute();
+        //}
 
-        [TestMethod]
-        [DataSource("Air_Mystifly_Multicity")]
-        public void Air_Mystifly_Multicity()
-        {
-            Execute();
-        }
+        //[TestMethod]
+        //[DataSource("Air_Mystifly_Multicity")]
+        //public void Air_Mystifly_Multicity()
+        //{
+        //    Execute();
+        //}
 
-        [TestMethod]
-        [DataSource("Air_Sabre_OneWay")]
-        public void Air_Sabre_OneWay()
-        {
-            Execute();
-        }
+        //[TestMethod]
+        //[DataSource("Air_Sabre_OneWay")]
+        //public void Air_Sabre_OneWay()
+        //{
+        //    Execute();
+        //}
 
-        [TestMethod]
-        [DataSource("Air_Sabre_RoundTrip")]
-        public void Air_Sabre_RoundTrip()
-        {
-            Execute();
-        }
+        //[TestMethod]
+        //[DataSource("Air_Sabre_RoundTrip")]
+        //public void Air_Sabre_RoundTrip()
+        //{
+        //    Execute();
+        //}
 
-        [TestMethod]
-        [DataSource("Air_WorldSpan_OneWay")]
-        public void Air_WorldSpan_OneWay()
-        {
-            Execute();
-        }
+        //[TestMethod]
+        //[DataSource("Air_WorldSpan_OneWay")]
+        //public void Air_WorldSpan_OneWay()
+        //{
+        //    Execute();
+        //}
 
-        [TestMethod]
-        [DataSource("Air_WorldSpan_RoundTrip")]
-        public void Air_WorldSpan_RoundTrip()
-        {
-            Execute();
-        }
+        //[TestMethod]
+        //[DataSource("Air_WorldSpan_RoundTrip")]
+        //public void Air_WorldSpan_RoundTrip()
+        //{
+        //    Execute();
+        //}
 
         private void Execute()
         {
