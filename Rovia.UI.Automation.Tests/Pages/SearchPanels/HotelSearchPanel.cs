@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 
 namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
-    public class HotelSearchPanel:SearchPanel
+    public class HotelSearchPanel : SearchPanel
     {
 
         private void SetPassengerDetails(Passengers passengers)
@@ -18,7 +20,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                     return;
                 WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Children + (passengers.Children > 1 ? " Children" : " Child"));
                 var i = 0;
-                GetUIElements("divChildAgeHolder").ForEach(x=>x.SelectFromDropDown(passengers.ChildrenAges[i++]));
+            GetUIElements("divChildAgeHolder").ForEach(x => x.SelectFromDropDown(passengers.ChildrenAges[i++]));
             
         }
 
@@ -42,6 +44,20 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
         }
 
+        protected override void SelectSearchPanel()
+        {
+            var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
+            if (navBar == null || !navBar.Displayed)
+                throw new UIElementNullOrNotVisible("Navigation Bar ");
+            navBar.Click();
+
+            Thread.Sleep(500);
+
+            var searchPanel = WaitAndGetBySelector("searchPanel", ApplicationSettings.TimeOut.Slow);
+            if (searchPanel == null || !searchPanel.Displayed)
+                throw new UIElementNullOrNotVisible("SearchPanel");
+        }
+
         protected override void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             var filters = preSearchFilters as HotelPreSearchFilters;
@@ -50,19 +66,19 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             if (!string.IsNullOrEmpty(filters.HotelName))
                 WaitAndGetBySelector("txtHotelName",ApplicationSettings.TimeOut.Fast).SendKeys(filters.HotelName);
             if (filters.AdditionalPreferences != null && filters.AdditionalPreferences.Count != 0)
-                filters.AdditionalPreferences.ForEach(x => ExecuteJavascript("$('#ulAdditionalPref').find('[data-value=\""+x+"\"]').click()"));
+                filters.AdditionalPreferences.ForEach(x => ExecuteJavascript("$('#ulAdditionalPref').find('[data-value=\"" + x + "\"]').click()"));
         }
         public override void Search(SearchCriteria searchCriteria)
         {
             try
             {
-                var hotelSearchCriteria = searchCriteria as HotelSearchCriteria;
-                SelectSearchPanel();
-                SetStayPeriod(hotelSearchCriteria.StayPeriod);
+            var hotelSearchCriteria = searchCriteria as HotelSearchCriteria;
+            SelectSearchPanel();
+            SetStayPeriod(hotelSearchCriteria.StayPeriod);
                 SetLocation(hotelSearchCriteria.ShortLocation, hotelSearchCriteria.Location);
 
-                SetPassengerDetails(hotelSearchCriteria.Passengers);
-                ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
+            SetPassengerDetails(hotelSearchCriteria.Passengers);
+            ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
                 WaitAndGetBySelector("btnHotelSearch", ApplicationSettings.TimeOut.Slow).Click();
             }
             catch (Exception exception)

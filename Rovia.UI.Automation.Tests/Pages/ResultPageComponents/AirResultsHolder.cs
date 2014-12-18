@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
@@ -16,71 +14,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     public class AirResultsHolder : UIPage, IResultsHolder
     {
         private static Dictionary<Results, IUIWebElement> _results;
-        #region IResultHolder Members
-        public bool IsVisible()
-        {
-            var div = WaitAndGetBySelector("divMatrix", ApplicationSettings.TimeOut.Slow);
-            return div != null && div.Displayed;
-        }
-
-        public List<Results> ParseResults()
-        {
-            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
-            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
-            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
-            var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
-            var addToCartControl = GetUIElements("btnAddToCart");
-            var flightLegs = ParseFlightLegs();
-            var legsPerResult = flightLegs.Count / supplier.Length;
-            ProcessairLines(airLines, subair);
-
-            _results = new Dictionary<Results, IUIWebElement>();
-
-            for (var i = 0; i < addToCartControl.Count; i++)
-            {
-                _results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
-            }
-            return _results.Keys.ToList();
-        }
-
-
-        public Dictionary<AirResult, IUIWebElement> GetParsedResults()
-        {
-            try
-            {
-                var price = GetUIElements("amount").Select(x => x.Text).ToArray();
-                var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
-                var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
-                var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
-                var addToCartControl = GetUIElements("btnAddToCart");
-                var flightLegs = ParseFlightLegs();
-                var legsPerResult = flightLegs.Count / supplier.Length;
-                ProcessairLines(airLines, subair);
-
-                var results = new Dictionary<AirResult, IUIWebElement>();
-
-                for (var i = 0; i < addToCartControl.Count; i++)
-                {
-                    results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
-                }
-                return results;
-            }
-            catch (Exception exception)
-            {
-                LogManager.GetInstance().LogInformation("Result parsing failed");
-                throw;
-            }
-        }
-        public Results AddToCart(string supplier)
-        {
-            return
-                GetParsedResults()
-                    .Where(x => string.IsNullOrEmpty(supplier)||x.Key.Supplier.SupplierName.Equals(supplier))
-                    .FirstOrDefault(x => AddToCart(x.Value)).Key;
-        }
-        #endregion
 
         #region Private Members
+
         private bool AddToCart(IUIWebElement btnAddToCart)
         {
 
@@ -92,7 +28,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             {
                     GetUIElements("alerts").ForEach(x => 
                     {
-                        if(x.Displayed)
+                        if (x.Displayed)
                             throw new Alert(x.Text);
                     });
                         
@@ -183,6 +119,71 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     Cabin = legCabins[i].Split()[0].ToCabinType(),
                     Stops = int.Parse(legStops[i])
                 }).ToList();
+        }
+        #endregion
+
+        #region IResultHolder Members
+
+        public bool IsVisible()
+        {
+            var div = WaitAndGetBySelector("divMatrix", ApplicationSettings.TimeOut.Slow);
+            return div != null && div.Displayed;
+        }
+
+        public List<Results> ParseResults()
+        {
+            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
+            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
+            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
+            var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
+            var addToCartControl = GetUIElements("btnAddToCart");
+            var flightLegs = ParseFlightLegs();
+            var legsPerResult = flightLegs.Count / supplier.Length;
+            ProcessairLines(airLines, subair);
+
+            _results = new Dictionary<Results, IUIWebElement>();
+
+            for (var i = 0; i < addToCartControl.Count; i++)
+            {
+                _results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
+            }
+            return _results.Keys.ToList();
+        }
+
+
+        public Dictionary<AirResult, IUIWebElement> GetParsedResults()
+        {
+            try
+            {
+            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
+            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
+            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
+            var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
+            var addToCartControl = GetUIElements("btnAddToCart");
+            var flightLegs = ParseFlightLegs();
+            var legsPerResult = flightLegs.Count / supplier.Length;
+            ProcessairLines(airLines, subair);
+
+            var results = new Dictionary<AirResult, IUIWebElement>();
+
+            for (var i = 0; i < addToCartControl.Count; i++)
+            {
+                results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
+            }
+            return results;
+            }
+            catch (Exception exception)
+            {
+                LogManager.GetInstance().LogInformation("Result parsing failed");
+                throw;
+            }
+        }
+        public Results AddToCart(string supplier)
+        {
+            return
+                GetParsedResults()
+                    .Where(x => string.IsNullOrEmpty(supplier)||x.Key.Supplier.SupplierName.Equals(supplier))
+                    .FirstOrDefault(x => AddToCart(x.Value)).Key;
         }
         #endregion
     }

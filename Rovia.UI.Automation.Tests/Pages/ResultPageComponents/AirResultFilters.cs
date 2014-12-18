@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
@@ -11,58 +10,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
     public class AirResultFilters : UIPage, IResultFilters
     {
-        #region IResultPage Members
-
-        public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
-        {
-            var airPostSearchFilters = postSearchFilters as AirPostSearchFilters;
-            if (airPostSearchFilters == null)
-                throw new InvalidInputException("PostSearchFilters");
-            var appliedFilters = new List<string>();
-            if (airPostSearchFilters.Stop != null)
-            {
-                SetStops(airPostSearchFilters.Stop);
-                appliedFilters.Add("Stops");
-            }
-            if (airPostSearchFilters.PriceRange != null)
-            {
-                SetPriceRange(airPostSearchFilters.PriceRange);
-                appliedFilters.Add("Price");
-            }
-            if (airPostSearchFilters.MaxTimeDurationDiff >=0)
-            {
-                SetTimeDuration(airPostSearchFilters.MaxTimeDurationDiff);
-                appliedFilters.Add("Trip Duration");
-            }
-            if (airPostSearchFilters.TakeOffTimeRange != null)
-            {
-                SetTakeOffTime(airPostSearchFilters.TakeOffTimeRange);
-                appliedFilters.Add("Times");
-            }
-            if (airPostSearchFilters.LandingTimeRange != null)
-            {
-                SetLandingTime(airPostSearchFilters.LandingTimeRange);
-                appliedFilters.Add("Times");
-            }
-            if (airPostSearchFilters.CabinTypes != null)
-            {
-                SetCabinTypes(airPostSearchFilters.CabinTypes);
-                appliedFilters.Add("Cabin/Class");
-            }
-            if (airPostSearchFilters.Airlines != null)
-            {
-                SetAirlines(airPostSearchFilters.Airlines);
-                appliedFilters.Add("Airlines");
-            }
-            SetMatrix();
-            var unAppliedFilters = appliedFilters.Except(GetAppliedFilters()).ToList();
-
-            if (unAppliedFilters.Any())
-                throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
-        }
-
-        #endregion
-
         #region private Air Specific members
 
         private IEnumerable<string> GetAppliedFilters()
@@ -181,7 +128,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             divMatrixAirlines[0].Click();
 
-            
+
             // uncomment below if wants to test all matrix
             //return !divMatrixAirlines.Any(x =>
             //{
@@ -191,6 +138,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             //});
         }
 
+        
         #region need this methods in validations
 
         private string VerifyStopsFilter()
@@ -233,5 +181,63 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         #endregion
 
         #endregion
+
+        #region IResultPage Members
+
+        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
+        {
+            return true;
+        }
+
+        public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
+        {
+            var airPostSearchFilters = postSearchFilters as AirPostSearchFilters;
+            if (airPostSearchFilters == null)
+                throw new InvalidInputException("PostSearchFilters");
+            var appliedFilters = new List<string>();
+            if (airPostSearchFilters.Stop != null)
+            {
+                SetStops(airPostSearchFilters.Stop);
+                appliedFilters.Add("Stops");
+            }
+            if (airPostSearchFilters.PriceRange != null)
+            {
+                SetPriceRange(airPostSearchFilters.PriceRange);
+                appliedFilters.Add("Price");
+            }
+            if (airPostSearchFilters.MaxTimeDurationDiff >= 0)
+            {
+                SetTimeDuration(airPostSearchFilters.MaxTimeDurationDiff);
+                appliedFilters.Add("Trip Duration");
+            }
+            if (airPostSearchFilters.TakeOffTimeRange != null)
+            {
+                SetTakeOffTime(airPostSearchFilters.TakeOffTimeRange);
+                appliedFilters.Add("Times");
+            }
+            if (airPostSearchFilters.LandingTimeRange != null)
+            {
+                SetLandingTime(airPostSearchFilters.LandingTimeRange);
+                appliedFilters.Add("Times");
+            }
+            if (airPostSearchFilters.CabinTypes != null)
+            {
+                SetCabinTypes(airPostSearchFilters.CabinTypes);
+                appliedFilters.Add("Cabin/Class");
+            }
+            if (airPostSearchFilters.Airlines != null)
+            {
+                SetAirlines(airPostSearchFilters.Airlines);
+                appliedFilters.Add("Airlines");
+            }
+            SetMatrix();
+            var unAppliedFilters = appliedFilters.Except(GetAppliedFilters()).ToList();
+
+            if (unAppliedFilters.Any())
+                throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
+        }
+
+        #endregion
+
     }
 }

@@ -28,14 +28,14 @@ namespace Rovia.UI.Automation.Tests.Tests.HotelTests
 
         [TestInitialize]
         public void TestInitialize(){ }
-        
+
         [TestCleanup]
         public void TestCleanup()
         {
             TestHelper.CleanUp();
             _logManager.SubmitLog();           
         }
-
+           
         [TestMethod]
         [TestCategory("Sanity")]
         [DataSource("GeneralScenarios")]

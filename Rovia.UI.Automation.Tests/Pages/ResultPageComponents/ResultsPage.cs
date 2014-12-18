@@ -24,20 +24,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var div = WaitAndGetBySelector("divWaiting", ApplicationSettings.TimeOut.Fast);
             return div != null && div.Displayed;
         } 
-        #endregion
-
-        #region Public Members
-        
-        public Results AddToCart(string supplier)
-        {
-            var selectedResult=ResultsHolder.AddToCart(supplier);
-            if (selectedResult == null && IsNextPageAvailable())
-            {
-                GoToNextPage();
-                selectedResult = AddToCart(supplier);
-            }
-            return selectedResult;
-        }
 
         private void GoToNextPage()
         {
@@ -48,7 +34,22 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private bool IsNextPageAvailable()
         {
-            return (_currentPageNo<ApplicationSettings.MaxSearchDepth) && (WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("ResultHolder"));
+            return (_currentPageNo < ApplicationSettings.MaxSearchDepth) && (WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("#AirResultHolder"));
+        }
+
+        #endregion
+
+        #region Public Members
+
+        public Results AddToCart(string supplier)
+        {
+            var selectedResult=ResultsHolder.AddToCart(supplier);
+            if (selectedResult == null && IsNextPageAvailable())
+            {
+                GoToNextPage();
+                selectedResult = AddToCart(supplier);
+            }
+            return selectedResult;
         }
 
         public void WaitForResultLoad()
@@ -86,6 +87,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
              ResultFilters.SetPostSearchFilters(postSearchFilters);
+        }
+ 
+        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
+        {
+            return ResultFilters.VerifyPreSearchFilters(preSearchFilters);
         }
  
         #endregion

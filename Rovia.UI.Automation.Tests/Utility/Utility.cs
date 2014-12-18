@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace Rovia.UI.Automation.Tests.Utility
                 case "air":
                 case "flight":
                     return TripProductType.Air;
+                case "car":
+                    return TripProductType.Car;
                 case "hotel":
                     return TripProductType.Hotel;
                 default:
@@ -54,6 +57,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 case TripProductType.Air:
                     return new AirTripProduct();
+                case TripProductType.Car:
+                    return new CarTripProduct();
                 case TripProductType.Hotel:
                     return new HotelTripProduct();
                 default:
