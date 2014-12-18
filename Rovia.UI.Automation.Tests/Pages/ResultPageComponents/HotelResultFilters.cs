@@ -13,6 +13,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     class HotelResultFilters : UIPage, IResultFilters
     {
         #region IResultPage Members
+
+        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
+        {
+            return true;
+        }
+
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
             var airPostSearchFilters = postSearchFilters as HotelPostSearchFilters;
@@ -60,6 +66,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         #region private Hotel Specific members
         private IEnumerable<string> GetAppliedFilters()
         {
+            Thread.Sleep(2000);
             return GetUIElements("appliedFilters").Select(x => x.Text.Trim());
         }
 

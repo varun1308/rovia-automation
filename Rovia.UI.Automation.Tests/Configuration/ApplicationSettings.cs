@@ -1,6 +1,4 @@
-﻿using System;
-using System.Configuration;
-using Rovia.UI.Automation.Logger;
+﻿using System.Configuration;
 
 namespace Rovia.UI.Automation.Tests.Configuration
 {
@@ -8,27 +6,39 @@ namespace Rovia.UI.Automation.Tests.Configuration
     {
         public static string Url
         {
-            get { return ConfigurationManager.AppSettings["application.url"] ?? "http://corp.rovia.com/";
-        }
+            get
+            {
+                return ConfigurationManager.AppSettings["application.url"] ?? "http://corp.rovia.com/";
+            }
         }
 
-        public static class WebUser
+        public static class PreferredCustomer
         {
             public static string Username
             {
-                get { return ConfigurationManager.AppSettings["application.webuser.username"]; }
+                get { return ConfigurationManager.AppSettings["application.preferred.username"]??"3285301"; }
             }
-
             public static string Password
             {
-                get { return ConfigurationManager.AppSettings["application.webuser.password"]; }
+                get { return ConfigurationManager.AppSettings["application.preferred.password"]??"test"; }
             }
+        }
 
+        public static class RegisteredCustomer
+        {
+            public static string Username
+            {
+                get { return ConfigurationManager.AppSettings["application.registered.username"] ?? "vrathod@tavisca.com"; }
+            }
+            public static string Password
+            {
+                get { return ConfigurationManager.AppSettings["application.registered.password"] ?? "zaq1ZAQ!"; }
+            }
         }
 
         public static int MaxSearchDepth
         {
-            get { return int.Parse(ConfigurationManager.AppSettings["application.maxSearchDepth"]); }
+            get { return int.Parse(ConfigurationManager.AppSettings["application.maxSearchDepth"]??"1"); }
         }
 
         public static class TimeOut
@@ -37,12 +47,6 @@ namespace Rovia.UI.Automation.Tests.Configuration
             public static int Slow { get { return 8; } }
             public static int Fast { get { return 5; } }
             public static int SuperFast { get { return 3; } }
-
-
-
         }
-
-      
-       
     }
 }

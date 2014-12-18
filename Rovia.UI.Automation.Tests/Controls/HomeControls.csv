@@ -23,7 +23,6 @@ fromC,input#txtPickUpLoc
 toC,input#txtDropOffLoc
 fromDateC,input#txtPickupDate
 toDateC,input#txtDropoffDate
-btnCarSearch,button#btnCarSearch
 addFlight,a#addflight
 cabinType,select.jCabinClass
 includeNearByAirports,input.jsIncludeNearbyAirports

@@ -17,3 +17,4 @@ tripNameTextbox,input#inputError
 cancelEditTripName,div.txtAlignRight .btn.btn-cancel.mrm
 SaveTripName,a.btn.btn-success.jsSaveCart
 tripStartOverCheck,div.jTopBarCartCount
+carACnTransmission,div.border-grey.mal div.pull-left.font12

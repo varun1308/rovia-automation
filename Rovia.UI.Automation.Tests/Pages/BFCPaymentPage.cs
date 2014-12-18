@@ -12,6 +12,75 @@ namespace Rovia.UI.Automation.Tests.Pages
 {
     public class BFCPaymentPage : UIPage
     {
+        #region Private Members
+
+        private void WaitForPayment()
+        {
+            try
+            {
+                do
+                {
+                    Thread.Sleep(1000);
+                    if (WaitAndGetBySelector("divSpinner", ApplicationSettings.TimeOut.Fast) == null)
+                        break;
+                } while (true);
+            }
+            catch (StaleElementReferenceException exception)
+            {
+                LogManager.GetInstance().LogInformation("StaleElementReferenceException caught and suppressed");
+            }
+        }
+
+        private void CheckErrors()
+        {
+            var errors = WaitAndGetBySelector("divError", ApplicationSettings.TimeOut.Slow);
+            if (errors.Displayed)
+                throw new Alert(errors.Text);
+        }
+
+        private void SetBillingAddress(BillingAddress address)
+        {
+            try
+            {
+                WaitAndGetBySelector("inpAddress1", ApplicationSettings.TimeOut.Fast).SendKeys(address.Line1);
+                WaitAndGetBySelector("inpAddress2", ApplicationSettings.TimeOut.Fast).SendKeys(address.Line2);
+                WaitAndGetBySelector("inpCity", ApplicationSettings.TimeOut.Fast).SendKeys(address.City);
+                WaitAndGetBySelector("selectCountry", ApplicationSettings.TimeOut.Safe).SelectFromDropDown(address.Country);
+                Thread.Sleep(2000);
+                WaitAndGetBySelector("selectProvinces", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(address.State);
+                WaitAndGetBySelector("inpPhoneNumberArea", ApplicationSettings.TimeOut.Fast).SendKeys(address.PhoneNumber.Substring(0, 3));
+                WaitAndGetBySelector("inpPhoneNumberExchange", ApplicationSettings.TimeOut.Fast).SendKeys(address.PhoneNumber.Substring(3, 3));
+                WaitAndGetBySelector("inpPhoneNumberDigits", ApplicationSettings.TimeOut.Fast).SendKeys(address.PhoneNumber.Substring(6));
+                WaitAndGetBySelector("inpPostalCode", ApplicationSettings.TimeOut.Fast).SendKeys(address.ZipCode);
+            }
+            catch (Exception exception)
+            {
+                LogManager.GetInstance().LogInformation("Set Billing Address Failed");
+                throw;// new Exception("Exception while setting CreditCard Info", exception);
+            }
+        }
+
+        private void SetCreditCardInfo(CreditCardInfo creditCardInfo)
+        {
+            try
+            {
+                Thread.Sleep(1000);
+                WaitAndGetBySelector("inpNameOnCard", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.NameOnCard);
+                WaitAndGetBySelector("inpCardNumber", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.CardNo);
+                WaitAndGetBySelector("inpSecurityCode", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.Cvv);
+                WaitAndGetBySelector("selectExpirationMonth", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(creditCardInfo.ExpiryDate.ToString("MMMM"));
+                WaitAndGetBySelector("selectExpirationYear", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(creditCardInfo.ExpiryDate.Year.ToString());
+                WaitAndGetBySelector("inpEmailAddresse", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.CardHolderEmailId);
+            }
+            catch (Exception exception)
+            {
+                LogManager.GetInstance().LogInformation("Setting CrediCard Info Failed");
+                throw;// new Exception("Exception while setting CreditCard Info", exception);
+            }
+        }
+
+        #endregion
+
         internal void WaitForLoad()
         {
             IUIWebElement nameOnCard;
@@ -30,69 +99,5 @@ namespace Rovia.UI.Automation.Tests.Pages
             CheckErrors();
         }
 
-        private void WaitForPayment()
-        {
-            try
-            {
-                do
-                {
-                    Thread.Sleep(1000);
-                    if (WaitAndGetBySelector("divSpinner", ApplicationSettings.TimeOut.Fast) == null)
-                        break;
-                } while (true);
-            }
-            catch (StaleElementReferenceException exception)
-            {
-                LogManager.GetInstance().LogInformation("StaleElementReferenceException caught and suppressed"); 
-            }
-        }
-
-        private void CheckErrors()
-        {
-            var errors = WaitAndGetBySelector("divError", ApplicationSettings.TimeOut.Slow);
-            if (errors.Displayed)
-                throw new Alert(errors.Text);
-        }
-
-        private void SetBillingAddress(BillingAddress address)
-        {
-           try 
-	        {	        
-		        WaitAndGetBySelector("inpAddress1", ApplicationSettings.TimeOut.Fast).SendKeys(address.Line1);
-                WaitAndGetBySelector("inpAddress2", ApplicationSettings.TimeOut.Fast).SendKeys(address.Line2);
-                WaitAndGetBySelector("inpCity", ApplicationSettings.TimeOut.Fast).SendKeys(address.City);
-                WaitAndGetBySelector("selectCountry", ApplicationSettings.TimeOut.Safe).SelectFromDropDown(address.Country);
-	            Thread.Sleep(2000);
-                WaitAndGetBySelector("selectProvinces", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(address.State);
-                WaitAndGetBySelector("inpPhoneNumberArea", ApplicationSettings.TimeOut.Fast).SendKeys(address.PhoneNumber.Substring(0, 3));
-                WaitAndGetBySelector("inpPhoneNumberExchange", ApplicationSettings.TimeOut.Fast).SendKeys(address.PhoneNumber.Substring(3, 3));
-                WaitAndGetBySelector("inpPhoneNumberDigits", ApplicationSettings.TimeOut.Fast).SendKeys(address.PhoneNumber.Substring(6));
-                WaitAndGetBySelector("inpPostalCode", ApplicationSettings.TimeOut.Fast).SendKeys(address.ZipCode);
-	        }
-	        catch (Exception exception)
-	        {
-                LogManager.GetInstance().LogInformation("Set Billing Address Failed");
-                throw;// new Exception("Exception while setting CreditCard Info", exception);
-	        }
-        }
-
-        private void SetCreditCardInfo(CreditCardInfo creditCardInfo)
-        {
-            try
-            {
-                Thread.Sleep(1000);
-                WaitAndGetBySelector("inpNameOnCard", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.NameOnCard);
-                WaitAndGetBySelector("inpCardNumber", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.CardNo);
-                WaitAndGetBySelector("inpSecurityCode", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.Cvv);
-                WaitAndGetBySelector("selectExpirationMonth", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(creditCardInfo.ExpiryDate.ToString("MMMM"));
-                WaitAndGetBySelector("selectExpirationYear", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(creditCardInfo.ExpiryDate.Year.ToString());
-                WaitAndGetBySelector("inpEmailAddresse", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.CardHolderEmailId);
-            }
-            catch (Exception exception)
-            {
-                LogManager.GetInstance().LogInformation("Setting CrediCard Info Failed"); 
-                throw;// new Exception("Exception while setting CreditCard Info", exception);
-            }
-        }
     }
 }

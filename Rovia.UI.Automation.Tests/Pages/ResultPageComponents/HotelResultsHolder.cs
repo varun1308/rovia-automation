@@ -65,7 +65,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public List<Results> ParseResults()
         {
-            throw new NotImplementedException();
+            return null; //throw new NotImplementedException();
         }
 
         public Results AddToCart(string supplier)
