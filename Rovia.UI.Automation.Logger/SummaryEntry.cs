@@ -4,7 +4,7 @@ namespace Rovia.UI.Automation.Logger
 {
     class SummaryEntry
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         private readonly List<string> _passedSteps;
         private readonly List<string> _failedSteps;
         public SummaryEntry()

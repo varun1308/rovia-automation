@@ -13,7 +13,6 @@ namespace Rovia.UI.Automation.Logger
         private readonly List<ILogger> _detailsLoggers;
         private readonly List<ILogger> _summaryLoggers;
         private static LogManager _logManagerInstance;
-        private int _logId;
         private SummaryEntry _summaryEntry;
         private DetailEntry _detailEntry;
         private Severity _severity;
@@ -23,7 +22,6 @@ namespace Rovia.UI.Automation.Logger
             _summaryLoggers = summaryLoggers;
             _detailsLoggers = detailLoggers;
             _severity=Severity.All;
-            _logId = 0;
         }
 
         
@@ -59,15 +57,12 @@ namespace Rovia.UI.Automation.Logger
         }
         public void StartNewLog(String description)
         {
-            ++_logId;
             _summaryEntry=new SummaryEntry()
                 {
-                    Id=_logId,
                     Description = description
                 };
             _detailEntry=new DetailEntry()
                 {
-                    Id = _logId,
                     Description = description
                 };
         }
@@ -109,8 +104,10 @@ namespace Rovia.UI.Automation.Logger
             _detailEntry.Append("!!!!Fetal Error> "+message+"!!!!");
         }
 
-        public void SubmitLog()
+        public void SubmitLog(string sessionId)
         {
+            _detailEntry.Id = sessionId;
+            _summaryEntry.Id = sessionId;
             _detailsLoggers.ForEach(x=>x.Log(_detailEntry.ToString()));
             _summaryLoggers.ForEach(x=>x.Log(_summaryEntry.ToString()));
         }

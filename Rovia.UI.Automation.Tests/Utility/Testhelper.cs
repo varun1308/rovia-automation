@@ -21,6 +21,7 @@ namespace Rovia.UI.Automation.Tests.Utility
     {
         #region Datafields
 
+        public static string SessionId { get { return  _app.HomePage.GetSessionId(); }}
         private static RoviaApp _app;
         private static LogManager _logger;
         private static SearchCriteria _criteria;

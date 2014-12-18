@@ -32,10 +32,9 @@ namespace Rovia.UI.Automation.Tests.Tests.AirTests
         [TestCleanup]
         public void TestCleanup()
         {
-            TestHelper.SaveSessionId(TestContext);
             TestHelper.SaveScreenShot(TestContext);
+            _logManager.SubmitLog(TestHelper.SessionId);
             TestHelper.CleanUp();
-            _logManager.SubmitLog();
         }
 
         [TestMethod]
