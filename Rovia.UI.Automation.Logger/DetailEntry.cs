@@ -4,12 +4,12 @@ namespace Rovia.UI.Automation.Logger
 {
     class DetailEntry
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         private readonly List<string> _details;
 
         public DetailEntry()
         {
-            _details=new List<string>();
+            _details = new List<string>();
         }
 
         public void Append(string s)
@@ -21,8 +21,8 @@ namespace Rovia.UI.Automation.Logger
 
         public override string ToString()
         {
-            return Id.ToString() + ">> " + Description + "\n" + string.Join("\n", _details)+
-                "-------------------------------------------------------------------------------------------------------------------------------------------------------";
+            return "<< " + Id + " >> " + Description + "\n" + string.Join("\n", _details) +
+                "\n---------------------------------------------------------------------------------";
         }
     }
 }

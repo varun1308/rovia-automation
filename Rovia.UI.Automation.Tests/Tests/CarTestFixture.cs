@@ -8,7 +8,7 @@ using Rovia.UI.Automation.Tests.Utility;
 namespace Rovia.UI.Automation.Tests.Tests
 {
     [TestClass]
-   public class CarTestFixture
+    public class CarTestFixture
     {
         public TestContext TestContext { get; set; }
         public static ICriteriaDataBinder DataBinder { get; set; }
@@ -29,9 +29,10 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void TestCleanup()
         {
             TestHelper.SaveScreenShot(TestContext);
-            TestHelper.CleanUp(); 
-            _logManager.SubmitLog();
+            _logManager.SubmitLog(TestHelper.SessionId);
+            TestHelper.CleanUp();
         }
+
 
         [TestMethod]
         [DataSource("Car_Airport_To_Airport")]
