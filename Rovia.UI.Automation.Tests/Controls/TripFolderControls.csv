@@ -18,3 +18,5 @@ cancelEditTripName,div.txtAlignRight .btn.btn-cancel.mrm
 SaveTripName,a.btn.btn-success.jsSaveCart
 tripStartOverCheck,div.jTopBarCartCount
 carACnTransmission,div.border-grey.mal div.pull-left.font12
+hotelDetails,div.text-flightinfo
+hotelAddress,span.font11.greyfont

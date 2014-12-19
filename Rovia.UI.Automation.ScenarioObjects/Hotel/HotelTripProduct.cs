@@ -7,5 +7,10 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public string Room { get; set; }
         public string KitchenType { get; set; }
         public string Address { get; set; }
+
+        public HotelTripProduct()
+        {
+            ProductType = TripProductType.Hotel;
+        }
     }
 }
