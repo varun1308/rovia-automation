@@ -5,7 +5,6 @@
     <DeploymentItem filename="References\AppacitiveLoggingFramework\chromedriver.exe" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\HotelScenarios.xlsx" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\Air\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\Tests\AirTests\AirHappyFlowTest.cs" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\AirLoginCreditCardData.csv" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Car\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\" />
@@ -13,6 +12,7 @@
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Hotel\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Air\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\CarScenarios.xlsx" />
+    <DeploymentItem filename="References\AppacitiveLoggingFramework\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\App.config" />
   </Deployment>
   <NamingScheme baseName="RoviaUI" />
