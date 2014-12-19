@@ -130,6 +130,7 @@
     <None Include="Controls\Hotel\HotelSearchPanelControls.csv" />
     <None Include="Controls\LoginDetailsControls.csv" />
     <None Include="Controls\PassengerInfoControls.csv" />
+    <Content Include="Controls\chromedriver.exe" />
     <Content Include="DataSheet\AirScenarios.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
