@@ -88,8 +88,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     CarType = carType[i],
                     AirConditioning = airconditioning[i],
                     Transmission = transmission[i],
-                    PricePerWeek = pricePerWeek[i],
-                    TotalPrice = totalPrice[i]
+                    PricePerWeek = new Amount(pricePerWeek[i]),
+                    TotalPrice = new Amount(totalPrice[i])
                 },btnAddToCart[i]);
                 i++;
             }

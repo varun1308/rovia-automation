@@ -4,8 +4,8 @@ namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class Fare
     {
-        public string TotalFare { get; set; }
-        public string BaseFare { get; set; }
-        public string Taxes { get; set; }
+        public Amount TotalFare { get; set; }
+        public Amount BaseFare { get; set; }
+        public Amount Taxes { get; set; }
     }
 }

@@ -33,9 +33,9 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                fares.Add(new Fare()
                {
-                   TotalFare = totalFare[i],
-                   BaseFare = baseFare[i],
-                   Taxes = taxes[i]
+                   TotalFare = new Amount(totalFare[i]),
+                   BaseFare = new Amount(baseFare[i]),
+                   Taxes = new Amount(taxes[i])
                });
                 i++;
             }
@@ -52,8 +52,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 {
                     Adults = passengers.Contains("Adult") ? int.Parse(passengers[passengers.IndexOf("Adult") - 1]) : 0,
                     Children = passengers.Contains("Child") ? int.Parse(passengers[passengers.IndexOf("Child") - 1]) : 0,
-                    Infants =
-                        passengers.Contains("Infant") ? int.Parse(passengers[passengers.IndexOf("Infant") - 1]) : 0
+                    Infants = passengers.Contains("Infant") ? int.Parse(passengers[passengers.IndexOf("Infant") - 1]) : 0
                 };
             });
         }
@@ -66,12 +65,28 @@ namespace Rovia.UI.Automation.Tests.Pages
                 case "FLIGHT":
                     return null;
                 case "HOTEL":
-                    return null;
+                    return ParseHotelTripProduct();
                 case "CAR":
                     return ParseCarTripProduct();
                 default:
                     throw new InvalidInputException("ProductType : "+productType);
             }
+        }
+
+        private TripProduct ParseHotelTripProduct()
+        {
+            var elements = GetUIElements("hotelDetails").Select(x=>x.Text).ToArray();
+            return new HotelTripProduct()
+                {
+                    Address = WaitAndGetBySelector("hotelAddress",ApplicationSettings.TimeOut.Fast).Text,
+                    StayPeriod = new StayPeriod()
+                        {
+                            CheckInDate = DateTime.Parse(elements[0]),
+                            CheckOutDate = DateTime.Parse(elements[1])
+                        },
+                    Room = elements[2],
+                    KitchenType = elements[3]
+                };
         }
 
         private TripProduct ParseCarTripProduct()
@@ -120,29 +135,46 @@ namespace Rovia.UI.Automation.Tests.Pages
             return trip;
         }
 
-        private void ValidateTripProduct(AirTripProduct carTripProduct, AirResult airResult)
+        private void ValidateTripProduct(AirTripProduct airTripProduct, AirResult airResult)
         {
             //throw new NotImplementedException();
         }
 
-        private void ValidateTripProduct(HotelTripProduct carTripProduct, HotelResult hotelResult)
+        private void ValidateTripProduct(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
         {
-            //throw new NotImplementedException();
+            var errors = new StringBuilder();
+            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle))
+                errors.Append(FormatError("HotelName",hotelResult.HotelName,hotelTripProduct.ProductTitle));
+            if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", "")))
+                errors.Append(FormatError("HotelAddress", hotelResult.HotelAddress, hotelTripProduct.Address));
+            if (!hotelResult.Amount.Equals(hotelTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("HotelPrice", hotelResult.Amount.ToString(), hotelTripProduct.Fares.TotalFare.ToString()));
+            if (!hotelResult.StayPeriod.Equals(hotelTripProduct.StayPeriod))
+                errors.Append(FormatError("StayPeriod", hotelResult.StayPeriod.ToString(), hotelTripProduct.StayPeriod.ToString()));
+            if (!hotelResult.Passengers.Equals(hotelTripProduct.Passengers))
+                errors.Append(FormatError("PassengersInfo", hotelResult.Passengers.ToString(), hotelTripProduct.Passengers.ToString()));
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on TripFolderPage");
+        }
+
+        private string FormatError(string error, string addedValue, string tfValue)
+        {
+            return string.Format("| Invalid {0} ({1}, {2})",error,addedValue,tfValue);
         }
 
         private void ValidateTripProduct(CarTripProduct carTripProduct, CarResult carResult)
         {
             var errors = new StringBuilder();
             if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
-                errors.Append("InvalidPrice : added("+carResult.TotalPrice+"),ontrip("+carTripProduct.Fares.TotalFare+")");
+                errors.Append(FormatError("CarFare",carResult.TotalPrice.ToString(),carTripProduct.Fares.TotalFare.ToString()));
             if (!carResult.CarType.Equals(carTripProduct.CarType))
-                errors.Append(" | InvalidCarType : added("+carResult.CarType+"),ontrip("+carTripProduct.CarType+")");
+                errors.Append(FormatError("CarType", carResult.CarType, carTripProduct.CarType));
             if (!carResult.AirConditioning.Equals(carTripProduct.AirConditioning))
-                errors.Append(" | InvalidAirConditioningType : added("+carResult.AirConditioning+"),ontrip("+carTripProduct.AirConditioning+")");
+                errors.Append(FormatError("AirConditioning", carResult.AirConditioning,carTripProduct.AirConditioning));
             if (!carResult.Transmission.Equals(carTripProduct.Transmission))
-                errors.Append(" | InvalidTransmission : added(" + carResult.Transmission + "),ontrip(" + carTripProduct.Transmission + ")");
+                errors.Append(FormatError("Transmission",carResult.Transmission,carTripProduct.Transmission));
             if (!string.IsNullOrEmpty(errors.ToString()))
-                throw new ValidationException(errors + " on TripFolderPage");
+                throw new ValidationException(errors + "| on TripFolderPage");
         }
 
 
@@ -187,13 +219,13 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             WaitAndGetBySelector("continueShopping", ApplicationSettings.TimeOut.Slow).Click();
         }
-
+       
         internal void TripStartOver()
         {
             WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();
             WaitAndGetBySelector("startOver", ApplicationSettings.TimeOut.Fast).Click();
         }
-
+       
         internal void SaveTrip()
         {
             WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();

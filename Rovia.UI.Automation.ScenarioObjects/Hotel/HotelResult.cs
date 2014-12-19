@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using Rovia.Ui.Automation.ScenarioObjects.Hotel;
 
 namespace Rovia.UI.Automation.ScenarioObjects
 {
@@ -14,10 +15,12 @@ namespace Rovia.UI.Automation.ScenarioObjects
 
         public int HotelRating { get; set; }
 
-        public string RoomType { get; set; }
+        public HotelRoom SelectedRoom { get; set; }
 
-        public Amount RoomPrice { get; set; }
+        public StayPeriod StayPeriod { get; set; }
 
         public List<string> Amenities { get; set; }
+
+        public Passengers Passengers { get; set; }
     }
 }
