@@ -137,7 +137,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("HomePage"))
                     throw new InvalidOperationException("Search", _app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
-                SessionId = _app.HomePage.GetSessionId();
+               // SessionId = _app.HomePage.GetSessionId();
                 _app.ResultsPage.WaitForResultLoad();
                 //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
@@ -208,7 +208,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (_selectedItineary == null)
                     throw new AddToCartFailedException();
                 _app.State.CurrentPage = "TripFolderPage";
-                Trip = ParseTripFolder();
+                _app.TripFolderPage.ValidateTripFolder(_selectedItineary);
                 _logger.LogStatus("AddToCart", "Passed");
             }
             catch (Exception exception)
@@ -255,21 +255,6 @@ namespace Rovia.UI.Automation.Tests.Utility
 
 
         #region TripFolder Calls
-
-        private static TripFolder ParseTripFolder()
-        {
-            try
-            {
-                if (!_app.State.CurrentPage.Equals("TripFolderPage"))
-                    throw new InvalidOperationException("ParseTripFolder", _app.State.CurrentPage);
-                return _app.TripFolderPage.ParseTripFolder();
-            }
-            catch (Exception exception)
-            {
-                _logger.LogInformation("TripFolder Parsing Failed");
-                throw;
-            }
-        }
 
         public static void SaveTrip()
         {
@@ -365,9 +350,6 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("CheckoutTrip", _app.State.CurrentPage);
-
-                Assert.IsTrue(_app.TripFolderPage.VerifyAddedItinerary(_selectedItineary, Trip), "Itinerary added to cart is invalid on trip page.");
-
                 Trip.CheckoutTripButton.Click();
 
                 if (_app.State.CurrentUser.Type != UserType.Guest)

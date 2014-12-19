@@ -6,5 +6,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     {
         bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters);
         void SetPostSearchFilters(PostSearchFilters postSearchFilters);
+
+        void ValidateFilters(PostSearchFilters postSearchFilters, System.Collections.Generic.List<Results> list);
     }
 }

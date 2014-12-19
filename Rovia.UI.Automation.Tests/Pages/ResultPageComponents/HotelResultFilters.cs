@@ -21,38 +21,38 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
-            var airPostSearchFilters = postSearchFilters as HotelPostSearchFilters;
-            if (airPostSearchFilters == null)
+            var hotelPostSearchFilters = postSearchFilters as HotelPostSearchFilters;
+            if (hotelPostSearchFilters == null)
                 throw new InvalidInputException("PostSearchFilters");
             var appliedFilters = new List<string>();
-            if (airPostSearchFilters.PriceRange != null)
+            if (hotelPostSearchFilters.PriceRange != null)
             {
-                SetPriceRange(airPostSearchFilters.PriceRange);
+                SetPriceRange(hotelPostSearchFilters.PriceRange);
                 appliedFilters.Add("Price");
             }
-            if (airPostSearchFilters.HotelName != null)
+            if (hotelPostSearchFilters.HotelName != null)
             {
-                SetHotelName(airPostSearchFilters.HotelName);
+                SetHotelName(hotelPostSearchFilters.HotelName);
                 appliedFilters.Add("Hotel Name");
             }
-            if (airPostSearchFilters.RatingRange != null)
+            if (hotelPostSearchFilters.RatingRange != null)
             {
-                SetRatingRange(airPostSearchFilters.RatingRange);
+                SetRatingRange(hotelPostSearchFilters.RatingRange);
                 appliedFilters.Add("Star Rating");
             }
-            if (airPostSearchFilters.Amenities != null)
+            if (hotelPostSearchFilters.Amenities != null)
             {
-                SetAmenitiesFilter(airPostSearchFilters.Amenities);
+                SetAmenitiesFilter(hotelPostSearchFilters.Amenities);
                 appliedFilters.Add("Amenities");
             }
-            if (airPostSearchFilters.PreferredLocation != null)
+            if (hotelPostSearchFilters.PreferredLocation != null)
             {
-                SetPreferredLocationFilter(airPostSearchFilters.PreferredLocation);
+                SetPreferredLocationFilter(hotelPostSearchFilters.PreferredLocation);
                 appliedFilters.Add("Preferred Location");
             }
-            if (airPostSearchFilters.DistanceRange != null)
+            if (hotelPostSearchFilters.DistanceRange != null)
             {
-                SetDistanceRangeFilter(airPostSearchFilters.DistanceRange);
+                SetDistanceRangeFilter(hotelPostSearchFilters.DistanceRange);
                 appliedFilters.Add("Distance");
             }
 
@@ -61,6 +61,72 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             if (unAppliedFilters.Any())
                 throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
         }
+
+        public void ValidateFilters(PostSearchFilters postSearchFilters, List<Results> results)
+        {
+            var hotelPostSearchFilters = postSearchFilters as HotelPostSearchFilters;
+            var hotelResults = results.Select(x => x as HotelResult).ToList();
+            if (hotelPostSearchFilters == null)
+                throw new InvalidInputException("PostSearchFilters");
+            var appliedFilters = new List<string>();
+            if (hotelPostSearchFilters.PriceRange != null)
+            {
+                ValidatePriceRange(hotelResults.Select(x=>x.Amount));
+                appliedFilters.Add("Price");
+            }
+            if (hotelPostSearchFilters.HotelName != null)
+            {
+                ValidateHotelName(hotelPostSearchFilters.HotelName, hotelResults.Select(x=>x.HotelName));
+                appliedFilters.Add("Hotel Name");
+            }
+            if (hotelPostSearchFilters.RatingRange != null)
+            {
+                ValidateRatingRange(hotelPostSearchFilters.RatingRange, hotelResults.Select(x=>x.HotelRating));
+                appliedFilters.Add("Star Rating");
+            }
+            if (hotelPostSearchFilters.Amenities != null)
+            {
+                ValidateAmenitiesFilter(hotelPostSearchFilters.Amenities, hotelResults.Select(x=>x.Amenities));
+                appliedFilters.Add("Amenities");
+            }
+            if (hotelPostSearchFilters.PreferredLocation != null)
+            {
+                ValidatePreferredLocationFilter(hotelPostSearchFilters.PreferredLocation, hotelResults.Select(x=>x.HotelAddress));
+                appliedFilters.Add("Preferred Location");
+            }
+            if (hotelPostSearchFilters.DistanceRange != null)
+            {
+                SetDistanceRangeFilter(hotelPostSearchFilters.DistanceRange);
+                appliedFilters.Add("Distance");
+            }
+
+        }
+
+        private void ValidatePreferredLocationFilter(Tuple<string, string> preferredLocation, IEnumerable<string> @select)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ValidateAmenitiesFilter(List<string> amenities, IEnumerable<List<string>> @select)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ValidateRatingRange(RatingRange ratingRange, IEnumerable<int> @select)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ValidateHotelName(string hotelName, IEnumerable<string> @select)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ValidatePriceRange(IEnumerable<Amount> enumerable)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region private Hotel Specific members

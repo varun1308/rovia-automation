@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
@@ -56,28 +58,31 @@ namespace Rovia.UI.Automation.Tests.Pages
             });
         }
 
-        private void ParseTripProduct(ref TripProduct product)
+        private TripProduct ParseTripProduct(string productType)
         {
-            switch (product.ProductType)
+            switch (productType.ToUpper())
             {
-                case TripProductType.Air:
+                case "AIR":
                     break;
-                case TripProductType.Hotel:
+                case "HOTEL":
                     break;
-                case TripProductType.Car:
-                    product = ParseCarTripProduct(product as CarTripProduct);
-                    break;
+                case "CAR":
+                    return ParseCarTripProduct();
+                default:
+                    throw new InvalidInputException("ProductType : "+productType);
             }
         }
 
-        private TripProduct ParseCarTripProduct(CarTripProduct carTripProduct)
+        private TripProduct ParseCarTripProduct()
         {
-            carTripProduct.CarType = GetUIElements("productName").Select(x => x.Text.Split(' ')[0]).ToArray()[0];
             var carOptions = GetUIElements("carACnTransmission").ToArray();
-            carTripProduct.AirConditioning = carOptions[1].Text;
-            carTripProduct.Transmission = carOptions[2].Text;
-            //to do impletentation for Rental Agency
-            return carTripProduct;
+            return new CarTripProduct()
+                {
+                    CarType = GetUIElements("productName").Select(x => x.Text.Split(' ')[0]).ToArray()[0],
+                    AirConditioning = carOptions[1].Text,
+                    Transmission = carOptions[2].Text
+                    //to do impletentation for Rental Agency
+                };
         }
 
         private List<TripProduct> ParseTripProducts()
@@ -92,8 +97,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             var i = 0;
             while (i < productTypes.Length)
             {
-                var product = UtilityFunctions.GetTripProduct(productTypes[i]);
-                ParseTripProduct(ref product);
+                var product=ParseTripProduct(productTypes[i]);
                 product.ProductTitle = productTitle[i];
                 product.Fares = fares[i];
                 product.Passengers = passengers.Length > 0 ? passengers[i] : null;
@@ -106,45 +110,9 @@ namespace Rovia.UI.Automation.Tests.Pages
             return tripProducts;
         }
 
-        internal void EditTripName()
+        private TripFolder ParseTripFolder()
         {
-            WaitAndGetBySelector("editTripName", ApplicationSettings.TimeOut.Fast).Click();
-            WaitAndGetBySelector("tripNameTextbox", ApplicationSettings.TimeOut.Slow).SendKeys("EditedTripName");
-
-            //if wants to test cancel button/closing popup funcionality uncomment below & comment savetrip click 
-            //WaitAndGetBySelector("cancelEditTripName",ApplicationSettings.TimeOut.Fast).Click();
-
-            WaitAndGetBySelector("SaveTripName", ApplicationSettings.TimeOut.Fast).Click();
-        }
-
-        internal bool VerifyAddedItinerary(Results addedItem, TripFolder tripFolder)
-        {
-            var i = 0;
-            while (i < tripFolder.TripProducts.Count)
-            {
-                switch (tripFolder.TripProducts[i].ProductType)
-                {
-                    case TripProductType.Air:
-                        break;
-                    case TripProductType.Hotel:
-                        break;
-                    case TripProductType.Car:
-                        var car = addedItem as CarResult;
-                        var carTrip = tripFolder.TripProducts[i] as CarTripProduct;
-                        return car.TotalPrice.Equals(tripFolder.TripProducts[i].Fares.TotalFare) &&
-                            car.CarType.Equals(carTrip.CarType)&&car.AirConditioning.Equals(carTrip.AirConditioning)&&
-                            car.Transmission.Equals(carTrip.Transmission);
-                    case TripProductType.Activity:
-                        break;
-                }
-                i++;
-            }
-            return true;
-        }
-
-        internal TripFolder ParseTripFolder()
-        {
-            TripFolder trip = new TripFolder()
+            var trip = new TripFolder()
             {
                 TotalTripProducts =
                     Convert.ToInt32(WaitAndGetBySelector("totalItems", ApplicationSettings.TimeOut.Safe).Text),
@@ -157,5 +125,64 @@ namespace Rovia.UI.Automation.Tests.Pages
             };
             return trip;
         }
+
+        private void ValidateTripProduct(AirTripProduct carTripProduct, AirResult airResult)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ValidateTripProduct(HotelTripProduct carTripProduct, HotelResult hotelResult)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ValidateTripProduct(CarTripProduct carTripProduct, CarResult carResult)
+        {
+            var errors = new StringBuilder();
+            if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
+                errors.Append("InvalidPrice");
+            if (!carResult.CarType.Equals(carTripProduct.CarType))
+                errors.Append(" | InvalidCarType");
+            if (!carResult.AirConditioning.Equals(carTripProduct.AirConditioning))
+                errors.Append(" | InvalidAirConditioningType");
+            if (!carResult.Transmission.Equals(carTripProduct.Transmission))
+                errors.Append(" | InvalidTransmission");
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + " on TripFolderPage");
+        }
+
+
+        internal void EditTripName()
+        {
+            WaitAndGetBySelector("editTripName", ApplicationSettings.TimeOut.Fast).Click();
+            WaitAndGetBySelector("tripNameTextbox", ApplicationSettings.TimeOut.Slow).SendKeys("EditedTripName");
+
+            //if wants to test cancel button/closing popup funcionality uncomment below & comment savetrip click 
+            //WaitAndGetBySelector("cancelEditTripName",ApplicationSettings.TimeOut.Fast).Click();
+
+            WaitAndGetBySelector("SaveTripName", ApplicationSettings.TimeOut.Fast).Click();
+        }
+
+        internal void ValidateTripFolder(Results selectedItineary)
+        {
+            var tripProduct = ParseTripFolder().TripProducts[0];
+            switch (tripProduct.ProductType)
+            {
+                case TripProductType.Air:
+                    ValidateTripProduct(tripProduct as AirTripProduct, selectedItineary as AirResult);
+                    break;
+                case TripProductType.Hotel:
+                    ValidateTripProduct(tripProduct as HotelTripProduct, selectedItineary as HotelResult);
+                    break;
+                case TripProductType.Car:
+                    ValidateTripProduct(tripProduct as CarTripProduct, selectedItineary as CarResult);
+                    break;
+                case TripProductType.Activity:
+                    break;
+            }
+        }
+
+       
+       
     }
 }

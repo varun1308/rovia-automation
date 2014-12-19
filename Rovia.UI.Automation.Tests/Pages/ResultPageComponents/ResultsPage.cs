@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -93,13 +94,19 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         {
             return ResultFilters.VerifyPreSearchFilters(preSearchFilters);
         }
- 
-        #endregion
 
-        internal void ValidateSearch(Criteria.SearchCriteria criteria)
+        public void ValidateSearch(SearchCriteria criteria)
         {
             if (!ResultTitle.ValidateTitle(criteria))
                 throw new ValidationException("Invalid Results:");
         }
+
+        public void ValidateFilters(PostSearchFilters postSearchFilters)
+        {
+            ResultFilters.ValidateFilters(postSearchFilters, ResultsHolder.ParseResults());
+        }
+
+        #endregion
+
     }
 }

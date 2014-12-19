@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class HotelResult:Results
@@ -15,5 +17,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public string RoomType { get; set; }
 
         public Amount RoomPrice { get; set; }
+
+        public List<string> Amenities { get; set; }
     }
 }

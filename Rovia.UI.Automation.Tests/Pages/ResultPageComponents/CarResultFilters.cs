@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -26,6 +27,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
             //throw new NotImplementedException();
+        }
+
+        public void ValidateFilters(PostSearchFilters postSearchFilters, List<Results> list)
+        {
+            throw new NotImplementedException();
         }
     }
 }
