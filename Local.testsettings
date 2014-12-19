@@ -2,18 +2,14 @@
 <TestSettings name="Remote" id="f296a2fa-3e1c-418b-bef3-1e80314ddeb2" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\HotelScenarios.xlsx" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\Air\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\CarScenarios.xlsx" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\AirLoginCreditCardData.csv" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Car\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\AirScenarios.xlsx" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Hotel\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Air\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\chromedriver.exe" />
-    <DeploymentItem filename="References\AppacitiveLoggingFramework\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\App.config" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Air\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\Air\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Car\" />
   </Deployment>
   <NamingScheme baseName="RoviaUI" />
   <RemoteController name="TavWITPD047" />
