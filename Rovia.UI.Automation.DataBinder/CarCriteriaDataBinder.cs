@@ -125,7 +125,8 @@ namespace Rovia.UI.Automation.DataBinder
                             Transmission = ParseTransmission(dataRow["Transmission"].ToString()),
                             CorporateDiscount = ParseCorporateDiscount(dataRow["CorpDiscRentalAgency"].ToString(), dataRow["CorpDiscCode"].ToString(), dataRow["CorpDiscPromotionalCode"].ToString())
                         }
-                    }
+                    },
+                    Passengers = new Passengers(){Adults = 1}
                 };
             }
             catch (Exception exception)

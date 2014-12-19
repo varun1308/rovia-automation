@@ -63,9 +63,10 @@ namespace Rovia.UI.Automation.Tests.Pages
             switch (productType.ToUpper())
             {
                 case "AIR":
-                    break;
+                case "FLIGHT":
+                    return null;
                 case "HOTEL":
-                    break;
+                    return null;
                 case "CAR":
                     return ParseCarTripProduct();
                 default:
@@ -114,39 +115,32 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             var trip = new TripFolder()
             {
-                TotalTripProducts =
-                    Convert.ToInt32(WaitAndGetBySelector("totalItems", ApplicationSettings.TimeOut.Safe).Text),
                 TripProducts = ParseTripProducts(),
-                ContinueShoppingButton = WaitAndGetBySelector("continueShopping", ApplicationSettings.TimeOut.Fast),
-                CheckoutTripButton = WaitAndGetBySelector("checkoutButton", ApplicationSettings.TimeOut.Slow),
-                TripSettingsButton = WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast),
-                SaveTripButton = WaitAndGetBySelector("saveTripButton", ApplicationSettings.TimeOut.Fast),
-                StartoverButton = WaitAndGetBySelector("startOver", ApplicationSettings.TimeOut.Fast)
             };
             return trip;
         }
 
         private void ValidateTripProduct(AirTripProduct carTripProduct, AirResult airResult)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void ValidateTripProduct(HotelTripProduct carTripProduct, HotelResult hotelResult)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void ValidateTripProduct(CarTripProduct carTripProduct, CarResult carResult)
         {
             var errors = new StringBuilder();
             if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
-                errors.Append("InvalidPrice");
+                errors.Append("InvalidPrice : added("+carResult.TotalPrice+"),ontrip("+carTripProduct.Fares.TotalFare+")");
             if (!carResult.CarType.Equals(carTripProduct.CarType))
-                errors.Append(" | InvalidCarType");
+                errors.Append(" | InvalidCarType : added("+carResult.CarType+"),ontrip("+carTripProduct.CarType+")");
             if (!carResult.AirConditioning.Equals(carTripProduct.AirConditioning))
-                errors.Append(" | InvalidAirConditioningType");
+                errors.Append(" | InvalidAirConditioningType : added("+carResult.AirConditioning+"),ontrip("+carTripProduct.AirConditioning+")");
             if (!carResult.Transmission.Equals(carTripProduct.Transmission))
-                errors.Append(" | InvalidTransmission");
+                errors.Append(" | InvalidTransmission : added(" + carResult.Transmission + "),ontrip(" + carTripProduct.Transmission + ")");
             if (!string.IsNullOrEmpty(errors.ToString()))
                 throw new ValidationException(errors + " on TripFolderPage");
         }
@@ -154,6 +148,8 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void EditTripName()
         {
+            WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();
+
             WaitAndGetBySelector("editTripName", ApplicationSettings.TimeOut.Fast).Click();
             WaitAndGetBySelector("tripNameTextbox", ApplicationSettings.TimeOut.Slow).SendKeys("EditedTripName");
 
@@ -182,7 +178,26 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
         }
 
-       
-       
+        internal void CheckoutTrip()
+        {
+            WaitAndGetBySelector("checkoutButton", ApplicationSettings.TimeOut.Slow).Click();
+        }
+
+        internal void ContinueShopping()
+        {
+            WaitAndGetBySelector("continueShopping", ApplicationSettings.TimeOut.Slow).Click();
+        }
+
+        internal void TripStartOver()
+        {
+            WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();
+            WaitAndGetBySelector("startOver", ApplicationSettings.TimeOut.Fast).Click();
+        }
+
+        internal void SaveTrip()
+        {
+            WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();
+            WaitAndGetBySelector("saveTripButton", ApplicationSettings.TimeOut.Fast).Click();
+        }
     }
 }

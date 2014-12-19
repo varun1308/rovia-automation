@@ -114,7 +114,7 @@ namespace Rovia.UI.Automation.Tests.Application
                     var screenShot = driver.GetScreenshot();
 
                     var fileName = GetDirectoryPath() +"\\"+
-                                   testClass[testClass.Length - 1] + "_" + context.TestName + "_" + context.DataRow.Table.Rows.IndexOf(context.DataRow) +
+                                   testClass[testClass.Length - 1] + "_" + context.TestName + "_" + (context.DataRow.Table.Rows.IndexOf(context.DataRow)+1) +
                                    ".jpg";
                     screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
                 }
