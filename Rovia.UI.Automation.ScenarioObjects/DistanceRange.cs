@@ -1,5 +1,5 @@
 ﻿
-namespace Rovia.Ui.Automation.ScenarioObjects
+namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class DistanceRange
     {

@@ -28,3 +28,4 @@ addFlight,a#addflight
 cabinType,select.jCabinClass
 includeNearByAirports,input.jsIncludeNearbyAirports
 dates,.timepicker_arrow
+divErrors,span.divError

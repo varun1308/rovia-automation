@@ -63,7 +63,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                 case "AIR":
                 case "FLIGHT":
-                    return null;
+                    return new AirTripProduct();
                 case "HOTEL":
                     return ParseHotelTripProduct();
                 case "CAR":
