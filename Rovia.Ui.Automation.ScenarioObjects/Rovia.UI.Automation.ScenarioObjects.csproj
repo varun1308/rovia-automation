@@ -7,8 +7,8 @@
     <ProjectGuid>{21AE4471-A960-447B-B736-803EC7A64E0A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rovia.Ui.Automation.ScenarioObjects</RootNamespace>
-    <AssemblyName>Rovia.Ui.Automation.ScenarioObjects</AssemblyName>
+    <RootNamespace>Rovia.UI.Automation.ScenarioObjects</RootNamespace>
+    <AssemblyName>Rovia.UI.Automation.ScenarioObjects</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

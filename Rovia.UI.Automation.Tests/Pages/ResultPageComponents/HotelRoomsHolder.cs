@@ -9,7 +9,7 @@ using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.Ui.Automation.ScenarioObjects.Hotel;
+using Rovia.UI.Automation.ScenarioObjects.Hotel;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {

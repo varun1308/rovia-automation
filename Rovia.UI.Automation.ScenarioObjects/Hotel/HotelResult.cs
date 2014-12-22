@@ -1,6 +1,6 @@
 ﻿
 using System.Collections.Generic;
-using Rovia.Ui.Automation.ScenarioObjects.Hotel;
+using Rovia.UI.Automation.ScenarioObjects.Hotel;
 
 namespace Rovia.UI.Automation.ScenarioObjects
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rovia.Ui.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.ScenarioObjects
 {
