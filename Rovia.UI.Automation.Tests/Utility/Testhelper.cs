@@ -137,8 +137,8 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (!_app.State.CurrentPage.Equals("HomePage"))
                     throw new InvalidOperationException("Search", _app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
-                SessionId = _app.HomePage.GetSessionId();
                 _app.ResultsPage.WaitForResultLoad();
+                SessionId = _app.HomePage.GetSessionId();
                 //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
                 Results = _app.ResultsPage.ParseResults();
@@ -346,7 +346,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 if (!_app.State.CurrentPage.Equals("TripFolderPage"))
                     throw new InvalidOperationException("CheckoutTrip", _app.State.CurrentPage);
-               
+
                 _app.TripFolderPage.CheckoutTrip();
 
                 if (_app.State.CurrentUser.Type != UserType.Guest)
@@ -397,15 +397,21 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 if (!_app.State.CurrentPage.Equals("CheckOutPage"))
                     throw new InvalidOperationException("PayNow", _app.State.CurrentPage);
-                if (_criteria.PaymentMode == PaymentMode.RoviaBucks)
-                    _app.CheckoutPage.PayNow(new PaymentInfo(_criteria.PaymentMode));
-                else
+
+                if (!TripProductType.Equals(TripProductType.Car))
                 {
-                    _app.CheckoutPage.PayNow(_criteria.PaymentMode);
-                    _app.BFCPaymentPage.WaitForLoad();
-                    _app.State.CurrentPage = "BFCPaymentPage";
-                    _app.BFCPaymentPage.PayNow(new PaymentInfo(_criteria.PaymentMode, _criteria.CardType));
+                    if (_criteria.PaymentMode == PaymentMode.RoviaBucks)
+                        _app.CheckoutPage.PayNow(new PaymentInfo(_criteria.PaymentMode));
+                    else
+                    {
+                        _app.CheckoutPage.PayNow(_criteria.PaymentMode);
+                        _app.BFCPaymentPage.WaitForLoad();
+                        _app.State.CurrentPage = "BFCPaymentPage";
+                        _app.BFCPaymentPage.PayNow(new PaymentInfo(_criteria.PaymentMode, _criteria.CardType));
+                    }
                 }
+                else
+                    _app.CheckoutPage.BookNow();
                 _app.CheckoutPage.CheckPaymentStatus();
                 _logger.LogStatus("PayNow", "Passed");
             }

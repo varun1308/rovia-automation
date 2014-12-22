@@ -109,6 +109,12 @@ namespace Rovia.UI.Automation.Tests.Pages
             WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click(); 
         }
 
+        internal void BookNow()
+        {
+            WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
+            WaitAndGetBySelector("booknow", ApplicationSettings.TimeOut.Fast).Click(); 
+        }
+
         #endregion
 
         public void CheckPaymentStatus()

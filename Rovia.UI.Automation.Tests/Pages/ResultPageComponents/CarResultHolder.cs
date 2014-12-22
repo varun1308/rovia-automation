@@ -13,6 +13,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     public class CarResultHolder : UIPage, IResultsHolder
     {
         private static Dictionary<CarResult, IUIWebElement> _results;
+        private CarResult _addedItinerary ;
 
         private bool AddToCart(IUIWebElement btnAddToCart)
         {
@@ -39,12 +40,27 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Slow);
             if (btnCheckOut != null && btnCheckOut.Displayed)
             {
+                _addedItinerary = ParseResultFromCart();
                 btnCheckOut.Click();
                 return true;
             }
 
             WaitAndGetBySelector("btnCancel", ApplicationSettings.TimeOut.Slow).Click();
             return false;
+
+        }
+
+        private CarResult ParseResultFromCart()
+        {
+            var carOptions = GetUIElements("carOptionsOnCart");
+            return new CarResult()
+                {
+                    RentalAgency =
+                    WaitAndGetBySelector("rentalAgencyOnCArt", ApplicationSettings.TimeOut.Fast).GetAttribute("alt"),
+                    AirConditioning = carOptions[1].Text,
+                    Transmission = carOptions[2].Text,
+                    TotalPrice =new Amount(WaitAndGetBySelector("priceOnCart", ApplicationSettings.TimeOut.Fast).Text)
+                };
 
         }
 
@@ -98,7 +114,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public Results AddToCart(string supplier)
         {
-            return _results.FirstOrDefault(x => AddToCart(x.Value)).Key;
+            CarResult carResult= _results.FirstOrDefault(x => AddToCart(x.Value)).Key;
+            carResult.TotalPrice = _addedItinerary.TotalPrice;
+            carResult.RentalAgency = _addedItinerary.RentalAgency;
+            carResult.AirConditioning = _addedItinerary.AirConditioning;
+            carResult.Transmission = _addedItinerary.Transmission;
+            return carResult;
         }
     }
 }
