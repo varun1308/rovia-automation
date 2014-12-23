@@ -154,9 +154,13 @@ namespace Rovia.UI.Automation.Tests.Pages
        {
            Thread.Sleep(1500);
            _passengers = passengerDetails.Passengers;
-           WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengerDetails.Country);
-           if (passengerDetails.IsInsuranceRequired)
-               WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
+           if (!TestHelper.TripProductType.Equals(TripProductType.Car))
+           {
+               WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(
+                   passengerDetails.Country);
+               if (passengerDetails.IsInsuranceRequired)
+                   WaitAndGetBySelector("selectInsurance", ApplicationSettings.TimeOut.Slow).Click();
+           }
            EnterPassengerDetails();
            WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Slow).Click();
            WaitForConfirmationPageLoad();

@@ -20,3 +20,4 @@ address_txtState,input#txtState
 address_txtCity,input#txtCity
 divErrors,div.alert-error
 alertSuccess,div.alert-success
+booknow,a.jsBtnBookWithoutPay.btn.btn-warning

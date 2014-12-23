@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
@@ -111,6 +112,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             var removeProductButton = GetUIElements("removeItemClick").ToArray();
             var passengers = ParsePassengers().ToArray();
             var i = 0;
+            LogManager.GetInstance().LogDebug("Products on Trip Folder : "+string.Join("-",productTypes));
             while (i < productTypes.Length)
             {
                 var product=ParseTripProduct(productTypes[i]);
@@ -193,20 +195,23 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void ValidateTripFolder(Results selectedItineary)
         {
-            var tripProduct = ParseTripFolder().TripProducts[0];
-            switch (tripProduct.ProductType)
+            foreach (var tripProduct in ParseTripFolder().TripProducts)
             {
-                case TripProductType.Air:
-                    ValidateTripProduct(tripProduct as AirTripProduct, selectedItineary as AirResult);
-                    break;
-                case TripProductType.Hotel:
-                    ValidateTripProduct(tripProduct as HotelTripProduct, selectedItineary as HotelResult);
-                    break;
-                case TripProductType.Car:
-                    ValidateTripProduct(tripProduct as CarTripProduct, selectedItineary as CarResult);
-                    break;
-                case TripProductType.Activity:
-                    break;
+                LogManager.GetInstance().LogDebug("Validating trip product");
+                switch (tripProduct.ProductType)
+                {
+                    case TripProductType.Air:
+                        ValidateTripProduct(tripProduct as AirTripProduct, selectedItineary as AirResult);
+                        break;
+                    case TripProductType.Hotel:
+                        ValidateTripProduct(tripProduct as HotelTripProduct, selectedItineary as HotelResult);
+                        break;
+                    case TripProductType.Car:
+                        ValidateTripProduct(tripProduct as CarTripProduct, selectedItineary as CarResult);
+                        break;
+                    case TripProductType.Activity:
+                        break;
+                }
             }
         }
 
