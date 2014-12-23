@@ -34,8 +34,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                         SupplierId = int.Parse(suppliers[resultIndex][0])
                     };
             }
-            catch (StaleElementReferenceException exception)
+            catch (StaleElementReferenceException)
             {
+                LogManager.GetInstance().LogWarning("StaleElementReferenceException suppressed.");
                 throw;
             }
         }
@@ -78,10 +79,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
             catch (System.InvalidOperationException)
             {
-                LogManager.GetInstance().LogWarning("No result mactched addToCart Criteria");
+                LogManager.GetInstance().LogWarning("No suitable results found on this page");
                 return null;
             }
-            catch (StaleElementReferenceException exception)
+            catch (StaleElementReferenceException)
             {
                 throw;
             }

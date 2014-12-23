@@ -68,10 +68,10 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Children.ToString());
                 WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Infants.ToString());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 LogManager.GetInstance().LogInformation("Error While Entering Passenger Details");
-                throw;// new Exception("Error while entering passenger details", ex);
+                throw;
             }
         }
         private void EnterAirports(SearchType searchType, List<AirportPair> airportPairs)

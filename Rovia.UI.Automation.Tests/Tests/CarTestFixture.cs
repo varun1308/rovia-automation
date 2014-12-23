@@ -34,43 +34,37 @@ namespace Rovia.UI.Automation.Tests.Tests
         }
 
 
-        [TestMethod]
-        [DataSource("Car_Airport_To_Airport")]
+        [TestMethod, DataSource("Car_Airport_To_Airport"), TestCategory("Sanity")]
         public void Car_Airport_To_Airport()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Car_Airport_To_City")]
+        [TestMethod, DataSource("Car_Airport_To_City"), TestCategory("Sanity")]
         public void Car_Airport_To_City()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Car_Airport_To_SameAsPickUp")]
+        [TestMethod, DataSource("Car_Airport_To_SameAsPickUp"), TestCategory("Sanity")]
         public void Car_Airport_To_SameAsPickUp()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Car_City_To_Airport")]
+        [TestMethod, DataSource("Car_City_To_Airport"), TestCategory("Sanity")]
         public void Car_City_To_Airport()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Car_City_To_City")]
+        [TestMethod, DataSource("Car_City_To_City"), TestCategory("Sanity")]
         public void Car_City_To_City()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Car_City_To_SameAsPickUp")]
+        [TestMethod, DataSource("Car_City_To_SameAsPickUp"), TestCategory("Sanity")]
         public void Car_City_To_SameAsPickUp()
         {
             Execute();

@@ -68,7 +68,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 _addedResult.SelectedRoom.Descriptions = roomType.ElementAt(selectedRoomIndex);
                 return _addedResult;
             }
-            catch (System.InvalidOperationException exception)
+            catch (System.InvalidOperationException)
             {
                 LogManager.GetInstance().LogWarning("No Room Could Be Added");
                 throw new AddToCartFailedException();

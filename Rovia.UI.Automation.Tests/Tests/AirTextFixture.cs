@@ -37,71 +37,61 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.CleanUp();
         }
 
-        [TestMethod]
-        [DataSource("Air_Amadeus_OneWay")]
+        [TestMethod,DataSource("Air_Amadeus_OneWay"),TestCategory("Sanity")]
         public void Air_Amadeus_OneWay()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_Amadeus_RoundTrip")]
+        [TestMethod, DataSource("Air_Amadeus_RoundTrip"), TestCategory("Sanity")]
         public void Air_Amadeus_RoundTrip()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_Amadeus_Multicity")]
+        [TestMethod,DataSource("Air_Amadeus_Multicity"),TestCategory("Sanity")]
         public void Air_Amadeus_Multicity()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_Mystifly_OneWay")]
+        [TestMethod, DataSource("Air_Mystifly_OneWay"),TestCategory("Sanity")]
         public void Air_Mystifly_OneWay()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_Mystifly_RoundTrip")]
+        [TestMethod, DataSource("Air_Mystifly_RoundTrip"),TestCategory("Sanity")]
         public void Air_Mystifly_RoundTrip()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_Mystifly_Multicity")]
+        [TestMethod, DataSource("Air_Mystifly_Multicity"),TestCategory("Sanity")]
         public void Air_Mystifly_Multicity()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_Sabre_OneWay")]
+        [TestMethod, DataSource("Air_Sabre_OneWay"),TestCategory("Sanity")]
         public void Air_Sabre_OneWay()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_Sabre_RoundTrip")]
+        [TestMethod, DataSource("Air_Sabre_RoundTrip"),TestCategory("Sanity")]
         public void Air_Sabre_RoundTrip()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_WorldSpan_OneWay")]
+        [TestMethod,DataSource("Air_WorldSpan_OneWay"),TestCategory("Sanity")]
         public void Air_WorldSpan_OneWay()
         {
             Execute();
         }
 
-        [TestMethod]
-        [DataSource("Air_WorldSpan_RoundTrip")]
+        [TestMethod,DataSource("Air_WorldSpan_RoundTrip"),TestCategory("Sanity")]
         public void Air_WorldSpan_RoundTrip()
         {
             Execute();

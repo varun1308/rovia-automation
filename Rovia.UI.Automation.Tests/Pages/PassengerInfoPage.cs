@@ -25,7 +25,7 @@ namespace Rovia.UI.Automation.Tests.Pages
            {
                return WaitAndGetBySelector("divPassengerDetailInput", ApplicationSettings.TimeOut.Slow).Displayed ;
            }
-           catch (Exception exception)
+           catch (Exception)
            {
                LogManager.GetInstance().LogDebug("passenger details InputForm not visible"); 
                return false;
@@ -38,7 +38,7 @@ namespace Rovia.UI.Automation.Tests.Pages
            {
                return WaitAndGetBySelector("divConfirmPassengerDetails", ApplicationSettings.TimeOut.Slow).Displayed;
            }
-           catch (Exception exception)
+           catch (Exception)
            {
                LogManager.GetInstance().LogDebug("passenger details Confirmation page not visible"); 
                return false;

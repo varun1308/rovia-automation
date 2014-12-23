@@ -8,5 +8,6 @@ namespace Rovia.UI.Automation.ScenarioObjects
 {
    public class CarPostSearchFilters:PostSearchFilters
     {
+       public List<string> LocationValues { get; set; }
     }
 }

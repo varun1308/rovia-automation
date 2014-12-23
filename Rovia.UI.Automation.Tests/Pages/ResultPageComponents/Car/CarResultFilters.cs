@@ -34,6 +34,18 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (minPrice * 100) + "," + (maxPrice * 100) + "]})");
         }
 
+        private void SetLocationsFilter(List<string> locations)
+        {
+            var cabinTypeList = GetUIElements("cabinTypeFilter").ToList();
+            cabinTypeList[0].Click();
+
+            cabinTypeList.ForEach(x =>
+            {
+                if (locations.Contains(x.GetAttribute("data-name")) && x.Displayed)
+                    x.Click();
+            });
+        }
+
         public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             var carSearchFilters = preSearchFilters as CarPreSearchFilters;
@@ -54,6 +66,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             {
                 SetPriceRange(carPostSearchFilters.PriceRange);
                 appliedFilters.Add("Price");
+            }
+            if(carPostSearchFilters.LocationValues!=null)
+            {
+                SetLocationsFilter(carPostSearchFilters.LocationValues);
+                appliedFilters.Add("Locations");
             }
            // SetMatrix();
             var unAppliedFilters = appliedFilters.Except(GetAppliedFilters()).ToList();

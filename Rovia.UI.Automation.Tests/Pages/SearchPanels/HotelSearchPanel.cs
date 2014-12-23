@@ -81,9 +81,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
                 WaitAndGetBySelector("btnHotelSearch", ApplicationSettings.TimeOut.Slow).Click();
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                
                 throw;
             }
         }

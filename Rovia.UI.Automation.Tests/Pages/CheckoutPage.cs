@@ -29,7 +29,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                     preLoadingDiv = WaitAndGetBySelector("preloading", ApplicationSettings.TimeOut.Fast);
                 } while (preLoadingDiv != null && preLoadingDiv.Displayed);
             }
-            catch (StaleElementReferenceException exception)
+            catch (StaleElementReferenceException)
             {
                 LogManager.GetInstance().LogInformation("StaleElementReferenceException caught and suppressed");
                 //eat OpenQASelenium.StaleElementReferenceException 
@@ -64,7 +64,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 WaitAndGetBySelector("address_phnDigits", ApplicationSettings.TimeOut.Fast)
                     .SendKeys(billingAddress.PhoneNumber.Substring(6, 4));
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 LogManager.GetInstance().LogInformation("Set Address Failed");
                 throw;
@@ -129,7 +129,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                     CheckAndThrowErrors();
                 } while (true);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 LogManager.GetInstance().LogInformation("Payment Failed"); 
                 throw;

@@ -156,7 +156,7 @@ namespace Rovia.UI.Automation.Tests.Application
             {
                 Driver.SwitchTo().Alert().Accept();
             }
-            catch (NoAlertPresentException Ex)
+            catch (NoAlertPresentException)
             {
                
             }

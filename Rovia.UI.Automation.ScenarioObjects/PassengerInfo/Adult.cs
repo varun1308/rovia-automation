@@ -7,7 +7,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
     {
         public Adult()
         {
-            BirthDate = DateTime.Now.AddYears(-1 * (new Random()).Next(19, 99)).AddMonths(3).ToString("MM/dd/yyyy");
+            BirthDate = DateTime.Now.AddYears(-1 * (new Random()).Next(13, 99)).AddMonths(3).ToString("MM/dd/yyyy");
         }
 
         public Adult(IList<string> details)

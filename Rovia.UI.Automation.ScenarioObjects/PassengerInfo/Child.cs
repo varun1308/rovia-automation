@@ -9,7 +9,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
     {
         public Child()
         {
-            BirthDate = DateTime.Now.AddYears(-1 * (new Random()).Next(3, 17)).AddMonths(3).ToString("MM/dd/yyyy");
+            BirthDate = DateTime.Now.AddYears(-1 * (new Random()).Next(3,12)).AddMonths(3).ToString("MM/dd/yyyy");
         }
         public Child(IList<string> details)
         {

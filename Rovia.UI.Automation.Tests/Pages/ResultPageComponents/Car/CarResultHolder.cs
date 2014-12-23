@@ -114,12 +114,20 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public Results AddToCart(string supplier)
         {
-            CarResult carResult= _results.FirstOrDefault(x => AddToCart(x.Value)).Key;
-            carResult.TotalPrice = _addedItinerary.TotalPrice;
-            carResult.RentalAgency = _addedItinerary.RentalAgency;
-            carResult.AirConditioning = _addedItinerary.AirConditioning;
-            carResult.Transmission = _addedItinerary.Transmission;
-            return carResult;
+            try
+            {
+                var carResult = _results.First(x => AddToCart(x.Value)).Key;
+                carResult.TotalPrice = _addedItinerary.TotalPrice;
+                carResult.RentalAgency = _addedItinerary.RentalAgency;
+                carResult.AirConditioning = _addedItinerary.AirConditioning;
+                carResult.Transmission = _addedItinerary.Transmission;
+                return carResult;
+            }
+            catch (System.InvalidOperationException)
+            {
+                LogManager.GetInstance().LogWarning("No suitable results found on this page");
+                return null;
+            }
         }
     }
 }

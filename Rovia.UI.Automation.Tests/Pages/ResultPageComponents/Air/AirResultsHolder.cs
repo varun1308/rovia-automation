@@ -172,7 +172,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
             return results;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 LogManager.GetInstance().LogInformation("Result parsing failed");
                 throw;

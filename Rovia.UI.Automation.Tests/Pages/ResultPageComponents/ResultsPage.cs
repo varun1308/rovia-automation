@@ -73,10 +73,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     throw new Alert("Results Not visible");
                 _currentPageNo = 1;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 LogManager.GetInstance().LogInformation("Results Failed To Load");
-                throw;// new Exception("Results failed to load", exception);
+                throw;
             }
         }
 

@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.DataBinder
 {

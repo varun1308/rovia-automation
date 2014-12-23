@@ -25,7 +25,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                         break;
                 } while (true);
             }
-            catch (StaleElementReferenceException exception)
+            catch (StaleElementReferenceException)
             {
                 LogManager.GetInstance().LogInformation("StaleElementReferenceException caught and suppressed");
             }
@@ -53,10 +53,10 @@ namespace Rovia.UI.Automation.Tests.Pages
                 WaitAndGetBySelector("inpPhoneNumberDigits", ApplicationSettings.TimeOut.Fast).SendKeys(address.PhoneNumber.Substring(6));
                 WaitAndGetBySelector("inpPostalCode", ApplicationSettings.TimeOut.Fast).SendKeys(address.ZipCode);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 LogManager.GetInstance().LogInformation("Set Billing Address Failed");
-                throw;// new Exception("Exception while setting CreditCard Info", exception);
+                throw;
             }
         }
 
@@ -72,10 +72,10 @@ namespace Rovia.UI.Automation.Tests.Pages
                 WaitAndGetBySelector("selectExpirationYear", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(creditCardInfo.ExpiryDate.Year.ToString());
                 WaitAndGetBySelector("inpEmailAddresse", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.CardHolderEmailId);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 LogManager.GetInstance().LogInformation("Setting CrediCard Info Failed");
-                throw;// new Exception("Exception while setting CreditCard Info", exception);
+                throw;
             }
         }
 
