@@ -1,1 +1,3 @@
-appliedFilters,span.filter_badge  span a
+appliedFilters,div#CarFilterHolder span.label
+minPrice,div.jsMinPrice
+maxPrice,div.jsMaxPrice

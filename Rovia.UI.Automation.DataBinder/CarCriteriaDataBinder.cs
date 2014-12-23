@@ -124,7 +124,8 @@ namespace Rovia.UI.Automation.DataBinder
                             CarType = dataRow["CarType"].ToString(),
                             Transmission = ParseTransmission(dataRow["Transmission"].ToString()),
                             CorporateDiscount = ParseCorporateDiscount(dataRow["CorpDiscRentalAgency"].ToString(), dataRow["CorpDiscCode"].ToString(), dataRow["CorpDiscPromotionalCode"].ToString())
-                        }
+                        },
+                        PostSearchFilters = GetPostSearchFilters(dataRow["PostFilters"].ToString(), dataRow["PostFiltersValues"].ToString())
                     },
                     Passengers = new Passengers(){Adults = 1}
                 };
@@ -133,6 +134,31 @@ namespace Rovia.UI.Automation.DataBinder
             {
                 throw new InvalidInputException("DataRow to CarCriteriaDataBinder.GetCriteria", exception);
             }
+        }
+
+        private CarPostSearchFilters GetPostSearchFilters(string filter, string value)
+        {
+            if (string.IsNullOrEmpty(filter))
+                return null;
+            var filterList = filter.Split('|');
+            var valueList = value.Split('|');
+            var i = 0;
+            var carfilterCriteria = new CarPostSearchFilters();
+            while (i<filterList.Length)
+            {
+                switch (filterList[i].ToUpper())
+                {
+                    case "PRICE":
+                        carfilterCriteria.PriceRange = new PriceRange()
+                            {
+                                Min = int.Parse(valueList[i].Split('-')[0]),
+                                Max = int.Parse(valueList[i].Split('-')[1])
+                            };
+                        break;
+                }
+                i++;
+            }
+            return carfilterCriteria;
         }
     }
 }

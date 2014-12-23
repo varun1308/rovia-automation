@@ -12,4 +12,4 @@ amount,p.price.font-weight700
 legDuration,div.span3.text-flighttime
 titleAirLines,div.text-boxtitle
 zeroAiritineraryDiv,div#AirListHolder .alert.alert-error
-appliedFilters,span.filter_badge  span a
+appliedFilters,div#AirFilterHolder span.label
