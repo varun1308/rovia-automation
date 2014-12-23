@@ -35,7 +35,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private bool IsNextPageAvailable()
         {
-            return (_currentPageNo < ApplicationSettings.MaxSearchDepth) && (WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).GetAttribute("href").EndsWith("ResultHolder"));
+            if (_currentPageNo >= ApplicationSettings.MaxSearchDepth)
+                return false;
+            var nextPageLink = WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast);
+            return nextPageLink!=null && nextPageLink.GetAttribute("href").EndsWith("ResultHolder");
         }
 
         #endregion

@@ -32,16 +32,16 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
         private void SetLocation(string shortlocation,string location)
         {
-            WaitAndGetBySelector("inpShortLocation", ApplicationSettings.TimeOut.Slow).SendKeys(shortlocation);
-            if (location != null)
+            var locationHolder=WaitAndGetBySelector("inpShortLocation", ApplicationSettings.TimeOut.Slow);
+            locationHolder.Click();
+            locationHolder.SendKeys(shortlocation);
+            if (location == null) return;
+            IUIWebElement autoSuggestBox;
+            do
             {
-                IUIWebElement autoSuggestBox;
-                do
-                {
-                    autoSuggestBox = WaitAndGetBySelector("autoSuggestBox", ApplicationSettings.TimeOut.Fast);
-                } while (autoSuggestBox == null || !autoSuggestBox.Displayed);
-                GetUIElements("autoSuggestOptions").First(x => (x.Displayed && x.Text.Equals(location))).Click();
-            }
+                autoSuggestBox = WaitAndGetBySelector("autoSuggestBox", ApplicationSettings.TimeOut.Fast);
+            } while (autoSuggestBox == null || !autoSuggestBox.Displayed);
+            GetUIElements("autoSuggestOptions").First(x => (x.Displayed && x.Text.Equals(location))).Click();
         }
 
         protected override void SelectSearchPanel()

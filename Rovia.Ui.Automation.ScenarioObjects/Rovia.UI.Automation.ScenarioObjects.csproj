@@ -58,6 +58,7 @@
     <Compile Include="Hotel\HotelResult.cs" />
     <Compile Include="Hotel\HotelRoom.cs" />
     <Compile Include="Hotel\HotelTripProduct.cs" />
+    <Compile Include="Hotel\SortBy.cs" />
     <Compile Include="PassengerInfo\Adult.cs" />
     <Compile Include="Air\AirportPair.cs" />
     <Compile Include="Air\AirResult.cs" />

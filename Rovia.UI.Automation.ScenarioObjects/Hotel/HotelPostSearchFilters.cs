@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Hotel;
 
 namespace Rovia.UI.Automation.ScenarioObjects
 {
@@ -14,5 +15,9 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public Tuple<string,string> PreferredLocation { get; set; }
 
         public DistanceRange DistanceRange { get; set; }
+
+        public int Matrix { get; set; }
+
+        public SortBy SortBy { get; set; }
     }
 }

@@ -37,20 +37,81 @@ namespace Rovia.UI.Automation.Tests.Tests
            
         [TestMethod]
         [TestCategory("Sanity")]
-        [DataSource("GeneralScenarios")]
-        public void GeneralHotelBookFlow()
+        [DataSource("AmedusWSHotelBookingFlow")]
+        public void AmedusWsHotelBookingFlow()
+        {
+            Execute();
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("HotelsComHotelBookingFlow")]
+        public void HotelsComHotelBookingFlow()
+        {
+            Execute();
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("HotelBedsHotelBookingFlow")]
+        public void HotelBedsHotelBookingFlow()
+        {
+            Execute();
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("PegasusHotelBookingFlow")]
+        public void PegasusHotelBookingFlow()
+        {
+            Execute();
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("PegasussplHotelBookingFlow")]
+        public void PegasussplHotelBookingFlow()
+        {
+            Execute();
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("PriceLineV3HotelBookingFlow")]
+        public void PriceLineV3HotelBookingFlow()
+        {
+            Execute();
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("TuricoTGSHotelBookingFlow")]
+        public void TuricoTgsHotelBookingFlow()
+        {
+            Execute();
+        }
+
+        [TestMethod]
+        [TestCategory("Sanity")]
+        [DataSource("FiltersAndMatrixScenarios")]
+        public void HotelFiltersAndMatrixScenarios()
+        {
+            Execute();
+        }
+
+        private void Execute()
         {
             try
             {
-                _logManager.StartNewLog(TestContext.DataRow["Description"].ToString());
                 var criteria = DataBinder.GetCriteria(TestContext.DataRow);
+                _logManager.StartNewLog(criteria.Description);
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Passed!!!!!!!!!");
+                _logManager.LogInformation("Test Passed.");
             }
             catch (Exception exception)
             {
-                _logManager.LogInformation("Failed!!!!!!!!");
+                _logManager.LogInformation("Test Failed.");
                 Assert.Fail(exception.Message);
             }
         }

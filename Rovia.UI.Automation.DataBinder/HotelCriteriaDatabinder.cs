@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.DataBinder
@@ -16,7 +17,7 @@ namespace Rovia.UI.Automation.DataBinder
                     Description = dataRow["Description"].ToString().Replace("..", ","),
                     Pipeline = dataRow["ExecutionPipeLine"].ToString(),
                     UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
-                    ShortLocation = dataRow["ShortLocation"].ToString(),
+                    ShortLocation = dataRow["ShortLocation"].ToString().Replace("..", ","),
                     Location = dataRow["Location"].ToString().Replace("..", ","),
                     StayPeriod = new StayPeriod()
                         {
@@ -64,7 +65,7 @@ namespace Rovia.UI.Automation.DataBinder
                     case "HOTELNAME":
                         filterCriteria.HotelName = valueList[i];
                         break;
-                    case "DURATION":
+                    case "RATING":
                         var ratings = Array.ConvertAll(valueList[i].Split('-'), int.Parse);
                         filterCriteria.RatingRange = new RatingRange()
                             {
@@ -87,6 +88,13 @@ namespace Rovia.UI.Automation.DataBinder
                             Max = distRange[1]
                         };
                         break;
+                    case "MATRIX":
+                        filterCriteria.Matrix = int.Parse(valueList[i]);
+                        break;
+                    case "SORT":
+                        filterCriteria.SortBy =  StringToEnum<SortBy>(valueList[i]);
+                        break;
+                    default:throw new InvalidInputException(valueList[i] + " to HotelDataBinder");
                 }
                 i++;
             }

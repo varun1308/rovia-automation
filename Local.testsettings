@@ -3,13 +3,14 @@
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Hotel\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\chromedriver.exe" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\App.config" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Air\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\Air\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Car\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\Hotel\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Air\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\chromedriver.exe" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\App.config" />
   </Deployment>
   <NamingScheme baseName="RoviaUI" />
   <RemoteController name="TavWITPD047" />

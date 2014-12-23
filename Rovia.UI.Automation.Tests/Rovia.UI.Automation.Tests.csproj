@@ -151,7 +151,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="DataSheet\CarScenarios.xlsx" />
-    <None Include="DataSheet\HotelScenarios.xlsx" />
+    <None Include="DataSheet\Hotel\HotelScenarios.xlsx" />
     <None Include="Utility\KillChromeDriver.bat" />
   </ItemGroup>
   <ItemGroup />

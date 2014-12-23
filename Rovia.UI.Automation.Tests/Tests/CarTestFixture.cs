@@ -70,7 +70,7 @@ namespace Rovia.UI.Automation.Tests.Tests
             Execute();
         }
 
-        public void Execute()
+        private void Execute()
         {
             try
             {
