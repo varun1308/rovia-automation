@@ -34,16 +34,9 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void TestCleanup()
         {
             TestHelper.SaveScreenShot(TestContext);
-            _logManager.SubmitLog(TestHelper.SessionId);
+            _logManager.SubmitLog(TestHelper.TripsErrorUI);    
         }
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("GeneralScenarios")]
-        public void GeneralHotelBookingFlow()
-        {
-            Execute();
-        } 
-  
+           
         [TestMethod]
         [TestCategory("Sanity")]
         [DataSource("AmedusWSHotelBookingFlow")]
