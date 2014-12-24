@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using OpenQA.Selenium;
 using Rovia.UI.Automation.Exceptions;
@@ -16,7 +13,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     {
         private Results _selectedItinerary;
         public HotelRoomsHolder RoomsHolder{private get; set;}
-        public Action WaitingFunction { private get; set; }
 
         private  void SelectHotel(string hotelSupplier, string roomSupplier)
         {
@@ -40,7 +36,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw;
             }
         }
-
         
         private bool SelectRoom(IUIWebElement btnSelectHotel, string supplier)
         {
@@ -66,7 +61,15 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public List<Results> ParseResults()
         {
-            return null; //throw new NotImplementedException();
+            var ratings = GetUIElements("hotelRating").Select(x => x.GetUIElements("stars").Count).ToArray();
+            var hotelNames = GetUIElements("divHotelName").Select(x=>x.Text);
+            var prices = GetUIElements("hotelPrice").Select(x => new Amount(x.Text)).ToArray();
+            return hotelNames.Select((x, index) => new HotelResult()
+                {
+                    HotelName = x,
+                    Amount = prices[index],
+                    HotelRating = ratings[index]
+                } as Results).ToList();
         }
 
         public Results AddToCart(string supplier)

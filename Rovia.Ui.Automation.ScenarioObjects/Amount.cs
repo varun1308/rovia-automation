@@ -20,7 +20,8 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public Amount(string amount)
         {
             var details = amount.Split();
-            Currency = details[1];
+            if(details.Length>=2)
+                Currency = details[1];
             TotalAmount = double.Parse(details[0].Remove(0,1));
         }
 

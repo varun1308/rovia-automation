@@ -16,7 +16,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             try
             {
                 GetUIElements("divErrors").ForEach(x =>
-                    {
+                    { 
                         if (x.Displayed)
                         {
                             throw new Alert(x.Text);

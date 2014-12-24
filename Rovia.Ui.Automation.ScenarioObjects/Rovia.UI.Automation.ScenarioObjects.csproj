@@ -46,6 +46,7 @@
     <Compile Include="Air\AirPreSearchFilters.cs" />
     <Compile Include="Air\AirTripProduct.cs" />
     <Compile Include="Car\CarPostSearchFilters.cs" />
+    <Compile Include="HotelMatrix.cs" />
     <Compile Include="DistanceRange.cs" />
     <Compile Include="Hotel\HotelPostSearchFilters.cs" />
     <Compile Include="Car\CarTripProduct.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Hotel\HotelRoom.cs" />
     <Compile Include="Hotel\HotelTripProduct.cs" />
     <Compile Include="Hotel\SortBy.cs" />
+    <Compile Include="Matrix.cs" />
     <Compile Include="PassengerInfo\Adult.cs" />
     <Compile Include="Air\AirportPair.cs" />
     <Compile Include="Air\AirResult.cs" />

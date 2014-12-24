@@ -7,6 +7,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
 {
     public enum SortBy
     {
+        Featured,
         PriceAsc,
         PriceDsc,
         HotelNameAsc,

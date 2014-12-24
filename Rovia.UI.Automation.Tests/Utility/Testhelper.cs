@@ -388,7 +388,18 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         public static void SetFilters()
         {
-            _app.ResultsPage.SetPostSearchFilters(_criteria.Filters.PostSearchFilters);
+            try
+            {
+                if (!_app.State.CurrentPage.EndsWith("ResultsPage"))
+                    throw new InvalidOperationException("SetFilters", _app.State.CurrentPage);
+                _app.ResultsPage.SetAndValidatePostSearchFilters(_criteria.Filters.PostSearchFilters);
+            }
+            catch (Exception)
+            {
+                _logger.LogStatus("SetFilters", "Failed");
+                throw;
+            }
+
         }
 
         public static void PayNow()
@@ -415,20 +426,20 @@ namespace Rovia.UI.Automation.Tests.Utility
                 _app.CheckoutPage.CheckPaymentStatus();
                 _logger.LogStatus("PayNow", "Passed");
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 _logger.LogStatus("PayNow", "Failed");
                 throw;
             }
         }
 
-        internal static void CleanUp()
+        internal static void InitializeTest()
         {
             _app.ClearBrowserCache();
             _app.State.CurrentUser.ResetUser();
-
             GoToHomePage();
         }
+
         public static void SaveScreenShot(TestContext context)
         {
             _app.SaveScreenshot(context);

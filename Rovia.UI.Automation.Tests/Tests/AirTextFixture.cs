@@ -27,6 +27,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         [TestInitialize]
         public void TestInitialize()
         {
+            TestHelper.InitializeTest();
         }
 
         [TestCleanup]
@@ -34,7 +35,6 @@ namespace Rovia.UI.Automation.Tests.Tests
         {
             TestHelper.SaveScreenShot(TestContext);
             _logManager.SubmitLog(TestHelper.SessionId);
-            TestHelper.CleanUp();
         }
 
         [TestMethod,DataSource("Air_Amadeus_OneWay"),TestCategory("Sanity")]

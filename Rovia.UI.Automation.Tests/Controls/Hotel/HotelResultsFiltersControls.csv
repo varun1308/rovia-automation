@@ -15,3 +15,15 @@ preferredLocation,a.jsLocListItem
 locationHolder,div.jsLocationHolder a.btn
 zeroAiritineraryDiv,div#AirListHolder .alert.alert-error
 appliedFilters,div#HotelFilterHolder span.label
+priceAsc,#Price-Asc
+priceDsc,#Price-Desc
+ratingAsc,#Rating-Asc
+ratingDsc,#Rating-Desc
+nameDsc,#Name-Desc,
+nameAsc,#Name-Asc
+sortHeader,#sortHeader
+featured,#Featured-Desc
+matrixSection,.jsMatrixStarRatings
+ratedStars,.rated
+preLoader,#modal_filterloader .icon_preloader_small
+matrixPrice,.orangeTxt

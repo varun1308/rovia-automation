@@ -23,14 +23,16 @@ namespace Rovia.UI.Automation.Tests.Tests
         }
 
         [TestInitialize]
-        public void TestInitialize() { }
+        public void TestInitialize()
+        {
+            TestHelper.InitializeTest();
+        }
 
         [TestCleanup]
         public void TestCleanup()
         {
             TestHelper.SaveScreenShot(TestContext);
             _logManager.SubmitLog(TestHelper.SessionId);
-            TestHelper.CleanUp();
         }
 
 

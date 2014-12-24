@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
@@ -22,11 +23,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 float.Parse(WaitAndGetBySelector("minPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
             var maxPrice =
                float.Parse(WaitAndGetBySelector("maxPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
-
-            minPrice += minPrice * priceRange.Min / 100;
-            maxPrice -= maxPrice * priceRange.Max / 100;
-
-            ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (minPrice * 100) + "," + (maxPrice * 100) + "]})");
+            priceRange.MinPrice = minPrice+(minPrice * priceRange.Min / 100);
+            priceRange.MaxPrice = maxPrice-(maxPrice * priceRange.Max / 100);
+            ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (priceRange.MinPrice * 100) + "," + (priceRange.MaxPrice * 100) + "]})");
         }
 
         private void SetTimeDuration(int maxTimeDurationCustom)
@@ -237,9 +236,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
         }
 
-        public void ValidateFilters(PostSearchFilters postSearchFilters, List<Results> list)
+        public void ValidateFilters(PostSearchFilters postSearchFilters, Func<List<Results>> getParsedResults)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         #endregion

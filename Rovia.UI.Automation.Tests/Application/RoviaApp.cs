@@ -50,7 +50,6 @@ namespace Rovia.UI.Automation.Tests.Application
                     case TripProductType.Hotel:
                         var resultHolder=InitializePage<HotelResultsHolder>("HotelResultsHolderControls");
                         resultHolder.RoomsHolder= InitializePage<HotelRoomsHolder>("HotelRoomsHolderControls");
-                        resultHolder.WaitingFunction = resultsPage.WaitForResultLoad;
                         resultsPage.ResultsHolder = resultHolder;
                         resultsPage.ResultFilters = InitializePage<HotelResultFilters>("HotelResultsFiltersControls");
                         resultsPage.ResultTitle = InitializePage<HotelResultsTitle>("HotelResultsTitleControls");

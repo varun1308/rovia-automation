@@ -88,9 +88,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return ResultsHolder.ParseResults();
         }
 
-        public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
+        public void SetAndValidatePostSearchFilters(PostSearchFilters postSearchFilters)
         {
              ResultFilters.SetPostSearchFilters(postSearchFilters);
+             ResultFilters.ValidateFilters(postSearchFilters,ResultsHolder.ParseResults);
         }
  
         public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
@@ -102,11 +103,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         {
             if (!ResultTitle.ValidateTitle(criteria))
                 throw new ValidationException("Invalid Results:");
-        }
-
-        public void ValidateFilters(PostSearchFilters postSearchFilters)
-        {
-            ResultFilters.ValidateFilters(postSearchFilters, ResultsHolder.ParseResults());
         }
 
         #endregion

@@ -79,9 +79,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
         }
 
-        public void ValidateFilters(PostSearchFilters postSearchFilters, List<Results> list)
+        public void ValidateFilters(PostSearchFilters postSearchFilters, Func<List<Results>> getParsedResults)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -89,7 +89,10 @@ namespace Rovia.UI.Automation.DataBinder
                         };
                         break;
                     case "MATRIX":
-                        filterCriteria.Matrix = int.Parse(valueList[i]);
+                        filterCriteria.Matrix = new HotelMatrix()
+                            {
+                                Rating = int.Parse(valueList[i])
+                            };
                         break;
                     case "SORT":
                         filterCriteria.SortBy =  StringToEnum<SortBy>(valueList[i]);

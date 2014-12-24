@@ -1,4 +1,6 @@
-﻿using Rovia.UI.Automation.ScenarioObjects;
+﻿using System;
+using System.Collections.Generic;
+using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
@@ -7,6 +9,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters);
         void SetPostSearchFilters(PostSearchFilters postSearchFilters);
 
-        void ValidateFilters(PostSearchFilters postSearchFilters, System.Collections.Generic.List<Results> list);
+        void ValidateFilters(PostSearchFilters postSearchFilters, Func<List<Results>> parseResults);
     }
 }
