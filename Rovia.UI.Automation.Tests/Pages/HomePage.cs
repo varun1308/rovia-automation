@@ -2,6 +2,7 @@
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.Tests.Configuration;
 using System.Threading;
 
@@ -12,13 +13,20 @@ namespace Rovia.UI.Automation.Tests.Pages
     {
         private void CheckForErrors()
         {
-            GetUIElements("divErrors").ForEach(x =>
+            try
             {
-                if (x.Displayed)
-                {
-                    throw new Alert(x.Text);
-                }
-            });
+                GetUIElements("divErrors").ForEach(x =>
+                    {
+                        if (x.Displayed)
+                        {
+                            throw new Alert(x.Text);
+                        }
+                    });
+            }
+            catch (OpenQA.Selenium.StaleElementReferenceException )
+            {
+                LogManager.GetInstance().LogWarning("Caught and Suppressed StaleElementReferenceException");
+            }
         }
 
         internal void WaitForHomePage()
