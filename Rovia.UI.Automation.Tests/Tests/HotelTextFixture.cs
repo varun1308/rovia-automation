@@ -31,7 +31,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void TestCleanup()
         {
             TestHelper.SaveScreenShot(TestContext);
-            _logManager.SubmitLog(TestHelper.SessionId);
+            _logManager.SubmitLog(TestHelper.TripsErrorUI);
             TestHelper.CleanUp();        
         }
            

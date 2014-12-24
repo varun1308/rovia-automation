@@ -138,11 +138,6 @@ namespace Rovia.UI.Automation.Tests.Application
             return directoryPath;
         }
 
-        public void SaveSessionId(TestContext context,string sessionId)
-        {
-            context.Properties.Add(context.TestName + "_" + (context.DataRow.Table.Rows.IndexOf(context.DataRow)+1), sessionId);
-        }
-
         public void ClearBrowserCache()
         {
 
