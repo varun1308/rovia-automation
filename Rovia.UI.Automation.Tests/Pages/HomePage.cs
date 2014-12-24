@@ -23,7 +23,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                         }
                     });
             }
-            catch (OpenQA.Selenium.StaleElementReferenceException )
+            catch (OpenQA.Selenium.StaleElementReferenceException)
             {
                 LogManager.GetInstance().LogWarning("Caught and Suppressed StaleElementReferenceException");
             }
@@ -85,9 +85,11 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         public SearchPanel SearchPanel { get; set; }
 
-        public string GetSessionId()
+        public string GetTripsErrorUri()
         {
-            return WaitAndGetBySelector("sessionId", ApplicationSettings.TimeOut.Fast).GetAttribute("title").ToString();
+            var sessionId = WaitAndGetBySelector("sessionId", ApplicationSettings.TimeOut.Fast).GetAttribute("title");
+            return string.IsNullOrEmpty(sessionId) ? string.Empty :
+               ApplicationSettings.TripsErrorUri + "?sessionid=" + sessionId;
         }
     }
 }

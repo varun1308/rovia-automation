@@ -53,5 +53,15 @@ namespace Rovia.UI.Automation.Tests.Configuration
             public static int Fast { get { return 5; } }
             public static int SuperFast { get { return 3; } }
         }
+
+        public static string Environment
+        {
+            get { return ConfigurationManager.AppSettings["application.environment"]; }
+        }
+
+        public static string TripsErrorUri
+        {
+            get { return ConfigurationManager.AppSettings["application.tripsErrorUI.url"]; }
+        }
     }
 }

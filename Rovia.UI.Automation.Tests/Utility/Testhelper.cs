@@ -17,7 +17,7 @@ namespace Rovia.UI.Automation.Tests.Utility
     {
         #region Datafields
 
-        public static string SessionId { get; set; }
+        public static string TripsErrorUI { get; set; }
         private static RoviaApp _app;
         private static LogManager _logger;
         private static SearchCriteria _criteria;
@@ -138,7 +138,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new InvalidOperationException("Search", _app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
                 _app.ResultsPage.WaitForResultLoad();
-                SessionId = _app.HomePage.GetSessionId();
+                TripsErrorUI = _app.HomePage.GetTripsErrorUri();
                 //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
                 Results = _app.ResultsPage.ParseResults();
@@ -443,11 +443,6 @@ namespace Rovia.UI.Automation.Tests.Utility
         public static void SaveScreenShot(TestContext context)
         {
             _app.SaveScreenshot(context);
-        }
-
-        public static void SaveSessionId(TestContext context)
-        {
-            _app.SaveSessionId(context, _app.HomePage.GetSessionId());
         }
     }
 }
