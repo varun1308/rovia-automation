@@ -1,4 +1,8 @@
 appliedFilters,div#CarFilterHolder span.label
 minPrice,div.jsMinPrice
 maxPrice,div.jsMaxPrice
-locationFilter,div.jsCarLocationFilter .mbs .checkbox.font11 input
+locationFilter,div.jsCarLocationFilter .mbs .checkbox.font11
+carTypeFilter,div.jsCarClassFilter .mbs input
+carRentalAgencyFilter,div.jsCarAgencyFilter .mbs input
+carOptions,div.jsCarFeaturesFilter .mbs input
+matrixSection,p.jsMatrixCarPrice

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -11,7 +12,7 @@ namespace Rovia.UI.Automation.DataBinder
     {
         #region Private Members
 
-        private PickUp ParsePickUpDetails(string pickUp,string location, string travelDates)
+        private PickUp ParsePickUpDetails(string pickUp, string location, string travelDates)
         {
             try
             {
@@ -31,7 +32,7 @@ namespace Rovia.UI.Automation.DataBinder
             }
         }
 
-        private DropOff ParseDropOffDetails(string dropOff,string location, string travelDates)
+        private DropOff ParseDropOffDetails(string dropOff, string location, string travelDates)
         {
             try
             {
@@ -40,7 +41,7 @@ namespace Rovia.UI.Automation.DataBinder
                 return new DropOff()
                 {
                     DropOffType = StringToEnum<DropOffType>(drop[0]),
-                    DropOffLocCode = drop.Length > 1 && !string.IsNullOrEmpty(drop[1]) ? drop[1]: string.Empty,
+                    DropOffLocCode = drop.Length > 1 && !string.IsNullOrEmpty(drop[1]) ? drop[1] : string.Empty,
                     DropOffTime = dropoffTime,
                     DropOffLocation = location
                 };
@@ -56,7 +57,7 @@ namespace Rovia.UI.Automation.DataBinder
             return (T)Enum.Parse(typeof(T), name, true);
         }
 
-        private List<CorporateDiscount> ParseCorporateDiscount(string rentalAgency,string corpDiscCode,string promotionalCode)
+        private List<CorporateDiscount> ParseCorporateDiscount(string rentalAgency, string corpDiscCode, string promotionalCode)
         {
             try
             {
@@ -69,7 +70,7 @@ namespace Rovia.UI.Automation.DataBinder
                 {
                     corpDiscountList.Add(new CorporateDiscount()
                     {
-                        RentalAgency = string.IsNullOrEmpty(rentalAgencies[i])?string.Empty:rentalAgencies[i],
+                        RentalAgency = string.IsNullOrEmpty(rentalAgencies[i]) ? string.Empty : rentalAgencies[i],
                         CorpDiscountCode = string.IsNullOrEmpty(corpDiscCodes[i]) ? string.Empty : corpDiscCodes[i],
                         PromotionalCode = string.IsNullOrEmpty(promotionalCodes[i]) ? string.Empty : promotionalCodes[i],
                     });
@@ -85,14 +86,14 @@ namespace Rovia.UI.Automation.DataBinder
 
         private int ParseTransmission(string transmission)
         {
-            if(!string.IsNullOrEmpty(transmission))
-            switch (transmission.ToUpper())
-            {
-                case "AUTOMATIC":
-                    return 1;
-                case "MANUAL":
-                    return 2;
-            }
+            if (!string.IsNullOrEmpty(transmission))
+                switch (transmission.ToUpper())
+                {
+                    case "AUTOMATIC":
+                        return 1;
+                    case "MANUAL":
+                        return 2;
+                }
             return 0;
         }
 
@@ -103,7 +104,7 @@ namespace Rovia.UI.Automation.DataBinder
         }
 
         #endregion
-        
+
         public SearchCriteria GetCriteria(DataRow dataRow)
         {
             try
@@ -127,7 +128,7 @@ namespace Rovia.UI.Automation.DataBinder
                         },
                         PostSearchFilters = GetPostSearchFilters(dataRow["PostFilters"].ToString(), dataRow["PostFiltersValues"].ToString())
                     },
-                    Passengers = new Passengers(){Adults = 1}
+                    Passengers = new Passengers() { Adults = 1 }
                 };
             }
             catch (Exception exception)
@@ -144,7 +145,7 @@ namespace Rovia.UI.Automation.DataBinder
             var valueList = value.Split('|');
             var i = 0;
             var carfilterCriteria = new CarPostSearchFilters();
-            while (i<filterList.Length)
+            while (i < filterList.Length)
             {
                 switch (filterList[i].ToUpper())
                 {
@@ -155,6 +156,22 @@ namespace Rovia.UI.Automation.DataBinder
                                 Max = int.Parse(valueList[i].Split('-')[1])
                             };
                         break;
+                    case "LOCATIONS":
+                        carfilterCriteria.LocationValues = new List<string>(valueList[i].Split('/'));
+                        break;
+                    case "CARTYPE":
+                        carfilterCriteria.CarTypes = new List<string>(valueList[i].Split('/'));
+                        break;
+                    case "RENTALAGENCY":
+                        carfilterCriteria.RentalAgency = new List<string>(valueList[i].Split('/'));
+                        break;
+                    case "CAROPTIONS":
+                        carfilterCriteria.CarOptions = new List<string>(valueList[i].Split('/'));
+                        break;
+                    case "MATRIX":
+                        carfilterCriteria.Matrix = new CarMatrix(){CheckMatrix = true};
+                        break;
+                    default: throw new InvalidInputException("Invalid filter keyword : " + filterList[i]);
                 }
                 i++;
             }

@@ -45,6 +45,7 @@
     <Compile Include="Air\AirPostSearchFilters.cs" />
     <Compile Include="Air\AirPreSearchFilters.cs" />
     <Compile Include="Air\AirTripProduct.cs" />
+    <Compile Include="Car\CarMatrix.cs" />
     <Compile Include="Car\CarPostSearchFilters.cs" />
     <Compile Include="HotelMatrix.cs" />
     <Compile Include="DistanceRange.cs" />

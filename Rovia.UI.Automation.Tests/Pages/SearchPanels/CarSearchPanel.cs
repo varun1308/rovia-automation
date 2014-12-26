@@ -61,7 +61,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
             else
             {
-                WaitAndGetBySelector("pickUpCity", ApplicationSettings.TimeOut.SuperFast).Click();
+                WaitAndGetBySelector("pickUpCity", ApplicationSettings.TimeOut.Slow).Click();
                 WaitAndGetBySelector("pickUpCityLoc", ApplicationSettings.TimeOut.Slow).SendKeys(carSearchCriteria.PickUp.PickUpLocCode);
                 if (!string.IsNullOrEmpty(carSearchCriteria.PickUp.PickUpLocation)) SetOriginLocation(carSearchCriteria.PickUp.PickUpLocation);
             }
@@ -79,7 +79,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                         .SendKeys(carSearchCriteria.DropOff.DropOffLocCode);
                 else
                 {
-                    WaitAndGetBySelector("dropoffCity", ApplicationSettings.TimeOut.SuperFast).Click();
+                    WaitAndGetBySelector("dropoffCity", ApplicationSettings.TimeOut.Slow).Click();
                     WaitAndGetBySelector("dropoffCityLoc", ApplicationSettings.TimeOut.Slow)
                         .SendKeys(carSearchCriteria.DropOff.DropOffLocCode);
                 }
@@ -87,7 +87,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                     SetDestinationLocation(carSearchCriteria.DropOff.DropOffLocation);
             }
             else
-                WaitAndGetBySelector("dropoffSameAsPickUp",ApplicationSettings.TimeOut.SuperFast).Click();
+                WaitAndGetBySelector("dropoffSameAsPickUp", ApplicationSettings.TimeOut.Slow).Click();
             var dropoffDate = WaitAndGetBySelector("dropoffDate", ApplicationSettings.TimeOut.Slow);
             dropoffDate.SendKeys(carSearchCriteria.DropOff.DropOffTime.ToString("MM/dd/yyyy"));
            dropoffDate.Click();
@@ -143,7 +143,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
             ApplyPreSearchFilters(carSearchCriteria.Filters.PreSearchFilters);
 
-            WaitAndGetBySelector("buttonCarSearch", ApplicationSettings.TimeOut.Fast).Click();
+            WaitAndGetBySelector("buttonCarSearch", ApplicationSettings.TimeOut.Slow).Click();
 
             ResolveMultiLocationOptions();
         }

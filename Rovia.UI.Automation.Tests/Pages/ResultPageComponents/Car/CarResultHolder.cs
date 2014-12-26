@@ -92,6 +92,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var pricePerWeek = price.Select(x => x.Text).Where((item, index) => index % 2 == 0).ToArray();
             var totalPrice = price.Select(x => x.Text).Where((item, index) => index % 2 != 0).ToArray();
             var btnAddToCart = GetUIElements("addToCartButton").ToArray();
+            var locations = GetUIElements("locations").Select(x => x.Text.Split('-')[0].TrimEnd(' ')).Where((item, index) => index%2 == 0).ToArray();
 
             _results = new Dictionary<CarResult, IUIWebElement>();
 
@@ -105,7 +106,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     AirConditioning = airconditioning[i],
                     Transmission = transmission[i],
                     PricePerWeek = new Amount(pricePerWeek[i]),
-                    TotalPrice = new Amount(totalPrice[i])
+                    TotalPrice = new Amount(totalPrice[i]),
+                    Location = locations[i]
                 },btnAddToCart[i]);
                 i++;
             }
