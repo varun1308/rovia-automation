@@ -39,7 +39,8 @@ namespace Rovia.UI.Automation.DataBinder
                                 },
                             PostSearchFilters = GetPostSearchFilters(dataRow["PostSearchFilters"].ToString(), dataRow["PostSearchFilterValues"].ToString())
                         },
-                    Supplier = dataRow["Supplier"].ToString()
+                    Supplier = dataRow["Supplier"].ToString(),
+                    PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
                 };
         }
 

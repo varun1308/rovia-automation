@@ -29,5 +29,14 @@ subTitle,span.greyfont,
 stayDates,.mvl .mts
 price,.price
 roomCount,.mrm .greyfont
+bookedProducts,.jsItemsHolder .border-grey
+bookedProductType,.print_product_header_bg
+bProductTitle,.text-boxtitle
+bSubTitle,.font11.greyfont
+totalFare,span.price,
+taxesandFees,.font11.minus4
+baseFare,.font11.minus10
+bHotelDetails,div.text-flightinfo
+bPassengers,div.font11.mbl
 carDates,div.mvl .font10.greyfont
 carTimes,div.font16.mts

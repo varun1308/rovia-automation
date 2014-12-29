@@ -34,7 +34,7 @@ namespace Rovia.UI.Automation.Tests.Pages
         private void CheckErrors()
         {
             var errors = WaitAndGetBySelector("divError", ApplicationSettings.TimeOut.Slow);
-            if (errors.Displayed)
+            if (errors!=null &&errors.Displayed)
                 throw new Alert(errors.Text);
         }
 
