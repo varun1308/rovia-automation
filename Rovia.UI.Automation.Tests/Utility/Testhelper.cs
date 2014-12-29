@@ -187,6 +187,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 else
                 {
                     _app.PassengerInfoPage.WaitForPageLoad();
+                    _app.PassengerInfoPage.ValidateTripDetails(_selectedItineary);
                     _app.State.CurrentPage = "PassengerInfoPage";
                 }
                 _logger.LogStatus("Login", "Passed");
@@ -352,6 +353,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 if (_app.State.CurrentUser.Type != UserType.Guest)
                 {
                     _app.PassengerInfoPage.WaitForPageLoad();
+                    _app.PassengerInfoPage.ValidateTripDetails(_selectedItineary);
                     _app.State.CurrentPage = "PassengerInfoPage";
                 }
                 else
