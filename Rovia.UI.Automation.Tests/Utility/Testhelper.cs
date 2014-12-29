@@ -427,6 +427,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 else
                     _app.CheckoutPage.BookNow();
                 _app.CheckoutPage.CheckPaymentStatus();
+                _app.CheckoutPage.ValidateBookedProductDetails(_selectedItineary);
                 _logger.LogStatus("PayNow", "Passed");
             }
             catch (Exception exception)

@@ -105,7 +105,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                };
        }
 
-       private void ValidateHotelTripProductDetails(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
+       private void ValidateTripProductDetails(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
        {
            var errors = new StringBuilder();
            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle))
@@ -205,7 +205,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                    switch (x.ProductType)
                    {
                        case TripProductType.Hotel:
-                           ValidateHotelTripProductDetails(x as HotelTripProduct,selectedItineary as HotelResult);
+                           ValidateTripProductDetails(x as HotelTripProduct,selectedItineary as HotelResult);
                            break;
                    }
                });

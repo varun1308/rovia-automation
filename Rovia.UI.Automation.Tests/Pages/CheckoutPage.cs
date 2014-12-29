@@ -82,7 +82,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 throw new Alert(divErrors.Text);
         }
 
-        private void ValidateHotelTripProductDetails(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
+        private void ValidateTripProductDetails(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
         {
             var errors = new StringBuilder();
             if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle))
@@ -102,6 +102,16 @@ namespace Rovia.UI.Automation.Tests.Pages
         private string FormatError(string error, string addedValue, string tfValue)
         {
             return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
+        }
+
+        private Fare ParseFares(IUIWebElement tripProduct)
+        {
+            return new Fare()
+                {
+                    TotalFare = new Amount(tripProduct.WaitAndGetBySelector("totalFare", ApplicationSettings.TimeOut.Fast).Text),
+                    BaseFare = new Amount(tripProduct.WaitAndGetBySelector("baseFare", ApplicationSettings.TimeOut.Fast).Text.Split(':')[1].TrimStart(' ')),
+                    Taxes = new Amount(tripProduct.GetUIElements("taxesandFees").ElementAt(1).Text.Split(':')[1].TrimStart(' '))
+                };
         }
 
         private List<TripProduct> ParseTripProducts()
@@ -149,6 +159,17 @@ namespace Rovia.UI.Automation.Tests.Pages
             return TripProductType.Air;
         }
 
+        private Passengers ParsePassengers(IUIWebElement tripProduct)
+        {
+            var passengers = tripProduct.WaitAndGetBySelector("bPassengers", ApplicationSettings.TimeOut.Fast).Text.Split(new[] { ' ', ',' }).ToList();
+                return new Passengers()
+                {
+                    Adults = passengers.Contains("Adult") ? int.Parse(passengers[passengers.IndexOf("Adult") - 1]) : 0,
+                    Children = passengers.Contains("Child") ? int.Parse(passengers[passengers.IndexOf("Child") - 1]) : 0,
+                    Infants = passengers.Contains("Infant") ? int.Parse(passengers[passengers.IndexOf("Infant") - 1]) : 0
+                };
+            }
+        
 
         #endregion
 
@@ -169,7 +190,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             do
             {
                 fillCcDetailsDiv = WaitAndGetBySelector("fillCCDetailsDiv", ApplicationSettings.TimeOut.Safe);
-            }while (fillCcDetailsDiv == null || !fillCcDetailsDiv.Displayed) ;
+            } while (fillCcDetailsDiv == null || !fillCcDetailsDiv.Displayed);
         }
 
         internal void PayNow(PaymentInfo paymentInfo)
@@ -178,13 +199,13 @@ namespace Rovia.UI.Automation.Tests.Pages
             SetAddress(paymentInfo.BillingAddress);
 
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
-            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click(); 
+            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click();
         }
 
         internal void BookNow()
         {
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
-            WaitAndGetBySelector("booknow", ApplicationSettings.TimeOut.Fast).Click(); 
+            WaitAndGetBySelector("booknow", ApplicationSettings.TimeOut.Fast).Click();
         }
 
         #endregion
@@ -203,7 +224,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception)
             {
-                LogManager.GetInstance().LogInformation("Payment Failed"); 
+                LogManager.GetInstance().LogInformation("Payment Failed");
                 throw;
             }
         }
@@ -215,10 +236,75 @@ namespace Rovia.UI.Automation.Tests.Pages
                 switch (x.ProductType)
                 {
                     case TripProductType.Hotel:
-                        ValidateHotelTripProductDetails(x as HotelTripProduct, selectedItineary as HotelResult);
+                        ValidateTripProductDetails(x as HotelTripProduct, selectedItineary as HotelResult);
                         break;
                 }
             });
+        }
+
+        public void ValidateBookedProductDetails(Results selectedItineary)
+        {
+            ParseBookedTripProducts().ForEach(x =>
+            {
+                switch (x.ProductType)
+                {
+                    case TripProductType.Hotel:
+                        ValidateBookedTripProducts(x as HotelTripProduct, selectedItineary as HotelResult);
+                        break;
+                }
+            });
+        }
+
+        private void ValidateBookedTripProducts(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
+        {
+            var errors = new StringBuilder();
+            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle))
+                errors.Append(FormatError("HotelName", hotelResult.HotelName, hotelTripProduct.ProductTitle));
+            if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", "")))
+                errors.Append(FormatError("HotelAddress", hotelResult.HotelAddress, hotelTripProduct.Address));
+            if (!hotelResult.Amount.Equals(hotelTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("HotelPrice", hotelResult.Amount.ToString(), hotelTripProduct.Fares.TotalFare.ToString()));
+            if (!hotelResult.StayPeriod.Equals(hotelTripProduct.StayPeriod))
+                errors.Append(FormatError("StayPeriod", hotelResult.StayPeriod.ToString(), hotelTripProduct.StayPeriod.ToString()));
+            if (!hotelResult.Passengers.Equals(hotelTripProduct.Passengers))
+                errors.Append(FormatError("PassengersInfo", hotelResult.Passengers.ToString(), hotelTripProduct.Passengers.ToString()));
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on ConfirmationPage");
+        }
+        private List<TripProduct> ParseBookedTripProducts()
+        {
+            return GetUIElements("bookedProducts").Select(x =>
+            {
+                switch (x.GetAttribute("data-category").Trim())
+                {
+                    case "Hotel":
+                        return ParseBookedHotelTripProduct(x);
+                    default:
+                        return null;
+                }
+            }).ToList();
+        }
+
+        private TripProduct ParseBookedHotelTripProduct(IUIWebElement tripProduct)
+        {
+            var hotelDetails = tripProduct.GetUIElements("bHotelDetails").Select(x => x.Text).ToArray();
+            return new HotelTripProduct()
+            {
+                ProductTitle = tripProduct.WaitAndGetBySelector("bProductTitle", ApplicationSettings.TimeOut.Fast).Text,
+                Address = tripProduct.WaitAndGetBySelector("bSubTitle", ApplicationSettings.TimeOut.Fast).Text,
+                StayPeriod = new StayPeriod()
+                        {
+                            CheckInDate = DateTime.Parse(hotelDetails[0]),
+                            CheckOutDate = DateTime.Parse(hotelDetails[1])
+                        },
+                Room = new HotelRoom()
+                    {
+                        Descriptions = hotelDetails[2]
+                    },
+                Passengers = ParsePassengers(tripProduct),
+                KitchenType = hotelDetails[3],
+                Fares = ParseFares(tripProduct)
+            };
         }
     }
 }
