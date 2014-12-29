@@ -15,11 +15,11 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
         private void SetPassengerDetails(Passengers passengers)
         {
             
-                WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Adults+(passengers.Adults>1?" Adults":" Adult"));
-                if (passengers.Children==0)
-                    return;
-                WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Children + (passengers.Children > 1 ? " Children" : " Child"));
-                var i = 0;
+            WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Adults+(passengers.Adults>1?" Adults":" Adult"));
+            if (passengers.Children==0)
+                return;
+            WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Children + (passengers.Children > 1 ? " Children" : " Child"));
+            var i = 0;
             GetUIElements("divChildAgeHolder").ForEach(x => x.SelectFromDropDown(passengers.ChildrenAges[i++]));
             
         }
@@ -75,7 +75,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             var hotelSearchCriteria = searchCriteria as HotelSearchCriteria;
             SelectSearchPanel();
             SetStayPeriod(hotelSearchCriteria.StayPeriod);
-                SetLocation(hotelSearchCriteria.ShortLocation, hotelSearchCriteria.Location);
+            SetLocation(hotelSearchCriteria.ShortLocation, hotelSearchCriteria.Location);
 
             SetPassengerDetails(hotelSearchCriteria.Passengers);
             ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
