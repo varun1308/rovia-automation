@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -127,6 +125,56 @@ namespace Rovia.UI.Automation.Tests.Pages
            while (WaitAndGetBySelector("SpinningDiv", 60).Displayed) ;
            if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Safe).Displayed == false)
                throw new PageLoadFailed("PassengerInfoPage");
+           ValidateTripDetails();
+       }
+
+       private void ValidateTripDetails()
+       {
+           ParseTripProducts().ForEach(x =>
+               {
+                   switch (x.ProductType)
+                   {
+                       case TripProductType.Hotel:
+                           ValidateHotelTripProductDetails();
+                           break;
+                   }
+               });
+       }
+
+       private void ValidateHotelTripProductDetails()
+       {
+           throw new NotImplementedException();
+       }
+
+       private List<TripProduct> ParseTripProducts()
+       {
+           return GetUIElements("tripProducts").Select(x =>
+               {
+                   switch (GetTripProductType(x))
+                   {
+                        case TripProductType.Hotel:
+                           return ParseHotelTripProduct(x);
+                        default:
+                           return null;
+                   }
+               }).ToList();
+       }
+
+       private TripProduct ParseHotelTripProduct(IUIWebElement x)
+       {
+           throw new NotImplementedException();
+       }
+
+       private TripProductType GetTripProductType(IUIWebElement tripProduct)
+       {
+           if(tripProduct.WaitAndGetBySelector("rating",ApplicationSettings.TimeOut.Fast)!=null)
+               return TripProductType.Hotel;
+           return TripProductType.Air;
+       }
+
+       private TripProduct ParseTripProduct(object getTripProduct)
+       {
+           throw new NotImplementedException();
        }
 
        public void WaitForConfirmationPageLoad()
