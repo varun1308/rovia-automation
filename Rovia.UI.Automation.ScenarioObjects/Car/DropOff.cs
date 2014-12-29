@@ -7,6 +7,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public DropOffType DropOffType { get; set; }
         public string DropOffLocCode { get; set; }
         public string DropOffLocation { get; set; }
-        public DateTime DropOffTime { get; set; }
+        public DateTime DropOffDate { get; set; }
+        public string DropOffTime { get; set; }
     }
 }

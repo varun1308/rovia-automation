@@ -110,12 +110,40 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                 switch (GetTripProductType(x))
                 {
+                    case TripProductType.Air:
+                        return ParseAirTripProduct(x);
                     case TripProductType.Hotel:
                         return ParseHotelTripProduct(x);
+                    case TripProductType.Car:
+                        return ParseCarTripProduct(x);
                     default:
                         return null;
                 }
             }).ToList();
+        }
+
+        private TripProduct ParseAirTripProduct(IUIWebElement tripProduct)
+        {
+            //to implement
+            return new AirTripProduct();
+        }
+
+        private TripProduct ParseCarTripProduct(IUIWebElement tripProduct)
+        {
+            var title = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text.Split(' ');
+            var totalFare = tripProduct.WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text;
+            var carDates = tripProduct.GetUIElements("carDates").Select(x=>x.Text).ToArray();//1 & 3
+            var carTimes = tripProduct.GetUIElements("carTimes").Select(x => x.Text).ToArray();//0&1
+            var pickUpDateTime = DateTime.Parse(carDates[1]).ToShortDateString() + " " + carTimes[0];
+            var dropOffDateTime = DateTime.Parse(carDates[3]).ToShortDateString() + " " + carTimes[1];
+            return new CarTripProduct()
+            {
+                RentalAgency = title[2],
+                CarType = title[0],
+                Fares = new Fare() { TotalFare = new Amount(totalFare) },
+                PickUpDateTime = DateTime.Parse(pickUpDateTime),
+                DropOffDateTime = DateTime.Parse(dropOffDateTime)
+            };
         }
 
         private TripProduct ParseHotelTripProduct(IUIWebElement tripProduct)
@@ -146,6 +174,8 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             if (tripProduct.WaitAndGetBySelector("hotelStars", ApplicationSettings.TimeOut.Fast) != null)
                 return TripProductType.Hotel;
+            if (tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text.Contains("Car"))
+                return TripProductType.Car;
             return TripProductType.Air;
         }
 
@@ -169,7 +199,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             do
             {
                 fillCcDetailsDiv = WaitAndGetBySelector("fillCCDetailsDiv", ApplicationSettings.TimeOut.Safe);
-            }while (fillCcDetailsDiv == null || !fillCcDetailsDiv.Displayed) ;
+            } while (fillCcDetailsDiv == null || !fillCcDetailsDiv.Displayed);
         }
 
         internal void PayNow(PaymentInfo paymentInfo)
@@ -178,13 +208,13 @@ namespace Rovia.UI.Automation.Tests.Pages
             SetAddress(paymentInfo.BillingAddress);
 
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
-            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click(); 
+            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click();
         }
 
         internal void BookNow()
         {
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
-            WaitAndGetBySelector("booknow", ApplicationSettings.TimeOut.Fast).Click(); 
+            WaitAndGetBySelector("booknow", ApplicationSettings.TimeOut.Fast).Click();
         }
 
         #endregion
@@ -203,7 +233,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception)
             {
-                LogManager.GetInstance().LogInformation("Payment Failed"); 
+                LogManager.GetInstance().LogInformation("Payment Failed");
                 throw;
             }
         }
@@ -214,11 +244,39 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                 switch (x.ProductType)
                 {
+                    case TripProductType.Air:
+                        ValidateAirTripProductDetails(x as AirTripProduct, selectedItineary as AirResult);
+                        break;
                     case TripProductType.Hotel:
                         ValidateHotelTripProductDetails(x as HotelTripProduct, selectedItineary as HotelResult);
                         break;
+                    case TripProductType.Car:
+                       ValidateCarTripProductDetails(x as CarTripProduct, selectedItineary as CarResult);
+                        break;
                 }
             });
+        }
+
+        private void ValidateCarTripProductDetails(CarTripProduct carTripProduct, CarResult carResult)
+        {
+            var errors = new StringBuilder();
+            if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("CarFare", carResult.TotalPrice.ToString(), carTripProduct.Fares.TotalFare.ToString()));
+            if (!carResult.CarType.Equals(carTripProduct.CarType))
+                errors.Append(FormatError("CarType", carResult.CarType, carTripProduct.CarType));
+            if (!carResult.RentalAgency.Equals(carTripProduct.RentalAgency))
+                errors.Append(FormatError("RentalAgency", carResult.RentalAgency, carTripProduct.RentalAgency));
+            if (!carResult.PickUpDateTime.Equals(carTripProduct.PickUpDateTime))
+                errors.Append(FormatError("Pick Up DateTime", carResult.PickUpDateTime.ToLongDateString(), carTripProduct.PickUpDateTime.ToLongDateString()));
+            if (!carResult.DropOffDateTime.Equals(carTripProduct.DropOffDateTime))
+                errors.Append(FormatError("Drop Off DateTime", carResult.DropOffDateTime.ToLongDateString(), carTripProduct.DropOffDateTime.ToLongDateString()));
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on CheckOutPage");
+        }
+
+        private void ValidateAirTripProductDetails(AirTripProduct airTripProduct, AirResult airResult)
+        {
+            //to Impletment
         }
     }
 }

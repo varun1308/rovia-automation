@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class CarTripProduct : TripProduct
@@ -7,6 +9,8 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public string CarType { get; set; }
         public string AirConditioning { get; set; }
         public string Transmission { get; set; }
+        public DateTime PickUpDateTime { get; set; }
+        public DateTime DropOffDateTime { get; set; }
 
         public CarTripProduct()
         {

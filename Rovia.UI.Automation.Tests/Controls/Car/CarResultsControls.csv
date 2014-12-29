@@ -13,3 +13,4 @@ rentalAgencyOnCArt,div#dvAddToCartCar .phm.mtm.mlm
 carOptionsOnCart,div.mts.mbl .pull-left.font12
 priceOnCart,div.jsPrice span.price
 locations,div.span7.pull-left div small
+DateTimes,div.span4 .font12.fontBold

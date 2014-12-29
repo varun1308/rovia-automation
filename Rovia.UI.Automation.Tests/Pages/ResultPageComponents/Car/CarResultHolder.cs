@@ -94,6 +94,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var btnAddToCart = GetUIElements("addToCartButton").ToArray();
             var locations = GetUIElements("locations").Select(x => x.Text.Split('-')[0].TrimEnd(' ')).Where((item, index) => index%2 == 0).ToArray();
 
+            var allDateTimes = GetUIElements("DateTimes").Where((item) => item.Text.Contains(" AM") || item.Text.Contains(" PM")).Select(x => x.Text).ToList();
+            var pickUpDateTimes = allDateTimes.Where(((item,index) => index%2 == 0)).ToArray();
+            var dropOffDateTimes = allDateTimes.Where(((item, index) => index % 2 != 0)).ToArray();
+
             _results = new Dictionary<CarResult, IUIWebElement>();
 
             i = 0;
@@ -107,7 +111,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     Transmission = transmission[i],
                     PricePerWeek = new Amount(pricePerWeek[i]),
                     TotalPrice = new Amount(totalPrice[i]),
-                    Location = locations[i]
+                    Location = locations[i],
+                    PickUpDateTime = DateTime.Parse(pickUpDateTimes[i]),
+                    DropOffDateTime = DateTime.Parse(dropOffDateTimes[i])
                 },btnAddToCart[i]);
                 i++;
             }

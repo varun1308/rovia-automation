@@ -97,11 +97,17 @@ namespace Rovia.UI.Automation.Tests.Pages
         private TripProduct ParseCarTripProduct()
         {
             var carOptions = GetUIElements("carACnTransmission").ToArray();
+            var carDates = GetUIElements("carDates").Select(x => x.Text).ToArray();//1 & 3
+            var carTimes = GetUIElements("carTimes").Select(x => x.Text).ToArray();//0&1
+            var pickUpDateTime = DateTime.Parse(carDates[0]).ToShortDateString() + " " + carTimes[0];
+            var dropOffDateTime = DateTime.Parse(carDates[1]).ToShortDateString() + " " + carTimes[1];
             return new CarTripProduct()
                 {
                     CarType = GetUIElements("productName").Select(x => x.Text.Split(' ')[0]).ToArray()[0],
                     AirConditioning = carOptions[1].Text,
-                    Transmission = carOptions[2].Text
+                    Transmission = carOptions[2].Text,
+                    PickUpDateTime = DateTime.Parse(pickUpDateTime),
+                    DropOffDateTime = DateTime.Parse(dropOffDateTime)
                     //to do impletentation for Rental Agency
                 };
         }
@@ -179,6 +185,10 @@ namespace Rovia.UI.Automation.Tests.Pages
                 errors.Append(FormatError("AirConditioning", carResult.AirConditioning,carTripProduct.AirConditioning));
             if (!carResult.Transmission.Equals(carTripProduct.Transmission))
                 errors.Append(FormatError("Transmission",carResult.Transmission,carTripProduct.Transmission));
+            if (!carResult.PickUpDateTime.Equals(carTripProduct.PickUpDateTime))
+                errors.Append(FormatError("Pick Up DateTime", carResult.PickUpDateTime.ToLongDateString(), carTripProduct.PickUpDateTime.ToLongDateString()));
+            if (!carResult.DropOffDateTime.Equals(carTripProduct.DropOffDateTime))
+                errors.Append(FormatError("Drop Off DateTime", carResult.DropOffDateTime.ToLongDateString(), carTripProduct.DropOffDateTime.ToLongDateString()));
             if (!string.IsNullOrEmpty(errors.ToString()))
                 throw new ValidationException(errors + "| on TripFolderPage");
         }

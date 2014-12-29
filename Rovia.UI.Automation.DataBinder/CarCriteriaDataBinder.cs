@@ -17,12 +17,13 @@ namespace Rovia.UI.Automation.DataBinder
             try
             {
                 var pick = pickUp.Split('-');
-                var pickUpTime = DateTime.Now.AddDays(int.Parse(travelDates.Split('|')[0]));
+                var pickUpDateTimeTime = travelDates.Split('|')[0].Split(',');
                 return new PickUp()
                 {
                     PickUpType = StringToEnum<PickUpType>(pick[0]),
                     PickUpLocCode = pick[1],
-                    PickUpTime = pickUpTime,
+                    PickUpDate = DateTime.Now.AddDays(int.Parse(pickUpDateTimeTime[0])),
+                    PickUpTime = pickUpDateTimeTime.Length == 2 ? pickUpDateTimeTime[1] : "Anytime",
                     PickUpLocation = location
                 };
             }
@@ -37,12 +38,13 @@ namespace Rovia.UI.Automation.DataBinder
             try
             {
                 var drop = dropOff.Split('-');
-                var dropoffTime = DateTime.Now.AddDays(int.Parse(travelDates.Split('|')[1]));
+                var dropoffDateTime = travelDates.Split('|')[1].Split(',');
                 return new DropOff()
                 {
                     DropOffType = StringToEnum<DropOffType>(drop[0]),
                     DropOffLocCode = drop.Length > 1 && !string.IsNullOrEmpty(drop[1]) ? drop[1] : string.Empty,
-                    DropOffTime = dropoffTime,
+                    DropOffDate = DateTime.Now.AddDays(int.Parse(dropoffDateTime[0])),
+                    DropOffTime = dropoffDateTime.Length == 2 ? dropoffDateTime[1] : "Anytime",
                     DropOffLocation = location
                 };
             }
@@ -169,7 +171,7 @@ namespace Rovia.UI.Automation.DataBinder
                         carfilterCriteria.CarOptions = new List<string>(valueList[i].Split('/'));
                         break;
                     case "MATRIX":
-                        carfilterCriteria.Matrix = new CarMatrix(){CheckMatrix = true};
+                        carfilterCriteria.Matrix = new CarMatrix() { CheckMatrix = true };
                         break;
                     default: throw new InvalidInputException("Invalid filter keyword : " + filterList[i]);
                 }
