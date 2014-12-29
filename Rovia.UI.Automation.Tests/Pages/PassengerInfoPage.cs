@@ -6,6 +6,7 @@ using System.Threading;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects.Hotel;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -104,6 +105,102 @@ namespace Rovia.UI.Automation.Tests.Pages
                };
         }
 
+        private void ValidateHotelTripProductDetails(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
+        {
+            var errors = new StringBuilder();
+            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle))
+                errors.Append(FormatError("HotelName", hotelResult.HotelName, hotelTripProduct.ProductTitle));
+            if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", "")))
+                errors.Append(FormatError("HotelAddress", hotelResult.HotelAddress, hotelTripProduct.Address));
+            if (!hotelResult.Amount.Equals(hotelTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("HotelPrice", hotelResult.Amount.ToString(), hotelTripProduct.Fares.TotalFare.ToString()));
+            if (!hotelResult.StayPeriod.Equals(hotelTripProduct.StayPeriod))
+                errors.Append(FormatError("StayPeriod", hotelResult.StayPeriod.ToString(), hotelTripProduct.StayPeriod.ToString()));
+            if (!hotelResult.SelectedRoom.NoOfRooms.Equals(hotelTripProduct.Room.NoOfRooms))
+                errors.Append(FormatError("NoOfRooms", hotelResult.SelectedRoom.NoOfRooms.ToString(), hotelTripProduct.Room.NoOfRooms.ToString()));
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on PaxInfoPage");
+        }
+
+        private string FormatError(string error, string addedValue, string tfValue)
+        {
+            return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
+        }
+
+        private TripProduct ParseHotelTripProduct(IUIWebElement tripProduct)
+        {
+            var stayperiod = tripProduct.GetUIElements("stayDates").Select(x => x.Text).ToArray();
+            return new HotelTripProduct()
+            {
+                ProductTitle = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text,
+                Address = tripProduct.WaitAndGetBySelector("subTitle", ApplicationSettings.TimeOut.Fast).Text,
+                Rating = tripProduct.GetUIElements("rating").Count,
+                StayPeriod = new StayPeriod()
+                {
+                    CheckInDate = DateTime.Parse(stayperiod[0]),
+                    CheckOutDate = DateTime.Parse(stayperiod[1])
+                },
+                Fares = new Fare()
+                {
+                    TotalFare = new Amount(WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text)
+                },
+                Room = new HotelRoom()
+                {
+                    NoOfRooms = int.Parse(WaitAndGetBySelector("roomCount", ApplicationSettings.TimeOut.Fast).Text.Split()[0])
+                }
+            };
+        }
+
+        private void ValidateCarTripProductDetails(CarTripProduct carTripProduct, CarResult carResult)
+        {
+            var errors = new StringBuilder();
+            if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("CarFare", carResult.TotalPrice.ToString(), carTripProduct.Fares.TotalFare.ToString()));
+            if (!carResult.CarType.Equals(carTripProduct.CarType))
+                errors.Append(FormatError("CarType", carResult.CarType, carTripProduct.CarType));
+            if (!carResult.RentalAgency.Equals(carTripProduct.RentalAgency))
+                errors.Append(FormatError("RentalAgency", carResult.RentalAgency, carTripProduct.RentalAgency));
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on PassengerInfoPage");
+        }
+
+        private List<TripProduct> ParseTripProducts()
+        {
+            return GetUIElements("tripProducts").Select(x =>
+            {
+                switch (GetTripProductType(x))
+                {
+                    case TripProductType.Hotel:
+                        return ParseHotelTripProduct(x);
+                    case TripProductType.Car:
+                        return ParseCarTripProduct(x);
+                    default:
+                        return null;
+                }
+            }).ToList();
+        }
+
+        private TripProduct ParseCarTripProduct(IUIWebElement tripProduct)
+        {
+            var title = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text.Split(' ');
+            var totalFare = tripProduct.WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text;
+            return new CarTripProduct()
+            {
+                RentalAgency = title[2],
+                CarType = title[0],
+                Fares = new Fare() { TotalFare = new Amount(totalFare) }
+            };
+        }
+
+        private TripProductType GetTripProductType(IUIWebElement tripProduct)
+        {
+            if (tripProduct.WaitAndGetBySelector("hotelStars", ApplicationSettings.TimeOut.Fast) != null)
+                return TripProductType.Hotel;
+            if (tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text.Contains("Car"))
+                return TripProductType.Car;
+            return TripProductType.Air;
+        }
+
         #endregion
 
         internal void EditPassengerInfo()
@@ -135,83 +232,13 @@ namespace Rovia.UI.Automation.Tests.Pages
                     switch (x.ProductType)
                     {
                         case TripProductType.Hotel:
-                            ValidateHotelTripProductDetails();
+                            ValidateHotelTripProductDetails(x as HotelTripProduct, selectedItinerary as HotelResult);
                             break;
                         case TripProductType.Car:
-                            ValidateCarTripProductDetails(x as CarTripProduct,selectedItinerary as CarResult);
+                            ValidateCarTripProductDetails(x as CarTripProduct, selectedItinerary as CarResult);
                             break;
                     }
-                }); 
-        }
-
-        private void ValidateCarTripProductDetails(CarTripProduct carTripProduct, CarResult carResult)
-        {
-            var errors = new StringBuilder();
-            if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
-                errors.Append(FormatError("CarFare", carResult.TotalPrice.ToString(), carTripProduct.Fares.TotalFare.ToString()));
-            if (!carResult.CarType.Equals(carTripProduct.CarType))
-                errors.Append(FormatError("CarType", carResult.CarType, carTripProduct.CarType));
-            if (!carResult.RentalAgency.Equals(carTripProduct.RentalAgency))
-                errors.Append(FormatError("RentalAgency", carResult.RentalAgency, carTripProduct.RentalAgency));
-            if (!string.IsNullOrEmpty(errors.ToString()))
-                throw new ValidationException(errors + "| on PassengerInfoPage");
-        }
-
-        private string FormatError(string error, string addedValue, string tfValue)
-        {
-            return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
-        }
-
-        private void ValidateHotelTripProductDetails()
-        {
-            throw new NotImplementedException();
-        }
-
-        private List<TripProduct> ParseTripProducts()
-        {
-            return GetUIElements("tripProducts").Select(x =>
-                {
-                    switch (GetTripProductType(x))
-                    {
-                        case TripProductType.Hotel:
-                            return ParseHotelTripProduct(x);
-                        case TripProductType.Car:
-                            return ParseCarTripProduct(x);
-                        default:
-                            return null;
-                    }
-                }).ToList();
-        }
-
-        private TripProduct ParseCarTripProduct(IUIWebElement tripProduct)
-        {
-            var title = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text.Split(' ');
-            var totalFare = tripProduct.WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text;
-            return new CarTripProduct()
-                {
-                    RentalAgency = title[2],
-                    CarType = title[0],
-                    Fares = new Fare() { TotalFare = new Amount(totalFare) }
-                };
-        }
-
-        private TripProduct ParseHotelTripProduct(IUIWebElement x)
-        {
-            throw new NotImplementedException();
-        }
-
-        private TripProductType GetTripProductType(IUIWebElement tripProduct)
-        {
-            if (tripProduct.WaitAndGetBySelector("rating", ApplicationSettings.TimeOut.Fast) != null)
-                return TripProductType.Hotel;
-            if (tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text.Contains("Car"))
-                return TripProductType.Car;
-            return TripProductType.Air;
-        }
-
-        private TripProduct ParseTripProduct(object getTripProduct)
-        {
-            throw new NotImplementedException();
+                });
         }
 
         public void WaitForConfirmationPageLoad()

@@ -22,7 +22,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                             .Select(x => x.GetAttribute("title").Split('|')).ToArray();
                 var validIndices = Enumerable.Range(0, suppliers.Count());
                 if (!string.IsNullOrEmpty(hotelSupplier))
-                    validIndices = validIndices.TakeWhile(x => suppliers[x][1].Equals(hotelSupplier));
+                    validIndices = validIndices.Where(x => suppliers[x][1].Equals(hotelSupplier));
                 var resultIndex = validIndices.First(i => SelectRoom(GetUIElements("btnSelectHotel")[i], roomSupplier));
                 _selectedItinerary.Supplier = new Supplier()
                     {

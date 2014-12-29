@@ -6,6 +6,7 @@ using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Hotel;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
 
@@ -85,7 +86,10 @@ namespace Rovia.UI.Automation.Tests.Pages
                             CheckInDate = DateTime.Parse(elements[0]),
                             CheckOutDate = DateTime.Parse(elements[1])
                         },
-                    Room = elements[2],
+                    Room = new HotelRoom()
+                        {
+                            Descriptions = elements[2]
+                        },
                     KitchenType = elements[3]
                 };
         }

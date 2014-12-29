@@ -435,7 +435,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 _app.CheckoutPage.CheckPaymentStatus();
                 _logger.LogStatus("PayNow", "Passed");
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 _logger.LogStatus("PayNow", "Failed");
                 throw;
