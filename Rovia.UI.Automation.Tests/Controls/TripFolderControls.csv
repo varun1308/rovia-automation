@@ -20,3 +20,4 @@ tripStartOverCheck,div.jTopBarCartCount
 carACnTransmission,div.border-grey.mal div.pull-left.font12
 hotelDetails,div.text-flightinfo
 hotelAddress,span.font11.greyfont
+dontLeavePopup,div#WindowBarDiv

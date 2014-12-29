@@ -16,7 +16,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             try
             {
                 GetUIElements("divErrors").ForEach(x =>
-                    { 
+                    {
                         if (x.Displayed)
                         {
                             throw new Alert(x.Text);
@@ -87,7 +87,8 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         public string GetTripsErrorUri()
         {
-            var sessionId = WaitAndGetBySelector("sessionId", ApplicationSettings.TimeOut.Fast).GetAttribute("title");
+            var sessionId = ApplicationSettings.Environment == "PROD" ? WaitAndGetBySelector("sessionIdProd", ApplicationSettings.TimeOut.Fast).GetAttribute("title") :
+                WaitAndGetBySelector("sessionIdQA", ApplicationSettings.TimeOut.Fast).GetAttribute("title");
             return string.IsNullOrEmpty(sessionId) ? string.Empty :
                ApplicationSettings.TripsErrorUri + "?sessionid=" + sessionId;
         }

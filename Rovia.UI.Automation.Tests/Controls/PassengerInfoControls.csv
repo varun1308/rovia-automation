@@ -23,3 +23,11 @@ divConfirmPassengerDetails,div.checkOutPassengerDetails
 divPassengerDetailInput,div#dvPassengerProdHolder
 alertError,div.alert-error
 paxConfDiv,div.jsPaxConfDetails
+tripProducts,.jsPaxCartDTL
+hotelStars,.hotel_stars
+rating,.rated
+title,h5
+subTitle,span.greyfont,
+stayDates,.mvl .mts
+price,.price
+roomCount,.mrm .greyfont

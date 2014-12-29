@@ -236,5 +236,11 @@ namespace Rovia.UI.Automation.Tests.Pages
             WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();
             WaitAndGetBySelector("saveTripButton", ApplicationSettings.TimeOut.Fast).Click();
         }
+
+        public bool IsLeavePopupVisible()
+        {
+            var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
+            return divDontLeavePopup != null && divDontLeavePopup.Displayed;
+        }
     }
 }

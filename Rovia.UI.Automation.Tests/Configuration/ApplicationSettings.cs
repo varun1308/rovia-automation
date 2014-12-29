@@ -56,7 +56,7 @@ namespace Rovia.UI.Automation.Tests.Configuration
 
         public static string Environment
         {
-            get { return ConfigurationManager.AppSettings["application.environment"]; }
+            get { return ConfigurationManager.AppSettings["application.environment"].ToUpper(); }
         }
 
         public static string TripsErrorUri
