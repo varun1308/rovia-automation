@@ -21,3 +21,11 @@ address_txtCity,input#txtCity
 divErrors,div.alert-error
 alertSuccess,div.alert-success
 booknow,a.jsBtnBookWithoutPay.btn.btn-warning
+tripProducts,#PaymentCartHolder .border-grey
+hotelStars,.hotel_stars
+rating,.rated
+title,h5
+subTitle,span.greyfont,
+stayDates,.mvl .mts
+price,.price
+roomCount,.mrm .greyfont

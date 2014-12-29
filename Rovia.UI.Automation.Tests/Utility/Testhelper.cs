@@ -251,6 +251,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     throw new InvalidOperationException("ConfirmPassengerDetails", _app.State.CurrentPage);
                 _app.PassengerInfoPage.ConfirmPassengers();
                 _app.CheckoutPage.WaitForLoad();
+                _app.CheckoutPage.ValidateTripDetails(_selectedItineary);
                 _app.State.CurrentPage = "CheckOutPage";
                 _logger.LogStatus("ConfirmPassengerDetails", "Passed");
             }
