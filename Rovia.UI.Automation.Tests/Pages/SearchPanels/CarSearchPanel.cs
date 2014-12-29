@@ -113,7 +113,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
             ExecuteJavascript("$('#ulTransmission').find('[data-value=\"" + carFilters.Transmission +
                               "\"]').click()");
-
+            if (!string.IsNullOrEmpty(carFilters.CorporateDiscount[0].RentalAgency))
             ApplyDiscountCode(carFilters.CorporateDiscount);
         }
 
