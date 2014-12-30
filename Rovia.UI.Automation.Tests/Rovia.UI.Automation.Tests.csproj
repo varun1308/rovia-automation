@@ -77,6 +77,8 @@
     <Compile Include="Application\RoviaApp.cs" />
     <Compile Include="Application\User.cs" />
     <Compile Include="Configuration\ApplicationSettings.cs" />
+    <Compile Include="Pages\ResultPageComponents\Activity\ActivityHolder.cs" />
+    <Compile Include="Pages\ResultPageComponents\Activity\ActivityResultsHolder.cs" />
     <Compile Include="Pages\ResultPageComponents\Air\AirResultFilters.cs" />
     <Compile Include="Pages\ResultPageComponents\Air\AirResultsHolder.cs" />
     <Compile Include="Pages\ResultPageComponents\Car\CarResultFilters.cs" />
@@ -89,16 +91,18 @@
     <Compile Include="Pages\ResultPageComponents\IResultsHolder.cs" />
     <Compile Include="Pages\ResultPageComponents\IResultsTitle.cs" />
     <Compile Include="Pages\ResultPageComponents\ResultsPage.cs" />
+    <Compile Include="Pages\SearchPanels\ActivitySearchPanel.cs" />
     <Compile Include="Pages\SearchPanels\AirSearchPanel.cs" />
     <Compile Include="Pages\SearchPanels\CarSearchPanel.cs" />
     <Compile Include="Pages\SearchPanels\HotelSearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\SearchPanel.cs" />
+    <Compile Include="Pages\SearchPanels\ISearchPanel.cs" />
     <Compile Include="Pages\BFCPaymentPage.cs" />
     <Compile Include="Pages\CheckoutPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\LoginDetailsPage.cs" />
     <Compile Include="Pages\PassengerInfoPage.cs" />
     <Compile Include="Pages\TripFolderPage.cs" />
+    <Compile Include="Tests\ActivityTestFixtures.cs" />
     <Compile Include="Tests\AirTextFixture.cs" />
     <Compile Include="Tests\CarTestFixture.cs" />
     <Compile Include="Tests\HomePageTests.cs" />
@@ -113,6 +117,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Controls\Activity\ActivityHolderControls.csv" />
+    <None Include="Controls\Activity\ActivityResultsHolderControls.csv" />
+    <None Include="Controls\Activity\ActivitySearchPanelControls.csv" />
     <None Include="Controls\Hotel\HotelResultsFiltersControls.csv" />
     <None Include="Controls\Hotel\HotelResultsHolderControls.csv" />
     <None Include="Controls\Hotel\HotelResultsTitleControls.csv" />

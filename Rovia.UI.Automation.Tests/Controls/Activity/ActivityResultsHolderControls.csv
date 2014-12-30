@@ -1,0 +1,8 @@
+divResultHolder,#ActivityListHolder
+divHotelName,div.text-boxtitle
+hotelRating,ul.hotel_result_stars
+stars,a.orangeStar
+hotelAddress,p.hotelAddressTruncate
+hotelPrice,span.price
+btnSelectActivity,.btnTopMinusMargin
+suppliers,.jsShowHotelDetails .text-flighttime span

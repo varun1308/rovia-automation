@@ -9,7 +9,7 @@ using Rovia.UI.Automation.Tests.Configuration;
 
 namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
-    public class CarSearchPanel : SearchPanel
+    public class CarSearchPanel : UIPage, ISearchPanel
     {
         #region Private Members
         private void ApplyDiscountCode(List<CorporateDiscount> corporateDiscounts)
@@ -99,7 +99,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
         #region Protected Members
 
-        protected override void ApplyPreSearchFilters(PreSearchFilters filters)
+        private void ApplyPreSearchFilters(PreSearchFilters filters)
         {
             var carFilters = filters as CarPreSearchFilters;
             if (!string.IsNullOrEmpty(carFilters.RentalAgency))
@@ -119,7 +119,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 ApplyDiscountCode(carFilters.CorporateDiscount);
         }
 
-        protected override void SelectSearchPanel()
+        private void SelectSearchPanel()
         {
             var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
             if (navBar == null || !navBar.Displayed)
@@ -135,18 +135,14 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
         #endregion
 
-        public override void Search(SearchCriteria searchCriteria)
+        public void Search(SearchCriteria searchCriteria)
         {
             var carSearchCriteria = searchCriteria as CarSearchCriteria;
             SelectSearchPanel();
-
             EnterPickUpDetails(carSearchCriteria);
             EnterDropOffDetails(carSearchCriteria);
-
             ApplyPreSearchFilters(carSearchCriteria.Filters.PreSearchFilters);
-
             WaitAndGetBySelector("buttonCarSearch", ApplicationSettings.TimeOut.Slow).Click();
-
             ResolveMultiLocationOptions();
         }
     }

@@ -83,7 +83,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             CheckForErrors();
         }
 
-        public SearchPanel SearchPanel { get; set; }
+        public ISearchPanel SearchPanel { get; set; }
 
         public string GetTripsErrorUri()
         {

@@ -10,6 +10,7 @@ using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Pages;
 using Rovia.UI.Automation.Tests.Pages.ResultPageComponents;
+using Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity;
 using Rovia.UI.Automation.Tests.Pages.SearchPanels;
 
 namespace Rovia.UI.Automation.Tests.Application
@@ -31,6 +32,8 @@ namespace Rovia.UI.Automation.Tests.Application
                         break;
                     case TripProductType.Car: homePage.SearchPanel = InitializePage<CarSearchPanel>("CarSearchPanelControls");
                         break;
+                    case TripProductType.Activity: homePage.SearchPanel = InitializePage<ActivitySearchPanel>("ActivitySearchPanelControls");
+                        break;
                 }
                 return homePage;
             }
@@ -48,15 +51,21 @@ namespace Rovia.UI.Automation.Tests.Application
                         resultsPage.ResultFilters = InitializePage<AirResultFilters>("AirResultsFiltersControls");
                         break;
                     case TripProductType.Hotel:
-                        var resultHolder = InitializePage<HotelResultsHolder>("HotelResultsHolderControls");
-                        resultHolder.RoomsHolder = InitializePage<HotelRoomsHolder>("HotelRoomsHolderControls");
-                        resultsPage.ResultsHolder = resultHolder;
+                        var hotelResultHolder = InitializePage<HotelResultsHolder>("HotelResultsHolderControls");
+                        hotelResultHolder.RoomsHolder = InitializePage<HotelRoomsHolder>("HotelRoomsHolderControls");
+                        resultsPage.ResultsHolder = hotelResultHolder;
                         resultsPage.ResultFilters = InitializePage<HotelResultFilters>("HotelResultsFiltersControls");
                         resultsPage.ResultTitle = InitializePage<HotelResultsTitle>("HotelResultsTitleControls");
                         break;
                     case TripProductType.Car:
                         resultsPage.ResultsHolder = InitializePage<CarResultHolder>("CarResultsControls");
                         resultsPage.ResultFilters = InitializePage<CarResultFilters>("CarFiltersControls");
+                        break;
+                    case TripProductType.Activity:
+                        var activityResultHolder = InitializePage<ActivityResultsHolder>("ActivityResultsHolderControls");
+                        activityResultHolder.ActivityHolder = InitializePage<ActivityHolder>("ActivityHolderControls");
+                        resultsPage.ResultsHolder = activityResultHolder;
+                        //resultsPage.ResultFilters = InitializePage<ActivityResultFilters>("CarFiltersControls");
                         break;
                     default:
                         return null;
