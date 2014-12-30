@@ -12,6 +12,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     {
         private List<string> _appliedFilters;
         private List<string> _failedFilters;
+        private CarMatrix _carMatrix;
 
         private bool IsPreSearchFilterApplied(string filterType)
         {
@@ -91,6 +92,13 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         private void SetMatrix()
         {
             var matrix = GetUIElements("matrixSection").First();
+            _carMatrix = new CarMatrix();
+            var carAgencyType = matrix.GetAttribute("data-id").Split(',');
+
+            _carMatrix.CarType = carAgencyType[0];
+            _carMatrix.RentalAgency = carAgencyType[1];
+            _carMatrix.TotalFare = double.Parse(matrix.WaitAndGetBySelector("matrixPrice", ApplicationSettings.TimeOut.Fast).Text.TrimStart('$'));
+
             matrix.Click();
         }
 
@@ -194,10 +202,47 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
             if (carPostSearchFilters.CarOptions != null)
             {
-                //ValidateCarOptions(carPostSearchFilters.CarOptions);
+                ValidateCarOptions(carPostSearchFilters.CarOptions, carResults);
             }
+            if (carPostSearchFilters.Matrix != null)
+                ValidateMatrix(_carMatrix, carResults);
             if (_failedFilters.Any())
                 throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
+        }
+
+        private void ValidateCarOptions(List<string> carOptions, List<CarResult> carResults)
+        {
+            if (!(carResults.Select(x => x.AirConditioning).All(x => x.Equals(GetCarOptionsText(carOptions.Contains, "AC")))
+                && carResults.Select(x => x.Transmission).All(x => x.Equals(GetCarOptionsText(carOptions.Contains, "AT")))))
+                _failedFilters.Add("Car options");
+        }
+
+        private string GetCarOptionsText(Func<string, bool> contains, string ac)
+        {
+            if (ac.Equals("AC"))
+                switch (contains.ToString())
+                {
+                    case "EAC":
+                        return "Air Conditioning";
+                    default: return "Air Conditioning";
+                }
+            else
+                switch (contains.ToString())
+                {
+                    case "EAT":
+                        return "Auto Transmission";
+                    default: return "Auto Transmission";
+                }
+        }
+
+        private void ValidateMatrix(CarMatrix carMatrix, List<CarResult> carResults)
+        {
+            if (!carResults.Select(x => x.TotalPrice.TotalAmount).All(x => x.Equals(carMatrix.TotalFare)))
+                _failedFilters.Add("Price");
+            if (!carResults.Select(x => x.CarType).All(x => x.Equals(carMatrix.CarType)))
+                _failedFilters.Add("Car type");
+            if (!carResults.Select(x => x.RentalAgency).All(x => x.Equals(carMatrix.RentalAgency)))
+                _failedFilters.Add("Rental Agency");
         }
     }
 }

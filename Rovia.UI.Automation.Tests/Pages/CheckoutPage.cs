@@ -99,6 +99,28 @@ namespace Rovia.UI.Automation.Tests.Pages
                 throw new ValidationException(errors + "| on PaxInfoPage");
         }
 
+        private void ValidateTripProductDetails(CarTripProduct carTripProduct, CarResult carResult)
+        {
+            var errors = new StringBuilder();
+            if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("CarFare", carResult.TotalPrice.ToString(), carTripProduct.Fares.TotalFare.ToString()));
+            if (!carResult.CarType.Equals(carTripProduct.CarType))
+                errors.Append(FormatError("CarType", carResult.CarType, carTripProduct.CarType));
+            if (!carResult.RentalAgency.Equals(carTripProduct.RentalAgency))
+                errors.Append(FormatError("RentalAgency", carResult.RentalAgency, carTripProduct.RentalAgency));
+            if (!carResult.PickUpDateTime.Equals(carTripProduct.PickUpDateTime))
+                errors.Append(FormatError("Pick Up DateTime", carResult.PickUpDateTime.ToLongDateString(), carTripProduct.PickUpDateTime.ToLongDateString()));
+            if (!carResult.DropOffDateTime.Equals(carTripProduct.DropOffDateTime))
+                errors.Append(FormatError("Drop Off DateTime", carResult.DropOffDateTime.ToLongDateString(), carTripProduct.DropOffDateTime.ToLongDateString()));
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on CheckOutPage");
+        }
+
+        private void ValidateTripProductDetails(AirTripProduct airTripProduct, AirResult airResult)
+        {
+            //to Impletment
+        }
+
         private string FormatError(string error, string addedValue, string tfValue)
         {
             return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
@@ -287,6 +309,9 @@ namespace Rovia.UI.Automation.Tests.Pages
                     case TripProductType.Hotel:
                         ValidateBookedTripProducts(x as HotelTripProduct, selectedItineary as HotelResult);
                         break;
+                    case TripProductType.Car:
+                        ValidateBookedTripProducts(x as CarTripProduct, selectedItineary as CarResult);
+                        break;
                 }
             });
         }
@@ -307,6 +332,24 @@ namespace Rovia.UI.Automation.Tests.Pages
             if (!string.IsNullOrEmpty(errors.ToString()))
                 throw new ValidationException(errors + "| on ConfirmationPage");
         }
+        private void ValidateBookedTripProducts(CarTripProduct carTripProduct, CarResult carResult)
+        {
+            var errors = new StringBuilder();
+            if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("CarFare", carResult.TotalPrice.ToString(), carTripProduct.Fares.TotalFare.ToString()));
+            if (!carResult.CarType.Equals(carTripProduct.CarType))
+                errors.Append(FormatError("CarType", carResult.CarType, carTripProduct.CarType));
+            if (!carResult.AirConditioning.Equals(carTripProduct.AirConditioning))
+                errors.Append(FormatError("AirConditioning", carResult.AirConditioning, carTripProduct.AirConditioning));
+            if (!carResult.Transmission.Equals(carTripProduct.Transmission))
+                errors.Append(FormatError("Transmission", carResult.Transmission, carTripProduct.Transmission));
+            if (!carResult.PickUpDateTime.Equals(carTripProduct.PickUpDateTime))
+                errors.Append(FormatError("Pick Up DateTime", carResult.PickUpDateTime.ToLongDateString(), carTripProduct.PickUpDateTime.ToLongDateString()));
+            if (!carResult.DropOffDateTime.Equals(carTripProduct.DropOffDateTime))
+                errors.Append(FormatError("Drop Off DateTime", carResult.DropOffDateTime.ToLongDateString(), carTripProduct.DropOffDateTime.ToLongDateString()));
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on ConfirmationPage");
+        }
 
         private List<TripProduct> ParseBookedTripProducts()
         {
@@ -316,10 +359,33 @@ namespace Rovia.UI.Automation.Tests.Pages
                 {
                     case "Hotel":
                         return ParseBookedHotelTripProduct(x);
+                    case "Car":
+                        return ParseBookedCarTripProduct(x);
                     default:
                         return null;
                 }
             }).ToList();
+        }
+
+        private TripProduct ParseBookedCarTripProduct(IUIWebElement tripProduct)
+        {
+            var title = tripProduct.WaitAndGetBySelector("carTitleConfirmation", ApplicationSettings.TimeOut.Fast).Text.Split('-')[0].Split(' ')[0].TrimEnd(' ');
+            var totalFare = tripProduct.WaitAndGetBySelector("totalFare", ApplicationSettings.TimeOut.Fast).Text;
+            var pickUp = tripProduct.GetUIElements("carPickUpDateTimeConfirmation").Select(x => x.Text).ToArray();
+            var pickUpDateTime = DateTime.Parse(pickUp[0]).ToShortDateString() + " " + pickUp[1];
+            var dropoff = tripProduct.GetUIElements("carDropoffDateTimeConfirmation").Select(x => x.Text).ToArray();
+            var dropOffDateTime = DateTime.Parse(dropoff[0]).ToShortDateString() + " " + dropoff[1];
+            var carOptions = tripProduct.GetUIElements("carOptionsConfirmation").Select(x => x.Text).ToArray();
+            var passengerName = tripProduct.WaitAndGetBySelector("carPassengersConfirmation", ApplicationSettings.TimeOut.Fast).Text;
+            return new CarTripProduct()
+            {
+                CarType = title,
+                AirConditioning = carOptions[1],
+                Transmission = carOptions[2],
+                Fares = new Fare() { TotalFare = new Amount(totalFare) },
+                PickUpDateTime = DateTime.Parse(pickUpDateTime),
+                DropOffDateTime = DateTime.Parse(dropOffDateTime)
+            };
         }
 
         private TripProduct ParseBookedHotelTripProduct(IUIWebElement tripProduct)
@@ -344,26 +410,5 @@ namespace Rovia.UI.Automation.Tests.Pages
             };
         }
 
-        private void ValidateTripProductDetails(CarTripProduct carTripProduct, CarResult carResult)
-        {
-            var errors = new StringBuilder();
-            if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
-                errors.Append(FormatError("CarFare", carResult.TotalPrice.ToString(), carTripProduct.Fares.TotalFare.ToString()));
-            if (!carResult.CarType.Equals(carTripProduct.CarType))
-                errors.Append(FormatError("CarType", carResult.CarType, carTripProduct.CarType));
-            if (!carResult.RentalAgency.Equals(carTripProduct.RentalAgency))
-                errors.Append(FormatError("RentalAgency", carResult.RentalAgency, carTripProduct.RentalAgency));
-            if (!carResult.PickUpDateTime.Equals(carTripProduct.PickUpDateTime))
-                errors.Append(FormatError("Pick Up DateTime", carResult.PickUpDateTime.ToLongDateString(), carTripProduct.PickUpDateTime.ToLongDateString()));
-            if (!carResult.DropOffDateTime.Equals(carTripProduct.DropOffDateTime))
-                errors.Append(FormatError("Drop Off DateTime", carResult.DropOffDateTime.ToLongDateString(), carTripProduct.DropOffDateTime.ToLongDateString()));
-            if (!string.IsNullOrEmpty(errors.ToString()))
-                throw new ValidationException(errors + "| on CheckOutPage");
-        }
-
-        private void ValidateTripProductDetails(AirTripProduct airTripProduct, AirResult airResult)
-        {
-            //to Impletment
-        }
     }
 }
