@@ -39,7 +39,20 @@ namespace Rovia.UI.Automation.Tests.Utility
             LogManager.Initialise();
             _logger = LogManager.GetInstance();
             _app = new RoviaApp();
-            GoToHomePage();
+            var i = 0;
+            while (true)
+            {
+                try
+                {
+                    GoToHomePage();
+                    break;
+                }
+                catch (PageLoadFailed exception)
+                {
+                    _app.SaveScreenshot("SiteLoadFailed"+i++);
+                    _logger.LogWarning(exception.ToString());
+                }
+            }
         }
 
         [AssemblyCleanup]

@@ -20,9 +20,9 @@ namespace Rovia.UI.Automation.Tests.Application
 
         public HomePage HomePage
         {
-            get 
-            { 
-                var homePage= InitializePage<HomePage>("HomeControls");
+            get
+            {
+                var homePage = InitializePage<HomePage>("HomeControls");
                 switch (State.CurrentProduct)
                 {
                     case TripProductType.Air: homePage.SearchPanel = InitializePage<AirSearchPanel>("AirSearchPanelControls");
@@ -48,15 +48,15 @@ namespace Rovia.UI.Automation.Tests.Application
                         resultsPage.ResultFilters = InitializePage<AirResultFilters>("AirResultsFiltersControls");
                         break;
                     case TripProductType.Hotel:
-                        var resultHolder=InitializePage<HotelResultsHolder>("HotelResultsHolderControls");
-                        resultHolder.RoomsHolder= InitializePage<HotelRoomsHolder>("HotelRoomsHolderControls");
+                        var resultHolder = InitializePage<HotelResultsHolder>("HotelResultsHolderControls");
+                        resultHolder.RoomsHolder = InitializePage<HotelRoomsHolder>("HotelRoomsHolderControls");
                         resultsPage.ResultsHolder = resultHolder;
                         resultsPage.ResultFilters = InitializePage<HotelResultFilters>("HotelResultsFiltersControls");
                         resultsPage.ResultTitle = InitializePage<HotelResultsTitle>("HotelResultsTitleControls");
                         break;
                     case TripProductType.Car:
                         resultsPage.ResultsHolder = InitializePage<CarResultHolder>("CarResultsControls");
-                        resultsPage.ResultFilters=InitializePage<CarResultFilters>("CarFiltersControls");
+                        resultsPage.ResultFilters = InitializePage<CarResultFilters>("CarFiltersControls");
                         break;
                     default:
                         return null;
@@ -103,27 +103,28 @@ namespace Rovia.UI.Automation.Tests.Application
             };
         }
 
-        public bool SaveScreenshot(TestContext context)
+        public void SaveScreenshot(TestContext context)
         {
-            try
-            {
-                var driver = Driver as ITakesScreenshot;
-                var testClass = context.FullyQualifiedTestClassName.Split('.');
-                if (driver != null)
-                {
-                    var screenShot = driver.GetScreenshot();
+            var driver = Driver as ITakesScreenshot;
+            var testClass = context.FullyQualifiedTestClassName.Split('.');
+            if (driver == null) return;
+            var screenShot = driver.GetScreenshot();
 
-                    var fileName = GetDirectoryPath() +"\\"+
-                                   testClass[testClass.Length - 1] + "_" + context.TestName + "_" + (context.DataRow.Table.Rows.IndexOf(context.DataRow)+1) +
-                                   ".jpg";
-                    screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
-                    LogManager.GetInstance().LogInformation("<< Img : "+fileName + " >>");
-                }
-            }
-            catch
-            {
-            }
-            return false;
+            var fileName = GetDirectoryPath() + "\\" +
+                           testClass[testClass.Length - 1] + "_" + context.TestName + "_" + (context.DataRow.Table.Rows.IndexOf(context.DataRow) + 1) +
+                           ".jpg";
+            screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
+            LogManager.GetInstance().LogInformation("<< Img : " + fileName + " >>");
+        }
+
+        public void SaveScreenshot(string name)
+        {
+            var driver = Driver as ITakesScreenshot;
+            if (driver == null) return;
+            var screenShot = driver.GetScreenshot();
+
+            var fileName = GetDirectoryPath() + "\\" + name + "jpg";
+            screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
         }
 
         private string GetDirectoryPath()
@@ -152,7 +153,7 @@ namespace Rovia.UI.Automation.Tests.Application
             }
             catch (NoAlertPresentException)
             {
-               
+
             }
         }
     }
