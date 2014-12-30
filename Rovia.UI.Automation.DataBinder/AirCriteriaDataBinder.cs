@@ -73,7 +73,7 @@ namespace Rovia.UI.Automation.DataBinder
                         break;
 
                     case "STOP":
-                        filterCriteria.Stop = valueList[i];
+                        filterCriteria.Stop =new List<string>(valueList[i].Split('/'));
                         break;
                     case "DURATION":
                         filterCriteria.MaxTimeDurationDiff = int.Parse(valueList[i]);
@@ -97,6 +97,9 @@ namespace Rovia.UI.Automation.DataBinder
                             Min = int.Parse(valueList[i].Split('-')[0]),
                             Max = int.Parse(valueList[i].Split('-')[1])
                         };
+                        break;
+                    case "MATRIX":
+                        filterCriteria.Matrix = new AirMatrix() { CheckMatrix = true };
                         break;
                 }
                 i++;

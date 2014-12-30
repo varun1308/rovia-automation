@@ -1,4 +1,6 @@
+divMatrix,div.flightResultsDetails 
 divMatrixAirlines,div.flightDetailsHeading
+divMatrixPrice,p.orangeTxt
 minPrice,div.jsMinPrice
 maxPrice,div.jsMaxPrice
 maxTimeDuration,span.jsSliderValue1

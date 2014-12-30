@@ -13,6 +13,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     {
         #region private Air Specific members
 
+        private AirMatrix _airMatrix;
+        private List<string> _failedFilters;
+
         private IEnumerable<string> GetAppliedFilters()
         {
             return GetUIElements("appliedFilters").Select(x => x.Text.Trim());
@@ -23,8 +26,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 float.Parse(WaitAndGetBySelector("minPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
             var maxPrice =
                float.Parse(WaitAndGetBySelector("maxPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
-            priceRange.MinPrice = minPrice+(minPrice * priceRange.Min / 100);
-            priceRange.MaxPrice = maxPrice-(maxPrice * priceRange.Max / 100);
+            priceRange.MinPrice = minPrice + (minPrice * priceRange.Min / 100);
+            priceRange.MaxPrice = maxPrice - (maxPrice * priceRange.Max / 100);
             ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (priceRange.MinPrice * 100) + "," + (priceRange.MaxPrice * 100) + "]})");
         }
 
@@ -36,14 +39,14 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             ExecuteJavascript("$('#sliderTripDuration').trigger({type:'slideStop',value:[" + (maxTimeDurationCustom * 60) + "]})");
         }
 
-        private void SetStops(string stop)
+        private void SetStops(List<string> stopList)
         {
             var stops = GetUIElements("stopsFilter").ToList();
             stops.ForEach(x => x.Click());
 
             stops.ForEach(x =>
             {
-                if (x.GetAttribute("data-name").Equals(stop))
+                if (stopList.Contains(x.GetAttribute("data-name")))
                     x.Click();
             });
         }
@@ -123,10 +126,16 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private void SetMatrix()
         {
-            var divMatrixAirlines = GetUIElements("divMatrixAirlines");
-
-            divMatrixAirlines[0].Click();
-
+            var divMatrixAirlines = GetUIElements("divMatrix").First(x => x.WaitAndGetBySelector("divMatrixPrice", ApplicationSettings.TimeOut.Fast).Text.Contains('$'));
+            _airMatrix = new AirMatrix
+                {
+                    Airlines =
+                        divMatrixAirlines.WaitAndGetBySelector("divMatrixAirlines", ApplicationSettings.TimeOut.Fast).
+                            GetAttribute("title"),
+                    Price =
+                        divMatrixAirlines.WaitAndGetBySelector("divMatrixPrice", ApplicationSettings.TimeOut.Fast).Text
+                };
+            divMatrixAirlines.Click();
 
             // uncomment below if wants to test all matrix
             //return !divMatrixAirlines.Any(x =>
@@ -137,7 +146,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             //});
         }
 
-        
+
         #region need this methods in validations
 
         private string VerifyStopsFilter()
@@ -229,7 +238,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 SetAirlines(airPostSearchFilters.Airlines);
                 appliedFilters.Add("Airlines");
             }
-            SetMatrix();
+            if (airPostSearchFilters.Matrix != null)
+            {
+                SetMatrix();
+                appliedFilters.AddRange(new string[] { "Airlines", "Price" });
+            }
             var unAppliedFilters = appliedFilters.Except(GetAppliedFilters()).ToList();
 
             if (unAppliedFilters.Any())
@@ -238,7 +251,52 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public void ValidateFilters(PostSearchFilters postSearchFilters, Func<List<Results>> getParsedResults)
         {
-            
+            var airPostSearchFilters = postSearchFilters as AirPostSearchFilters;
+            var airResults = getParsedResults().Select(x => x as AirResult).ToList();
+            _failedFilters = new List<string>();
+            if (airPostSearchFilters == null)
+                throw new InvalidInputException("PostSearchFilters");
+            if (airPostSearchFilters.PriceRange != null)
+                ValidatePriceRange(airPostSearchFilters.PriceRange, airResults.Select(x => x.Amount.TotalAmount));
+            //if (airPostSearchFilters.Stop != null)
+            //{
+            //    ValidateStops(airPostSearchFilters.Stop.ToList().ConvertAll(x=>x.ToLower()), airResults.Select(x => x.Legs));
+            //}
+            if (_failedFilters.Any())
+                throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
+        }
+
+        private void ValidateStops(List<string> filterStops, IEnumerable<List<FlightLegs>> resultLegs)
+        {
+
+        }
+
+        private List<int> GetStops(string[] filterStops)
+        {
+            var i = 0;
+            var stopLists = new List<int>();
+            while (i < filterStops.Length)
+            {
+                switch (filterStops[i].ToUpper())
+                {
+                    case "NONE": stopLists.Add(0);
+                        break;
+                    case "ONE": stopLists.Add(1);
+                        break;
+                    case "ONEPLUS": stopLists.Add(2);
+                        break;
+                    default: stopLists.Add(0);
+                        break;
+                }
+                i++;
+            }
+            return stopLists;
+        }
+
+        private void ValidatePriceRange(PriceRange priceRange, IEnumerable<double> amountList)
+        {
+            if (amountList.Any(x => x > priceRange.MaxPrice || x < priceRange.MinPrice))
+                _failedFilters.Add("Price");
         }
 
         #endregion

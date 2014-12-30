@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Air\AirMatrix.cs" />
     <Compile Include="Air\AirPostSearchFilters.cs" />
     <Compile Include="Air\AirPreSearchFilters.cs" />
     <Compile Include="Air\AirTripProduct.cs" />
