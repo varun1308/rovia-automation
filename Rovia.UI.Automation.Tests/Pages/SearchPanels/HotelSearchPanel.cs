@@ -9,30 +9,29 @@ using Rovia.UI.Automation.Tests.Configuration;
 
 namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
-    public class HotelSearchPanel : SearchPanel
+    public class HotelSearchPanel : UIPage, ISearchPanel
     {
 
         private void SetPassengerDetails(Passengers passengers)
         {
-            
-            WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Adults+(passengers.Adults>1?" Adults":" Adult"));
-            if (passengers.Children==0)
+            WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Adults + (passengers.Adults > 1 ? " Adults" : " Adult"));
+            if (passengers.Children == 0)
                 return;
             WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Children + (passengers.Children > 1 ? " Children" : " Child"));
             var i = 0;
             GetUIElements("divChildAgeHolder").ForEach(x => x.SelectFromDropDown(passengers.ChildrenAges[i++]));
-            
+
         }
 
         private void SetStayPeriod(StayPeriod stayPeriod)
         {
             WaitAndGetBySelector("checkInDate", ApplicationSettings.TimeOut.Slow).SendKeys(stayPeriod.CheckInDate.ToString("MM/dd/yyyy"));
-            WaitAndGetBySelector("checkOutDate", ApplicationSettings.TimeOut.Slow).SendKeys(stayPeriod.CheckOutDate.ToString("MM/dd/yyyy"));           
+            WaitAndGetBySelector("checkOutDate", ApplicationSettings.TimeOut.Slow).SendKeys(stayPeriod.CheckOutDate.ToString("MM/dd/yyyy"));
         }
 
-        private void SetLocation(string shortlocation,string location)
+        private void SetLocation(string shortlocation, string location)
         {
-            var locationHolder=WaitAndGetBySelector("inpShortLocation", ApplicationSettings.TimeOut.Slow);
+            var locationHolder = WaitAndGetBySelector("inpShortLocation", ApplicationSettings.TimeOut.Slow);
             locationHolder.Click();
             locationHolder.SendKeys(shortlocation);
             if (location == null) return;
@@ -44,7 +43,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             GetUIElements("autoSuggestOptions").First(x => (x.Displayed && x.Text.Equals(location))).Click();
         }
 
-        protected override void SelectSearchPanel()
+        private void SelectSearchPanel()
         {
             var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
             if (navBar == null || !navBar.Displayed)
@@ -58,20 +57,18 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("SearchPanel");
         }
 
-        protected override void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
+        private void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             var filters = preSearchFilters as HotelPreSearchFilters;
             if (!string.IsNullOrEmpty(filters.StarRating))
-                ExecuteJavascript("$('.jHotelRating').val(" + filters.StarRating +")"); 
+                ExecuteJavascript("$('.jHotelRating').val(" + filters.StarRating + ")");
             if (!string.IsNullOrEmpty(filters.HotelName))
-                WaitAndGetBySelector("txtHotelName",ApplicationSettings.TimeOut.Fast).SendKeys(filters.HotelName);
+                WaitAndGetBySelector("txtHotelName", ApplicationSettings.TimeOut.Fast).SendKeys(filters.HotelName);
             if (filters.AdditionalPreferences != null && filters.AdditionalPreferences.Count != 0)
                 filters.AdditionalPreferences.ForEach(x => ExecuteJavascript("$('#ulAdditionalPref').find('[data-value=\"" + x + "\"]').click()"));
         }
-        public override void Search(SearchCriteria searchCriteria)
+        public void Search(SearchCriteria searchCriteria)
         {
-            try
-            {
             var hotelSearchCriteria = searchCriteria as HotelSearchCriteria;
             SelectSearchPanel();
             SetStayPeriod(hotelSearchCriteria.StayPeriod);
@@ -79,12 +76,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
             SetPassengerDetails(hotelSearchCriteria.Passengers);
             ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
-                WaitAndGetBySelector("btnHotelSearch", ApplicationSettings.TimeOut.Slow).Click();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            WaitAndGetBySelector("btnHotelSearch", ApplicationSettings.TimeOut.Slow).Click();
         }
 
     }

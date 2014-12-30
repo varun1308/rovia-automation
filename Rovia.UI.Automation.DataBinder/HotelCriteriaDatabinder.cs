@@ -40,8 +40,13 @@ namespace Rovia.UI.Automation.DataBinder
                             PostSearchFilters = GetPostSearchFilters(dataRow["PostSearchFilters"].ToString(), dataRow["PostSearchFilterValues"].ToString())
                         },
                     Supplier = dataRow["Supplier"].ToString(),
-                    PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
+                    PaymentMode = GetPaymentMode(dataRow["PaymentMode"].ToString())
                 };
+        }
+
+        private PaymentMode GetPaymentMode(string paymentMode)
+        {
+            return string.IsNullOrEmpty(paymentMode) ? PaymentMode.CreditCard : StringToEnum<PaymentMode>(paymentMode);
         }
 
         private HotelPostSearchFilters GetPostSearchFilters(string filters, string value)
@@ -96,9 +101,9 @@ namespace Rovia.UI.Automation.DataBinder
                             };
                         break;
                     case "SORT":
-                        filterCriteria.SortBy =  StringToEnum<SortBy>(valueList[i]);
+                        filterCriteria.SortBy = StringToEnum<SortBy>(valueList[i]);
                         break;
-                    default:throw new InvalidInputException(valueList[i] + " to HotelDataBinder");
+                    default: throw new InvalidInputException(valueList[i] + " to HotelDataBinder");
                 }
                 i++;
             }

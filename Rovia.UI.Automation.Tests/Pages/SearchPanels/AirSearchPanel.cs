@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
@@ -10,7 +11,7 @@ using Rovia.UI.Automation.Tests.Configuration;
 
 namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
-    public class AirSearchPanel:SearchPanel
+    public class AirSearchPanel : UIPage , ISearchPanel
     {
         #region Private Members
 
@@ -111,7 +112,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
         #region Protected Members
 
-        protected override void SelectSearchPanel()
+        private void SelectSearchPanel()
         {
             var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
             if (navBar == null || !navBar.Displayed)
@@ -125,7 +126,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("SearchPanel");
         }
 
-        protected override void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
+        private void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             var filters = preSearchFilters as AirPreSearchFilters;
             ExecuteJavascript("$('.jCabinClass').siblings('div').find('.filter-option').text('" + filters.CabinType.ToString().Replace('_', ' ') + "')");
@@ -139,7 +140,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
         }
         #endregion
 
-        public override void Search(SearchCriteria searchCriteria)
+        public void Search(SearchCriteria searchCriteria)
         {
             var airSearchCriteria = searchCriteria as AirSearchCriteria;
             Thread.Sleep(4000);

@@ -1,0 +1,7 @@
+activityDetailsHolder,div#activityDetailsHolder
+btnAddToCart,.jsAddToCart
+btnCancel,button#btnCloseFlightPopup
+alerts,div.alert
+btnCheckOut,a#btnCheckout
+divloader,div.txtAlignCenter.jsWaitMessage
+productBar,.hotelroom-bar

@@ -16,8 +16,24 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         private List<string> _failedFilters;
         #region IResultPage Members
 
-        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
+        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters,Func<List<Results>> getParsedResults)
         {
+            //_appliedFilters = GetAppliedFilters().ToList();  
+            //var hotelFilters = preSearchFilters as HotelPreSearchFilters;
+            //if (hotelFilters == null)
+            //    throw new InvalidInputException("PreSearchFilters");
+            //var hotelResults = getParsedResults().Select(x => x as HotelResult).ToList();
+            //    _failedFilters = new List<string>();
+
+            //if (!string.IsNullOrEmpty(hotelFilters.HotelName))
+            //{
+            //    if(_appliedFilters.Contains("Hotel Name"))
+            //        ValidateHotelName(hotelFilters.HotelName, hotelResults.Select(x => x.HotelName));
+            //    else
+            //        _failedFilters.Add("Hotel Name")
+            //}
+            //if(!string.IsNullOrEmpty(hotelFilters.StarRating))
+            //    ValidateRatingRange(new RatingRange() { From = int.Parse(hotelFilters.StarRating),To = 5}, hotelResults.Select(x => x.HotelRating));
             return true;
         }
 
@@ -93,7 +109,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     ValidateRatingRange(hotelPostSearchFilters.RatingRange, hotelResults.Select(x => x.HotelRating));
                 if (hotelPostSearchFilters.SortBy != SortBy.Featured)
                     ValidateSort(hotelPostSearchFilters.SortBy, hotelResults);
-                if (hotelPostSearchFilters.PreferredLocation != null)
+                if (hotelPostSearchFilters.Matrix != null)
                 {
                     ValidateMatrix(hotelPostSearchFilters.Matrix as HotelMatrix, getParsedResults);
                     SortResults(hotelPostSearchFilters.SortBy);

@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class Amount
@@ -19,10 +21,17 @@ namespace Rovia.UI.Automation.ScenarioObjects
 
         public Amount(string amount)
         {
-            var details = amount.Split();
-            if(details.Length>=2)
-                Currency = details[1];
-            TotalAmount = double.Parse(details[0].Remove(0,1));
+            try
+            {
+                var details = amount.Split();
+                if (details.Length >= 2)
+                    Currency = details[1];
+                TotalAmount = double.Parse(details[0].Remove(0, 1));
+            }
+            catch (Exception exception)
+            {
+                TotalAmount = 0;
+            }
         }
 
         public Amount(){}

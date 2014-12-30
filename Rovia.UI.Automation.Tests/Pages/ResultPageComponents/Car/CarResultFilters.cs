@@ -118,7 +118,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 _failedFilters.Add("Price");
         }
 
-        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
+        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
         {
             var carSearchFilters = preSearchFilters as CarPreSearchFilters;
             bool carType = true, rentalAgency = true, carOptions = true;

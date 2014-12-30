@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivitySearchCriteria.cs" />
     <Compile Include="AirSearchCriteria.cs" />
     <Compile Include="CarSearchCriteria.cs" />
     <Compile Include="HotelSearchCriteria.cs" />
