@@ -11,7 +11,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
     public class CarSearchPanel : SearchPanel
     {
-        #region Private Members 
+        #region Private Members
         private void ApplyDiscountCode(List<CorporateDiscount> corporateDiscounts)
         {
             ExecuteJavascript("$('span:contains(\"Corporate Discount\")').click()");
@@ -29,7 +29,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             IUIWebElement autoSuggestBox;
             do
             {
-                autoSuggestBox =WaitAndGetBySelector("autoSuggestBoxOriginLoc", ApplicationSettings.TimeOut.Fast);
+                autoSuggestBox = WaitAndGetBySelector("autoSuggestBoxOriginLoc", ApplicationSettings.TimeOut.Fast);
             } while (autoSuggestBox == null || !autoSuggestBox.Displayed);
             GetUIElements("autoSuggestOptionsOriginLoc").First(x => (x.Displayed && x.Text.Equals(location))).Click();
         }
@@ -66,8 +66,9 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 if (!string.IsNullOrEmpty(carSearchCriteria.PickUp.PickUpLocation)) SetOriginLocation(carSearchCriteria.PickUp.PickUpLocation);
             }
             var pickUpDate = WaitAndGetBySelector("pickUpDate", ApplicationSettings.TimeOut.Slow);
-            pickUpDate.SendKeys(carSearchCriteria.PickUp.PickUpTime.ToString("MM/dd/yyyy"));
+            pickUpDate.SendKeys(carSearchCriteria.PickUp.PickUpDate.ToString("MM/dd/yyyy"));
             pickUpDate.Click();
+            WaitAndGetBySelector("pickUpTime", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(carSearchCriteria.PickUp.PickUpTime);
         }
 
         private void EnterDropOffDetails(CarSearchCriteria carSearchCriteria)
@@ -89,8 +90,9 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             else
                 WaitAndGetBySelector("dropoffSameAsPickUp", ApplicationSettings.TimeOut.Slow).Click();
             var dropoffDate = WaitAndGetBySelector("dropoffDate", ApplicationSettings.TimeOut.Slow);
-            dropoffDate.SendKeys(carSearchCriteria.DropOff.DropOffTime.ToString("MM/dd/yyyy"));
-           dropoffDate.Click();
+            dropoffDate.SendKeys(carSearchCriteria.DropOff.DropOffDate.ToString("MM/dd/yyyy"));
+            dropoffDate.Click();
+            WaitAndGetBySelector("dropoffTime", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(carSearchCriteria.DropOff.DropOffTime);
         }
 
         #endregion
@@ -113,8 +115,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
             ExecuteJavascript("$('#ulTransmission').find('[data-value=\"" + carFilters.Transmission +
                               "\"]').click()");
-
-            ApplyDiscountCode(carFilters.CorporateDiscount);
+            if (!string.IsNullOrEmpty(carFilters.CorporateDiscount[0].RentalAgency))
+                ApplyDiscountCode(carFilters.CorporateDiscount);
         }
 
         protected override void SelectSearchPanel()

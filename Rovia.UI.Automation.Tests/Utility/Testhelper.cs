@@ -154,7 +154,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 TripsErrorUI = _app.HomePage.GetTripsErrorUri();
                 //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
-                //Results = _app.ResultsPage.ParseResults();
+                Results = _app.ResultsPage.ParseResults();
                 Assert.IsTrue(_app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters), "Addtional search filters not applied.");
                 _logger.LogStatus("Search", "Passed");
             }
@@ -192,6 +192,13 @@ namespace Rovia.UI.Automation.Tests.Utility
                         _app.State.CurrentUser.ResetUser();
                         break;
                 }
+
+                if(ApplicationSettings.Environment=="PROD")
+                {
+                    if(_app.TripFolderPage.IsLeavePopupVisible())
+                    _app.ConfirmAlert();
+                }
+
                 if (requestingPage.Equals("HomePage"))
                 {
                     _app.HomePage.WaitForHomePage();
@@ -443,7 +450,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 _app.CheckoutPage.ValidateBookedProductDetails(_selectedItineary);
                 _logger.LogStatus("PayNow", "Passed");
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 _logger.LogStatus("PayNow", "Failed");
                 throw;

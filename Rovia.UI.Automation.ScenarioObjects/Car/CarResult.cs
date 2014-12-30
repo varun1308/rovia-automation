@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class CarResult :Results
@@ -10,5 +12,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public string Location { get; set; }
         public Amount PricePerWeek { get; set; }
         public Amount TotalPrice { get; set; }
+        public DateTime PickUpDateTime { get; set; }
+        public DateTime DropOffDateTime { get; set; }
     }
 }
