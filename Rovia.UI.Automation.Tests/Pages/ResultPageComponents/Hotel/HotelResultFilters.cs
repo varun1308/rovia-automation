@@ -46,48 +46,40 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 if (hotelPostSearchFilters.Matrix != null)
                 {
                     SetMatrix(hotelPostSearchFilters.Matrix as HotelMatrix);
-                    WaitWhilePreLoaderIsDisplayed();
                 }
                 if (hotelPostSearchFilters.PriceRange != null)
                 {
                     SetPriceRange(hotelPostSearchFilters.PriceRange);
                     _appliedFilters.Add("Price");
-                    WaitWhilePreLoaderIsDisplayed();
                 }
                 if (hotelPostSearchFilters.HotelName != null)
                 {
                     SetHotelName(hotelPostSearchFilters.HotelName);
                     _appliedFilters.Add("Hotel Name");
-                    WaitWhilePreLoaderIsDisplayed();
                 }
                 if (hotelPostSearchFilters.RatingRange != null)
                 {
                     SetRatingRange(hotelPostSearchFilters.RatingRange);
                     _appliedFilters.Add("Star Rating");
-                    WaitWhilePreLoaderIsDisplayed();
                 }
                 if (hotelPostSearchFilters.Amenities != null)
                 {
                     SetAmenitiesFilter(hotelPostSearchFilters.Amenities);
                     _appliedFilters.Add("Amenities");
-                    WaitWhilePreLoaderIsDisplayed();
                 }
                 if (hotelPostSearchFilters.PreferredLocation != null)
                 {
                     SetPreferredLocationFilter(hotelPostSearchFilters.PreferredLocation);
                     _appliedFilters.Add("Preferred Location");
-                    WaitWhilePreLoaderIsDisplayed();
                 }
                 if (hotelPostSearchFilters.DistanceRange != null)
                 {
                     SetDistanceRangeFilter(hotelPostSearchFilters.DistanceRange);
                     _appliedFilters.Add("Distance");
-                    WaitWhilePreLoaderIsDisplayed();
                 }
                 if (hotelPostSearchFilters.SortBy != SortBy.Featured)
                 {
                     SortResults(hotelPostSearchFilters.SortBy);
-                    WaitWhilePreLoaderIsDisplayed();
                 }
                 var unAppliedFilters = _appliedFilters.Except(GetAppliedFilters()).ToList();
                 if (unAppliedFilters.Any())
@@ -144,6 +136,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 case SortBy.RatingDsc: ValidateRating(hotelResults.Select(x => x.HotelRating).Reverse().ToList());
                     break;
             }
+            WaitWhilePreLoaderIsDisplayed();
         }
 
         private void ValidateRating(IList<int> ratingList)
@@ -192,6 +185,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             {
                 var matrixSection=GetUIElements("matrixSection").First(x => x.GetUIElements("ratedStars").Count == matrix.Rating);
                 matrixSection.Click();
+                WaitWhilePreLoaderIsDisplayed();
                 matrix.Amount = new Amount(matrixSection.WaitAndGetBySelector("matrixPrice", ApplicationSettings.TimeOut.Fast).Text);
                 _appliedFilters.AddRange(new[] { "Star Rating", "Price" });
             }
@@ -221,6 +215,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 case SortBy.RatingDsc: WaitAndGetBySelector("ratingDsc", ApplicationSettings.TimeOut.Fast).Click();
                     break;
             }
+            WaitWhilePreLoaderIsDisplayed();
         }
 
         private void ValidateRatingRange(RatingRange ratingRange, IEnumerable<int> ratingList)
@@ -257,6 +252,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             priceRange.MinPrice = minPrice+(minPrice * priceRange.Min / 100);
             priceRange.MaxPrice = maxPrice-(maxPrice * priceRange.Max / 100);
             ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (priceRange.MinPrice * 100) + "," + (priceRange.MaxPrice * 100) + "]})");
+            WaitWhilePreLoaderIsDisplayed();
         }
 
         private void SetDistanceRangeFilter(DistanceRange distanceRange)
@@ -265,11 +261,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 double.Parse(WaitAndGetBySelector("minDistance", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
             var maxDistance =
                double.Parse(WaitAndGetBySelector("maxDistance", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
-
             minDistance += minDistance * distanceRange.Min / 100;
             maxDistance -= maxDistance * distanceRange.Max / 100;
-
             ExecuteJavascript("$('#sliderRangeDistance').trigger({type:'slideStop',value:[" + (minDistance * 100) + "," + (maxDistance * 100) + "]})");
+            WaitWhilePreLoaderIsDisplayed();
         }
 
         private void SetPreferredLocationFilter(Tuple<string, string> preferredLocation)
@@ -278,6 +273,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             GetUIElements("preferredLocationCategory").First(x => x.GetAttribute("innerText").Equals(preferredLocation.Item1)).Click();
             WaitAndGetBySelector("locationHolder", ApplicationSettings.TimeOut.Fast).Click();
             GetUIElements("preferredLocation").First(x => x.GetAttribute("innerText").Equals(preferredLocation.Item2)).Click();
+            WaitWhilePreLoaderIsDisplayed();
         }
 
         private void SetAmenitiesFilter(ICollection<string> amenityList)
@@ -289,6 +285,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                         x.Click();
                     WaitWhilePreLoaderIsDisplayed();
                 });
+            WaitWhilePreLoaderIsDisplayed();
         }
 
         private void SetRatingRange(RatingRange ratingRange)
@@ -298,13 +295,15 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             GetUIElements("minStarRating")[ratingRange.From - 1].Click();
             WaitWhilePreLoaderIsDisplayed();
             if (ratingRange.From < 5)
-                GetUIElements("maxStarRating")[ratingRange.To-1].Click();
+                GetUIElements("maxStarRating")[ratingRange.To - 1].Click();
+            WaitWhilePreLoaderIsDisplayed();
         }
 
         private void SetHotelName(string hotelName)
         {
             WaitAndGetBySelector("textHotelName", ApplicationSettings.TimeOut.Fast).SendKeys(hotelName);
             WaitAndGetBySelector("searchIcon", ApplicationSettings.TimeOut.Fast).Click();
+            WaitWhilePreLoaderIsDisplayed();
         }
         #endregion
     }
