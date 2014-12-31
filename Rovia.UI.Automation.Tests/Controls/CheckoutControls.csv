@@ -33,10 +33,15 @@ bookedProducts,.jsItemsHolder .border-grey
 bookedProductType,.print_product_header_bg
 bProductTitle,.text-boxtitle
 bSubTitle,.font11.greyfont
-totalFare,span.price,
+totalFare,span.price
 taxesandFees,.font11.minus4
 baseFare,.font11.minus10
 bHotelDetails,div.text-flightinfo
 bPassengers,div.font11.mbl
 carDates,div.mvl .font10.greyfont
 carTimes,div.font16.mts
+carTitleConfirmation,span.print_product_title
+carOptionsConfirmation,div.pull-left.font12
+carPickUpDateTimeConfirmation,div.prl .print_nomargin
+carDropoffDateTimeConfirmation,div.borderRgt.mll .print_font12
+carPassengersConfirmation,div.printPassengers .print_nomargin

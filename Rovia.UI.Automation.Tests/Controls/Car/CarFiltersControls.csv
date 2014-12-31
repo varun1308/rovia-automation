@@ -6,3 +6,4 @@ carTypeFilter,div.jsCarClassFilter .mbs input
 carRentalAgencyFilter,div.jsCarAgencyFilter .mbs input
 carOptions,div.jsCarFeaturesFilter .mbs input
 matrixSection,p.jsMatrixCarPrice
+matrixPrice,span.orangefont
