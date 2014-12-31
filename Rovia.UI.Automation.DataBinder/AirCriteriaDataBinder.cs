@@ -34,9 +34,9 @@ namespace Rovia.UI.Automation.DataBinder
                             {
                                 PreSearchFilters = new AirPreSearchFilters()
                                 {
-                                    IncludeNearByAirPorts = bool.Parse(dataRow["IncludeNearByAirPorts"].ToString()),
-                                    CabinType = StringToEnum<CabinType>((string)dataRow["CabinType"]),
-                                    NonStopFlight = bool.Parse(dataRow["NonStopFlight"].ToString()),
+                                    IncludeNearByAirPorts = bool.Parse(string.IsNullOrEmpty(dataRow["IncludeNearByAirPorts"].ToString()) ? "False" : dataRow["IncludeNearByAirPorts"].ToString()),
+                                    CabinType = StringToEnum<CabinType>(string.IsNullOrEmpty(dataRow["CabinType"].ToString()) ? "Economy" : dataRow["CabinType"].ToString()),
+                                    NonStopFlight = bool.Parse(string.IsNullOrEmpty(dataRow["NonStopFlight"].ToString()) ? "False" : dataRow["NonStopFlight"].ToString()),
                                     AirLines = string.IsNullOrEmpty(dataRow["AirLines"].ToString()) ? null : new List<string>(((string)dataRow["AirLines"]).Split('|'))
                                 },
                                 PostSearchFilters = GetPostSearchFilters(dataRow["PostFilters"].ToString(), dataRow["PostFiltersValues"].ToString())

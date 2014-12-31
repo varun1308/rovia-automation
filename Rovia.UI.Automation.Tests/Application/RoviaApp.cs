@@ -123,7 +123,7 @@ namespace Rovia.UI.Automation.Tests.Application
                            testClass[testClass.Length - 1] + "_" + context.TestName + "_" + (context.DataRow.Table.Rows.IndexOf(context.DataRow) + 1) +
                            ".jpg";
             screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
-            LogManager.GetInstance().LogInformation("<< Img : " + fileName + " >>");
+            LogManager.GetInstance().LogInformation("$$ " + fileName + " $$");
         }
 
         public void SaveScreenshot(string name)

@@ -12,14 +12,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
     public class CarResultHolder : UIPage, IResultsHolder
     {
-        private static Dictionary<CarResult, IUIWebElement> _results;
-        private CarResult _addedItinerary ;
+        private CarResult _addedItinerary;
 
         private bool AddToCart(IUIWebElement btnAddToCart)
         {
 
             btnAddToCart.Click();
-            var divloader = WaitAndGetBySelector("divLoader", ApplicationSettings.TimeOut.Fast);
             try
             {
                 while (true)
@@ -53,13 +51,16 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         private CarResult ParseResultFromCart()
         {
             var carOptions = GetUIElements("carOptionsOnCart");
+            var dates = GetUIElements("DatesOnCart").Select(x => x.Text).ToArray();
+            var rental = WaitAndGetBySelector("rentalAgencyOnCArt", ApplicationSettings.TimeOut.Fast).GetAttribute("alt");
             return new CarResult()
                 {
-                    RentalAgency =
-                    WaitAndGetBySelector("rentalAgencyOnCArt", ApplicationSettings.TimeOut.Fast).GetAttribute("alt"),
+                    RentalAgency = rental,
                     AirConditioning = carOptions[1].Text,
                     Transmission = carOptions[2].Text,
-                    TotalPrice =new Amount(WaitAndGetBySelector("priceOnCart", ApplicationSettings.TimeOut.Fast).Text)
+                    TotalPrice = new Amount(WaitAndGetBySelector("priceOnCart", ApplicationSettings.TimeOut.Fast).Text),
+                    PickUpDateTime = DateTime.Parse(dates[0]),
+                    DropOffDateTime = DateTime.Parse(dates[1])
                 };
 
         }
@@ -72,64 +73,45 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public List<Results> ParseResults()
         {
-            var rentalAgency = GetUIElements("rentalAgency").Select(x => x.GetAttribute("alt")).ToArray();
-            var carDetails = GetUIElements("carType").ToArray();
-            var carType = new string[carDetails.Length / 3];
-            var j = 0; var i = 0;
-            for (j = 0; i < carDetails.Length; i = i + 3, j++)
-                carType[j] = carDetails[i].Text.Split(' ')[0];
+            var rentalAgency = GetUIElements("rentalAgency").Select(x => x.GetAttribute("alt"));
 
-            var carOptions = GetUIElements("carOptions").ToArray();
-            var airconditioning = new string[carOptions.Length / 4];
-            for (i = 1, j = 0; i < carOptions.Length; i = i + 4, j++)
-                airconditioning[j] = carOptions[i].Text;
-
-            var transmission = new string[carOptions.Length / 4];
-            for (i = 2, j = 0; i < carOptions.Length; i = i + 4, j++)
-                transmission[j] = carOptions[i].Text;
+            var carType = GetUIElements("carType").Where((x, index) => index == 0 || (index % 3 == 0)).Select(x => x.Text.Split(' ')[0]).ToList();
+            var carOptions = GetUIElements("carOptions");
+            var airconditioning = carOptions.Skip(1).Where((x, index) => index % 4 == 0).Select(x => x.Text).ToList();
+            var transmission = carOptions.Skip(2).Where((x, index) => index % 4 == 0).Select(x => x.Text).ToList();
 
             var price = GetUIElements("price");
             var pricePerWeek = price.Select(x => x.Text).Where((item, index) => index % 2 == 0).ToArray();
             var totalPrice = price.Select(x => x.Text).Where((item, index) => index % 2 != 0).ToArray();
-            var btnAddToCart = GetUIElements("addToCartButton").ToArray();
-            var locations = GetUIElements("locations").Select(x => x.Text.Split('-')[0].TrimEnd(' ')).Where((item, index) => index%2 == 0).ToArray();
+            var locations = GetUIElements("locations").Select(x => x.Text.Split('-')[0].TrimEnd(' ')).Where((item, index) => index % 2 == 0).ToArray();
 
             var allDateTimes = GetUIElements("DateTimes").Where((item) => item.Text.Contains(" AM") || item.Text.Contains(" PM")).Select(x => x.Text).ToList();
-            var pickUpDateTimes = allDateTimes.Where(((item,index) => index%2 == 0)).ToArray();
+            var pickUpDateTimes = allDateTimes.Where(((item, index) => index % 2 == 0)).ToArray();
             var dropOffDateTimes = allDateTimes.Where(((item, index) => index % 2 != 0)).ToArray();
 
-            _results = new Dictionary<CarResult, IUIWebElement>();
-
-            i = 0;
-            while (i < rentalAgency.Length)
-            {
-                _results.Add(new CarResult()
+            return rentalAgency.Select((x, index) => new CarResult()
                 {
-                    RentalAgency = rentalAgency[i],
-                    CarType = carType[i],
-                    AirConditioning = airconditioning[i],
-                    Transmission = transmission[i],
-                    PricePerWeek = new Amount(pricePerWeek[i]),
-                    TotalPrice = new Amount(totalPrice[i]),
-                    Location = locations[i],
-                    PickUpDateTime = DateTime.Parse(pickUpDateTimes[i]),
-                    DropOffDateTime = DateTime.Parse(dropOffDateTimes[i])
-                },btnAddToCart[i]);
-                i++;
-            }
-            return new List<Results>(_results.Select(d => d.Key).ToList());
+                    RentalAgency = x,
+                    CarType = carType[index],
+                    AirConditioning = airconditioning[index],
+                    Transmission = transmission[index],
+                    PricePerWeek = new Amount(pricePerWeek[index]),
+                    TotalPrice = new Amount(totalPrice[index]),
+                    Location = locations[index],
+                    PickUpDateTime = DateTime.Parse(pickUpDateTimes[index]),
+                    DropOffDateTime = DateTime.Parse(dropOffDateTimes[index])
+                } as Results).ToList();
+
         }
 
         public Results AddToCart(string supplier)
         {
             try
             {
-                var carResult = _results.First(x => AddToCart(x.Value)).Key;
-                carResult.TotalPrice = _addedItinerary.TotalPrice;
-                carResult.RentalAgency = _addedItinerary.RentalAgency;
-                carResult.AirConditioning = _addedItinerary.AirConditioning;
-                carResult.Transmission = _addedItinerary.Transmission;
-                return carResult;
+                var carType = GetUIElements("carType").Where((x, i) => i == 0 || (i % 3 == 0)).Select(x => x.Text.Split(' ')[0]).ToList();
+                var selectedIndex = GetUIElements("addToCartButton").Select((x, i) => new { btn = x, index = i }).First(x => AddToCart(x.btn)).index;
+                _addedItinerary.CarType = carType.ElementAt(selectedIndex);
+                return _addedItinerary;
             }
             catch (System.InvalidOperationException)
             {

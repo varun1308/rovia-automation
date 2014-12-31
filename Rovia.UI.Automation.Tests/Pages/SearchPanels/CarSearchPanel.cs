@@ -18,9 +18,9 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             foreach (var corpDisc in corporateDiscounts)
             {
                 WaitAndGetBySelector("selectCorpDiscCodeRentalAgency", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(corpDisc.RentalAgency);
-                WaitAndGetBySelector("txtcorporateDiscountCode", ApplicationSettings.TimeOut.SuperFast).SendKeys(corpDisc.CorpDiscountCode);
-                WaitAndGetBySelector("txtPromotionalCOde", ApplicationSettings.TimeOut.SuperFast).SendKeys(corpDisc.PromotionalCode);
-                WaitAndGetBySelector("btnaddCorporateCode", ApplicationSettings.TimeOut.SuperFast).Click();
+                WaitAndGetBySelector("txtcorporateDiscountCode", ApplicationSettings.TimeOut.Fast).SendKeys(corpDisc.CorpDiscountCode);
+                WaitAndGetBySelector("txtPromotionalCOde", ApplicationSettings.TimeOut.Fast).SendKeys(corpDisc.PromotionalCode);
+                WaitAndGetBySelector("btnaddCorporateCode", ApplicationSettings.TimeOut.Fast).Click();
             }
         }
 
