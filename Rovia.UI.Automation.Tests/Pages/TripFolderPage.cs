@@ -155,9 +155,9 @@ namespace Rovia.UI.Automation.Tests.Pages
         private void ValidateTripProduct(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
         {
             var errors = new StringBuilder();
-            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle))
+            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle, StringComparison.OrdinalIgnoreCase))
                 errors.Append(FormatError("HotelName",hotelResult.HotelName,hotelTripProduct.ProductTitle));
-            if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", "")))
+            if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", ""), StringComparison.OrdinalIgnoreCase))
                 errors.Append(FormatError("HotelAddress", hotelResult.HotelAddress, hotelTripProduct.Address));
             if (!hotelResult.Amount.Equals(hotelTripProduct.Fares.TotalFare))
                 errors.Append(FormatError("HotelPrice", hotelResult.Amount.ToString(), hotelTripProduct.Fares.TotalFare.ToString()));

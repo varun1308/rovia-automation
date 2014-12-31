@@ -85,9 +85,9 @@ namespace Rovia.UI.Automation.Tests.Pages
         private void ValidateTripProductDetails(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
         {
             var errors = new StringBuilder();
-            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle))
+            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle,StringComparison.OrdinalIgnoreCase))
                 errors.Append(FormatError("HotelName", hotelResult.HotelName, hotelTripProduct.ProductTitle));
-            if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", "")))
+            if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", ""), StringComparison.OrdinalIgnoreCase))
                 errors.Append(FormatError("HotelAddress", hotelResult.HotelAddress, hotelTripProduct.Address));
             if (!hotelResult.Amount.Equals(hotelTripProduct.Fares.TotalFare))
                 errors.Append(FormatError("HotelPrice", hotelResult.Amount.ToString(), hotelTripProduct.Fares.TotalFare.ToString()));
@@ -197,7 +197,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 },
                 Room = new HotelRoom()
                 {
-                    NoOfRooms = int.Parse(WaitAndGetBySelector("roomCount", ApplicationSettings.TimeOut.Fast).Text.Split()[0])
+                    NoOfRooms = int.Parse(tripProduct.WaitAndGetBySelector("roomCount", ApplicationSettings.TimeOut.Fast).Text.Split()[0])
                 }
             };
         }
@@ -319,9 +319,9 @@ namespace Rovia.UI.Automation.Tests.Pages
         private void ValidateBookedTripProducts(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
         {
             var errors = new StringBuilder();
-            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle))
+            if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle, StringComparison.OrdinalIgnoreCase))
                 errors.Append(FormatError("HotelName", hotelResult.HotelName, hotelTripProduct.ProductTitle));
-            if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", "")))
+            if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", ""), StringComparison.OrdinalIgnoreCase))
                 errors.Append(FormatError("HotelAddress", hotelResult.HotelAddress, hotelTripProduct.Address));
             if (!hotelResult.Amount.Equals(hotelTripProduct.Fares.TotalFare))
                 errors.Append(FormatError("HotelPrice", hotelResult.Amount.ToString(), hotelTripProduct.Fares.TotalFare.ToString()));

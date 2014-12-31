@@ -95,7 +95,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         private bool AddToCart(IUIWebElement btnAddToCart)
         {
             btnAddToCart.Click();
-            var divloader = WaitAndGetBySelector("divLoader", ApplicationSettings.TimeOut.Fast);
             try
             {
                 while (true)
