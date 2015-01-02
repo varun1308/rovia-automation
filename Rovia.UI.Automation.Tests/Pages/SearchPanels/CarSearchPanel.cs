@@ -17,7 +17,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             ExecuteJavascript("$('span:contains(\"Corporate Discount\")').click()");
             foreach (var corpDisc in corporateDiscounts)
             {
-                WaitAndGetBySelector("selectCorpDiscCodeRentalAgency", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(corpDisc.RentalAgency);
+                WaitAndGetBySelector("selectCorpDiscCodeRentalAgency", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(corpDisc.RentalAgency);
                 WaitAndGetBySelector("txtcorporateDiscountCode", ApplicationSettings.TimeOut.Fast).SendKeys(corpDisc.CorpDiscountCode);
                 WaitAndGetBySelector("txtPromotionalCOde", ApplicationSettings.TimeOut.Fast).SendKeys(corpDisc.PromotionalCode);
                 WaitAndGetBySelector("btnaddCorporateCode", ApplicationSettings.TimeOut.Fast).Click();

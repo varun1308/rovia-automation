@@ -132,7 +132,7 @@ namespace Rovia.UI.Automation.Tests.Application
             if (driver == null) return;
             var screenShot = driver.GetScreenshot();
 
-            var fileName = GetDirectoryPath() + "\\" + name + "jpg";
+            var fileName = GetDirectoryPath() + "\\" + name + ".jpg";
             screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
         }
 
