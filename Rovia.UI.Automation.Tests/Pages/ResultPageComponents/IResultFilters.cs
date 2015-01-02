@@ -6,7 +6,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
     public interface IResultFilters
     {
-        bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters,Func<List<Results>> getParsedResults);
+        void VerifyPreSearchFilters(PreSearchFilters preSearchFilters,Func<List<Results>> getParsedResults);
         void SetPostSearchFilters(PostSearchFilters postSearchFilters);
 
         void ValidateFilters(PostSearchFilters postSearchFilters, Func<List<Results>> parseResults);

@@ -27,3 +27,4 @@ matrixSection,.jsMatrixStarRatings
 ratedStars,.rated
 preLoader,#modal_filterloader .icon_preloader_small
 matrixPrice,.orangeTxt
+error,.alert-error

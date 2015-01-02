@@ -37,66 +37,50 @@ namespace Rovia.UI.Automation.Tests.Tests
             _logManager.SubmitLog(TestHelper.TripsErrorUI);
         }
 
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("AmedusWSHotelBookingFlow")]
-        public void AmedusWsHotelBookingFlow()
+        [TestMethod,TestCategory("Sanity"),DataSource("AmedusWSHotelBookingFlow")]
+        public void Hotel_AmedusWsBookingFlow()
         {
             Execute();
         }
 
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("HotelsComHotelBookingFlow")]
-        public void HotelsComHotelBookingFlow()
+        [TestMethod, TestCategory("Sanity"), DataSource("HotelsComHotelBookingFlow")]
+        public void Hotel_HotelsComBookingFlow()
         {
             Execute();
         }
 
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("HotelBedsHotelBookingFlow")]
+        [TestMethod, TestCategory("Sanity"), DataSource("HotelBedsHotelBookingFlow")]
         public void HotelBedsHotelBookingFlow()
         {
             Execute();
         }
 
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("PegasusHotelBookingFlow")]
-        public void PegasusHotelBookingFlow()
+        [TestMethod, TestCategory("Sanity"), DataSource("PegasusHotelBookingFlow")]
+        public void Hotel_PegasusBookingFlow()
         {
             Execute();
         }
 
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("PegasussplHotelBookingFlow")]
-        public void PegasussplHotelBookingFlow()
+        [TestMethod, TestCategory("Sanity"), DataSource("PegasussplHotelBookingFlow")]
+        public void Hotel_PegasussplBookingFlow()
         {
             Execute();
         }
 
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("PriceLineV3HotelBookingFlow")]
-        public void PriceLineV3HotelBookingFlow()
+        [TestMethod, TestCategory("Sanity"), DataSource("PriceLineV3HotelBookingFlow")]
+        public void Hotel_PriceLineV3BookingFlow()
         {
             Execute();
         }
 
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("TuricoTGSHotelBookingFlow")]
-        public void TuricoTgsHotelBookingFlow()
+        [TestMethod, TestCategory("Sanity"), DataSource("TuricoTGSHotelBookingFlow")]
+        public void Hotel_TuricoTgsBookingFlow()
         {
             Execute();
         }
 
-        [TestMethod]
-        [TestCategory("Sanity")]
-        [DataSource("FiltersAndMatrixScenarios")]
-        public void HotelFiltersAndMatrixScenarios()
+        [TestMethod, TestCategory("Sanity"), DataSource("FiltersAndMatrixScenarios")]
+        public void Hotel_FiltersAndMatrixTests()
         {
             Execute();
         }

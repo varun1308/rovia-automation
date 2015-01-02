@@ -192,9 +192,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         #region IResultPage Members
 
-        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
+        public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
         {
-            return true;
+            return ;
         }
 
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)

@@ -94,9 +94,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
              ResultFilters.ValidateFilters(postSearchFilters,ResultsHolder.ParseResults);
         }
  
-        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
+        public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
-            return ResultFilters.VerifyPreSearchFilters(preSearchFilters, ResultsHolder.ParseResults);
+             ResultFilters.VerifyPreSearchFilters(preSearchFilters, ResultsHolder.ParseResults);
         }
 
         public void ValidateSearch(SearchCriteria criteria)

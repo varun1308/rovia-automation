@@ -155,7 +155,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
                 Results = _app.ResultsPage.ParseResults();
-                Assert.IsTrue(_app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters), "Addtional search filters not applied.");
+                _app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters);
                 _logger.LogStatus("Search", "Passed");
             }
             catch (Exception)

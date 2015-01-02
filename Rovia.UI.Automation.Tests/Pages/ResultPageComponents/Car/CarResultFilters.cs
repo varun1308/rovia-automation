@@ -126,14 +126,16 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 _failedFilters.Add("Price");
         }
 
-        public bool VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
+        public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
         {
             var carSearchFilters = preSearchFilters as CarPreSearchFilters;
             bool carType = true, rentalAgency = true, carOptions = true;
             if (!string.IsNullOrEmpty(carSearchFilters.CarType)) carType = IsPreSearchFilterApplied("Car type");
             if (!string.IsNullOrEmpty(carSearchFilters.RentalAgency)) rentalAgency = IsPreSearchFilterApplied("Rental Agency");
             //if (carSearchFilters.AirConditioning > 0 || carSearchFilters.Transmission > 0) carOptions= IsPreSearchFilterApplied("Car options");
-            return carType && rentalAgency && carOptions;
+            if(carType && rentalAgency && carOptions)
+                return;
+            throw new ValidationException("PostSEarchFilters");
         }
 
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
