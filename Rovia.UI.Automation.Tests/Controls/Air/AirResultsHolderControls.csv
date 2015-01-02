@@ -11,6 +11,9 @@ btnContinue,button.jsContinue
 alerts,#dvAddToCartAir .alert
 btnCheckOut,a#btnCheckout
 legAirports,div.airportname
-legArrDepTime,div.span3 .span6 .text-flightinfo
 legCabinAndStop,div.span2 .text-flightinfo
 legDuration,div.span3.text-flighttime
+airlineOnCart,div#dvAddToCartAir .span2.font12
+priceOnCart,div#dvAddToCartAir .price
+legArrDepDate,.borderRight .font12.greyfont
+legArrDepTime,div.span3 .span6 .text-flightinfo

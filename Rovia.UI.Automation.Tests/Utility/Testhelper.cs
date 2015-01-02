@@ -153,7 +153,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 TripsErrorUI = _app.HomePage.GetTripsErrorUri();
                 //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
-                Results = _app.ResultsPage.ParseResults();
+                //Results = _app.ResultsPage.ParseResults();
                 _app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters);
                 _logger.LogStatus("Search", "Passed");
             }

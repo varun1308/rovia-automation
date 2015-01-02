@@ -10,6 +10,5 @@ namespace Rovia.UI.Automation.ScenarioObjects
     {
         public List<string> AirLines { get; set; }
         public List<FlightLegs> Legs { get; set; }
-        
     }
 }
