@@ -48,7 +48,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             locationFilter.ForEach(x =>
             {
-                if (locations.Contains(x.Text.Trim()) && x.Displayed)
+                if (locations.ConvertAll(y=>y.ToLower()).Contains(x.Text.Trim().ToLower()) && x.Displayed)
                     x.Click();
             });
         }
@@ -60,7 +60,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             carOptionsFilter.ForEach(x =>
             {
-                if (carOptions.Contains(x.GetAttribute("data-name")) && x.Displayed)
+                if (carOptions.ConvertAll(y => y.ToLower()).Contains(x.GetAttribute("data-name").ToLower()) && x.Displayed)
                     x.Click();
             });
         }
@@ -72,7 +72,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             rentalAgencyFilter.ForEach(x =>
             {
-                if (rentalAgency.Contains(x.GetAttribute("data-name")) && x.Displayed)
+                if (rentalAgency.ConvertAll(y => y.ToLower()).Contains(x.GetAttribute("data-name").ToLower()) && x.Displayed)
                     x.Click();
             });
         }
@@ -84,7 +84,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             carTypesFilter.ForEach(x =>
             {
-                if (carTypes.Contains(x.GetAttribute("data-name")) && x.Displayed)
+                if (carTypes.ConvertAll(y => y.ToLower()).Contains(x.GetAttribute("data-name").ToLower()) && x.Displayed)
                     x.Click();
             });
         }
@@ -214,27 +214,26 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private void ValidateCarOptions(List<string> carOptions, List<CarResult> carResults)
         {
-            if (!(carResults.Select(x => x.AirConditioning).All(x => x.Equals(GetCarOptionsText(carOptions.Contains, "AC")))
-                && carResults.Select(x => x.Transmission).All(x => x.Equals(GetCarOptionsText(carOptions.Contains, "AT")))))
+            if (!(carResults.Select(x => x.AirConditioning).All(GetCarOptionsText(carOptions).Contains)))
                 _failedFilters.Add("Car options");
         }
 
-        private string GetCarOptionsText(Func<string, bool> contains, string ac)
+        private List<string> GetCarOptionsText(List<string> carOptionsCode)
         {
-            if (ac.Equals("AC"))
-                switch (contains.ToString())
+            var carOptionsText=new List<string>();
+            foreach (string code in carOptionsCode)
+            {
+                switch (code)
                 {
                     case "EAC":
-                        return "Air Conditioning";
-                    default: return "Air Conditioning";
-                }
-            else
-                switch (contains.ToString())
-                {
+                        carOptionsText.Add("Air Conditioning");
+                        break;
                     case "EAT":
-                        return "Auto Transmission";
-                    default: return "Auto Transmission";
+                        carOptionsText.Add("Auto Transmission");
+                        break;
                 }
+            }
+            return carOptionsText;
         }
 
         private void ValidateMatrix(CarMatrix carMatrix, List<CarResult> carResults)

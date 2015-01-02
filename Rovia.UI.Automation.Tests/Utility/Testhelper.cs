@@ -50,7 +50,6 @@ namespace Rovia.UI.Automation.Tests.Utility
                 catch (PageLoadFailed exception)
                 {
                     _app.SaveScreenshot("SiteLoadFailed"+i++);
-                    _logger.LogWarning(exception.ToString());
                 }
             }
         }
