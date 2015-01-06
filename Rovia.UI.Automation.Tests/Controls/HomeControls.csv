@@ -4,8 +4,10 @@ sessionIdQA,span#ucPWP_ctl15_21153_lblAPISessionId
 sessionIdProd,span#ucPWP_ctl14_13006_lblAPISessionId
 country,select.span12.jCountrySelect
 saveCountry,a.btn.btn-primary.span12.jSaveBtn
-lnkLogIn,a#ucPWP_ctl08_21232_ucHeaderMenu_lnkLogin
-logOut,a#ucPWP_ctl08_21232_ucHeaderMenu_lnkLogout 
+lnkLogInQA,a#ucPWP_ctl08_21232_ucHeaderMenu_lnkLogin
+logOutQA,a#ucPWP_ctl08_21232_ucHeaderMenu_lnkLogout 
+lnkLogInProd,a#ucPWP_ctl08_13082_ucHeaderMenu_lnkLogin
+logOutProd,a#ucPWP_ctl08_13082_ucHeaderMenu_lnkLogout
 flights,ul.nav.fontUpperCase li.ico_flights
 flightsSearchPanel,div[data-producttype="flight"]
 flightJourneyTypeOneWay,div.tripbuttons button[data-triptype="0"]

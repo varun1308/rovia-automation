@@ -63,18 +63,23 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal bool IsUserLoggedIn()
         {
-            var anchor = WaitAndGetBySelector("logOut", ApplicationSettings.TimeOut.Slow);
+            var anchor = ApplicationSettings.Environment == "PROD"
+                ? WaitAndGetBySelector("logOutProd", ApplicationSettings.TimeOut.Fast) : WaitAndGetBySelector("logOutQA", ApplicationSettings.TimeOut.Fast);
             return anchor != null && anchor.Displayed;
         }
 
         internal void GoToLoginPage()
         {
-            WaitAndGetBySelector("lnkLogIn", ApplicationSettings.TimeOut.Fast).Click();
+            var login = ApplicationSettings.Environment == "PROD"
+               ? WaitAndGetBySelector("lnkLogInProd", ApplicationSettings.TimeOut.Fast) : WaitAndGetBySelector("lnkLogInQA", ApplicationSettings.TimeOut.Fast);
+            login.Click();
         }
 
         internal void LogOut()
         {
-            WaitAndGetBySelector("logOut", ApplicationSettings.TimeOut.Fast).Click();
+            var logout= ApplicationSettings.Environment == "PROD"
+                ?WaitAndGetBySelector("logOutProd", ApplicationSettings.TimeOut.Fast): WaitAndGetBySelector("logOutQA", ApplicationSettings.TimeOut.Fast);
+            logout.Click();
         }
 
         internal void Search(SearchCriteria searchCriteria)

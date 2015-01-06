@@ -47,7 +47,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     GoToHomePage();
                     break;
                 }
-                catch (PageLoadFailed exception)
+                catch (PageLoadFailed)
                 {
                     _app.SaveScreenshot("SiteLoadFailed"+i++);
                 }
