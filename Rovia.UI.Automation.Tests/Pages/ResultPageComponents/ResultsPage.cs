@@ -45,13 +45,13 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         #region Public Members
 
-        public Results AddToCart(string supplier)
+        public Results AddToCart(SearchCriteria criteria)
         {
-            var selectedResult=ResultsHolder.AddToCart(supplier);
+            var selectedResult=ResultsHolder.AddToCart(criteria);
             if (selectedResult == null && IsNextPageAvailable())
             {
                 GoToNextPage();
-                selectedResult = AddToCart(supplier);
+                selectedResult = AddToCart(criteria);
             }
             return selectedResult;
         }

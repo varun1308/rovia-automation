@@ -153,7 +153,6 @@ namespace Rovia.UI.Automation.Tests.Utility
                 TripsErrorUI = _app.HomePage.GetTripsErrorUri();
                 //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
-                //Results = _app.ResultsPage.ParseResults();
                 _app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters);
                 _logger.LogStatus("Search", "Passed");
             }
@@ -224,7 +223,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 if (!_app.State.CurrentPage.EndsWith("ResultsPage"))
                     throw new InvalidOperationException("AddToCart", _app.State.CurrentPage);
-                _selectedItineary = _app.ResultsPage.AddToCart(_criteria.Supplier);
+                _selectedItineary = _app.ResultsPage.AddToCart(_criteria);
                 if (_selectedItineary == null)
                     throw new AddToCartFailedException();
                 _app.State.CurrentPage = "TripFolderPage";

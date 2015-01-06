@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -104,7 +105,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         }
 
-        public Results AddToCart(string supplier)
+        public Results AddToCart(SearchCriteria criteria)
         {
             try
             {
