@@ -464,6 +464,7 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         public static void SaveScreenShot(TestContext context)
         {
+            _app.ConfirmAlert();
             _app.SaveScreenshot(context);
         }
     }

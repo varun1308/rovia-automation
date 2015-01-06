@@ -261,8 +261,17 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         public bool IsLeavePopupVisible()
         {
-            var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
-            return divDontLeavePopup != null && divDontLeavePopup.Displayed;
+            try
+            {
+
+                var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
+                return divDontLeavePopup != null && divDontLeavePopup.Displayed;
+            }
+            catch (OpenQA.Selenium.StaleElementReferenceException)
+            {
+                LogManager.GetInstance().LogWarning("Rovia Award Popup - Stale element reference caught and suppressed.");
+            }
+            return false;
         }
     }
 }
