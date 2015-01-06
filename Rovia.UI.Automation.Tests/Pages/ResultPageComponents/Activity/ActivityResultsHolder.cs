@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using OpenQA.Selenium;
+using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -18,7 +19,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         private Results _selectedItinerary;
         public ActivityHolder ActivityHolder { private get; set; }
 
-        private void SelectActivity(string supplier)
+        private void SelectActivity(Passengers passengers)
         {
             try
             {
@@ -26,7 +27,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 var validIndices = Enumerable.Range(0, 10);
                 //if (!string.IsNullOrEmpty(supplier))
                 //    validIndices = validIndices.Where(x => suppliers[x][1].Equals(hotelSupplier));
-                var resultIndex = validIndices.First(i => AddActivity(GetUIElements("btnSelectActivity")[i]));
+                var resultIndex = validIndices.First(i => AddActivity(GetUIElements("btnSelectActivity")[i], passengers));
             }
             catch (StaleElementReferenceException)
             {
@@ -34,13 +35,13 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
-        private bool AddActivity(IUIWebElement btnSelectActivity)
+        private bool AddActivity(IUIWebElement btnSelectActivity, Passengers passengers)
         {
             try
             {
                 btnSelectActivity.Click();
                 ActivityHolder.WaitForLoad();
-                _selectedItinerary = ActivityHolder.AddToCart();
+                _selectedItinerary = ActivityHolder.AddToCart(passengers);
                 return true;
             }
             catch (Alert alert)
@@ -61,11 +62,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             throw new NotImplementedException();
         }
 
-        public Results AddToCart(string supplier)
+        public Results AddToCart(SearchCriteria  criteria)
         {
             try
             {
-                SelectActivity(supplier);
+                SelectActivity(criteria.Passengers);
                 return _selectedItinerary;
             }
             catch (System.InvalidOperationException)

@@ -39,8 +39,8 @@ namespace Rovia.UI.Automation.Tests.Tests
         }
 
 
-        
-        //[TestMethod, DataSource("Car_City_To_SameAsPickUp"), TestCategory("Sanity")]
+
+        //[TestMethod, TestCategory("Sanity")]
         //public void ActivityDummyTest()
         //{
         //    Execute();
@@ -53,11 +53,18 @@ namespace Rovia.UI.Automation.Tests.Tests
                 //var criteria = DataBinder.GetCriteria(TestContext.DataRow);
                 var criteria = new ActivitySearchCriteria()
                     {
-                        ShortLocation = "Las Vegas",
-                        Location = "Las Vegas, NV - McCarran Intl (LAS)",
+                        Description = "Activity-DummyTest",
+                        ShortLocation = "Singapore",
+                        Location = "Singapore, SG",
                         FromDate = DateTime.Parse("01/06/2015"),
                         ToDate = DateTime.Parse("01/13/2015"),
-                        Pipeline = "Search|AddToCart"
+                        Pipeline = "Search|AddToCart",
+                        Passengers = new Passengers()
+                            {
+                                Adults = 2,
+                                Children = 1,
+                                Infants = 1
+                            }
                     };
                 _logManager.StartNewLog(criteria.Description);
                 TestHelper.SetCriteria(criteria);

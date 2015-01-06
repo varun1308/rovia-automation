@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Activity;
 using Rovia.UI.Automation.Tests.Configuration;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
 {
     public class ActivityHolder : UIPage
     {
-        private HotelResult _addedResult;
+        private ActivityResult _addedResult;
         internal void WaitForLoad()
         {
             try
@@ -34,12 +32,29 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
             }
         }
 
-        internal Results AddToCart()
+        internal Results AddToCart(Passengers passengers)
         {
+            var description = WaitAndGetBySelector("activityDescription", ApplicationSettings.TimeOut.Fast).Text;
+            var category = WaitAndGetBySelector("activityCategory", ApplicationSettings.TimeOut.Fast).Text.Split(':')[1].Trim();
             var i = 1;
             var productBars = GetUIElements("productBar");
+            var btnAddAdult = GetUIElements("adultCount").Where((x, index) => index % 2 == 1).ToArray();
+            if (!btnAddAdult.Any())
+                passengers.Adults = 0;
+            var btnAddChildren = GetUIElements("childrenCount").Where((x, index) => index % 2 == 1).ToArray();
+            if (!btnAddAdult.Any())
+                passengers.Children = 0;
+            var btnAddInfant = GetUIElements("infantCount").Where((x, index) => index % 2 == 1).ToArray();
+            if (!btnAddAdult.Any())
+                passengers.Children = 0;
             foreach (var btn in GetUIElements("btnAddToCart"))
             {
+                for (var j = 1; j < passengers.Adults; j++)
+                    btnAddAdult[i - 1].Click();
+                for (var j = 0; j < passengers.Children; j++)
+                    btnAddChildren[i - 1].Click();
+                for (var j = 0; j < passengers.Infants; j++)
+                    btnAddInfant[i - 1].Click();
                 if (!AddToCart(btn))
                     if (i < productBars.Count)
                         productBars[i++].Click();
@@ -49,7 +64,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
                         throw new AddToCartFailedException();
                     }
                 else
+                {
+                    _addedResult.Description = description;
+                    _addedResult.Passengers = passengers;
+                    _addedResult.Category = category;
                     return _addedResult;
+                }
             }
             return null;
         }
@@ -85,9 +105,16 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
             return false;
         }
 
-        private HotelResult ParseResultFromCart()
+        private ActivityResult ParseResultFromCart()
         {
-            return null;
+            var activityDetails = GetUIElements("activityDetails").Select(x => x.Text).ToArray();
+            return new ActivityResult()
+                {
+                    Name = activityDetails[0],
+                    ProductName = activityDetails[1],
+                    Date = DateTime.Parse(WaitAndGetBySelector("activityDate", ApplicationSettings.TimeOut.Fast).Text.Remove(0, 5).Trim()),
+                    Amount = new Amount(WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text)
+                };
         }
     }
 }

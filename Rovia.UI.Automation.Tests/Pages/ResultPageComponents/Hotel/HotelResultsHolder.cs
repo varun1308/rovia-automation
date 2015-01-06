@@ -2,6 +2,7 @@
 using System.Linq;
 using AppacitiveAutomationFramework;
 using OpenQA.Selenium;
+using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -71,11 +72,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 } as Results).ToList();
         }
 
-        public Results AddToCart(string supplier)
+        public Results AddToCart(SearchCriteria  criteria)
         {
             try
             {
-                var suppliers = supplier.Split('|');
+                var suppliers = criteria.Supplier.Split('|');
                 SelectHotel(suppliers[0], suppliers.Length == 2 ? suppliers[1] : null);
                 return _selectedItinerary;
             }

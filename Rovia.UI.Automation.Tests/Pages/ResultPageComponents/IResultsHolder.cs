@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
@@ -7,6 +8,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     {
         bool IsVisible();
         List<Results> ParseResults();
-        Results AddToCart(string result);
+        Results AddToCart(SearchCriteria  criteria);
     }
 }

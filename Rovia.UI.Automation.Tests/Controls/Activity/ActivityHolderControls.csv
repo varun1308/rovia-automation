@@ -5,3 +5,11 @@ alerts,div.alert
 btnCheckOut,a#btnCheckout
 divloader,div.txtAlignCenter.jsWaitMessage
 productBar,.hotelroom-bar
+activityDescription,.jsLessDetailHolder
+activityDetails,#dvAddToCartActivity .row-fluid.pull-left
+activityDate,#dvAddToCartActivity small
+activityCategory,.clearfix.mts p
+price,#dvAddToCartActivity .price
+adultCount,div[data-paxtype="ADULT"] button
+childrenCount,div[data-paxtype="CHILD"] button
+infantCount,div[data-paxtype="INFANT"] button
