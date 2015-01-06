@@ -94,25 +94,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                                   "$('.jsLslider').trigger({type:'slide',value:[minTime,maxTime]}).trigger({type:'slideStop',value:[minTime,maxTime]})");
         }
 
-        private float GetFirstItineraryPrice(string sortBy)
-        {
-            ExecuteJavascript(sortBy.ToLower().Equals("asc") ? "$('#Price-Asc').click()" : "$('#Price-Desc').click()");
-            Thread.Sleep(3000);
-            return float.Parse(GetUIElements("amount").Select(x => x.Text.Split()[0].TrimStart('$')).ToArray()[0]);
-        }
-
-        private float GetMaxDurationFlight()
-        {
-            ExecuteJavascript("$('#Duration-Desc').click()");
-            Thread.Sleep(3000);
-            var legDuration = GetUIElements("legDuration").Select(x =>
-            {
-                var arr = x.Text.Split();
-                return (arr[1] + "." + (arr[3] ?? "0"));
-            }).ToArray()[0];
-            return float.Parse(legDuration);
-        }
-
         private void SetMatrix()
         {
             var divMatrixAirlines = GetUIElements("divMatrix").First(x => x.WaitAndGetBySelector("divMatrixPrice", ApplicationSettings.TimeOut.Fast).Text.Contains('$'));
@@ -134,47 +115,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             //           IsPostResultsFilterApplied(new List<string> { "Airlines", "Price" });
             //});
         }
-
-        #region need this methods in validations
-
-        private string VerifyStopsFilter()
-        {
-            var legStops = GetUIElements("legCabinAndStop").Select(x =>
-            {
-                int num;
-                int.TryParse(x.Text, out num);
-                return num;
-            }).Where((item, index) => index % 2 != 0).ToList();
-
-            if (legStops.IndexOf(0) == -1)
-            {
-                if (legStops.IndexOf(1) == -1) return "one-plus";
-                else return "one";
-            }
-            else return "none";
-        }
-
-        private void VerifyCabinTypesFilter(List<string> cabinTypes)
-        {
-            //to do implement
-            var legStops = GetUIElements("legCabinAndStop").Select(x => x.Text.Split()[0]).Where((item, index) => index % 2 == 0).ToList();
-            legStops.ForEach(x =>
-            {
-                if (cabinTypes.Contains(x)) return;
-            });
-        }
-
-        private bool VerifyDurationFilter(float maxSliderDuration)
-        {
-            return maxSliderDuration >= GetMaxDurationFlight();
-        }
-
-        private bool VerifyPriceFilter(float minSliderPrice, float maxSliderPrice)
-        {
-            return minSliderPrice <= GetFirstItineraryPrice("asc") && maxSliderPrice >= GetFirstItineraryPrice("desc");
-        }
-
-        #endregion
 
         #endregion
 
