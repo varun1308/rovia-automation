@@ -1,3 +1,4 @@
 divWaiting,div.loading.mbl
 aNext,a#next
 divErrors,div.text-error
+preLoader,#modal_filterloader .icon_preloader_small

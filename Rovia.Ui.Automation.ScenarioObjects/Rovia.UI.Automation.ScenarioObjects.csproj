@@ -42,14 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activity\ActivityMatrix.cs" />
+    <Compile Include="Activity\ActivityPostSearchFilters.cs" />
     <Compile Include="Activity\ActivityResult.cs" />
+    <Compile Include="AgeGroup.cs" />
     <Compile Include="Air\AirMatrix.cs" />
     <Compile Include="Air\AirPostSearchFilters.cs" />
     <Compile Include="Air\AirPreSearchFilters.cs" />
     <Compile Include="Air\AirTripProduct.cs" />
     <Compile Include="Car\CarMatrix.cs" />
     <Compile Include="Car\CarPostSearchFilters.cs" />
-    <Compile Include="HotelMatrix.cs" />
+    <Compile Include="Hotel\HotelMatrix.cs" />
     <Compile Include="DistanceRange.cs" />
     <Compile Include="Hotel\HotelPostSearchFilters.cs" />
     <Compile Include="Car\CarTripProduct.cs" />

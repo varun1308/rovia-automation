@@ -1,8 +1,5 @@
 divResultHolder,#ActivityListHolder
-divHotelName,div.text-boxtitle
-hotelRating,ul.hotel_result_stars
-stars,a.orangeStar
-hotelAddress,p.hotelAddressTruncate
-hotelPrice,span.price
+activityNames,.jActivityBox .text-boxtitle
+activityCategories,.jActivityBox .text-flighttime
+activityPrices,.jActivityBox .price
 btnSelectActivity,.btnTopMinusMargin
-suppliers,.jsShowHotelDetails .text-flighttime span

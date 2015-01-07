@@ -78,6 +78,7 @@
     <Compile Include="Application\User.cs" />
     <Compile Include="Configuration\ApplicationSettings.cs" />
     <Compile Include="Pages\ResultPageComponents\Activity\ActivityHolder.cs" />
+    <Compile Include="Pages\ResultPageComponents\Activity\ActivityResultFilters.cs" />
     <Compile Include="Pages\ResultPageComponents\Activity\ActivityResultsHolder.cs" />
     <Compile Include="Pages\ResultPageComponents\Air\AirResultFilters.cs" />
     <Compile Include="Pages\ResultPageComponents\Air\AirResultsHolder.cs" />
@@ -120,6 +121,7 @@
     <None Include="Controls\Activity\ActivityHolderControls.csv" />
     <None Include="Controls\Activity\ActivityResultsHolderControls.csv" />
     <None Include="Controls\Activity\ActivitySearchPanelControls.csv" />
+    <None Include="Controls\Activity\ActivityResultsFiltersControls.csv" />
     <None Include="Controls\Hotel\HotelResultsFiltersControls.csv" />
     <None Include="Controls\Hotel\HotelResultsHolderControls.csv" />
     <None Include="Controls\Hotel\HotelResultsTitleControls.csv" />

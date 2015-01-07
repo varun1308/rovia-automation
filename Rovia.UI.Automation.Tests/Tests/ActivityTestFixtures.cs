@@ -56,14 +56,27 @@ namespace Rovia.UI.Automation.Tests.Tests
                         Description = "Activity-DummyTest",
                         ShortLocation = "Singapore",
                         Location = "Singapore, SG",
-                        FromDate = DateTime.Parse("01/06/2015"),
-                        ToDate = DateTime.Parse("01/13/2015"),
-                        Pipeline = "Search|AddToCart",
+                        FromDate = DateTime.Parse("02/06/2015"),
+                        ToDate = DateTime.Parse("02/13/2015"),
+                        Pipeline = "Search|SETFILTERS",
                         Passengers = new Passengers()
                             {
                                 Adults = 2,
                                 Children = 1,
                                 Infants = 1
+                            },
+                        Filters = new Filters()
+                            {
+                                PostSearchFilters = new ActivityPostSearchFilters()
+                                    {
+                                        //ActivityName = "Experience Trick Art",
+                                        //PriceRange = new PriceRange()
+                                        //    {
+                                        //        Max = 10,
+                                        //        Min=10
+                                        //    },
+                                        Matrix = new ActivityMatrix() {Category = "Water Sports"}
+                                    }
                             }
                     };
                 _logManager.StartNewLog(criteria.Description);

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -32,41 +33,52 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
             }
         }
 
-        internal Results AddToCart(Passengers passengers)
+        internal Results AddToCart(ActivitySearchCriteria criteria)
         {
+
             var description = WaitAndGetBySelector("activityDescription", ApplicationSettings.TimeOut.Fast).Text;
             var category = WaitAndGetBySelector("activityCategory", ApplicationSettings.TimeOut.Fast).Text.Split(':')[1].Trim();
             var i = 1;
             var productBars = GetUIElements("productBar");
             var btnAddAdult = GetUIElements("adultCount").Where((x, index) => index % 2 == 1).ToArray();
+            
             if (!btnAddAdult.Any())
-                passengers.Adults = 0;
+                criteria.Passengers.Adults = 0;
+            else
+                criteria.AdultAgeGroup = new AgeGroup(GetUIElements("adultAgeGrp")[0].Text);
             var btnAddChildren = GetUIElements("childrenCount").Where((x, index) => index % 2 == 1).ToArray();
-            if (!btnAddAdult.Any())
-                passengers.Children = 0;
+            
+            if (!btnAddChildren.Any())
+                criteria.Passengers.Children = 0;
+            else
+                criteria.ChildrenAgeGroup = new AgeGroup(GetUIElements("childrenAgeGrp")[0].Text);
             var btnAddInfant = GetUIElements("infantCount").Where((x, index) => index % 2 == 1).ToArray();
-            if (!btnAddAdult.Any())
-                passengers.Children = 0;
+
+            if (!btnAddInfant.Any())
+                criteria.Passengers.Infants = 0;
+            else
+                criteria.InfantAgeGroup = new AgeGroup(GetUIElements("infantAgeGrp")[0].Text);
+
             foreach (var btn in GetUIElements("btnAddToCart"))
             {
-                for (var j = 1; j < passengers.Adults; j++)
+                for (var j = 1; j < criteria.Passengers.Adults; j++)
                     btnAddAdult[i - 1].Click();
-                for (var j = 0; j < passengers.Children; j++)
+                for (var j = 0; j < criteria.Passengers.Children; j++)
                     btnAddChildren[i - 1].Click();
-                for (var j = 0; j < passengers.Infants; j++)
+                for (var j = 0; j < criteria.Passengers.Infants; j++)
                     btnAddInfant[i - 1].Click();
                 if (!AddToCart(btn))
                     if (i < productBars.Count)
                         productBars[i++].Click();
                     else
                     {
-                        LogManager.GetInstance().LogWarning("No Room Could Be Added");
+                        LogManager.GetInstance().LogWarning("No Activity Could Be Added");
                         throw new AddToCartFailedException();
                     }
                 else
                 {
                     _addedResult.Description = description;
-                    _addedResult.Passengers = passengers;
+                    _addedResult.Passengers = criteria.Passengers;
                     _addedResult.Category = category;
                     return _addedResult;
                 }

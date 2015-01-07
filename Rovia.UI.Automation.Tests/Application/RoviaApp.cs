@@ -65,6 +65,7 @@ namespace Rovia.UI.Automation.Tests.Application
                         var activityResultHolder = InitializePage<ActivityResultsHolder>("ActivityResultsHolderControls");
                         activityResultHolder.ActivityHolder = InitializePage<ActivityHolder>("ActivityHolderControls");
                         resultsPage.ResultsHolder = activityResultHolder;
+                        resultsPage.ResultFilters = InitializePage<ActivityResultFilters>("ActivityResultsFiltersControls");
                         //resultsPage.ResultFilters = InitializePage<ActivityResultFilters>("CarFiltersControls");
                         break;
                     default:

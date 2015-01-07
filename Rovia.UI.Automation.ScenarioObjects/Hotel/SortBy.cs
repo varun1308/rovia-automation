@@ -10,9 +10,11 @@ namespace Rovia.UI.Automation.ScenarioObjects
         Featured,
         PriceAsc,
         PriceDsc,
-        HotelNameAsc,
-        HotelNameDsc,
+        NameAsc,
+        NameDsc,
         RatingAsc,
-        RatingDsc
+        RatingDsc,
+        CategoryAsc,
+        CategoryDsc
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.Criteria
 {
@@ -12,5 +9,8 @@ namespace Rovia.UI.Automation.Criteria
         public DateTime ToDate { get; set; }
         public string ShortLocation { get; set; }
         public string Location { get; set; }
+        public AgeGroup ChildrenAgeGroup { get; set; }
+        public AgeGroup AdultAgeGroup { get; set; }
+        public AgeGroup InfantAgeGroup { get; set; }
     }
 }

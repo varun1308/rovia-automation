@@ -14,7 +14,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     {
         private List<string> _appliedFilters;
         private List<string> _failedFilters;
-        #region IResultPage Members
+
+        #region IResultFilter Members
 
         public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
         {
@@ -32,13 +33,13 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             if (!string.IsNullOrEmpty(hotelFilters.HotelName))
             {
                 if (_appliedFilters.Contains("Hotel Name"))
-                    ValidateHotelName(hotelFilters.HotelName, hotelResults.Select(x => x.HotelName));
+                    ValidateHotelNameFilter(hotelFilters.HotelName, hotelResults.Select(x => x.HotelName));
                 else
                     _failedFilters.Add("Hotel Name");
             }
             if (!string.IsNullOrEmpty(hotelFilters.StarRating))
                 if (_appliedFilters.Contains("Star Rating"))
-                    ValidateRatingRange(new RatingRange() { From = int.Parse(hotelFilters.StarRating), To = 5 }, hotelResults.Select(x => x.HotelRating));
+                    ValidateRatingRangeFilter(new RatingRange() { From = int.Parse(hotelFilters.StarRating), To = 5 }, hotelResults.Select(x => x.HotelRating));
                 else
                     _failedFilters.Add("Star Rating");
             if (_failedFilters.Any())
@@ -59,7 +60,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
             if (hotelPostSearchFilters.PriceRange != null)
             {
-                SetPriceRange(hotelPostSearchFilters.PriceRange);
+                SetPriceRangeFilter(hotelPostSearchFilters.PriceRange);
                 if (!AreResultsAvailable())
                     hotelPostSearchFilters.PriceRange = null;
                 else
@@ -67,7 +68,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
             if (hotelPostSearchFilters.HotelName != null)
             {
-                SetHotelName(hotelPostSearchFilters.HotelName);
+                SetHotelNameFilter(hotelPostSearchFilters.HotelName);
                 if (!AreResultsAvailable())
                     hotelPostSearchFilters.HotelName = null;
                 else
@@ -75,7 +76,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
             if (hotelPostSearchFilters.RatingRange != null)
             {
-                SetRatingRange(hotelPostSearchFilters.RatingRange);
+                SetRatingRangeFilter(hotelPostSearchFilters.RatingRange);
                 if (!AreResultsAvailable())
                     hotelPostSearchFilters.RatingRange = null;
                 else
@@ -114,16 +115,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
         }
 
-        private bool AreResultsAvailable()
-        {
-            foreach (var error in GetUIElements("error").Where(error => error.Displayed))
-            {
-                LogManager.GetInstance().LogWarning(error.Text);
-                return false;
-            }
-            return true;
-        }
-
         public void ValidateFilters(PostSearchFilters postSearchFilters, Func<List<Results>> getParsedResults)
         {
             var hotelPostSearchFilters = postSearchFilters as HotelPostSearchFilters;
@@ -132,11 +123,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             if (hotelPostSearchFilters == null)
                 throw new InvalidInputException("PostSearchFilters");
             if (hotelPostSearchFilters.PriceRange != null)
-                ValidatePriceRange(hotelPostSearchFilters.PriceRange, hotelResults.Select(x => x.Amount.TotalAmount));
+                ValidatePriceRangeFilter(hotelPostSearchFilters.PriceRange, hotelResults.Select(x => x.Amount.TotalAmount));
             if (hotelPostSearchFilters.HotelName != null)
-                ValidateHotelName(hotelPostSearchFilters.HotelName, hotelResults.Select(x => x.HotelName));
+                ValidateHotelNameFilter(hotelPostSearchFilters.HotelName, hotelResults.Select(x => x.HotelName));
             if (hotelPostSearchFilters.RatingRange != null)
-                ValidateRatingRange(hotelPostSearchFilters.RatingRange, hotelResults.Select(x => x.HotelRating));
+                ValidateRatingRangeFilter(hotelPostSearchFilters.RatingRange, hotelResults.Select(x => x.HotelRating));
             if (hotelPostSearchFilters.SortBy != SortBy.Featured)
                 ValidateSort(hotelPostSearchFilters.SortBy, hotelResults);
             if (hotelPostSearchFilters.Matrix != null)
@@ -148,6 +139,32 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
         }
 
+        #endregion
+
+        #region private Hotel Specific members
+        
+        private void WaitWhilePreLoaderIsDisplayed()
+        {
+            var preloader = WaitAndGetBySelector("preLoader", ApplicationSettings.TimeOut.Fast);
+            while (preloader.Displayed) ;
+        }
+
+        private bool AreResultsAvailable()
+        {
+            foreach (var error in GetUIElements("error").Where(error => error.Displayed))
+            {
+                LogManager.GetInstance().LogWarning(error.Text);
+                return false;
+            }
+            return true;
+        }
+
+        private IEnumerable<string> GetAppliedFilters()
+        {
+            Thread.Sleep(2000);
+            return GetUIElements("appliedFilters").Select(x => x.Text.Trim());
+        }
+
         private void ValidateMatrix(HotelMatrix matrix, Func<List<Results>> getParsedResults)
         {
             SortResults(SortBy.PriceAsc);
@@ -157,27 +174,27 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 _failedFilters.Add("Matrix");
         }
 
-        private void ValidateSort(SortBy sortBy, List<HotelResult> hotelResults)
+        private void ValidateSort(SortBy sortBy, IEnumerable<HotelResult> hotelResults)
         {
             switch (sortBy)
             {
-                case SortBy.PriceAsc: ValidateSortPrice(hotelResults.Select(x => x.Amount.TotalAmount).ToList());
+                case SortBy.PriceAsc: ValidatePriceSort(hotelResults.Select(x => x.Amount.TotalAmount).ToList());
                     break;
-                case SortBy.PriceDsc: ValidateSortPrice(hotelResults.Select(x => x.Amount.TotalAmount).Reverse().ToList());
+                case SortBy.PriceDsc: ValidatePriceSort(hotelResults.Select(x => x.Amount.TotalAmount).Reverse().ToList());
                     break;
-                case SortBy.HotelNameAsc: ValidateName(hotelResults.Select(x => x.HotelName).ToList());
+                case SortBy.NameAsc: ValidateNameSort(hotelResults.Select(x => x.HotelName).ToList());
                     break;
-                case SortBy.HotelNameDsc: ValidateName(hotelResults.Select(x => x.HotelName).Reverse().ToList());
+                case SortBy.NameDsc: ValidateNameSort(hotelResults.Select(x => x.HotelName).Reverse().ToList());
                     break;
-                case SortBy.RatingAsc: ValidateRating(hotelResults.Select(x => x.HotelRating).ToList());
+                case SortBy.RatingAsc: ValidateRatingSort(hotelResults.Select(x => x.HotelRating).ToList());
                     break;
-                case SortBy.RatingDsc: ValidateRating(hotelResults.Select(x => x.HotelRating).Reverse().ToList());
+                case SortBy.RatingDsc: ValidateRatingSort(hotelResults.Select(x => x.HotelRating).Reverse().ToList());
                     break;
             }
             WaitWhilePreLoaderIsDisplayed();
         }
 
-        private void ValidateRating(IList<int> ratingList)
+        private void ValidateRatingSort(IList<int> ratingList)
         {
             for (var i = 1; i < ratingList.Count; i++)
             {
@@ -187,7 +204,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
-        private void ValidateName(IList<string> nameList)
+        private void ValidateNameSort(IList<string> nameList)
         {
             for (var i = 1; i < nameList.Count; i++)
             {
@@ -197,7 +214,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
-        private void ValidateSortPrice(IList<double> priceList)
+        private void ValidatePriceSort(IList<double> priceList)
         {
             for (var i = 1; i < priceList.Count; i++)
             {
@@ -207,16 +224,24 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
-        #endregion
-
-        #region private Hotel Specific members
-
-        private void WaitWhilePreLoaderIsDisplayed()
+        private void ValidateRatingRangeFilter(RatingRange ratingRange, IEnumerable<int> ratingList)
         {
-            var preloader = WaitAndGetBySelector("preLoader", ApplicationSettings.TimeOut.Fast);
-            while (preloader.Displayed) ;
+            if (ratingList.Any(x => x > ratingRange.To || x < ratingRange.From))
+                _failedFilters.Add("Rating");
         }
 
+        private void ValidateHotelNameFilter(string hotelName, IEnumerable<string> hotelNames)
+        {
+            if (hotelNames.Any(x => !x.Contains(hotelName)))
+                _failedFilters.Add("Hotel Name");
+        }
+
+        private void ValidatePriceRangeFilter(PriceRange priceRange, IEnumerable<double> amountList)
+        {
+            if (amountList.Any(x => x > priceRange.MaxPrice || x < priceRange.MinPrice))
+                _failedFilters.Add("Price");
+        }
+        
         private void SetMatrix(HotelMatrix matrix)
         {
             try
@@ -244,9 +269,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     break;
                 case SortBy.PriceDsc: WaitAndGetBySelector("priceDsc", ApplicationSettings.TimeOut.Fast).Click();
                     break;
-                case SortBy.HotelNameAsc: WaitAndGetBySelector("nameAsc", ApplicationSettings.TimeOut.Fast).Click();
+                case SortBy.NameAsc: WaitAndGetBySelector("nameAsc", ApplicationSettings.TimeOut.Fast).Click();
                     break;
-                case SortBy.HotelNameDsc: WaitAndGetBySelector("nameDsc", ApplicationSettings.TimeOut.Fast).Click();
+                case SortBy.NameDsc: WaitAndGetBySelector("nameDsc", ApplicationSettings.TimeOut.Fast).Click();
                     break;
                 case SortBy.RatingAsc: WaitAndGetBySelector("ratingAsc", ApplicationSettings.TimeOut.Fast).Click();
                     break;
@@ -255,32 +280,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
             WaitWhilePreLoaderIsDisplayed();
         }
-
-        private void ValidateRatingRange(RatingRange ratingRange, IEnumerable<int> ratingList)
-        {
-            if (ratingList.Any(x => x > ratingRange.To || x < ratingRange.From))
-                _failedFilters.Add("Rating");
-        }
-
-        private void ValidateHotelName(string hotelName, IEnumerable<string> hotelNames)
-        {
-            if (hotelNames.Any(x => !x.Contains(hotelName)))
-                _failedFilters.Add("Hotel Name");
-        }
-
-        private void ValidatePriceRange(PriceRange priceRange, IEnumerable<double> amountList)
-        {
-            if (amountList.Any(x => x > priceRange.MaxPrice || x < priceRange.MinPrice))
-                _failedFilters.Add("Price");
-        }
-
-        private IEnumerable<string> GetAppliedFilters()
-        {
-            Thread.Sleep(2000);
-            return GetUIElements("appliedFilters").Select(x => x.Text.Trim());
-        }
-
-        private void SetPriceRange(PriceRange priceRange)
+        
+        private void SetPriceRangeFilter(PriceRange priceRange)
         {
             var minPrice =
                 float.Parse(WaitAndGetBySelector("minPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
@@ -326,7 +327,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             WaitWhilePreLoaderIsDisplayed();
         }
 
-        private void SetRatingRange(RatingRange ratingRange)
+        private void SetRatingRangeFilter(RatingRange ratingRange)
         {
             WaitAndGetBySelector("starRatingResetLink", ApplicationSettings.TimeOut.Fast).Click();
             WaitWhilePreLoaderIsDisplayed();
@@ -337,7 +338,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             WaitWhilePreLoaderIsDisplayed();
         }
 
-        private void SetHotelName(string hotelName)
+        private void SetHotelNameFilter(string hotelName)
         {
             WaitAndGetBySelector("textHotelName", ApplicationSettings.TimeOut.Fast).SendKeys(hotelName);
             WaitAndGetBySelector("searchIcon", ApplicationSettings.TimeOut.Fast).Click();
