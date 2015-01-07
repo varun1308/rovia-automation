@@ -48,7 +48,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             locationFilter.ForEach(x =>
             {
-                if (locations.ConvertAll(y=>y.ToLower()).Contains(x.Text.Trim().ToLower()) && x.Displayed)
+                if (locations.ConvertAll(y => y.ToLower()).Contains(x.Text.Trim().ToLower()) && x.Displayed)
                     x.Click();
             });
         }
@@ -129,13 +129,15 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
         {
             var carSearchFilters = preSearchFilters as CarPreSearchFilters;
-            bool carType = true, rentalAgency = true, carOptions = true;
-            if (!string.IsNullOrEmpty(carSearchFilters.CarType)) carType = IsPreSearchFilterApplied("Car type");
-            if (!string.IsNullOrEmpty(carSearchFilters.RentalAgency)) rentalAgency = IsPreSearchFilterApplied("Rental Agency");
+            //var carResults = getParsedResults().Select(x => x as CarResult).ToList();
+            var appliedFilters = new List<string>();
+            if (!string.IsNullOrEmpty(carSearchFilters.CarType)) appliedFilters.Add("Car type");
+            if (!string.IsNullOrEmpty(carSearchFilters.RentalAgency)) appliedFilters.Add("Rental Agency");
             //if (carSearchFilters.AirConditioning > 0 || carSearchFilters.Transmission > 0) carOptions= IsPreSearchFilterApplied("Car options");
-            if(carType && rentalAgency && carOptions)
-                return;
-            throw new ValidationException("PostSEarchFilters");
+            var unAppliedFilters = appliedFilters.Except(GetAppliedFilters()).ToList();
+
+            if (unAppliedFilters.Any())
+                throw new ValidationException("Following Filters were not applied on search : " + string.Join(",", unAppliedFilters));
         }
 
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
@@ -220,7 +222,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private List<string> GetCarOptionsText(List<string> carOptionsCode)
         {
-            var carOptionsText=new List<string>();
+            var carOptionsText = new List<string>();
             foreach (string code in carOptionsCode)
             {
                 switch (code)

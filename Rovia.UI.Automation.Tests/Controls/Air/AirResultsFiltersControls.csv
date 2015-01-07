@@ -7,7 +7,7 @@ maxTimeDuration,span.jsSliderValue1
 stopsFilter,label.checkbox.pull-left.mrl.font12 input
 legCabinAndStop,div.span2 .text-flightinfo
 cabinTypeFilter,div.jsCOSFilter .well-small div .checkbox.font11 input
-airlinesFilter,div.pull-left.width50p .checkbox.font11 input
+airlinesFilter,div.pull-left.width50p .checkbox.font11
 jsTslider,div.jsTslider
 jsLslider,div.jsLslider
 amount,p.price.font-weight700

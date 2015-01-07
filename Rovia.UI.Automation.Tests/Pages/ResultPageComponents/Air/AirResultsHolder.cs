@@ -15,6 +15,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
     public class AirResultsHolder : UIPage, IResultsHolder
     {
         private static Dictionary<Results, IUIWebElement> _results;
+        private AirResult _addedItinerary;
 
         #region Private Members
 
@@ -25,16 +26,16 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var divloader = WaitAndGetBySelector("divLoader", ApplicationSettings.TimeOut.Fast);
             try
             {
-                while (true)
-                {
-                    GetUIElements("alerts").ForEach(x =>
+            while (true)
+            {
+                    GetUIElements("alerts").ForEach(x => 
                     {
                         if (x.Displayed)
                             throw new Alert(x.Text);
                     });
-
+                        
                     Thread.Sleep(1000);
-                }
+            }
             }
             catch (Exception exception)
             {
@@ -43,6 +44,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Slow);
             if (btnCheckOut != null && btnCheckOut.Displayed)
             {
+                _addedItinerary = ParseResultFromCart();
                 btnCheckOut.Click();
                 return true;
             }
@@ -50,6 +52,15 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             WaitAndGetBySelector("btnCancel", ApplicationSettings.TimeOut.Slow).Click();
             return false;
 
+        }
+
+        private AirResult ParseResultFromCart()
+        {
+            return new AirResult()
+                {
+                    Amount = new Amount(WaitAndGetBySelector("priceOnCart", ApplicationSettings.TimeOut.Fast).Text),
+                    AirLines = new List<string>() { WaitAndGetBySelector("airlineOnCart", ApplicationSettings.TimeOut.Fast).Text }
+                };
         }
 
         private static void ProcessairLines(IList<string> airLines, IReadOnlyList<string> subair)
@@ -106,6 +117,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var legArrTime = legArrDepTime.Select(x => x.Text).Where((item, index) => index % 2 == 0).ToArray();
             var legDepTime = legArrDepTime.Select(x => x.Text).Where((item, index) => index % 2 != 0).ToArray();
 
+            var legArrDepDate = GetUIElements("legArrDepDate");
+            var legArrDate = legArrDepDate.Select(x => x.Text).Where((item, index) => index % 2 == 0).ToArray();
+            var legDepDate = legArrDepDate.Select(x => x.Text).Where((item, index) => index % 2 != 0).ToArray();
+
             var legCabinAndStops = GetUIElements("legCabinAndStop");
             var legCabins = legCabinAndStops.Select(x => x.Text).Where((item, index) => index % 2 == 0).ToArray();
             var legStops = legCabinAndStops.Select(x => x.Text).Where((item, index) => index % 2 != 0).ToArray();
@@ -115,8 +130,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 {
                     AirportPair = legArrAirport[i] + "-" + legDepAirport[i],
                     Duration = t,
-                    ArriveTime = legArrTime[i],
-                    DepartTime = legDepTime[i],
+                    ArriveTime = DateTime.Parse(legArrDate[i] + " " + legArrTime[i]),
+                    DepartTime = DateTime.Parse(legDepDate[i] + " " + legDepTime[i]),
                     Cabin = legCabins[i].Split()[0].ToCabinType(),
                     Stops = int.Parse(legStops[i])
                 }).ToList();
@@ -156,22 +171,22 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         {
             try
             {
-                var price = GetUIElements("amount").Select(x => x.Text).ToArray();
-                var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
-                var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
-                var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
-                var addToCartControl = GetUIElements("btnAddToCart");
-                var flightLegs = ParseFlightLegs();
-                var legsPerResult = flightLegs.Count / supplier.Length;
-                ProcessairLines(airLines, subair);
+            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
+            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
+            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
+            var supplier = GetUIElements("suppliers").Select(x => x.GetAttribute("title")).ToArray();
+            var addToCartControl = GetUIElements("btnAddToCart");
+            var flightLegs = ParseFlightLegs();
+            var legsPerResult = flightLegs.Count / supplier.Length;
+            ProcessairLines(airLines, subair);
 
-                var results = new Dictionary<AirResult, IUIWebElement>();
+            var results = new Dictionary<AirResult, IUIWebElement>();
 
-                for (var i = 0; i < addToCartControl.Count; i++)
-                {
-                    results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
-                }
-                return results;
+            for (var i = 0; i < addToCartControl.Count; i++)
+            {
+                results.Add(ParseSingleResult(price[2 * i], price[2 * i + 1], airLines[i], supplier[i], flightLegs.Skip(i * legsPerResult).Take(legsPerResult).ToList()), addToCartControl[i]);
+            }
+            return results;
             }
             catch (Exception)
             {
@@ -186,6 +201,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     .Where(x => string.IsNullOrEmpty(criteria.Supplier) || x.Key.Supplier.SupplierName.Equals(criteria.Supplier))
                     .FirstOrDefault(x => AddToCart(x.Value)).Key;
         }
+
         #endregion
     }
 }

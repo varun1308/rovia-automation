@@ -33,12 +33,12 @@ namespace Rovia.UI.Automation.Tests.Pages
 
             while (i < totalFare.Length)
             {
-               fares.Add(new Fare()
-               {
-                   TotalFare = new Amount(totalFare[i]),
-                   BaseFare = new Amount(baseFare[i]),
-                   Taxes = new Amount(taxes[i])
-               });
+                fares.Add(new Fare()
+                {
+                    TotalFare = new Amount(totalFare[i]),
+                    BaseFare = new Amount(baseFare[i]),
+                    Taxes = new Amount(taxes[i])
+                });
                 i++;
             }
             return fares;
@@ -65,22 +65,30 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                 case "AIR":
                 case "FLIGHT":
-                    return new AirTripProduct();
+                    return ParseAirTripProduct();
                 case "HOTEL":
                     return ParseHotelTripProduct();
                 case "CAR":
                     return ParseCarTripProduct();
                 default:
-                    throw new InvalidInputException("ProductType : "+productType);
+                    throw new InvalidInputException("ProductType : " + productType);
             }
+        }
+
+        private TripProduct ParseAirTripProduct()
+        {
+            return new AirTripProduct()
+                {
+
+                };
         }
 
         private TripProduct ParseHotelTripProduct()
         {
-            var elements = GetUIElements("hotelDetails").Select(x=>x.Text).ToArray();
+            var elements = GetUIElements("hotelDetails").Select(x => x.Text).ToArray();
             return new HotelTripProduct()
                 {
-                    Address = WaitAndGetBySelector("hotelAddress",ApplicationSettings.TimeOut.Fast).Text,
+                    Address = WaitAndGetBySelector("hotelAddress", ApplicationSettings.TimeOut.Fast).Text,
                     StayPeriod = new StayPeriod()
                         {
                             CheckInDate = DateTime.Parse(elements[0]),
@@ -122,10 +130,10 @@ namespace Rovia.UI.Automation.Tests.Pages
             var removeProductButton = GetUIElements("removeItemClick").ToArray();
             var passengers = ParsePassengers().ToArray();
             var i = 0;
-            LogManager.GetInstance().LogDebug("Products on Trip Folder : "+string.Join("-",productTypes));
+            LogManager.GetInstance().LogDebug("Products on Trip Folder : " + string.Join("-", productTypes));
             while (i < productTypes.Length)
             {
-                var product=ParseTripProduct(productTypes[i]);
+                var product = ParseTripProduct(productTypes[i]);
                 product.ProductTitle = productTitle[i];
                 product.Fares = fares[i];
                 product.Passengers = passengers.Length > 0 ? passengers[i] : null;
@@ -156,7 +164,7 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             var errors = new StringBuilder();
             if (!hotelResult.HotelName.Equals(hotelTripProduct.ProductTitle, StringComparison.OrdinalIgnoreCase))
-                errors.Append(FormatError("HotelName",hotelResult.HotelName,hotelTripProduct.ProductTitle));
+                errors.Append(FormatError("HotelName", hotelResult.HotelName, hotelTripProduct.ProductTitle));
             if (!hotelResult.HotelAddress.Replace(",", "").Equals(hotelTripProduct.Address.Replace(",", ""), StringComparison.OrdinalIgnoreCase))
                 errors.Append(FormatError("HotelAddress", hotelResult.HotelAddress, hotelTripProduct.Address));
             if (!hotelResult.Amount.Equals(hotelTripProduct.Fares.TotalFare))
@@ -171,20 +179,20 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private string FormatError(string error, string addedValue, string tfValue)
         {
-            return string.Format("| Invalid {0} ({1}, {2})",error,addedValue,tfValue);
+            return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
         }
 
         private void ValidateTripProduct(CarTripProduct carTripProduct, CarResult carResult)
         {
             var errors = new StringBuilder();
             if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
-                errors.Append(FormatError("CarFare",carResult.TotalPrice.ToString(),carTripProduct.Fares.TotalFare.ToString()));
+                errors.Append(FormatError("CarFare", carResult.TotalPrice.ToString(), carTripProduct.Fares.TotalFare.ToString()));
             if (!carResult.CarType.Equals(carTripProduct.CarType))
                 errors.Append(FormatError("CarType", carResult.CarType, carTripProduct.CarType));
             if (!carResult.AirConditioning.Equals(carTripProduct.AirConditioning))
-                errors.Append(FormatError("AirConditioning", carResult.AirConditioning,carTripProduct.AirConditioning));
+                errors.Append(FormatError("AirConditioning", carResult.AirConditioning, carTripProduct.AirConditioning));
             if (!carResult.Transmission.Equals(carTripProduct.Transmission))
-                errors.Append(FormatError("Transmission",carResult.Transmission,carTripProduct.Transmission));
+                errors.Append(FormatError("Transmission", carResult.Transmission, carTripProduct.Transmission));
             if (!carResult.PickUpDateTime.Equals(carTripProduct.PickUpDateTime))
                 errors.Append(FormatError("Pick Up DateTime", carResult.PickUpDateTime.ToLongDateString(), carTripProduct.PickUpDateTime.ToLongDateString()));
             if (!carResult.DropOffDateTime.Equals(carTripProduct.DropOffDateTime))
@@ -238,13 +246,13 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             WaitAndGetBySelector("continueShopping", ApplicationSettings.TimeOut.Slow).Click();
         }
-       
+
         internal void TripStartOver()
         {
             WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();
             WaitAndGetBySelector("startOver", ApplicationSettings.TimeOut.Fast).Click();
         }
-       
+
         internal void SaveTrip()
         {
             WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();
@@ -253,8 +261,17 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         public bool IsLeavePopupVisible()
         {
-            var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
-            return divDontLeavePopup != null && divDontLeavePopup.Displayed;
+            try
+            {
+
+                var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
+                return divDontLeavePopup != null && divDontLeavePopup.Displayed;
+            }
+            catch (OpenQA.Selenium.StaleElementReferenceException)
+            {
+                LogManager.GetInstance().LogWarning("Rovia Award Popup - Stale element reference caught and suppressed.");
+            }
+            return false;
         }
     }
 }

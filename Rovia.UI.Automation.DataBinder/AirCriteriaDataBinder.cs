@@ -82,7 +82,7 @@ namespace Rovia.UI.Automation.DataBinder
                         filterCriteria.CabinTypes = new List<string>(valueList[i].Split('/'));
                         break;
                     case "AIRLINES":
-                        filterCriteria.Airlines = new List<string>(valueList[i].Split('/'));
+                        filterCriteria.Airlines = new List<string>(valueList[i].Split('/')).ConvertAll(z => z.ToUpper());
                         break;
                     case "TAKEOFFTIME":
                         filterCriteria.TakeOffTimeRange = new TakeOffTimeRange()
