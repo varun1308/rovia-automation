@@ -33,3 +33,4 @@ price,.price
 roomCount,.mrm .greyfont
 carDates,div.mvl .font10.greyfont
 carTimes,div.font16.mts
+airportCodes,.airportname

@@ -79,7 +79,7 @@ namespace Rovia.UI.Automation.DataBinder
                         filterCriteria.MaxTimeDurationDiff = int.Parse(valueList[i]);
                         break;
                     case "CABIN":
-                        filterCriteria.CabinTypes = new List<string>(valueList[i].Split('/'));
+                        filterCriteria.CabinTypes = new List<string>(valueList[i].Split('/')).ConvertAll(x=>x.ToLower());
                         break;
                     case "AIRLINES":
                         filterCriteria.Airlines = new List<string>(valueList[i].Split('/')).ConvertAll(z => z.ToUpper());

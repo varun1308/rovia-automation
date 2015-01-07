@@ -118,7 +118,31 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private void ValidateTripProductDetails(AirTripProduct airTripProduct, AirResult airResult)
         {
-            //to Impletment
+            LogManager.GetInstance().LogDebug("Validating Air trip product on Checkout Page");
+            var errors = new StringBuilder();
+            if (!airResult.Amount.Equals(airTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("Amount", airResult.Amount.ToString(), airTripProduct.Fares.TotalFare.ToString()));
+
+            if (airTripProduct.FlightLegs.Count == airResult.Legs.Count)
+            {
+                for (var i = 0; i < airTripProduct.FlightLegs.Count; i++)
+                {
+                    if (!airTripProduct.FlightLegs[i].AirportPair.Equals(airResult.Legs[i].AirportPair))
+                        errors.Append(FormatError("AirportPair", airTripProduct.FlightLegs[i].AirportPair, airResult.Legs[i].AirportPair));
+                    if (!airTripProduct.FlightLegs[i].ArriveTime.Equals(airResult.Legs[i].ArriveTime))
+                        errors.Append(FormatError("Arrival Time", airTripProduct.FlightLegs[i].ArriveTime.ToLongDateString(), airResult.Legs[i].ArriveTime.ToLongDateString()));
+                    if (!airTripProduct.FlightLegs[i].DepartTime.Equals(airResult.Legs[i].DepartTime))
+                        errors.Append(FormatError("Depart Time", airTripProduct.FlightLegs[i].DepartTime.ToLongDateString(), airResult.Legs[i].DepartTime.ToLongDateString()));
+                }
+            }
+            else
+                errors.Append(FormatError("Leg counts ", airTripProduct.FlightLegs.Count.ToString(), airResult.Legs.Count.ToString()));
+
+            if (!airResult.AirLines.TrueForAll(airTripProduct.Airlines.Contains))
+                errors.Append(FormatError("Airlines", string.Join(",", airResult.AirLines.ToArray()), string.Join(",", airTripProduct.Airlines.ToArray())));
+
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on CheckoutPage");
         }
 
         private string FormatError(string error, string addedValue, string tfValue)
@@ -156,8 +180,40 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private TripProduct ParseAirTripProduct(IUIWebElement tripProduct)
         {
-            //to implement
-            return new AirTripProduct();
+            LogManager.GetInstance().LogDebug("Parsing Air trip product on Checkout Page");
+            return new AirTripProduct()
+            {
+                Fares = new Fare() { TotalFare = new Amount(tripProduct.WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Slow).Text.Trim()) },
+                Airlines = tripProduct.GetUIElements("title").Select(x => x.Text.Trim()).ToList(),
+                FlightLegs = ParseFlightLegs(tripProduct)
+            };
+        }
+
+        private List<FlightLegs> ParseFlightLegs(IUIWebElement tripProduct)
+        {
+            var airportnames = tripProduct.GetUIElements("airportCodes").Select(x => x.Text).ToList();
+            var legArrAirport = airportnames.Where((item, index) => index % 2 == 0).ToArray();
+            var legDepAirport = airportnames.Where((item, index) => index % 2 != 0).ToArray();
+
+
+            var legArrDepTime = tripProduct.GetUIElements("carTimes").Select(x =>
+            {
+                var a = x.Text.Split(' ');
+                return a[1] + " " + a[2];
+            }).ToList();
+            var legArrTime = legArrDepTime.Where((item, index) => index % 2 == 0).ToArray();
+            var legDepTime = legArrDepTime.Where((item, index) => index % 2 != 0).ToArray();
+
+            var legArrDepDate = tripProduct.GetUIElements("carDates").Select(x => x.Text).ToList();
+            var legArrDate = legArrDepDate.Where((item, index) => index != 0 && index % 4 == 1).ToArray();
+            var legDepDate = legArrDepDate.Where((item, index) => index != 0 && index % 4 == 3).ToArray();
+
+            return legArrAirport.Select((t, i) => new FlightLegs()
+            {
+                AirportPair = t + "-" + legDepAirport[i],
+                ArriveTime = DateTime.Parse(legArrDate[i] + " " + legArrTime[i]),
+                DepartTime = DateTime.Parse(legDepDate[i] + " " + legDepTime[i])
+            }).ToList();
         }
 
         private TripProduct ParseCarTripProduct(IUIWebElement tripProduct)

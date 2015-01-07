@@ -116,6 +116,73 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             //});
         }
 
+        private void NoResultsAvailableWarning()
+        {
+            var resultDiv = WaitAndGetBySelector("zeroAiritineraryDiv", ApplicationSettings.TimeOut.Slow);
+            if (resultDiv != null && resultDiv.Displayed)
+            {
+                LogManager.GetInstance().LogWarning(resultDiv.Text);
+                throw new UIElementNullOrNotVisible("No reults available for filters validation");
+            }
+        }
+
+        private void ValidateTripDuration(int maxTimeDuration, IEnumerable<int> resultDuration)
+        {
+            if (resultDuration.Any(x => x > maxTimeDuration * 60))
+                _failedFilters.Add("Trip Duration");
+        }
+
+        private void ValidateCabinTypes(IEnumerable<string> cabinTypes, IEnumerable<IEnumerable<CabinType>> resultcabins)
+        {
+            if (cabinTypes.Any(x => resultcabins.Any(y => !y.Contains(StringToEnum<CabinType>(x)))))
+                _failedFilters.Add("Cabin/Class");
+        }
+
+        private static T StringToEnum<T>(string name)
+        {
+            return (T)Enum.Parse(typeof(T), name, true);
+        }
+
+        private void ValidateAirlines(IEnumerable<string> airlines, IEnumerable<List<string>> resultAirlines)
+        {
+            if (resultAirlines.Any(y => !y.ConvertAll(z => z.ToUpper()).TrueForAll(airlines.Contains)))
+                _failedFilters.Add("Airlines");
+        }
+
+        private void ValidateStops(List<string> filterStops, IEnumerable<int> resultStops)
+        {
+            if (GetStops(filterStops).Any(x => resultStops.Any(y => y != x)))
+                _failedFilters.Add("Stops");
+        }
+
+        private IEnumerable<int> GetStops(IList<string> filterStops)
+        {
+            var i = 0;
+            var stopLists = new List<int>();
+            while (i < filterStops.Count)
+            {
+                switch (filterStops[i].ToUpper())
+                {
+                    case "NONE": stopLists.Add(0);
+                        break;
+                    case "ONE": stopLists.Add(1);
+                        break;
+                    case "ONEPLUS": stopLists.Add(2);
+                        break;
+                    default: stopLists.Add(0);
+                        break;
+                }
+                i++;
+            }
+            return stopLists;
+        }
+
+        private void ValidatePriceRange(PriceRange priceRange, IEnumerable<double> amountList)
+        {
+            if (amountList.Any(x => x > priceRange.MaxPrice || x < priceRange.MinPrice))
+                _failedFilters.Add("Price");
+        }
+
         #endregion
 
         #region IResultPage Members
@@ -198,73 +265,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 ValidateTripDuration(airPostSearchFilters.MaxTimeDurationDiff, airResults.Select(x => x.Legs.Select(y => y.Duration)).Select(z => z.Sum()).ToList());
             if (_failedFilters.Any())
                 throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
-        }
-
-        private void NoResultsAvailableWarning()
-        {
-            var resultDiv = WaitAndGetBySelector("zeroAiritineraryDiv", ApplicationSettings.TimeOut.Slow);
-            if (resultDiv != null && resultDiv.Displayed)
-            {
-                LogManager.GetInstance().LogWarning(resultDiv.Text);
-                throw new UIElementNullOrNotVisible("No reults available for filters validation");
-            }
-        }
-
-        private void ValidateTripDuration(int maxTimeDuration, IEnumerable<int> resultDuration)
-        {
-            if (resultDuration.Any(x => x > maxTimeDuration * 60))
-                _failedFilters.Add("Trip Duration");
-        }
-
-        private void ValidateCabinTypes(IEnumerable<string> cabinTypes, IEnumerable<IEnumerable<CabinType>> resultcabins)
-        {
-            if (cabinTypes.Any(x => resultcabins.Any(y => !y.Contains(StringToEnum<CabinType>(x)))))
-                _failedFilters.Add("Cabin/Class");
-        }
-
-        private static T StringToEnum<T>(string name)
-        {
-            return (T)Enum.Parse(typeof(T), name, true);
-        }
-
-        private void ValidateAirlines(IEnumerable<string> airlines, IEnumerable<List<string>> resultAirlines)
-        {
-            if (resultAirlines.Any(y => !y.ConvertAll(z=>z.ToUpper()).TrueForAll(airlines.Contains)))
-                _failedFilters.Add("Airlines");
-        }
-
-        private void ValidateStops(List<string> filterStops, IEnumerable<int> resultStops)
-        {
-            if (GetStops(filterStops).Any(x => resultStops.Any(y => y != x)))
-                _failedFilters.Add("Stops");
-        }
-
-        private IEnumerable<int> GetStops(IList<string> filterStops)
-        {
-            var i = 0;
-            var stopLists = new List<int>();
-            while (i < filterStops.Count)
-            {
-                switch (filterStops[i].ToUpper())
-                {
-                    case "NONE": stopLists.Add(0);
-                        break;
-                    case "ONE": stopLists.Add(1);
-                        break;
-                    case "ONEPLUS": stopLists.Add(2);
-                        break;
-                    default: stopLists.Add(0);
-                        break;
-                }
-                i++;
-            }
-            return stopLists;
-        }
-
-        private void ValidatePriceRange(PriceRange priceRange, IEnumerable<double> amountList)
-        {
-            if (amountList.Any(x => x > priceRange.MaxPrice || x < priceRange.MinPrice))
-                _failedFilters.Add("Price");
         }
 
         #endregion
