@@ -9,6 +9,7 @@ using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Activity;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity;
 
@@ -19,7 +20,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         private Results _selectedItinerary;
         public ActivityHolder ActivityHolder { private get; set; }
 
-        private void SelectActivity(Passengers passengers)
+        private void SelectActivity(SearchCriteria criteria)
         {
             try
             {
@@ -27,7 +28,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 var validIndices = Enumerable.Range(0, 10);
                 //if (!string.IsNullOrEmpty(supplier))
                 //    validIndices = validIndices.Where(x => suppliers[x][1].Equals(hotelSupplier));
-                var resultIndex = validIndices.First(i => AddActivity(GetUIElements("btnSelectActivity")[i], passengers));
+                var resultIndex = validIndices.First(i => AddActivity(GetUIElements("btnSelectActivity")[i], criteria));
             }
             catch (StaleElementReferenceException)
             {
@@ -35,13 +36,13 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
-        private bool AddActivity(IUIWebElement btnSelectActivity, Passengers passengers)
+        private bool AddActivity(IUIWebElement btnSelectActivity, SearchCriteria criteria)
         {
             try
             {
                 btnSelectActivity.Click();
                 ActivityHolder.WaitForLoad();
-                _selectedItinerary = ActivityHolder.AddToCart(passengers);
+                _selectedItinerary = ActivityHolder.AddToCart(criteria as ActivitySearchCriteria);
                 return true;
             }
             catch (Alert alert)
@@ -59,14 +60,24 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public List<Results> ParseResults()
         {
-            throw new NotImplementedException();
+            var activityNames = GetUIElements("activityNames").Select(x => x.Text);
+            var categories = GetUIElements("activityCategories").Select(x => x.Text.Remove(0, 11).Trim());
+            var prices = GetUIElements("activityPrices").Select(x => new Amount(x.Text));
+            return activityNames.Select((x, i) =>
+                new ActivityResult()
+                    {
+                        Name = x,
+                        Amount = prices.ElementAt(i),
+                        Category = categories.ElementAt(i)
+                    } as Results
+                ).ToList();
         }
 
-        public Results AddToCart(SearchCriteria  criteria)
+        public Results AddToCart(SearchCriteria criteria)
         {
             try
             {
-                SelectActivity(criteria.Passengers);
+                SelectActivity(criteria);
                 return _selectedItinerary;
             }
             catch (System.InvalidOperationException)

@@ -24,13 +24,24 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         {
             var div = WaitAndGetBySelector("divWaiting", ApplicationSettings.TimeOut.Fast);
             return div != null && div.Displayed;
-        } 
+        }
 
+        private void WaitWhilePreLoaderIsDisplayed()
+        {
+            var preloader = WaitAndGetBySelector("preLoader", ApplicationSettings.TimeOut.Fast);
+            if(preloader!=null)
+                while (preloader.Displayed) ;
+        }
         private void GoToNextPage()
         {
             WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).Click();
             ++_currentPageNo;
-            Thread.Sleep(3000);
+            WaitWhilePreLoaderIsDisplayed();
+            GetUIElements("divErrors").ForEach(x =>
+            {
+                if (x.Displayed)
+                    throw new Alert(x.Text);
+            });
         }
 
         private bool IsNextPageAvailable()

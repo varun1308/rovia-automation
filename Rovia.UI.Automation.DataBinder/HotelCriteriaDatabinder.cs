@@ -33,7 +33,7 @@ namespace Rovia.UI.Automation.DataBinder
                         {
                             PreSearchFilters = new HotelPreSearchFilters()
                                 {
-                                    AdditionalPreferences = string.IsNullOrEmpty(dataRow["ChildrenAges"].ToString()) ? null : dataRow["AdditionalPreferences"].ToString().Split('|').ToList(),
+                                    AdditionalPreferences = string.IsNullOrEmpty(dataRow["AdditionalPreferences"].ToString()) ? null : dataRow["AdditionalPreferences"].ToString().Split('|').ToList(),
                                     HotelName = dataRow["HotelName"].ToString().Replace("..", ","),
                                     StarRating = dataRow["StarRating"].ToString()
                                 },
