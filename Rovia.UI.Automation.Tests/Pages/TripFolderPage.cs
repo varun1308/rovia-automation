@@ -6,6 +6,7 @@ using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Activity;
 using Rovia.UI.Automation.ScenarioObjects.Hotel;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
@@ -36,8 +37,8 @@ namespace Rovia.UI.Automation.Tests.Pages
                 fares.Add(new Fare()
                 {
                     TotalFare = new Amount(totalFare[i]),
-                    BaseFare = new Amount(baseFare[i]),
-                    Taxes = new Amount(taxes[i])
+                    BaseFare = i<baseFare.Length ? new Amount(baseFare[i]) : null,
+                    Taxes = i<taxes.Length ? new Amount(taxes[i]):null
                 });
                 i++;
             }
@@ -70,9 +71,24 @@ namespace Rovia.UI.Automation.Tests.Pages
                     return ParseHotelTripProduct();
                 case "CAR":
                     return ParseCarTripProduct();
+                case "ACTIVITY":
+                    return ParseActivityTripProduct();
                 default:
                     throw new InvalidInputException("ProductType : " + productType);
             }
+        }
+
+        private TripProduct ParseActivityTripProduct()
+        {
+            var activityDetails = GetUIElements("activityDetails");
+            var paxInfoAndDate = GetUIElements("activityPaxDetails");
+            return new ActivityTripProduct()
+                {
+                    ActivityProductName=activityDetails[1].Text,
+                    Category=activityDetails[2].Text,
+                    Date=DateTime.Parse(paxInfoAndDate[0].Text),
+                    Passengers = new Passengers(paxInfoAndDate[1].Text)
+                };
         }
 
         private TripProduct ParseAirTripProduct()

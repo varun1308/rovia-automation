@@ -45,6 +45,7 @@
     <Compile Include="Activity\ActivityMatrix.cs" />
     <Compile Include="Activity\ActivityPostSearchFilters.cs" />
     <Compile Include="Activity\ActivityResult.cs" />
+    <Compile Include="Activity\ActivityTripProduct.cs" />
     <Compile Include="AgeGroup.cs" />
     <Compile Include="Air\AirMatrix.cs" />
     <Compile Include="Air\AirPostSearchFilters.cs" />

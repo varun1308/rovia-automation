@@ -75,23 +75,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
-        private Passengers GetPassengers()
-        {
-            var pax =
-                WaitAndGetBySelector("passengerInfo", ApplicationSettings.TimeOut.Fast)
-                    .Text.Replace("For", "")
-                    .Split(',');
-            var passengers = new Passengers();
-            foreach (var s in pax)
-            {
-                if (s.Contains("Adult"))
-                    passengers.Adults = int.Parse(s.Trim()[0].ToString());
-                if (s.Contains("Child"))
-                    passengers.Children = int.Parse(s.Trim()[0].ToString());
-            }
-            return passengers;
-        }
-
         private bool AddToCart(IUIWebElement btnAddToCart)
         {
             btnAddToCart.Click();
@@ -128,7 +111,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return new HotelResult()
                 {
                     Amount = new Amount(WaitAndGetBySelector("cartPrice",ApplicationSettings.TimeOut.Fast).Text),
-                    Passengers = GetPassengers(),
+                    Passengers = new Passengers(WaitAndGetBySelector("passengerInfo", ApplicationSettings.TimeOut.Fast).Text.Replace("For", "")),
                     HotelName = WaitAndGetBySelector("hotelName",ApplicationSettings.TimeOut.Fast).Text,
                     HotelAddress = WaitAndGetBySelector("hotelAddress",ApplicationSettings.TimeOut.Fast).Text,
                     StayPeriod = new StayPeriod()

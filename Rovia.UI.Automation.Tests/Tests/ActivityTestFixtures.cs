@@ -40,7 +40,7 @@ namespace Rovia.UI.Automation.Tests.Tests
 
 
 
-        //[TestMethod, TestCategory("Sanity")]
+        [TestMethod, TestCategory("Sanity")]
         //public void ActivityDummyTest()
         //{
         //    Execute();
@@ -58,7 +58,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                         Location = "Singapore, SG",
                         FromDate = DateTime.Parse("02/06/2015"),
                         ToDate = DateTime.Parse("02/13/2015"),
-                        Pipeline = "Search|SETFILTERS",
+                        Pipeline = "Search|AddTOCart",
                         Passengers = new Passengers()
                             {
                                 Adults = 2,

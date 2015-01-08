@@ -25,6 +25,24 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public int Infants { get; set; }
         public int Adults { get; set; }
         private int _childCount;
+
+        public Passengers(string pax)
+        {
+            foreach (var passenger in pax.Split(','))
+            {
+                if (passenger.Contains("Adult"))
+                    Adults = int.Parse(passenger.Trim()[0].ToString());
+                if (passenger.Contains("Child"))
+                    Children = int.Parse(passenger.Trim()[0].ToString());
+                if (passenger.Contains("Infant"))
+                    Infants = int.Parse(passenger.Trim()[0].ToString());
+            }
+        }
+
+        public Passengers()
+        {
+            // TODO: Complete member initialization
+        }
         public int Children {
             get { return ChildrenAges == null ? _childCount : ChildrenAges.Count; }
             set
