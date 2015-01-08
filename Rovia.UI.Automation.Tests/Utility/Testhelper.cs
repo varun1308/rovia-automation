@@ -176,6 +176,7 @@ namespace Rovia.UI.Automation.Tests.Utility
         {
             try
             {
+                var requestingPage = _app.State.CurrentPage;
                 if (_app.State.CurrentUser.IsLoggedIn)
                     LogOut();
                 GoToLoginPage();
@@ -198,7 +199,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                         _app.State.CurrentUser.ResetUser();
                         break;
                 }
-                OnSuccessLogin();
+                OnSuccessLogin(requestingPage);
                 _logger.LogStatus("Login", "Passed");
             }
             catch (Exception)
@@ -208,9 +209,8 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
         }
 
-        private static void OnSuccessLogin()
+        private static void OnSuccessLogin(string requestingPage)
         {
-            var requestingPage = _app.State.CurrentPage;
             if (requestingPage.Equals("HomePage"))
             {
                 _app.HomePage.WaitForHomePage();

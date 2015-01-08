@@ -119,10 +119,12 @@ namespace Rovia.UI.Automation.Tests.Pages
 
             for (var i = 0; i < segments.Count; i++)
             {
+                arrDate.Add(legArrDate[i]);
+                depDate.Add(legDepDate[i]);
                 var totalSegments = segments[i].GetUIElements("flightSegmentIdentifier").Where(x => x.Text.Contains("Take-off")).ToList();
-                for (var j = 0; j < totalSegments.Count; j++)
+                for (var j = 1; j < totalSegments.Count; j++)
                 {
-                    arrDate.Add(legArrDate[i]);
+                    arrDate.Add(legDepDate[i]);
                     depDate.Add(legDepDate[i]);
                 }
             }
