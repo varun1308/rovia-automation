@@ -1,7 +1,7 @@
 totalItems,div.mhl .span7 .font14 strong
 divTripsHolder,div.jsItemsHolder
 pruductType, div.border-grey.mal
-productName, span.text-boxtitle
+productName, .jsItemsHolder .text-boxtitle
 totalFare,span.price
 totalPassengers,div.font11.mbl
 fareBreakup,div[class="font11"]
@@ -24,6 +24,8 @@ dontLeavePopup,div#WindowBarDiv
 carDates,div[data-category="Car"] .text-flightinfo.mts
 carTimes,div.prl .font11.greyfont
 airLegsOnTrip,.pam.border_top
+activityDetails,div[data-category="Activity"] .row-fluid.pull-left
+activityPaxDetails,div[data-category="Activity"] .text-flightinfo
 airportCodes,div.airportname
 legtimes,.span3.fontsize12
 legDates,div.prl .font12.greyfont

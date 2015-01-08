@@ -41,7 +41,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
             var i = 1;
             var productBars = GetUIElements("productBar");
             var btnAddAdult = GetUIElements("adultCount").Where((x, index) => index % 2 == 1).ToArray();
-            
+            var activityName = WaitAndGetBySelector("activityTitle", ApplicationSettings.TimeOut.Fast).Text;
             if (!btnAddAdult.Any())
                 criteria.Passengers.Adults = 0;
             else
@@ -77,6 +77,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
                     }
                 else
                 {
+                    _addedResult.Name = activityName;
                     _addedResult.Description = description;
                     _addedResult.Passengers = criteria.Passengers;
                     _addedResult.Category = category;
@@ -122,7 +123,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
             var activityDetails = GetUIElements("activityDetails").Select(x => x.Text).ToArray();
             return new ActivityResult()
                 {
-                    Name = activityDetails[0],
                     ProductName = activityDetails[1],
                     Date = DateTime.Parse(WaitAndGetBySelector("activityDate", ApplicationSettings.TimeOut.Fast).Text.Remove(0, 5).Trim()),
                     Amount = new Amount(WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text)

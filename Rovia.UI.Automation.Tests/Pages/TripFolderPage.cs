@@ -7,6 +7,7 @@ using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Activity;
 using Rovia.UI.Automation.ScenarioObjects.Hotel;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Utility;
@@ -37,27 +38,12 @@ namespace Rovia.UI.Automation.Tests.Pages
                 fares.Add(new Fare()
                 {
                     TotalFare = new Amount(totalFare[i]),
-                    BaseFare = new Amount(baseFare[i]),
-                    Taxes = new Amount(taxes[i])
+                    BaseFare = i<baseFare.Length ? new Amount(baseFare[i]) : null,
+                    Taxes = i<taxes.Length ? new Amount(taxes[i]):null
                 });
                 i++;
             }
             return fares;
-        }
-
-        private IEnumerable<Passengers> ParsePassengers()
-        {
-            return GetUIElements("totalPassengers").Select(x =>
-            {
-
-                var passengers = x.Text.Split(new[] { ' ', ',' }).ToList();
-                return new Passengers()
-                {
-                    Adults = passengers.Contains("Adult") ? int.Parse(passengers[passengers.IndexOf("Adult") - 1]) : 0,
-                    Children = passengers.Contains("Child") ? int.Parse(passengers[passengers.IndexOf("Child") - 1]) : 0,
-                    Infants = passengers.Contains("Infant") ? int.Parse(passengers[passengers.IndexOf("Infant") - 1]) : 0
-                };
-            });
         }
 
         private TripProduct ParseTripProduct(string productType)
@@ -71,9 +57,24 @@ namespace Rovia.UI.Automation.Tests.Pages
                     return ParseHotelTripProduct();
                 case "CAR":
                     return ParseCarTripProduct();
+                case "ACTIVITY":
+                    return ParseActivityTripProduct();
                 default:
                     throw new InvalidInputException("ProductType : " + productType);
             }
+        }
+
+        private TripProduct ParseActivityTripProduct()
+        {
+            var activityDetails = GetUIElements("activityDetails");
+            var paxInfoAndDate = GetUIElements("activityPaxDetails");
+            return new ActivityTripProduct()
+                {
+                    ActivityProductName=activityDetails[1].Text,
+                    Category=activityDetails[2].Text,
+                    Date=DateTime.Parse(paxInfoAndDate[0].Text),
+                    Passengers = new Passengers(paxInfoAndDate[1].Text)
+                };
         }
 
         private TripProduct ParseAirTripProduct()
@@ -81,7 +82,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             LogManager.GetInstance().LogDebug("Parsing Air trip product on TripFolder Page");
             return new AirTripProduct()
                 {
-                    Fares = new Fare() { TotalFare = new Amount(WaitAndGetBySelector("totalFare", ApplicationSettings.TimeOut.Slow).Text.Trim()) },
+                    Passengers = new Passengers(WaitAndGetBySelector("totalPassengers",ApplicationSettings.TimeOut.Fast).Text.Replace("For","")),
                     Airlines = GetUIElements("productName").Select(x => x.Text.Trim()).ToList(),
                     FlightLegs = ParseFlightLegs()
                 };
@@ -196,7 +197,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             var fares = ParseFares().ToArray();
             var modifyProductButton = GetUIElements("modifyItemClick").ToArray();
             var removeProductButton = GetUIElements("removeItemClick").ToArray();
-            var passengers = ParsePassengers().ToArray();
+            var passengers = GetUIElements("totalPassengers").Select(x => new Passengers(x.Text.Replace("For", ""))).ToArray();
             var i = 0;
             LogManager.GetInstance().LogDebug("Products on Trip Folder : " + string.Join("-", productTypes));
             while (i < productTypes.Length)
@@ -204,7 +205,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 var product = ParseTripProduct(productTypes[i]);
                 product.ProductTitle = productTitle[i];
                 product.Fares = fares[i];
-                product.Passengers = passengers.Length > 0 ? passengers[i] : null;
+                product.Passengers = product.Passengers??(passengers.Length > 0 ? passengers[i] : null);
                 product.ModifyProductButton = modifyProductButton[i];
                 product.RemoveProductButton = removeProductButton[i];
 
@@ -299,6 +300,24 @@ namespace Rovia.UI.Automation.Tests.Pages
                 throw new ValidationException(errors + "| on TripFolderPage");
         }
 
+        private void ValidateTripProduct(ActivityTripProduct activityTripProduct, ActivityResult activityResult)
+        {
+            var errors = new StringBuilder();
+            if (!activityResult.Amount.Equals(activityTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("ActivityFare", activityResult.Amount.ToString(), activityTripProduct.Fares.TotalFare.ToString()));
+            //if (!activityResult.Category.Equals(activityTripProduct.Category,StringComparison.OrdinalIgnoreCase))
+            //    errors.Append(FormatError("ActivityCategory", activityResult.Category, activityTripProduct.Category));
+            if (!activityResult.ProductName.Equals(activityTripProduct.ActivityProductName))
+                errors.Append(FormatError("ActivityProductName", activityResult.ProductName, activityTripProduct.ActivityProductName));
+            if (!activityResult.Name.Equals(activityTripProduct.ProductTitle))
+                errors.Append(FormatError("ActivityName", activityResult.Name, activityTripProduct.ProductTitle));
+            if (!activityResult.Date.Equals(activityTripProduct.Date))
+                errors.Append(FormatError("Activity Date", activityResult.Date.ToShortDateString(), activityTripProduct.Date.ToShortDateString()));
+            if (!activityResult.Passengers.Equals(activityTripProduct.Passengers))
+                errors.Append(FormatError("PassengersCount", activityResult.Passengers.ToString(), activityTripProduct.Passengers.ToString()));
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on TripFolderPage");
+        }
 
         internal void EditTripName()
         {
@@ -330,10 +349,12 @@ namespace Rovia.UI.Automation.Tests.Pages
                         ValidateTripProduct(tripProduct as CarTripProduct, selectedItineary as CarResult);
                         break;
                     case TripProductType.Activity:
+                        ValidateTripProduct(tripProduct as ActivityTripProduct, selectedItineary as ActivityResult);
                         break;
                 }
             }
         }
+
 
         internal void CheckoutTrip()
         {

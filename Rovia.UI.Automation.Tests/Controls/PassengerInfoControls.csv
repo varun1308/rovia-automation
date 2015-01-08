@@ -34,3 +34,7 @@ roomCount,.mrm .greyfont
 carDates,div.mvl .font10.greyfont
 carTimes,div.font16.mts
 airportCodes,.airportname
+activitiesIcon,.icon_cat_activities
+activityTitle,.row-fluid.bold
+activityProductName,.row-fluid.font12
+activityCategory,.row-fluid.font11
