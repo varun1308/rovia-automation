@@ -16,3 +16,4 @@ infantCount,div[data-paxtype="INFANT"] button
 adultAgeGrp,div[data-paxtype="ADULT"] .greyfont.pls
 childrenAgeGrp,div[data-paxtype="CHILD"] .greyfont.pls
 infantAgeGrp,div[data-paxtype="INFANT"] .greyfont.pls
+activityTitle,.result_title

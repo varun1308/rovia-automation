@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
@@ -50,7 +51,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 }
                 catch (PageLoadFailed)
                 {
-                    _app.SaveScreenshot("SiteLoadFailed"+i++);
+                    _app.SaveScreenshot("SiteLoadFailed" + i++);
                 }
             }
         }
@@ -106,11 +107,19 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         private static PassengerDetails GetPassengerDetails()
         {
-            return new PassengerDetails(_criteria.Passengers, TripProductType)
+            switch (TripProductType)
             {
-                Country = "United States",
-                IsInsuranceRequired = false
-            };
+                case TripProductType.Hotel:
+                case TripProductType.Car:
+                    return new PassengerDetails(new Passengers("1 Adult"));
+                case TripProductType.Activity:
+                    var activitySearchCriteria = _criteria as ActivitySearchCriteria;
+                    return new PassengerDetails(activitySearchCriteria.Passengers,activitySearchCriteria.AdultAgeGroup,activitySearchCriteria.ChildrenAgeGroup,activitySearchCriteria.InfantAgeGroup);
+                case TripProductType.Air:
+                    return new PassengerDetails(_criteria.Passengers);
+                default:
+                    return null;
+            }
         }
 
         internal static void GoToHomePage()
