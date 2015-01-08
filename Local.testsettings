@@ -2,21 +2,21 @@
 <TestSettings name="Remote" id="f296a2fa-3e1c-418b-bef3-1e80314ddeb2" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Car\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Hotel\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\Air\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\Hotel\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Car\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Air\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\Hotel\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Activity\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\chromedriver.exe" />
-    <DeploymentItem filename="Rovia.UI.Automation.Tests\DataSheet\" />
+    <DeploymentItem filename="Rovia.UI.Automation.Tests\Controls\Air\" />
     <DeploymentItem filename="Rovia.UI.Automation.Tests\App.config" />
   </Deployment>
   <NamingScheme baseName="RoviaUI" />
   <RemoteController name="TavWITPD047" />
   <Execution location="Remote">
-    <Timeouts runTimeout="1800000" testTimeout="1500000" />
+    <Timeouts testTimeout="1500000" />
     <TestTypeSpecific>
       <UnitTestRunConfig testTypeId="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b">
         <AssemblyResolution>
