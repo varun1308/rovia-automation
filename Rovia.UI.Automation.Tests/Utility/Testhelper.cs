@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
@@ -50,7 +51,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 }
                 catch (PageLoadFailed)
                 {
-                    _app.SaveScreenshot("SiteLoadFailed"+i++);
+                    _app.SaveScreenshot("SiteLoadFailed" + i++);
                 }
             }
         }
@@ -201,6 +202,12 @@ namespace Rovia.UI.Automation.Tests.Utility
                 }
                 OnSuccessLogin(requestingPage);
                 _logger.LogStatus("Login", "Passed");
+            }
+            catch (UnhandledAlertException exception)
+            {
+                _app.ConfirmAlert();
+                _logger.LogStatus("Login", "Failed");
+                throw;
             }
             catch (Exception)
             {
