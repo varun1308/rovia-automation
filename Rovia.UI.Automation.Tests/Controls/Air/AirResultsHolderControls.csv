@@ -17,3 +17,14 @@ airlineOnCart,div#dvAddToCartAir .span2.font12
 priceOnCart,div#dvAddToCartAir .price
 legArrDepDate,.borderRight .font12.greyfont
 legArrDepTime,div.span3 .span6 .text-flightinfo
+flightlegSegments,.segmentHolder
+flightlegAirportCodes,.span6 .fontBold
+flightlegviewDetails,a.mtl
+flightlegArrDepTime,.span3.fontsize12
+flightlegArrDepDate,.dotted_bottomborder .span3
+flightlegStops,.dotted_bottomborder .span4
+flightlegCabins,.offset1.font12
+flightlegDuration,.ptm .prm
+flightAirportsOnCart,#dvAddToCartAir .airportname
+flightTimesOnCart,#dvAddToCartAir .airportname span
+flightDatesOnCart,#dvAddToCartAir .font12.greyfont

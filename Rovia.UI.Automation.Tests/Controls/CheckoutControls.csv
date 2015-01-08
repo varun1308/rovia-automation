@@ -45,3 +45,4 @@ carOptionsConfirmation,div.pull-left.font12
 carPickUpDateTimeConfirmation,div.prl .print_nomargin
 carDropoffDateTimeConfirmation,div.borderRgt.mll .print_font12
 carPassengersConfirmation,div.printPassengers .print_nomargin
+airportCodes,.airportname

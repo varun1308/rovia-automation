@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
@@ -93,10 +94,77 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private TripProduct ParseAirTripProduct()
         {
+            LogManager.GetInstance().LogDebug("Parsing Air trip product on TripFolder Page");
             return new AirTripProduct()
                 {
-
+                    Fares = new Fare() { TotalFare = new Amount(WaitAndGetBySelector("totalFare", ApplicationSettings.TimeOut.Slow).Text.Trim()) },
+                    Airlines = GetUIElements("productName").Select(x => x.Text.Trim()).ToList(),
+                    FlightLegs = ParseFlightLegs()
                 };
+        }
+
+        private List<FlightLegs> ParseFlightLegs()
+        {
+            foreach (var t in GetUIElements("flightlegviewDetails").Where(t => t.Text.Contains("view")))
+            {
+                t.Click();
+                Thread.Sleep(1000);
+            }
+
+            var airportnames = GetUIElements("flightlegAirportCodes").Select(x => x.Text).ToList();
+            var legArrAirport = airportnames.Where((item, index) => index % 2 == 0).ToArray();
+            var legDepAirport = airportnames.Where((item, index) => index % 2 != 0).ToArray();
+            var legArrDepTime = GetUIElements("legtimes").Select(x =>
+            {
+                var a = x.Text.Split(' ');
+                return a[1] + " " + a[2];
+            }).ToList();
+            var legArrTime = legArrDepTime.Where((item, index) => index % 2 == 0).ToArray();
+            var legDepTime = legArrDepTime.Where((item, index) => index % 2 != 0).ToArray();
+            var segments = GetUIElements("flightAllSegments").ToList();
+
+            var legCabins = GetUIElements("flightlegCabins").Where(x => x.Text.Contains("view fare rules")).
+                    Select(x => x.Text.Split('|')[0].Split('(')[0]).ToArray();
+
+            var legArrDepDate = GetUIElements("legDates").Select(x => x.Text).ToList();
+            var legArrDate = legArrDepDate.Where((item, index) => index % 2 == 0).ToList();
+            var legDepDate = legArrDepDate.Where((item, index) => index % 2 != 0).ToList();
+
+            var arrDate = new List<string>();
+            var depDate = new List<string>();
+
+            for (var i = 0; i < segments.Count; i++)
+            {
+                arrDate.Add(legArrDate[i]);
+                depDate.Add(legDepDate[i]);
+                var totalSegments = segments[i].GetUIElements("flightSegmentIdentifier").Where(x => x.Text.Contains("Take-off")).ToList();
+                for (var j = 1; j < totalSegments.Count; j++)
+                {
+                    arrDate.Add(legDepDate[i]);
+                    depDate.Add(legDepDate[i]);
+                }
+            }
+
+            //GetUIElements("viewlegDetails").ForEach(x =>
+            //    {
+            //        x.Click();
+            //        Thread.Sleep(1000);
+            //    });
+            //var legDuration = GetUIElements("legDuration").Select(x =>
+            //{
+            //    var arr = x.Text.Split();
+            //       return (int.Parse(arr[0]) * 60 + int.Parse(arr[2] ?? "0"));
+            //}).ToArray();
+
+            //var legCabinAndStops = GetUIElements("legCabin").Select(x => x.Text).ToList();
+            //var legCabins = legCabinAndStops.Select(x => x.Split(' ')[0]).Where((item, index) => index != 0 && (index == 2 || index % 6 == 0)).ToArray();
+
+            return legArrAirport.Select((t, i) => new FlightLegs()
+            {
+                AirportPair = t + "-" + legDepAirport[i],
+                ArriveTime = DateTime.Parse(arrDate[i] + " " + legArrTime[i]),
+                DepartTime = DateTime.Parse(depDate[i] + " " + legDepTime[i])
+            }).ToList();
         }
 
         private TripProduct ParseHotelTripProduct()
@@ -173,7 +241,37 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private void ValidateTripProduct(AirTripProduct airTripProduct, AirResult airResult)
         {
-            //throw new NotImplementedException();
+            LogManager.GetInstance().LogDebug("Validating Air trip product on TripFolder Page");
+
+            var errors = new StringBuilder();
+            if (!airResult.Amount.Equals(airTripProduct.Fares.TotalFare))
+                errors.Append(FormatError("Amount", airResult.Amount.ToString(), airTripProduct.Fares.TotalFare.ToString()));
+
+            if (airTripProduct.FlightLegs.Count == airResult.Legs.Count)
+            {
+                for (var i = 0; i < airTripProduct.FlightLegs.Count; i++)
+                {
+                    if (!airTripProduct.FlightLegs[i].AirportPair.Equals(airResult.Legs[i].AirportPair))
+                        errors.Append(FormatError("AirportPair", airResult.Legs[i].AirportPair, airTripProduct.FlightLegs[i].AirportPair));
+                    if (!airTripProduct.FlightLegs[i].ArriveTime.Equals(airResult.Legs[i].ArriveTime))
+                        errors.Append(FormatError("Arrival Time", airResult.Legs[i].ArriveTime.ToLongDateString(), airTripProduct.FlightLegs[i].ArriveTime.ToLongDateString()));
+                    if (!airTripProduct.FlightLegs[i].DepartTime.Equals(airResult.Legs[i].DepartTime))
+                        errors.Append(FormatError("Depart Time", airResult.Legs[i].DepartTime.ToLongDateString(), airTripProduct.FlightLegs[i].DepartTime.ToLongDateString()));
+                    //need to parsing on result page first
+                    //if (!airTripProduct.FlightLegs[i].Cabin.Equals(airResult.Legs[i].Cabin))
+                    //    errors.Append(FormatError("Cabin", airResult.Legs[i].Cabin.ToString(), airTripProduct.FlightLegs[i].Cabin.ToString()));
+                    //if (airTripProduct.FlightLegs[i].Duration != airResult.Legs[i].Duration && WaitAndGetBySelector("changeFlightTimes", ApplicationSettings.TimeOut.Fast) == null)
+                    //    errors.Append(FormatError("Duration", airResult.Legs[i].Duration.ToString(), airTripProduct.FlightLegs[i].Duration.ToString()));
+                }
+            }
+            else
+                errors.Append(FormatError("Leg counts ", airResult.Legs.Count.ToString(), airTripProduct.FlightLegs.Count.ToString()));
+
+            if (!airResult.AirLines.TrueForAll(airTripProduct.Airlines.Contains))
+                errors.Append(FormatError("Airlines", string.Join(",", airResult.AirLines.ToArray()), string.Join(",", airTripProduct.Airlines.ToArray())));
+
+            if (!string.IsNullOrEmpty(errors.ToString()))
+                throw new ValidationException(errors + "| on TripFolderPage");
         }
 
         private void ValidateTripProduct(HotelTripProduct hotelTripProduct, HotelResult hotelResult)
@@ -279,7 +377,6 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             try
             {
-
                 var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
                 return divDontLeavePopup != null && divDontLeavePopup.Displayed;
             }

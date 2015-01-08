@@ -26,3 +26,15 @@ carTimes,div.prl .font11.greyfont
 airLegsOnTrip,.pam.border_top
 activityDetails,div[data-category="Activity"] .row-fluid.pull-left
 activityPaxDetails,div[data-category="Activity"] .text-flightinfo
+airportCodes,div.airportname
+legtimes,.span3.fontsize12
+legDates,div.prl .font12.greyfont
+legCabin,div.prl .text-flightinfo.mts
+legDuration,div.mtl .prm
+viewlegDetails,a.collapsed
+changeFlightTimes,.pinkbg .txtAlignRight
+flightlegAirportCodes,.span6 .fontBold
+flightlegviewDetails,a.collapsed
+flightAllSegments,.mal .border_top.in.collapse
+flightSegmentIdentifier,.span2
+flightlegCabins,.offset1.font12

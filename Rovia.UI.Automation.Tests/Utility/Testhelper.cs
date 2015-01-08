@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rovia.UI.Automation.Criteria;
 using Rovia.UI.Automation.Exceptions;
@@ -115,10 +116,18 @@ namespace Rovia.UI.Automation.Tests.Utility
         internal static void GoToHomePage()
         {
             _app.Launch(ApplicationSettings.Url);
-            _app.ConfirmAlert();
+            ResolveProductionSitePopup();
             _app.HomePage.WaitForHomePage();
             _app.State.CurrentPage = "HomePage";
-            //_logger.Log("OnHomePage");
+        }
+
+        private static void ResolveProductionSitePopup()
+        {
+            if (ApplicationSettings.Environment == "PROD")
+            {
+                _app.ConfirmAlert();
+                Thread.Sleep(2000);
+            }
         }
 
         internal static void SetCriteria(SearchCriteria criteria)
@@ -190,30 +199,31 @@ namespace Rovia.UI.Automation.Tests.Utility
                         _app.State.CurrentUser.ResetUser();
                         break;
                 }
-
-                if(ApplicationSettings.Environment=="PROD")
-                {
-                    if(_app.TripFolderPage.IsLeavePopupVisible())
-                    _app.ConfirmAlert();
-                }
-
-                if (requestingPage.Equals("HomePage"))
-                {
-                    _app.HomePage.WaitForHomePage();
-                    _app.State.CurrentPage = "HomePage";
-                }
-                else
-                {
-                    _app.PassengerInfoPage.WaitForPageLoad();
-                    _app.PassengerInfoPage.ValidateTripDetails(_selectedItineary);
-                    _app.State.CurrentPage = "PassengerInfoPage";
-                }
+                OnSuccessLogin(requestingPage);
                 _logger.LogStatus("Login", "Passed");
             }
             catch (Exception)
             {
                 _logger.LogStatus("Login", "Failed");
                 throw;
+            }
+        }
+
+        private static void OnSuccessLogin(string requestingPage)
+        {
+            if (requestingPage.Equals("HomePage"))
+            {
+                _app.HomePage.WaitForHomePage();
+                _app.State.CurrentPage = "HomePage";
+            }
+            else
+            {
+                if (ApplicationSettings.Environment == "PROD")
+                    if (_app.TripFolderPage.IsLeavePopupVisible())
+                        _app.ConfirmAlert();
+                _app.PassengerInfoPage.WaitForPageLoad();
+                _app.PassengerInfoPage.ValidateTripDetails(_selectedItineary);
+                _app.State.CurrentPage = "PassengerInfoPage";
             }
         }
 
@@ -464,7 +474,6 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         public static void SaveScreenShot(TestContext context)
         {
-            _app.ConfirmAlert();
             _app.SaveScreenshot(context);
         }
     }
