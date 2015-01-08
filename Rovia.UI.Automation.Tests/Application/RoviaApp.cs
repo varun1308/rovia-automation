@@ -115,16 +115,24 @@ namespace Rovia.UI.Automation.Tests.Application
 
         public void SaveScreenshot(TestContext context)
         {
-            var driver = Driver as ITakesScreenshot;
-            var testClass = context.FullyQualifiedTestClassName.Split('.');
-            if (driver == null) return;
-            var screenShot = driver.GetScreenshot();
+            try
+            {
+                var driver = Driver as ITakesScreenshot;
+                var testClass = context.FullyQualifiedTestClassName.Split('.');
+                if (driver == null) return;
+                var screenShot = driver.GetScreenshot();
 
-            var fileName = GetDirectoryPath() + "\\" +
-                           testClass[testClass.Length - 1] + "_" + context.TestName + "_" + (context.DataRow.Table.Rows.IndexOf(context.DataRow) + 1) +
-                           ".jpg";
-            screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
-            LogManager.GetInstance().LogInformation("$$ " + fileName + " $$");
+                var fileName = GetDirectoryPath() + "\\" +
+                               testClass[testClass.Length - 1] + "_" + context.TestName + "_" +
+                               (context.DataRow.Table.Rows.IndexOf(context.DataRow) + 1) +
+                               ".jpg";
+                screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
+                LogManager.GetInstance().LogInformation("$$ " + fileName + " $$");
+            }
+            catch(Exception ex)
+            {
+                LogManager.GetInstance().LogWarning("Error in taking screenshot: Driver fridged due to Rovia Award Popup.");
+            }
         }
 
         public void SaveScreenshot(string name)
