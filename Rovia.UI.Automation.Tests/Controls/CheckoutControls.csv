@@ -31,12 +31,12 @@ price,.price
 roomCount,.mrm .greyfont
 bookedProducts,.jsItemsHolder .border-grey
 bookedProductType,.print_product_header_bg
-bProductTitle,.text-boxtitle
+bookingDetails,.text-boxtitle
 bSubTitle,.font11.greyfont
 totalFare,span.price
 taxesandFees,.font11.minus4
 baseFare,.font11.minus10
-bHotelDetails,div.text-flightinfo
+bProductDetails,div.text-flightinfo
 bPassengers,div.font11.mbl
 carDates,div.mvl .font10.greyfont
 carTimes,div.font16.mts
@@ -50,3 +50,4 @@ activitiesIcon,.icon_cat_activities
 activityTitle,.row-fluid.bold
 activityProductName,.row-fluid.font12
 activityCategory,.row-fluid.font11
+activityDetails,.print_activity_name .pull-left

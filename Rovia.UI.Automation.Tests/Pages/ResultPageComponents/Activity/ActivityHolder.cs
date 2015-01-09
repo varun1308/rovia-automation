@@ -58,9 +58,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
                 criteria.Passengers.Infants = 0;
             else
                 criteria.InfantAgeGroup = new AgeGroup(GetUIElements("infantAgeGrp")[0].Text);
-
+            var attemptCounter = 0;
             foreach (var btn in GetUIElements("btnAddToCart"))
             {
+                if (attemptCounter++ > 5)
+                    return null;
                 for (var j = 1; j < criteria.Passengers.Adults; j++)
                     btnAddAdult[i - 1].Click();
                 for (var j = 0; j < criteria.Passengers.Children; j++)

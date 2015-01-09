@@ -79,7 +79,6 @@ namespace Rovia.UI.Automation.Tests.Utility
             catch (Exception)
             {
                 _logger.LogInformation("GoToLoginPage Failed");
-                throw;
             }
         }
 
@@ -115,7 +114,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                     return new PassengerDetails(new Passengers("1 Adult"));
                 case TripProductType.Activity:
                     var activitySearchCriteria = _criteria as ActivitySearchCriteria;
-                    return new PassengerDetails(activitySearchCriteria.Passengers,activitySearchCriteria.AdultAgeGroup,activitySearchCriteria.ChildrenAgeGroup,activitySearchCriteria.InfantAgeGroup);
+                    return new PassengerDetails(activitySearchCriteria.Passengers, activitySearchCriteria.AdultAgeGroup, activitySearchCriteria.ChildrenAgeGroup, activitySearchCriteria.InfantAgeGroup);
                 case TripProductType.Air:
                     return new PassengerDetails(_criteria.Passengers);
                 default:
@@ -218,10 +217,10 @@ namespace Rovia.UI.Automation.Tests.Utility
                 _logger.LogStatus("Login", "Failed");
                 throw;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 _logger.LogStatus("Login", "Failed");
-                throw;
+                throw new PageLoadFailed("LogInPage", exception); ;
             }
         }
 
@@ -474,7 +473,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 _app.CheckoutPage.ValidateBookedProductDetails(_selectedItineary);
                 _logger.LogStatus("PayNow", "Passed");
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 _logger.LogStatus("PayNow", "Failed");
                 throw;
