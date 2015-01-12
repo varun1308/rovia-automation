@@ -309,7 +309,7 @@ namespace Rovia.UI.Automation.Tests.Pages
         public void WaitForPageLoad()
         {
             var startCount = Environment.TickCount;
-            while (WaitAndGetBySelector("SpinningDiv", 300).Displayed)
+            while (WaitAndGetBySelector("SpinningDiv", 120).Displayed)
             {
                 if (Environment.TickCount - startCount > 120000)
                     throw new PageLoadFailed("passengerInfoPage", new TimeoutException());
