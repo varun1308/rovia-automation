@@ -58,7 +58,7 @@ namespace Rovia.UI.Automation.Tests.Tests
                         Location = "Singapore, SG",
                         FromDate = DateTime.Parse("02/06/2015"),
                         ToDate = DateTime.Parse("02/13/2015"),
-                        Pipeline = "LOGIN|Search|AddTOCart|CHECKOUTTRIP|ENTERPAXINFO",
+                        Pipeline = "LOGIN|Search|AddTOCart|CHECKOUTTRIP|ENTERPAXINFO|CONFIRMPAXINFO|PAYNOW",
                         UserType = UserType.Registered,
                         Passengers = new Passengers()
                             {

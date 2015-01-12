@@ -281,7 +281,8 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             if (tripProduct.WaitAndGetBySelector("hotelStars", ApplicationSettings.TimeOut.Fast) != null)
                 return TripProductType.Hotel;
-            if (tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text.Contains("Car"))
+            var carTitle = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast);
+            if (carTitle!=null && carTitle.Text.Contains("Car"))
                 return TripProductType.Car;
             if (tripProduct.WaitAndGetBySelector("activitiesIcon", ApplicationSettings.TimeOut.Fast) != null)
                 return TripProductType.Activity;
