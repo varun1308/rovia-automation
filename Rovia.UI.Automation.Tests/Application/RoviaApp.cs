@@ -131,7 +131,7 @@ namespace Rovia.UI.Automation.Tests.Application
             }
             catch(Exception ex)
             {
-                LogManager.GetInstance().LogWarning("Error in taking screenshot: Driver fridged due to Rovia Award Popup.");
+                LogManager.GetInstance().LogWarning("Error in taking screenshot: Driver freezed due to Rovia Award Popup.");
             }
         }
 
