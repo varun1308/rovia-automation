@@ -16,12 +16,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private AirMatrix _airMatrix;
         private List<string> _failedFilters;
-
+        private List<string> _appliedFilters;
         private IEnumerable<string> GetAppliedFilters()
         {
             return GetUIElements("appliedFilters").Select(x => x.Text.Trim());
         }
-        private void SetPriceRange(PriceRange priceRange)
+        private void  SetPriceRange(PriceRange priceRange)
         {
             var minPrice =
                 float.Parse(WaitAndGetBySelector("minPrice", ApplicationSettings.TimeOut.Fast).Text.Split(' ')[0].TrimStart('$'));
@@ -40,7 +40,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             ExecuteJavascript("$('#sliderTripDuration').trigger({type:'slideStop',value:[" + (maxTimeDurationCustom * 60) + "]})");
         }
 
-        private void SetStops(List<string> stopList)
+        private void SetStops(ICollection<string> stopList)
         {
             var stops = GetUIElements("stopsFilter").ToList();
             stops.ForEach(x => x.Click());
@@ -52,14 +52,14 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             });
         }
 
-        private void SetCabinTypes(List<string> cabinTypes)
+        private void SetCabinTypes(IEnumerable<CabinType> cabinTypes)
         {
             var cabinTypeList = GetUIElements("cabinTypeFilter").ToList();
             cabinTypeList[0].Click();
 
             cabinTypeList.ForEach(x =>
             {
-                if (cabinTypes.Contains(x.GetAttribute("data-name")) && x.Displayed)
+                if (cabinTypes.Any(y=>x.GetAttribute("data-name").Equals(y.ToString(),StringComparison.OrdinalIgnoreCase)) && x.Displayed)
                     x.Click();
             });
         }
@@ -132,9 +132,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 _failedFilters.Add("Trip Duration");
         }
 
-        private void ValidateCabinTypes(IEnumerable<string> cabinTypes, IEnumerable<IEnumerable<CabinType>> resultcabins)
+        private void ValidateCabinTypes(IEnumerable<CabinType> cabinTypes, List<CabinType> resultcabins)
         {
-            if (cabinTypes.Any(x => resultcabins.Any(y => !y.Contains(StringToEnum<CabinType>(x)))))
+            if (resultcabins.All(cabinTypes.Contains))
                 _failedFilters.Add("Cabin/Class");
         }
 
@@ -143,9 +143,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return (T)Enum.Parse(typeof(T), name, true);
         }
 
-        private void ValidateAirlines(IEnumerable<string> airlines, IEnumerable<List<string>> resultAirlines)
+        private void ValidateAirlines(IEnumerable<string> airlines, IEnumerable<string> resultAirlines)
         {
-            if (resultAirlines.Any(y => !y.ConvertAll(z => z.ToUpper()).TrueForAll(airlines.Contains)))
+            if (resultAirlines.Any(x=>!airlines.Contains(x.ToUpper())))
                 _failedFilters.Add("Airlines");
         }
 
@@ -189,7 +189,34 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
         {
-            return;
+            _appliedFilters = GetAppliedFilters().ToList();
+            var airFilters = preSearchFilters as AirPreSearchFilters;
+            if (preSearchFilters == null)
+                throw new InvalidInputException("PreSearchFilters");
+            var airResults = getParsedResults().Select(x => x as AirResult).ToList();
+            _failedFilters = new List<string>();
+
+            //if (airFilters.AirLines != null && airFilters.AirLines.Count > 0 )
+            //    if(!_appliedFilters.Contains("Airlines"))
+            //        _failedFilters.Add("Airlines");
+            //    else
+            //        ValidateAirlines(airFilters.AirLines,airResults.SelectMany(x=>x.AirLines).ToList());
+            if (airFilters.CabinType!=CabinType.Economy)
+            {
+                if (_appliedFilters.Contains("Cabin/Class"))
+
+                    _failedFilters.Add("Cabin/Class");
+                else
+                ValidateCabinTypes(new List<CabinType>() {airFilters.CabinType},
+                                       airResults.SelectMany(y=>y.Legs.Select(x => x.Cabin)).ToList());
+            }
+            if (airFilters.NonStopFlight)
+                if (_appliedFilters.Contains("Stops"))
+                    ValidateStops(new List<string>(){"none"}, airResults.Select(x => x.Legs.Select(y => y.Stops)).Select(z => z.Sum()).ToList());
+                else
+                    _failedFilters.Add("Stops");
+            if (_failedFilters.Any())
+                throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
         }
 
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
@@ -258,9 +285,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             if (airPostSearchFilters.Stop != null)
                 ValidateStops(airPostSearchFilters.Stop, airResults.Select(x => x.Legs.Select(y => y.Stops)).Select(z => z.Sum()).ToList());
             if (airPostSearchFilters.Airlines != null)
-                ValidateAirlines(airPostSearchFilters.Airlines, airResults.Select(x => x.AirLines).ToList());
+                ValidateAirlines(airPostSearchFilters.Airlines, airResults.SelectMany(x => x.AirLines));
             if (airPostSearchFilters.CabinTypes != null)
-                ValidateCabinTypes(airPostSearchFilters.CabinTypes, airResults.Select(x => x.Legs.Select(y => y.Cabin)).ToList());
+                ValidateCabinTypes(airPostSearchFilters.CabinTypes, airResults.SelectMany(x => x.Legs.Select(y => y.Cabin)).ToList());
             if (airPostSearchFilters.MaxTimeDurationDiff > 0)
                 ValidateTripDuration(airPostSearchFilters.MaxTimeDurationDiff, airResults.Select(x => x.Legs.Select(y => y.Duration)).Select(z => z.Sum()).ToList());
             if (_failedFilters.Any())

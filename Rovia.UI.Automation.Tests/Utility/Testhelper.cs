@@ -171,7 +171,8 @@ namespace Rovia.UI.Automation.Tests.Utility
                 TripsErrorUI = _app.HomePage.GetTripsErrorUri();
                 //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
-                _app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters);
+                if(_criteria.Filters!=null && _criteria.Filters.PreSearchFilters!=null)
+                    _app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters);
                 _logger.LogStatus("Search", "Passed");
             }
             catch (Exception)
