@@ -13,7 +13,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void LogIn(string userId, string password)
         {
-            WaitAndGetBySelector("username", ApplicationSettings.TimeOut.Fast).SendKeys(userId);
+            WaitAndGetBySelector("username", ApplicationSettings.TimeOut.Slow).SendKeys(userId);
 
             WaitAndGetBySelector("password", ApplicationSettings.TimeOut.Fast).SendKeys(password);
 
@@ -22,7 +22,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void ContinueAsGuest(string fname,string lname, string emailid)
         {
-            WaitAndGetBySelector("guestOption", 60).Click();
+            WaitAndGetBySelector("guestOption", 120).Click();
             WaitAndGetBySelector("guestOptionContinue", ApplicationSettings.TimeOut.Safe).Click();
             WaitAndGetBySelector("guestFName", ApplicationSettings.TimeOut.SuperFast).SendKeys(fname);
             WaitAndGetBySelector("guestLName", ApplicationSettings.TimeOut.SuperFast).SendKeys(lname);

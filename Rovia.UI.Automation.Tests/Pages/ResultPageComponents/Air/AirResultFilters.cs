@@ -17,6 +17,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         private AirMatrix _airMatrix;
         private List<string> _failedFilters;
         private List<string> _appliedFilters;
+
         private IEnumerable<string> GetAppliedFilters()
         {
             return GetUIElements("appliedFilters").Select(x => x.Text.Trim());
@@ -30,6 +31,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             priceRange.MinPrice = minPrice + (minPrice * priceRange.Min / 100);
             priceRange.MaxPrice = maxPrice - (maxPrice * priceRange.Max / 100);
             ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (priceRange.MinPrice * 100) + "," + (priceRange.MaxPrice * 100) + "]})");
+            _appliedFilters.Add("Price");
         }
 
         private void SetTimeDuration(int maxTimeDurationCustom)
@@ -38,6 +40,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var maxTimeDurationMins =
                 WaitAndGetBySelector("maxTimeDuration", ApplicationSettings.TimeOut.Fast).Text.Split(' ');
             ExecuteJavascript("$('#sliderTripDuration').trigger({type:'slideStop',value:[" + (maxTimeDurationCustom * 60) + "]})");
+            _appliedFilters.Add("Trip Duration");
         }
 
         private void SetStops(ICollection<string> stopList)
@@ -50,6 +53,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 if (stopList.Contains(x.GetAttribute("data-name")))
                     x.Click();
             });
+            _appliedFilters.Add("Stops");
         }
 
         private void SetCabinTypes(IEnumerable<CabinType> cabinTypes)
@@ -62,6 +66,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 if (cabinTypes.Any(y=>x.GetAttribute("data-name").Equals(y.ToString(),StringComparison.OrdinalIgnoreCase)) && x.Displayed)
                     x.Click();
             });
+
+            if (!cabinTypeList[0].Selected)
+                _appliedFilters.Add("Cabin/Class");
         }
 
         private void SetAirlines(List<string> airlines)
@@ -73,6 +80,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 if (airlines.Contains(x.Text.Trim().ToUpper()) && x.Displayed)
                     x.Click();
             });
+            if (!airlinesList[0].Selected)
+                _appliedFilters.Add("Airlines");
         }
 
         private void SetTakeOffTime(TakeOffTimeRange takeOffTimeRange)
@@ -83,6 +92,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                                   "var minTime =maxTime- maxTime * " + takeOffTimeRange.Max +
                                   " / 100;maxTime -= maxTime * " + takeOffTimeRange.Min + " / 100;" +
                                   "$('.jsTslider').trigger({type:'slide',value:[minTime,maxTime]}).trigger({type:'slideStop',value:[minTime,maxTime]})");
+            _appliedFilters.Add("Times");
         }
 
         private void SetLandingTime(LandingTimeRange landingTimeRange)
@@ -92,6 +102,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 ExecuteJavascript("var maxTime=parseInt($('.jsLslider').data('slider').max);" +
                                       "var minTime =maxTime- maxTime * " + landingTimeRange.Max + " / 100;maxTime -= maxTime * " + landingTimeRange.Min + " / 100;" +
                                   "$('.jsLslider').trigger({type:'slide',value:[minTime,maxTime]}).trigger({type:'slideStop',value:[minTime,maxTime]})");
+            _appliedFilters.Add("Times");
         }
 
         private void SetMatrix()
@@ -106,6 +117,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                         divMatrixAirlines.WaitAndGetBySelector("divMatrixPrice", ApplicationSettings.TimeOut.Fast).Text
                 };
             divMatrixAirlines.Click();
+
+            _appliedFilters.AddRange(new string[] { "Airlines", "Price" });
 
             // uncomment below if wants to test all matrix
             //return !divMatrixAirlines.Any(x =>
@@ -224,48 +237,25 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var airPostSearchFilters = postSearchFilters as AirPostSearchFilters;
             if (airPostSearchFilters == null)
                 throw new InvalidInputException("PostSearchFilters");
-            var appliedFilters = new List<string>();
+            _appliedFilters = new List<string>();
             if (airPostSearchFilters.Stop != null)
-            {
                 SetStops(airPostSearchFilters.Stop);
-                appliedFilters.Add("Stops");
-            }
             if (airPostSearchFilters.PriceRange != null)
-            {
                 SetPriceRange(airPostSearchFilters.PriceRange);
-                appliedFilters.Add("Price");
-            }
             if (airPostSearchFilters.MaxTimeDurationDiff > 0)
-            {
                 SetTimeDuration(airPostSearchFilters.MaxTimeDurationDiff);
-                appliedFilters.Add("Trip Duration");
-            }
             if (airPostSearchFilters.TakeOffTimeRange != null)
-            {
                 SetTakeOffTime(airPostSearchFilters.TakeOffTimeRange);
-                appliedFilters.Add("Times");
-            }
             if (airPostSearchFilters.LandingTimeRange != null)
-            {
                 SetLandingTime(airPostSearchFilters.LandingTimeRange);
-                appliedFilters.Add("Times");
-            }
             if (airPostSearchFilters.CabinTypes != null)
-            {
                 SetCabinTypes(airPostSearchFilters.CabinTypes);
-                appliedFilters.Add("Cabin/Class");
-            }
             if (airPostSearchFilters.Airlines != null)
-            {
                 SetAirlines(airPostSearchFilters.Airlines);
-                appliedFilters.Add("Airlines");
-            }
             if (airPostSearchFilters.Matrix != null)
-            {
                 SetMatrix();
-                appliedFilters.AddRange(new string[] { "Airlines", "Price" });
-            }
-            var unAppliedFilters = appliedFilters.Except(GetAppliedFilters()).ToList();
+
+            var unAppliedFilters = _appliedFilters.Except(GetAppliedFilters()).ToList();
 
             if (unAppliedFilters.Any())
                 throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
