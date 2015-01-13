@@ -24,7 +24,8 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 var validIndices = Enumerable.Range(0, suppliers.Count());
                 if (!string.IsNullOrEmpty(hotelSupplier))
                     validIndices = validIndices.Where(x => suppliers[x][1].Equals(hotelSupplier));
-                var resultIndex = validIndices.First(i => SelectRoom(GetUIElements("btnSelectHotel")[i], roomSupplier));
+                var btnAddToCart = GetUIElements("btnSelectHotel");
+                var resultIndex = validIndices.First(i => SelectRoom(btnAddToCart[i], roomSupplier));
                 _selectedItinerary.Supplier = new Supplier()
                     {
                         SupplierName = suppliers[resultIndex][1],

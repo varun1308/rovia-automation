@@ -20,7 +20,7 @@ namespace Rovia.UI.Automation.Tests.Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            //DataBinder = new ActivityCriteriaDataBinder();
+            DataBinder = new ActivityCriteriaDataBinder();
             TestHelper.TripProductType = TripProductType.Activity;
             _logManager = LogManager.GetInstance();
         }
@@ -40,46 +40,23 @@ namespace Rovia.UI.Automation.Tests.Tests
 
 
 
-        //[TestMethod, TestCategory("Sanity")]
-        //public void ActivityDummyTest()
-        //{
-        //    Execute();
-        //}
+        [TestMethod, DataSource("ActivityCompleteBookingFlows"), TestCategory("Sanity")]
+        public void ActivityCompleteBookingFlowTests()
+        {
+            Execute();
+        }
+
+        [TestMethod, DataSource("ActivityMatrixSortAndFilters"), TestCategory("Sanity")]
+        public void ActivityMatrixSortAndFiltersTests()
+        {
+            Execute();
+        }
 
         private void Execute()
         {
             try
             {
-                //var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                var criteria = new ActivitySearchCriteria()
-                    {
-                        Description = "Activity-DummyTest",
-                        ShortLocation = "Singapore",
-                        Location = "Singapore, SG",
-                        FromDate = DateTime.Parse("02/06/2015"),
-                        ToDate = DateTime.Parse("02/13/2015"),
-                        Pipeline = "LOGIN|Search|AddTOCart|CHECKOUTTRIP|ENTERPAXINFO|CONFIRMPAXINFO|PAYNOW",
-                        UserType = UserType.Registered,
-                        Passengers = new Passengers()
-                            {
-                                Adults = 2,
-                                Children = 1,
-                                Infants = 1
-                            },
-                        Filters = new Filters()
-                            {
-                                PostSearchFilters = new ActivityPostSearchFilters()
-                                    {
-                                        //ActivityName = "Experience Trick Art",
-                                        //PriceRange = new PriceRange()
-                                        //    {
-                                        //        Max = 10,
-                                        //        Min=10
-                                        //    },
-                                        Matrix = new ActivityMatrix() {Category = "Water Sports"}
-                                    }
-                            }
-                    };
+                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
                 _logManager.StartNewLog(criteria.Description);
                 TestHelper.SetCriteria(criteria);
                 TestExecutionPipeLine.Execute(criteria.Pipeline);

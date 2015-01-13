@@ -11,7 +11,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public LandingTimeRange LandingTimeRange { get; set; }
         public List<string> Stop { get; set; }
         public int MaxTimeDurationDiff { get; set; }
-        public List<string> CabinTypes { get; set; }
+        public List<CabinType> CabinTypes { get; set; }
         public List<string> Airlines { get; set; }
     }
 }

@@ -159,6 +159,7 @@
     <Content Include="DataSheet\Air\Air_WorldSpan.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="DataSheet\Activities\ActivityScenarios.xlsx" />
     <None Include="DataSheet\CarScenarios.xlsx" />
     <None Include="DataSheet\Hotel\HotelScenarios.xlsx" />
     <None Include="Utility\KillChromeDriver.bat" />

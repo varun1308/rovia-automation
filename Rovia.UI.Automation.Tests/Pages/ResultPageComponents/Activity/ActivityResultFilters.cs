@@ -82,10 +82,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 ValidateActivityNameFilter(activityPostSearchFilters.ActivityName, activityResults.Select(x => x.Name));
             if (activityPostSearchFilters.Categories != null)
                 ValidateCategoryFilter(activityPostSearchFilters.Categories, activityResults.Select(x => x.Category));
-            if (activityPostSearchFilters.SortBy != SortBy.Featured)
+            if (activityPostSearchFilters.SortBy != SortBy.PriceAsc)
                 ValidateSort(activityPostSearchFilters.SortBy, activityResults);
             if (activityPostSearchFilters.Matrix != null)
             {
+                if(activityPostSearchFilters.SortBy!=SortBy.PriceAsc)
+                    SortResults(SortBy.PriceAsc);
                 ValidateMatrix(activityPostSearchFilters.Matrix as ActivityMatrix, getParsedResults);
                 if(activityPostSearchFilters.SortBy!=SortBy.PriceAsc)
                     SortResults(activityPostSearchFilters.SortBy);
@@ -122,7 +124,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private void ValidateMatrix(ActivityMatrix matrix, Func<List<Results>> getParsedResults)
         {
-            SortResults(SortBy.PriceAsc);
             var results = getParsedResults();
             if (results.First().Amount.TotalAmount<matrix.StaringPrice.TotalAmount ||
                results.Any(x => (x as ActivityResult).Category != matrix.Category))
@@ -211,7 +212,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     matrix.StaringPrice = new Amount(x.WaitAndGetBySelector("startingPrice", ApplicationSettings.TimeOut.Fast).Text);
                     return true;
                 }))
-                _appliedFilters.Add("Category");
+                _appliedFilters.Add("Categories");
             else
                 LogManager.GetInstance().LogWarning(string.Format("Matrix Filter was not applied( Requested Matrix Section with Category : {0} not Found )", matrix.Category));
         }

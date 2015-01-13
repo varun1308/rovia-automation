@@ -10,13 +10,13 @@ using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.DataBinder
 {
-    class ActivityCriteriaDataBinder : ICriteriaDataBinder
+    public class ActivityCriteriaDataBinder : ICriteriaDataBinder
     {
         public SearchCriteria GetCriteria(DataRow dataRow)
         {
             try
             {
-                return new ActivitySearchCriteria()
+                var scenario = new ActivitySearchCriteria()
                 {
                     Pipeline = (string)dataRow["ExecutionPipeline"],
                     UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
@@ -24,17 +24,29 @@ namespace Rovia.UI.Automation.DataBinder
                     ShortLocation = dataRow["ShortLocation"].ToString().Replace("..", ","),
                     Location = dataRow["Location"].ToString().Replace("..", ","),
                     Passengers = ParsePassengers(dataRow["Adults"].ToString(), dataRow["Children"].ToString(), dataRow["Infants"].ToString()),
-                    Filters = GetFilters(dataRow["PostFilters"].ToString(), dataRow["PostFiltersValues"].ToString()),
-                    PaymentMode = StringToEnum<PaymentMode>(((string)dataRow["PaymentMode"]).Split('|')[0]),
-                    CardType = StringToEnum<CreditCardType>(((string)dataRow["PaymentMode"]).Contains("|") ? ((string)dataRow["PaymentMode"]).Split('|')[1] : "Visa"),
+                    Filters = GetFilters(dataRow["PostSearchFilters"].ToString(), dataRow["PostSearchFilterValues"].ToString()),
+
                     FromDate = DateTime.Now.AddDays(int.Parse(dataRow["StartDate"].ToString())),
                     ToDate = DateTime.Now.AddDays(int.Parse(dataRow["EndDate"].ToString())),
                 };
+
+                SetPaymentMode(scenario, dataRow["PaymentMode"].ToString());
+                return scenario;
             }
             catch (Exception exception)
             {
                 throw new InvalidInputException("DataRow to AirCriteriaDataBinder.GetCriteria", exception);
             }
+        }
+
+        private static void SetPaymentMode(ActivitySearchCriteria scenario, string paymentMode)
+        {
+            if (string.IsNullOrEmpty(paymentMode))
+                return;
+            var paymentOptions = paymentMode.Split('|');
+            scenario.PaymentMode = StringToEnum<PaymentMode>(paymentOptions[0]);
+            if (paymentOptions.Length == 2)
+                scenario.CardType = StringToEnum<CreditCardType>(paymentOptions[1]);
         }
 
         private Passengers ParsePassengers(string adults, string children, string infant)
@@ -60,17 +72,17 @@ namespace Rovia.UI.Automation.DataBinder
             {
                 switch (filterList[i].ToUpper())
                 {
-                    case "PriceRange":
+                    case "PRICERANGE":
                         filterCriteria.PriceRange = new PriceRange()
                         {
                             Min = int.Parse(valueList[i].Split('-')[0]),
                             Max = int.Parse(valueList[i].Split('-')[1])
                         };
                         break;
-                    case "Name":
+                    case "NAME":
                         filterCriteria.ActivityName = valueList[i];
                         break;
-                    case "Categories":
+                    case "CATEGORIES":
                         filterCriteria.Categories = new List<string>(valueList[i].Split('/'));
                         break;
                     case "MATRIX":
@@ -86,6 +98,8 @@ namespace Rovia.UI.Automation.DataBinder
                 }
                 i++;
             }
+            if(filterCriteria.SortBy==SortBy.Featured)
+                filterCriteria.SortBy=SortBy.PriceAsc;
             return new Filters()
                 {
                     PostSearchFilters = filterCriteria
