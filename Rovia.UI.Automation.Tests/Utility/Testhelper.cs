@@ -169,7 +169,6 @@ namespace Rovia.UI.Automation.Tests.Utility
                 _app.HomePage.Search(_criteria);
                 _app.ResultsPage.WaitForResultLoad();
                 TripsErrorUI = _app.HomePage.GetTripsErrorUri();
-                //_app.ResultsPage.ValidateSearch(_criteria);
                 _app.State.CurrentPage = "ResultsPage";
                 _app.ResultsPage.VerifyPreSearchFilters(_criteria.Filters.PreSearchFilters);
                 _logger.LogStatus("Search", "Passed");
@@ -211,12 +210,6 @@ namespace Rovia.UI.Automation.Tests.Utility
                 OnSuccessLogin(requestingPage);
                 _logger.LogStatus("Login", "Passed");
             }
-            catch (UnhandledAlertException exception)
-            {
-                _app.ConfirmAlert();
-                _logger.LogStatus("Login", "Failed");
-                throw;
-            }
             catch (Exception exception)
             {
                 _logger.LogStatus("Login", "Failed");
@@ -233,10 +226,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             }
             else
             {
-                if (ApplicationSettings.Environment == "PROD")
-                    if (_app.TripFolderPage.IsLeavePopupVisible())
-                        _app.ConfirmAlert();
-                _app.PassengerInfoPage.WaitForPageLoad();
+                _app.PassengerInfoPage.WaitForPageLoad(_app.ConfirmAlert);
                 _app.PassengerInfoPage.ValidateTripDetails(_selectedItineary);
                 _app.State.CurrentPage = "PassengerInfoPage";
             }
@@ -396,7 +386,7 @@ namespace Rovia.UI.Automation.Tests.Utility
 
                 if (_app.State.CurrentUser.Type != UserType.Guest)
                 {
-                    _app.PassengerInfoPage.WaitForPageLoad();
+                    _app.PassengerInfoPage.WaitForPageLoad(_app.ConfirmAlert);
                     _app.PassengerInfoPage.ValidateTripDetails(_selectedItineary);
                     _app.State.CurrentPage = "PassengerInfoPage";
                 }

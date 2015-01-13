@@ -38,3 +38,4 @@ activitiesIcon,.icon_cat_activities
 activityTitle,.row-fluid.bold
 activityProductName,.row-fluid.font12
 activityCategory,.row-fluid.font11
+dontLeavePopup,div#WindowBarDiv

@@ -108,9 +108,6 @@ namespace Rovia.UI.Automation.Tests.Pages
                 return a[1] + " " + a[2];
             }).ToList();
 
-            var daySegments = legArrDepTimeInfo.Select(x => x.Text.Split(' ')[0]).ToList();
-
-
             var legArrTime = legArrDepTime.Where((item, index) => index % 2 == 0).ToArray();
             var legDepTime = legArrDepTime.Where((item, index) => index % 2 != 0).ToArray();
             var segments = GetUIElements("flightAllSegments").ToList();
@@ -129,11 +126,12 @@ namespace Rovia.UI.Automation.Tests.Pages
             for (var i = 0; i < segments.Count; i++)
             {
                 var totalSegments = segments[i].GetUIElements("flightSegmentIdentifier").Where(x => x.Text.Contains("Take-off")).ToList();
+                var daySegments = segments[i].GetUIElements("legtimes").Select(x => x.Text.Split(' ')[0]).ToList();
                 arrDate.Add(legArrDate[i]);
                 depDate.Add(legDepDate[i]);
                 for (var j = 1; j < totalSegments.Count; j++)
                 {
-                    arrDate.Add(dayLegs[i].Equals(daySegments[j]) ? legArrDate[i] : legDepDate[i]);
+                    arrDate.Add(dayLegs[i * totalSegments.Count].Equals(daySegments[j]) ? legArrDate[i] : legDepDate[i]);
                     depDate.Add(legDepDate[i]);
                 }
             }
@@ -168,8 +166,8 @@ namespace Rovia.UI.Automation.Tests.Pages
         private TripProduct ParseCarTripProduct()
         {
             var carOptions = GetUIElements("carACnTransmission").ToArray();
-            var carDates = GetUIElements("carDates").Select(x => x.Text).ToArray();//1 & 3
-            var carTimes = GetUIElements("carTimes").Select(x => x.Text).ToArray();//0&1
+            var carDates = GetUIElements("carDates").Select(x => x.Text).ToArray();
+            var carTimes = GetUIElements("carTimes").Select(x => x.Text).ToArray();
             var pickUpDateTime = DateTime.Parse(carDates[0]).ToShortDateString() + " " + carTimes[0];
             var dropOffDateTime = DateTime.Parse(carDates[1]).ToShortDateString() + " " + carTimes[1];
             return new CarTripProduct()
@@ -370,20 +368,6 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();
             WaitAndGetBySelector("saveTripButton", ApplicationSettings.TimeOut.Fast).Click();
-        }
-
-        public bool IsLeavePopupVisible()
-        {
-            try
-            {
-                var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
-                return divDontLeavePopup != null && divDontLeavePopup.Displayed;
-            }
-            catch (OpenQA.Selenium.StaleElementReferenceException)
-            {
-                LogManager.GetInstance().LogWarning("Rovia Award Popup - Stale element reference caught and suppressed.");
-            }
-            return false;
         }
     }
 }

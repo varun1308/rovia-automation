@@ -134,12 +134,12 @@ namespace Rovia.UI.Automation.Tests.Pages
                 errors.Append(FormatError("ActivityPrice", activityResult.Amount.ToString(), activityTripProduct.Fares.TotalFare.ToString()));
             if (!activityResult.Date.Equals(activityTripProduct.Date))
                 errors.Append(FormatError("ActvityDate", activityResult.Date.ToShortDateString(), activityTripProduct.Date.ToShortDateString()));
-            if (!activityResult.ProductName.Equals(activityTripProduct.ActivityProductName,StringComparison.OrdinalIgnoreCase))
+            if (!activityResult.ProductName.Equals(activityTripProduct.ActivityProductName, StringComparison.OrdinalIgnoreCase))
                 errors.Append(FormatError("ActivityProductName", activityResult.ProductName, activityTripProduct.ActivityProductName));
             if (!string.IsNullOrEmpty(errors.ToString()))
                 throw new ValidationException(errors + "| on PaxInfoPage");
         }
-        
+
         private string FormatError(string error, string addedValue, string tfValue)
         {
             return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
@@ -282,7 +282,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             if (tripProduct.WaitAndGetBySelector("hotelStars", ApplicationSettings.TimeOut.Fast) != null)
                 return TripProductType.Hotel;
             var carTitle = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast);
-            if (carTitle!=null && carTitle.Text.Contains("Car"))
+            if (carTitle != null && carTitle.Text.Contains("Car"))
                 return TripProductType.Car;
             if (tripProduct.WaitAndGetBySelector("activitiesIcon", ApplicationSettings.TimeOut.Fast) != null)
                 return TripProductType.Activity;
@@ -306,16 +306,34 @@ namespace Rovia.UI.Automation.Tests.Pages
             WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
         }
 
-        public void WaitForPageLoad()
+        public void WaitForPageLoad(Action confirmAlert)
         {
+            while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Fast) == null)
+                confirmAlert();
+
             var startCount = Environment.TickCount;
-            while (WaitAndGetBySelector("SpinningDiv", 120).Displayed)
+            while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Fast).Displayed)
             {
                 if (Environment.TickCount - startCount > 120000)
                     throw new PageLoadFailed("passengerInfoPage", new TimeoutException());
             }
             if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Safe).Displayed == false)
                 throw new PageLoadFailed("PassengerInfoPage");
+        }
+
+
+        public bool IsLeavePopupVisible()
+        {
+            try
+            {
+                var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
+                return divDontLeavePopup != null && divDontLeavePopup.Displayed;
+            }
+            catch (OpenQA.Selenium.StaleElementReferenceException)
+            {
+                LogManager.GetInstance().LogWarning("Rovia Award Popup - Stale element reference caught and suppressed.");
+            }
+            return false;
         }
 
         internal void ValidateTripDetails(Results selectedItinerary)
@@ -340,7 +358,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 });
         }
 
-       
+
         private void ValidateTripProductDetails(AirTripProduct airTripProduct, AirResult airResult)
         {
             LogManager.GetInstance().LogDebug("Validating Air trip product on PassengerInfo Page");
@@ -380,10 +398,8 @@ namespace Rovia.UI.Automation.Tests.Pages
                     if (alertError != null && alertError.Displayed)
                     {
                         throw new Alert(alertError.Text);
-
                     }
                 }
-
             }
             catch (Exception exception)
             {
@@ -395,7 +411,7 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             Thread.Sleep(1500);
             _passengers = passengerDetails.Passengers;
-            if (TestHelper.TripProductType==TripProductType.Air|| TestHelper.TripProductType==TripProductType.Hotel)
+            if (TestHelper.TripProductType == TripProductType.Air || TestHelper.TripProductType == TripProductType.Hotel)
             {
                 WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(
                     passengerDetails.Country);

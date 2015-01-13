@@ -50,8 +50,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             stops.ForEach(x =>
             {
-                if (stopList.Contains(x.GetAttribute("data-name")))
-                    x.Click();
+                if (!stopList.Contains(x.GetAttribute("data-name"))) return;
+                x.Click();
+                Thread.Sleep(500);
             });
             _appliedFilters.Add("Stops");
         }
@@ -63,8 +64,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
             cabinTypeList.ForEach(x =>
             {
-                if (cabinTypes.Contains(x.GetAttribute("data-name")) && x.Displayed)
-                    x.Click();
+                if (!cabinTypes.Contains(x.GetAttribute("data-name")) || !x.Displayed) return;
+                x.Click();
+                Thread.Sleep(500);
             });
 
             if (!cabinTypeList[0].Selected)
@@ -77,8 +79,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             airlinesList[0].Click();
             airlinesList.ForEach(x =>
             {
-                if (airlines.Contains(x.Text.Trim().ToUpper()) && x.Displayed)
-                    x.Click();
+                if (!airlines.Contains(x.Text.Trim().ToUpper()) || !x.Displayed) return;
+                x.Click();
+                Thread.Sleep(500);
             });
             if (!airlinesList[0].Selected)
                 _appliedFilters.Add("Airlines");
@@ -131,7 +134,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private void NoResultsAvailableWarning()
         {
-            var resultDiv = WaitAndGetBySelector("zeroAiritineraryDiv", ApplicationSettings.TimeOut.Slow);
+            var resultDiv = WaitAndGetBySelector("zeroAiritineraryDiv", ApplicationSettings.TimeOut.Fast);
             if (resultDiv != null && resultDiv.Displayed)
             {
                 LogManager.GetInstance().LogWarning(resultDiv.Text);
@@ -147,7 +150,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private void ValidateCabinTypes(IEnumerable<string> cabinTypes, IEnumerable<IEnumerable<CabinType>> resultcabins)
         {
-            if (cabinTypes.Any(x => resultcabins.Any(y => !y.Contains(StringToEnum<CabinType>(x)))))
+            if (!cabinTypes.Any(x => resultcabins.Any(y => y.Contains(StringToEnum<CabinType>(x)))))
                 _failedFilters.Add("Cabin/Class");
         }
 

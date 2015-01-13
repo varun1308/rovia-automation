@@ -20,7 +20,6 @@ tripStartOverCheck,div.jTopBarCartCount
 carACnTransmission,div.border-grey.mal div.pull-left.font12
 hotelDetails,div.text-flightinfo
 hotelAddress,span.font11.greyfont
-dontLeavePopup,div#WindowBarDiv
 carDates,div[data-category="Car"] .text-flightinfo.mts
 carTimes,div.prl .font11.greyfont
 airLegsOnTrip,.pam.border_top
