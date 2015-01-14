@@ -113,6 +113,11 @@
     <Compile Include="Utility\TestExecutionPipeLine.cs" />
     <Compile Include="Utility\Testhelper.cs" />
     <Compile Include="Utility\Utility.cs" />
+    <Compile Include="Validators\ActivityValidator.cs" />
+    <Compile Include="Validators\AirValidator.cs" />
+    <Compile Include="Validators\CarValidator.cs" />
+    <Compile Include="Validators\HotelValidator.cs" />
+    <Compile Include="Validators\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
