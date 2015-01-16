@@ -10,7 +10,7 @@ using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.ScenarioObjects.Activity;
 using Rovia.UI.Automation.ScenarioObjects.Hotel;
 using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Utility;
+using Rovia.UI.Automation.Tests.Validators;
 
 
 namespace Rovia.UI.Automation.Tests.Pages
@@ -326,27 +326,8 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void ValidateTripFolder(Results selectedItineary)
         {
-            foreach (var tripProduct in ParseTripFolder().TripProducts)
-            {
-                LogManager.GetInstance().LogDebug("Validating trip product");
-                switch (tripProduct.ProductType)
-                {
-                    case TripProductType.Air:
-                        ValidateTripProduct(tripProduct as AirTripProduct, selectedItineary as AirResult);
-                        break;
-                    case TripProductType.Hotel:
-                        ValidateTripProduct(tripProduct as HotelTripProduct, selectedItineary as HotelResult);
-                        break;
-                    case TripProductType.Car:
-                        ValidateTripProduct(tripProduct as CarTripProduct, selectedItineary as CarResult);
-                        break;
-                    case TripProductType.Activity:
-                        ValidateTripProduct(tripProduct as ActivityTripProduct, selectedItineary as ActivityResult);
-                        break;
-                }
-            }
+            ParseTripFolder().TripProducts.ForEach(x=>this.ValidateTripProduct(x,selectedItineary));
         }
-
 
         internal void CheckoutTrip()
         {
