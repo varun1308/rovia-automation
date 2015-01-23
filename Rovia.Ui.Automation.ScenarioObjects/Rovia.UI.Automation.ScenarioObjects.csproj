@@ -51,6 +51,7 @@
     <Compile Include="Air\AirPostSearchFilters.cs" />
     <Compile Include="Air\AirPreSearchFilters.cs" />
     <Compile Include="Air\AirTripProduct.cs" />
+    <Compile Include="Air\FlightSegment.cs" />
     <Compile Include="Car\CarMatrix.cs" />
     <Compile Include="Car\CarPostSearchFilters.cs" />
     <Compile Include="Hotel\HotelMatrix.cs" />
@@ -76,7 +77,7 @@
     <Compile Include="Fare.cs" />
     <Compile Include="PassengerInfo\Child.cs" />
     <Compile Include="Filters.cs" />
-    <Compile Include="Air\FlightLegs.cs" />
+    <Compile Include="Air\FlightLeg.cs" />
     <Compile Include="PassengerInfo\Infant.cs" />
     <Compile Include="PassengerInfo\Passenger.cs" />
     <Compile Include="PassengerInfo\PassengerDetails.cs" />

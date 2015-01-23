@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.ScenarioObjects;
+﻿using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.ScenarioObjects.Activity;
 using Rovia.UI.Automation.Tests.Pages;
 
@@ -37,6 +31,7 @@ namespace Rovia.UI.Automation.Tests.Validators
             else if (tripProduct is ActivityTripProduct)
                 passengerInfoPage.ValidateTripProduct(tripProduct as ActivityTripProduct, results as ActivityResult);
         }
+
         public static void ValidateTripProduct(this CheckoutPage checkoutPage,
                                                TripProduct tripProduct, Results results)
         {

@@ -1,30 +1,27 @@
-divResults,div#AirListHolder
 divloader,div.txtAlignCenter.jsWaitMessage
-divMatrix,div#flightMatrixTable
 amount,p.price.font-weight700
 titleAirLines,div.text-boxtitle
 subTitleAirLines,div.text-subtitle
 suppliers,div.jsSupplierName
 btnAddToCart,a.btn_AddToCart
 btnCancel,button#btnCloseFlightPopup
-btnContinue,button.jsContinue
 alerts,#dvAddToCartAir .alert
 btnCheckOut,a#btnCheckout
-legAirports,div.airportname
-legCabinAndStop,div.span2 .text-flightinfo
-legDuration,div.span3.text-flighttime
 airlineOnCart,div#dvAddToCartAir .span2.font12
 priceOnCart,div#dvAddToCartAir .price
-legArrDepDate,.borderRight .font12.greyfont
-legArrDepTime,div.span3 .span6 .text-flightinfo
-flightlegSegments,.segmentHolder
-flightlegAirportCodes,.span6 .fontBold
-flightlegviewDetails,a.mtl
-flightlegArrDepTime,.span3.fontsize12
-flightlegArrDepDate,.dotted_bottomborder .span3
-flightlegStops,.dotted_bottomborder .span4
-flightlegCabins,.offset1.font12
-flightlegDuration,.ptm .prm
-flightAirportsOnCart,#dvAddToCartAir .airportname
-flightTimesOnCart,#dvAddToCartAir .airportname span
-flightDatesOnCart,#dvAddToCartAir .font12.greyfont
+flightSegmentHolder,#AirListHolder .segmentHolder
+viewDetailsLink,.text-link
+flightLegs,.searchResultsInBorder
+legAirPorts,.airportname
+legTravelTime,.span3.borderRight
+legDuration,.text-flighttime
+legInfo,.span2 .text-flightinfo
+legLayOverTime,.bgwhite .pinkbg .txtAlignCenter
+legLayOverDuration,.bgwhite .pinkbg .txtAlignRight
+segmentAirPorts,.span6.fontsize12
+segmentTimes,.span3.fontsize12
+segmentAirLines,.span8.fontsize12
+segmentDuration,.txtAlignRight.fontsize12
+stops,.pas.mam.font12
+stopDate,.txtAlignCenter
+stopDuration,.txtAlignRight

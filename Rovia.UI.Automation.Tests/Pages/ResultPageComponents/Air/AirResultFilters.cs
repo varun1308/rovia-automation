@@ -282,7 +282,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             if (airPostSearchFilters.CabinTypes != null)
                 ValidateCabinTypes(airPostSearchFilters.CabinTypes, airResults.SelectMany(x => x.Legs.Select(y => y.Cabin)).ToList());
             if (airPostSearchFilters.MaxTimeDurationDiff > 0)
-                ValidateTripDuration(airPostSearchFilters.MaxTimeDurationDiff, airResults.Select(x => x.Legs.Select(y => y.Duration)).Select(z => z.Sum()).ToList());
+                ValidateTripDuration(airPostSearchFilters.MaxTimeDurationDiff, airResults.Select(x => x.Legs.Sum(y => y.Duration.Minutes)).ToList());
             if (_failedFilters.Any())
                 throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
         }

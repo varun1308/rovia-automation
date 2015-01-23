@@ -19,7 +19,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
             var randomGenerator = new Random();
             for (var i = 0; i < passengers.Adults; i++)
             {
-                Passengers.Add(new Adult()
+                Add(new Adult()
                     {
                         FirstName = FirstName[randomGenerator.Next(FirstName.Length)],
                         MiddleName = MiddleName[randomGenerator.Next(MiddleName.Length)],
@@ -30,7 +30,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
             }
             for (var i = 0; i < passengers.Children; i++)
             {
-                Passengers.Add(new Child()
+                Add(new Child()
                 {
                     FirstName = FirstName[randomGenerator.Next(FirstName.Length)],
                     MiddleName = MiddleName[randomGenerator.Next(MiddleName.Length)],
@@ -41,7 +41,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
             }
             for (var i = 0; i < passengers.Infants; i++)
             {
-                Passengers.Add(new Infant()
+                Add(new Infant()
                 {
                     FirstName = FirstName[randomGenerator.Next(FirstName.Length)],
                     MiddleName = MiddleName[randomGenerator.Next(MiddleName.Length)],
@@ -52,6 +52,18 @@ namespace Rovia.UI.Automation.ScenarioObjects
             }
             Country = "United States";
             IsInsuranceRequired = false;
+        }
+
+        private void Add(Passenger passenger)
+        {
+            while (true)
+            {
+                if (Passengers.Any(x => x.FirstName.Equals(passenger.FirstName) && x.LastName.Equals(passenger.LastName)))
+                    passenger.FirstName += "dup";
+                else
+                    break;
+            }
+            Passengers.Add(passenger);
         }
 
         public PassengerDetails(Passengers passengers, AgeGroup adultAgeGroup, AgeGroup childAgeGroup, AgeGroup infantAgeGroup)

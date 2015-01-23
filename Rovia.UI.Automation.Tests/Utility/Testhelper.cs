@@ -239,6 +239,7 @@ namespace Rovia.UI.Automation.Tests.Utility
             {
                 if (!_app.State.CurrentPage.EndsWith("ResultsPage"))
                     throw new InvalidOperationException("AddToCart", _app.State.CurrentPage);
+                
                 _selectedItineary = _app.ResultsPage.AddToCart(_criteria);
                 if (_selectedItineary == null)
                     throw new AddToCartFailedException();
@@ -246,7 +247,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                 _app.TripFolderPage.ValidateTripFolder(_selectedItineary);
                 _logger.LogStatus("AddToCart", "Passed");
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 _logger.LogStatus("AddToCart", "Failed");
                 throw;

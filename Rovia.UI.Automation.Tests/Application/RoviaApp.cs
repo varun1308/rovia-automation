@@ -9,6 +9,7 @@ using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
 using Rovia.UI.Automation.Tests.Pages;
+using Rovia.UI.Automation.Tests.Pages.Parsers;
 using Rovia.UI.Automation.Tests.Pages.ResultPageComponents;
 using Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity;
 using Rovia.UI.Automation.Tests.Pages.SearchPanels;
@@ -82,17 +83,32 @@ namespace Rovia.UI.Automation.Tests.Application
 
         public TripFolderPage TripFolderPage
         {
-            get { return InitializePage<TripFolderPage>("TripFolderControls"); }
+            get
+            {
+                var tripFolderPage= InitializePage<TripFolderPage>("TripFolderControls");
+                tripFolderPage.TripProductParser = InitializePage<TripFolderParser>("TripFolderParserControls");
+                return tripFolderPage;
+            }
         }
 
         public PassengerInfoPage PassengerInfoPage
         {
-            get { return InitializePage<PassengerInfoPage>("PassengerInfoControls"); }
+            get
+            {
+                var paxInfoPage = InitializePage<PassengerInfoPage>("PassengerInfoControls");
+                paxInfoPage.TripProductHolder = InitializePage<TripProductHolder>("PassengerInfoTripProductHolderControls");
+                return paxInfoPage;
+            }
         }
 
         public CheckoutPage CheckoutPage
         {
-            get { return InitializePage<CheckoutPage>("CheckoutControls"); }
+            get
+            {
+                var checkOutPage = InitializePage<CheckoutPage>("CheckoutTripProductHolderControls");
+                checkOutPage.TripProductHolder = InitializePage<TripProductHolder>("CheckoutTripProductHolderControls");
+                return checkOutPage;
+            }
         }
 
         public BFCPaymentPage BFCPaymentPage

@@ -16,6 +16,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 {
     public class CheckoutPage : UIPage
     {
+        public TripProductHolder TripProductHolder { get; set; }
         #region Private Members
 
         private void SetPaymentMode(PaymentMode paymentMode)
@@ -94,143 +95,16 @@ namespace Rovia.UI.Automation.Tests.Pages
                 };
         }
 
-        private List<TripProduct> ParseTripProducts()
-        {
-            return GetUIElements("tripProducts").Select(x =>
-            {
-                switch (GetTripProductType(x))
-                {
-                    case TripProductType.Air:
-                        return ParseAirTripProduct(x);
-                    case TripProductType.Hotel:
-                        return ParseHotelTripProduct(x);
-                    case TripProductType.Car:
-                        return ParseCarTripProduct(x);
-                    case TripProductType.Activity:
-                        return ParseActivityTripProduct(x);
-                    default:
-                        return null;
-                }
-            }).ToList();
-        }
-
-        private TripProduct ParseActivityTripProduct(IUIWebElement paxCartContainer)
-        {
-            return new ActivityTripProduct()
-            {
-                ProductTitle = paxCartContainer.WaitAndGetBySelector("activityTitle", ApplicationSettings.TimeOut.Fast).Text,
-                ActivityProductName = paxCartContainer.WaitAndGetBySelector("activityProductName", ApplicationSettings.TimeOut.Fast).Text,
-                Category = paxCartContainer.WaitAndGetBySelector("activityCategory", ApplicationSettings.TimeOut.Fast).Text,
-                Date = DateTime.Parse(paxCartContainer.WaitAndGetBySelector("stayDates", ApplicationSettings.TimeOut.Fast).Text),
-                Fares = new Fare()
-                {
-                    TotalFare = new Amount(paxCartContainer.WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text)
-                }
-            };
-        }
-
-        private TripProduct ParseAirTripProduct(IUIWebElement tripProduct)
-        {
-            LogManager.GetInstance().LogDebug("Parsing Air trip product on Checkout Page");
-            return new AirTripProduct()
-            {
-                Fares = new Fare() { TotalFare = new Amount(tripProduct.WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Slow).Text.Trim()) },
-                Airlines = tripProduct.GetUIElements("title").Select(x => x.Text.Trim()).ToList(),
-                FlightLegs = ParseFlightLegs(tripProduct)
-            };
-        }
-
-        private List<FlightLegs> ParseFlightLegs(IUIWebElement tripProduct)
-        {
-            var airportnames = tripProduct.GetUIElements("airportCodes").Select(x => x.Text).ToList();
-            var legArrAirport = airportnames.Where((item, index) => index % 2 == 0).ToArray();
-            var legDepAirport = airportnames.Where((item, index) => index % 2 != 0).ToArray();
-
-
-            var legArrDepTime = tripProduct.GetUIElements("carTimes").Select(x =>
-            {
-                var a = x.Text.Split(' ');
-                return a[1] + " " + a[2];
-            }).ToList();
-            var legArrTime = legArrDepTime.Where((item, index) => index % 2 == 0).ToArray();
-            var legDepTime = legArrDepTime.Where((item, index) => index % 2 != 0).ToArray();
-
-            var legArrDepDate = tripProduct.GetUIElements("carDates").Select(x => x.Text).ToList();
-            var legArrDate = legArrDepDate.Where((item, index) => index != 0 && index % 4 == 1).ToArray();
-            var legDepDate = legArrDepDate.Where((item, index) => index != 0 && index % 4 == 3).ToArray();
-
-            return legArrAirport.Select((t, i) => new FlightLegs()
-            {
-                AirportPair = t + "-" + legDepAirport[i],
-                ArriveTime = DateTime.Parse(legArrDate[i] + " " + legArrTime[i]),
-                DepartTime = DateTime.Parse(legDepDate[i] + " " + legDepTime[i])
-            }).ToList();
-        }
-
-        private TripProduct ParseCarTripProduct(IUIWebElement tripProduct)
-        {
-            var title = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text.Split(' ');
-            var totalFare = tripProduct.WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text;
-            var carDates = tripProduct.GetUIElements("carDates").Select(x=>x.Text).ToArray();
-            var carTimes = tripProduct.GetUIElements("carTimes").Select(x => x.Text).ToArray();
-            var pickUpDateTime = DateTime.Parse(carDates[1]).ToShortDateString() + " " + carTimes[0];
-            var dropOffDateTime = DateTime.Parse(carDates[3]).ToShortDateString() + " " + carTimes[1];
-            return new CarTripProduct()
-            {
-                RentalAgency = title[2],
-                CarType = title[0],
-                Fares = new Fare() { TotalFare = new Amount(totalFare) },
-                PickUpDateTime = DateTime.Parse(pickUpDateTime),
-                DropOffDateTime = DateTime.Parse(dropOffDateTime)
-            };
-        }
-
-        private TripProduct ParseHotelTripProduct(IUIWebElement tripProduct)
-        {
-            var stayperiod = tripProduct.GetUIElements("stayDates").Select(x => x.Text).ToArray();
-            return new HotelTripProduct()
-            {
-                ProductTitle = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text,
-                Address = tripProduct.WaitAndGetBySelector("subTitle", ApplicationSettings.TimeOut.Fast).Text,
-                Rating = tripProduct.GetUIElements("rating").Count,
-                StayPeriod = new StayPeriod()
-                {
-                    CheckInDate = DateTime.Parse(stayperiod[0]),
-                    CheckOutDate = DateTime.Parse(stayperiod[1])
-                },
-                Fares = new Fare()
-                {
-                    TotalFare = new Amount(WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text)
-                },
-                Room = new HotelRoom()
-                {
-                    NoOfRooms = int.Parse(tripProduct.WaitAndGetBySelector("roomCount", ApplicationSettings.TimeOut.Fast).Text.Split()[0])
-                }
-            };
-        }
-
-        private TripProductType GetTripProductType(IUIWebElement tripProduct)
-        {
-            if (tripProduct.WaitAndGetBySelector("hotelStars", ApplicationSettings.TimeOut.Fast) != null)
-                return TripProductType.Hotel;
-            var carTitle = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast);
-            if (carTitle != null && carTitle.Text.Contains("Car"))
-                return TripProductType.Car;
-            if (tripProduct.WaitAndGetBySelector("activitiesIcon", ApplicationSettings.TimeOut.Fast) != null)
-                return TripProductType.Activity;
-            return TripProductType.Air;
-        }
-
         private Passengers ParsePassengers(IUIWebElement tripProduct)
         {
             var passengers = tripProduct.WaitAndGetBySelector("bPassengers", ApplicationSettings.TimeOut.Fast).Text.Split(new[] { ' ', ',' }).ToList();
-                return new Passengers()
-                {
-                    Adults = passengers.Contains("Adult") ? int.Parse(passengers[passengers.IndexOf("Adult") - 1]) : 0,
-                    Children = passengers.Contains("Child") ? int.Parse(passengers[passengers.IndexOf("Child") - 1]) : 0,
-                    Infants = passengers.Contains("Infant") ? int.Parse(passengers[passengers.IndexOf("Infant") - 1]) : 0
-                };
-            }
+            return new Passengers()
+            {
+                Adults = passengers.Contains("Adult") ? int.Parse(passengers[passengers.IndexOf("Adult") - 1]) : 0,
+                Children = passengers.Contains("Child") ? int.Parse(passengers[passengers.IndexOf("Child") - 1]) : 0,
+                Infants = passengers.Contains("Infant") ? int.Parse(passengers[passengers.IndexOf("Infant") - 1]) : 0
+            };
+        }
 
 
         private List<TripProduct> ParseBookedTripProducts()
@@ -338,13 +212,13 @@ namespace Rovia.UI.Automation.Tests.Pages
             SetAddress(paymentInfo.BillingAddress);
 
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
-            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click(); 
+            WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click();
         }
 
         internal void BookNow()
         {
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
-            WaitAndGetBySelector("booknow", ApplicationSettings.TimeOut.Fast).Click(); 
+            WaitAndGetBySelector("booknow", ApplicationSettings.TimeOut.Fast).Click();
         }
 
         #endregion
@@ -363,22 +237,22 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception)
             {
-                LogManager.GetInstance().LogInformation("Payment Failed"); 
+                LogManager.GetInstance().LogInformation("Payment Failed");
                 throw;
             }
         }
 
         public void ValidateTripDetails(Results selectedItineary)
         {
-            ParseTripProducts().ForEach(x=>this.ValidateTripProduct(x,selectedItineary));
+            TripProductHolder.GetTripProducts().ForEach(x => this.ValidateTripProduct(x, selectedItineary));
         }
 
         public void ValidateBookedProductDetails(Results selectedItineary)
         {
-            ParseBookedTripProducts().ForEach(x =>this.ValidateBookedTripProducts(x,selectedItineary));
+            ParseBookedTripProducts().ForEach(x => this.ValidateBookedTripProducts(x, selectedItineary));
         }
 
-        
+
 
     }
 }

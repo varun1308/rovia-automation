@@ -9,6 +9,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
     public class AirResult:Results
     {
         public List<string> AirLines { get; set; }
-        public List<FlightLegs> Legs { get; set; }
+        public List<FlightLeg> Legs { get; set; }
+        public Passengers Passengers { get; set; }
     }
 }

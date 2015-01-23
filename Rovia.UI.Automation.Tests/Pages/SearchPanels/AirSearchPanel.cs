@@ -150,7 +150,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             EnterAirports(airSearchCriteria.SearchType, airSearchCriteria.AirportPairs);
             //Enter from/to airports
             EnterPassengerDetails(airSearchCriteria.Passengers);
-            ApplyPreSearchFilters(airSearchCriteria.Filters.PreSearchFilters as AirPreSearchFilters);
+            if(airSearchCriteria.Filters!=null && airSearchCriteria.Filters.PreSearchFilters!=null)
+                ApplyPreSearchFilters(airSearchCriteria.Filters.PreSearchFilters as AirPreSearchFilters);
             WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Slow).Click();
             
         }

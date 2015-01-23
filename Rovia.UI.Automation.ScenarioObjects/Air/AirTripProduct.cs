@@ -8,7 +8,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
 {
     public class AirTripProduct : TripProduct
     {
-        public List<FlightLegs> FlightLegs { get; set; }
+        public List<FlightLeg> FlightLegs { get; set; }
         public List<string> Airlines { get; set; } 
         public AirTripProduct()
         {

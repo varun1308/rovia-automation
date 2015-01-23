@@ -1,15 +1,18 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Air;
 using Rovia.UI.Automation.Tests.Pages;
+using System.Linq;
 
 namespace Rovia.UI.Automation.Tests.Validators
 {
     public static class AirValidator
     {
         public static void ValidateTripProduct(this TripFolderPage page, AirTripProduct airTripProduct,
-                                                    AirResult airResult)
+                                               AirResult airResult)
         {
             LogManager.GetInstance().LogDebug("Validating Air trip product on TripFolder Page");
 
@@ -22,16 +25,29 @@ namespace Rovia.UI.Automation.Tests.Validators
                 for (var i = 0; i < airTripProduct.FlightLegs.Count; i++)
                 {
                     if (!airTripProduct.FlightLegs[i].AirportPair.Equals(airResult.Legs[i].AirportPair))
-                        errors.Append(FormatError("AirportPair", airResult.Legs[i].AirportPair, airTripProduct.FlightLegs[i].AirportPair));
-                    if (!airTripProduct.FlightLegs[i].ArriveTime.Equals(airResult.Legs[i].ArriveTime))
-                        errors.Append(FormatError("Arrival Time", airResult.Legs[i].ArriveTime.ToLongDateString(), airTripProduct.FlightLegs[i].ArriveTime.ToLongDateString()));
-                    if (!airTripProduct.FlightLegs[i].DepartTime.Equals(airResult.Legs[i].DepartTime))
-                        errors.Append(FormatError("Depart Time", airResult.Legs[i].DepartTime.ToLongDateString(), airTripProduct.FlightLegs[i].DepartTime.ToLongDateString()));
-                    //need to parsing on result page first
-                    //if (!airTripProduct.FlightLegs[i].Cabin.Equals(airResult.Legs[i].Cabin))
-                    //    errors.Append(FormatError("Cabin", airResult.Legs[i].Cabin.ToString(), airTripProduct.FlightLegs[i].Cabin.ToString()));
-                    //if (airTripProduct.FlightLegs[i].Duration != airResult.Legs[i].Duration && WaitAndGetBySelector("changeFlightTimes", ApplicationSettings.TimeOut.Fast) == null)
-                    //    errors.Append(FormatError("Duration", airResult.Legs[i].Duration.ToString(), airTripProduct.FlightLegs[i].Duration.ToString()));
+                        errors.Append(FormatError("[Leg " + i + "] AirportPair", airResult.Legs[i].AirportPair.ToString(), airTripProduct.FlightLegs[i].AirportPair.ToString()));
+                    if (!airTripProduct.FlightLegs[i].Cabin.Equals(airResult.Legs[i].Cabin))
+                        errors.Append(FormatError("[Leg " + i + "] Cabin", airResult.Legs[i].Cabin.ToString(), airTripProduct.FlightLegs[i].Cabin.ToString()));
+                    if (airTripProduct.FlightLegs[i].Duration != airResult.Legs[i].Duration)
+                        errors.Append(FormatError("[Leg " + i + "] Duration", airResult.Legs[i].Duration.ToString(), airTripProduct.FlightLegs[i].Duration.ToString()));
+                    if (airTripProduct.FlightLegs[i].Stops != airResult.Legs[i].Stops)
+                        errors.Append(FormatError("[Leg " + i + "] Stops", airResult.Legs[i].Stops.ToString(), airTripProduct.FlightLegs[i].Stops.ToString()));
+                    if (airTripProduct.FlightLegs[i].Segments.Count == airResult.Legs[i].Segments.Count)
+                    {
+                        for (int j = 0; j < airTripProduct.FlightLegs[i].Segments.Count; j++)
+                        {
+                            var resultSegment = airTripProduct.FlightLegs[i].Segments[j];
+                            var tpSegment = airResult.Legs[i].Segments[j];
+                            if (!tpSegment.AirportPair.Equals(resultSegment.AirportPair))
+                                errors.Append(FormatError("[Leg " + i + ": Segment " + j + "] AirportPair", resultSegment.AirportPair.ToString(), tpSegment.AirportPair.ToString()));
+                            if (!resultSegment.AirLine.Equals(tpSegment.AirLine))
+                                errors.Append(FormatError("[Leg " + i + ": Segment " + j + "] Airline", resultSegment.AirLine, tpSegment.AirLine));
+                            if (resultSegment.Duration != tpSegment.Duration)
+                                errors.Append(FormatError("[Leg " + i + ": Segment " + j + "] Duration", resultSegment.Duration.ToString(), tpSegment.Duration.ToString()));
+                        }
+                    }
+                    else
+                        errors.Append(FormatError("[Leg " + i + "] Segment-Count", airResult.Legs[i].Segments.Count.ToString(), airTripProduct.FlightLegs[i].Segments.Count.ToString()));
                 }
             }
             else
@@ -42,6 +58,7 @@ namespace Rovia.UI.Automation.Tests.Validators
 
             if (!string.IsNullOrEmpty(errors.ToString()))
                 throw new ValidationException(errors + "| on TripFolderPage");
+
         }
 
         public static void ValidateTripProduct(this PassengerInfoPage page, AirTripProduct airTripProduct, AirResult airResult)
@@ -50,24 +67,27 @@ namespace Rovia.UI.Automation.Tests.Validators
             var errors = new StringBuilder();
             if (!airResult.Amount.Equals(airTripProduct.Fares.TotalFare))
                 errors.Append(FormatError("Amount", airResult.Amount.ToString(), airTripProduct.Fares.TotalFare.ToString()));
-
-            if (airTripProduct.FlightLegs.Count == airResult.Legs.Count)
+            var rSegments = airResult.Legs.SelectMany(x => x.Segments.Select(y => new FlightSegment(y))).ToArray();
+            foreach (var flightSegment in rSegments)
             {
-                for (var i = 0; i < airTripProduct.FlightLegs.Count; i++)
+                flightSegment.AirportPair.ArrivalAirport = flightSegment.AirportPair.ArrivalAirport.Split('-')[1].Trim().Split()[0];
+                flightSegment.AirportPair.DepartureAirport = flightSegment.AirportPair.DepartureAirport.Split('-')[1].Trim().Split()[0];
+                flightSegment.AirLine = flightSegment.AirLine.Split('-')[0].Trim();
+            }
+            var pfSegment = airTripProduct.FlightLegs.SelectMany(x => x.Segments).ToArray();
+            if (rSegments.Length == pfSegment.Length)
+            {
+                for (var j = 0; j < rSegments.Length; j++)
                 {
-                    if (!airTripProduct.FlightLegs[i].AirportPair.Equals(airResult.Legs[i].AirportPair))
-                        errors.Append(FormatError("AirportPair", airTripProduct.FlightLegs[i].AirportPair, airResult.Legs[i].AirportPair));
-                    if (!airTripProduct.FlightLegs[i].ArriveTime.Equals(airResult.Legs[i].ArriveTime))
-                        errors.Append(FormatError("Arrival Time", airTripProduct.FlightLegs[i].ArriveTime.ToLongDateString(), airResult.Legs[i].ArriveTime.ToLongDateString()));
-                    if (!airTripProduct.FlightLegs[i].DepartTime.Equals(airResult.Legs[i].DepartTime))
-                        errors.Append(FormatError("Depart Time", airTripProduct.FlightLegs[i].DepartTime.ToLongDateString(), airResult.Legs[i].DepartTime.ToLongDateString()));
+                    if (!pfSegment[j].AirportPair.Equals(rSegments[j].AirportPair))
+                        errors.Append(FormatError("[Segment " + j + "] AirportPair", rSegments[j].AirportPair.ToString(), pfSegment[j].AirportPair.ToString()));
+                    if (!rSegments[j].AirLine.Equals(pfSegment[j].AirLine))
+                        errors.Append(FormatError("[Segment " + j + "] Airline", rSegments[j].AirLine, pfSegment[j].AirLine));
                 }
             }
             else
-                errors.Append(FormatError("Leg counts ", airTripProduct.FlightLegs.Count.ToString(), airResult.Legs.Count.ToString()));
+                errors.Append(FormatError(" Segment-Count", rSegments.Length.ToString(), pfSegment.Length.ToString()));
 
-            if (!airResult.AirLines.TrueForAll(airTripProduct.Airlines.Contains))
-                errors.Append(FormatError("Airlines", string.Join(",", airResult.AirLines.ToArray()), string.Join(",", airTripProduct.Airlines.ToArray())));
 
             if (!string.IsNullOrEmpty(errors.ToString()))
                 throw new ValidationException(errors + "| on PassengerInfoPage");
@@ -75,38 +95,42 @@ namespace Rovia.UI.Automation.Tests.Validators
 
         public static void ValidateTripProduct(this CheckoutPage page, AirTripProduct airTripProduct, AirResult airResult)
         {
-            LogManager.GetInstance().LogDebug("Validating Air trip product on Checkout Page");
+            LogManager.GetInstance().LogDebug("Validating Air trip product on CheckOut Page");
             var errors = new StringBuilder();
             if (!airResult.Amount.Equals(airTripProduct.Fares.TotalFare))
                 errors.Append(FormatError("Amount", airResult.Amount.ToString(), airTripProduct.Fares.TotalFare.ToString()));
-
-            if (airTripProduct.FlightLegs.Count == airResult.Legs.Count)
+            var rSegments = airResult.Legs.SelectMany(x => x.Segments.Select(y => new FlightSegment(y))).ToArray();
+            foreach (var flightSegment in rSegments)
             {
-                for (var i = 0; i < airTripProduct.FlightLegs.Count; i++)
+                flightSegment.AirportPair.ArrivalAirport = flightSegment.AirportPair.ArrivalAirport.Split('-')[1].Trim().Split()[0];//GetAirPortCode(flightSegment.AirportPair.ArrivalAirport);
+                flightSegment.AirportPair.DepartureAirport = flightSegment.AirportPair.DepartureAirport.Split('-')[1].Trim().Split()[0];
+                flightSegment.AirLine = flightSegment.AirLine.Split('-')[0].Trim();
+                //GetAirPortCode(flightSegment.AirportPair.DepartureAirport);
+            }
+            var pfSegment = airTripProduct.FlightLegs.SelectMany(x => x.Segments).ToArray();
+            if (rSegments.Length == pfSegment.Length)
+            {
+                for (var j = 0; j < rSegments.Length; j++)
                 {
-                    if (!airTripProduct.FlightLegs[i].AirportPair.Equals(airResult.Legs[i].AirportPair))
-                        errors.Append(FormatError("AirportPair", airTripProduct.FlightLegs[i].AirportPair, airResult.Legs[i].AirportPair));
-                    if (!airTripProduct.FlightLegs[i].ArriveTime.Equals(airResult.Legs[i].ArriveTime))
-                        errors.Append(FormatError("Arrival Time", airTripProduct.FlightLegs[i].ArriveTime.ToLongDateString(), airResult.Legs[i].ArriveTime.ToLongDateString()));
-                    if (!airTripProduct.FlightLegs[i].DepartTime.Equals(airResult.Legs[i].DepartTime))
-                        errors.Append(FormatError("Depart Time", airTripProduct.FlightLegs[i].DepartTime.ToLongDateString(), airResult.Legs[i].DepartTime.ToLongDateString()));
+                    if (!pfSegment[j].AirportPair.Equals(rSegments[j].AirportPair))
+                        errors.Append(FormatError("[Segment " + j + "] AirportPair", rSegments[j].AirportPair.ToString(), pfSegment[j].AirportPair.ToString()));
+                    if (!rSegments[j].AirLine.Equals(pfSegment[j].AirLine))
+                        errors.Append(FormatError("[Segment " + j + "] Airline", rSegments[j].AirLine, pfSegment[j].AirLine));
                 }
             }
             else
-                errors.Append(FormatError("Leg counts ", airTripProduct.FlightLegs.Count.ToString(), airResult.Legs.Count.ToString()));
+                errors.Append(FormatError(" Segment-Count", rSegments.Length.ToString(), pfSegment.Length.ToString()));
 
-            if (!airResult.AirLines.TrueForAll(airTripProduct.Airlines.Contains))
-                errors.Append(FormatError("Airlines", string.Join(",", airResult.AirLines.ToArray()), string.Join(",", airTripProduct.Airlines.ToArray())));
 
             if (!string.IsNullOrEmpty(errors.ToString()))
-                throw new ValidationException(errors + "| on CheckoutPage");
+                throw new ValidationException(errors + "| on PassengerInfoPage");
         }
 
         public static void ValidateBookedTripProducts(this CheckoutPage page, AirTripProduct airTripProduct, AirResult airResult)
         {
             //Todo Implement Confirmation Page Validation
         }
-        
+
         private static string FormatError(string error, string addedValue, string tfValue)
         {
             return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);

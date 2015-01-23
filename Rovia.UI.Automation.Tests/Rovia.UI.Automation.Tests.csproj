@@ -103,6 +103,8 @@
     <Compile Include="Pages\LoginDetailsPage.cs" />
     <Compile Include="Pages\PassengerInfoPage.cs" />
     <Compile Include="Pages\TripFolderPage.cs" />
+    <Compile Include="Pages\Parsers\TripFolderParser.cs" />
+    <Compile Include="Pages\TripProductHolder.cs" />
     <Compile Include="Tests\ActivityTestFixtures.cs" />
     <Compile Include="Tests\AirTextFixture.cs" />
     <Compile Include="Tests\CarTestFixture.cs" />
@@ -127,6 +129,7 @@
     <None Include="Controls\Activity\ActivityResultsHolderControls.csv" />
     <None Include="Controls\Activity\ActivitySearchPanelControls.csv" />
     <None Include="Controls\Activity\ActivityResultsFiltersControls.csv" />
+    <None Include="Controls\CheckoutTripProductHolderControls.csv" />
     <None Include="Controls\Hotel\HotelResultsFiltersControls.csv" />
     <None Include="Controls\Hotel\HotelResultsHolderControls.csv" />
     <None Include="Controls\Hotel\HotelResultsTitleControls.csv" />
@@ -134,6 +137,7 @@
     <None Include="Controls\Car\CarFiltersControls.csv" />
     <None Include="Controls\Car\CarResultsControls.csv" />
     <None Include="Controls\Car\CarSearchPanelControls.csv" />
+    <None Include="Controls\PassengerInfoTripProductHolderControls.csv" />
     <None Include="Controls\ResultControls.csv" />
     <None Include="Controls\Air\AirResultsFiltersControls.csv" />
     <None Include="Controls\Air\AirResultsHolderControls.csv" />
@@ -164,6 +168,7 @@
     <Content Include="DataSheet\Air\Air_WorldSpan.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Controls\TripFolderParserControls.csv" />
     <None Include="DataSheet\Activities\ActivityScenarios.xlsx" />
     <None Include="DataSheet\CarScenarios.xlsx" />
     <None Include="DataSheet\Hotel\HotelScenarios.xlsx" />
