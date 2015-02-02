@@ -59,7 +59,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
             while (true)
             {
                 if (Passengers.Any(x => x.FirstName.Equals(passenger.FirstName) && x.LastName.Equals(passenger.LastName)))
-                    passenger.FirstName += "dup";
+                    passenger.FirstName += "d";
                 else
                     break;
             }

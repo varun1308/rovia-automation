@@ -9,7 +9,7 @@ namespace Rovia.UI.Automation.Tests.Pages
     public class TripFolderPage : UIPage
     {
         public TripFolderParser TripProductParser { get; set; }
-        
+
         internal void EditTripName()
         {
             WaitAndGetBySelector("tripSettings", ApplicationSettings.TimeOut.Fast).Click();

@@ -12,7 +12,7 @@ namespace Rovia.UI.Automation.Tests.Validators
     public static class AirValidator
     {
         public static void ValidateTripProduct(this TripFolderPage page, AirTripProduct airTripProduct,
-                                               AirResult airResult)
+                                                    AirResult airResult)
         {
             LogManager.GetInstance().LogDebug("Validating Air trip product on TripFolder Page");
 

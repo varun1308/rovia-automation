@@ -28,7 +28,7 @@ namespace Rovia.UI.Automation.ScenarioObjects
                     Currency = details[1];
                 TotalAmount = double.Parse(details[0].Remove(0, 1));
             }
-            catch (Exception exception)
+            catch (Exception )
             {
                 TotalAmount = 0;
             }
