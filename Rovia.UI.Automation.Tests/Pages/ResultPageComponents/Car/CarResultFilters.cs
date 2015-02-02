@@ -13,13 +13,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         private List<string> _appliedFilters;
         private List<string> _failedFilters;
         private CarMatrix _carMatrix;
-
-        private bool IsPreSearchFilterApplied(string filterType)
-        {
-            var isFiltered = GetUIElements("appliedFilters").ToList();
-            return isFiltered.Exists(x => filterType.Contains(x.GetAttribute("data-fid")));
-        }
-
+        
         private IEnumerable<string> GetAppliedFilters()
         {
             return GetUIElements("appliedFilters").Select(x => x.Text.Trim());
@@ -102,40 +96,83 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             matrix.Click();
         }
 
-        private void ValidateLocations(List<string> locationValues, IEnumerable<string> locationValueList)
+        private void ValidateLocations(ICollection<string> locationValues)
         {
-            if (!locationValueList.All(locationValues.Contains))
+            var locations = GetUIElements("locations").Select(x => x.Text.Split('-')[0].TrimEnd(' ')).Where((item, index) => index % 2 == 0);
+            if (!locations.All(locationValues.Contains))
                 _failedFilters.Add("Locations");
         }
 
-        private void ValidateRentalAgency(List<string> rentalAgency, IEnumerable<string> carRentalAgency)
+        private void ValidateRentalAgency(ICollection<string> rentalAgency)
         {
-            if (!carRentalAgency.All(rentalAgency.Contains))
+            var carRentalAgencies = GetUIElements("rentalAgency").Select(x => x.GetAttribute("alt"));
+            if (!carRentalAgencies.All(rentalAgency.Contains))
                 _failedFilters.Add("Rental Agency");
         }
 
-        private void ValidateCarTypes(List<string> carTypes, IEnumerable<string> carTypeList)
+        private void ValidateCarTypes(ICollection<string> filterCarTypes)
         {
-            if (!carTypeList.All(carTypes.Contains))
+            var carTypes = GetUIElements("carType").Where((x, index) => index == 0 || (index % 3 == 0)).Select(x => x.Text.Split(' ')[0]);
+            if (!carTypes.All(filterCarTypes.Contains))
                 _failedFilters.Add("Car type");
         }
 
-        private void ValidatePriceRange(PriceRange priceRange, IEnumerable<double> amountList)
+        private void ValidatePriceRange(PriceRange priceRange)
         {
-            if (amountList.Any(x => x > priceRange.MaxPrice || x < priceRange.MinPrice))
+            var prices = GetUIElements("price").Where((item, index) => index % 2 != 0).Select(x => new Amount(x.Text).TotalAmount);
+            if (prices.Any(x => x > priceRange.MaxPrice || x < priceRange.MinPrice))
                 _failedFilters.Add("Price");
         }
 
-        public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
+        private void ValidateCarOptions(IEnumerable<string> filterCarOptions)
+        {
+            var carOptions = GetUIElements("carOptions");
+            var airconditioning = carOptions.Skip(1).Where((x, index) => index % 4 == 0).Select(x => x.Text);
+            var transmission = carOptions.Skip(2).Where((x, index) => index % 4 == 0).Select(x => x.Text);
+            var filterCode = GetCarOptionsText(filterCarOptions);
+            if (!(airconditioning.All(filterCode.Contains)))
+                _failedFilters.Add("Car options");
+        }
+
+        private List<string> GetCarOptionsText(IEnumerable<string> carOptionsCode)
+        {
+            var carOptionsText = new List<string>();
+            foreach (string code in carOptionsCode)
+            {
+                switch (code)
+                {
+                    case "EAC":
+                        carOptionsText.Add("Air Conditioning");
+                        break;
+                    case "EAT":
+                        carOptionsText.Add("Auto Transmission");
+                        break;
+                }
+            }
+            return carOptionsText;
+        }
+
+        private void ValidateMatrix(CarMatrix carMatrix)
+        {
+            var prices = GetUIElements("price").Where((item, index) => index % 2 != 0).Select(x => new Amount(x.Text).TotalAmount);
+            if (!prices.All(x => x.Equals(carMatrix.TotalFare)))
+                _failedFilters.Add("Price");
+            var carTypes = GetUIElements("carType").Where((x, index) => index == 0 || (index % 3 == 0)).Select(x => x.Text.Split(' ')[0]);
+            if (!carTypes.All(x => x.Equals(carMatrix.CarType)))
+                _failedFilters.Add("Car type");
+            var carRentalAgencies = GetUIElements("rentalAgency").Select(x => x.GetAttribute("alt"));
+            if (!carRentalAgencies.All(x => x.Equals(carMatrix.RentalAgency)))
+                _failedFilters.Add("Rental Agency");
+        }
+
+        public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             var carSearchFilters = preSearchFilters as CarPreSearchFilters;
-            //var carResults = getParsedResults().Select(x => x as CarResult).ToList();
             var appliedFilters = new List<string>();
             if (!string.IsNullOrEmpty(carSearchFilters.CarType)) appliedFilters.Add("Car type");
             if (!string.IsNullOrEmpty(carSearchFilters.RentalAgency)) appliedFilters.Add("Rental Agency");
             //if (carSearchFilters.AirConditioning > 0 || carSearchFilters.Transmission > 0) carOptions= IsPreSearchFilterApplied("Car options");
             var unAppliedFilters = appliedFilters.Except(GetAppliedFilters()).ToList();
-
             if (unAppliedFilters.Any())
                 throw new ValidationException("Following Filters were not applied on search : " + string.Join(",", unAppliedFilters));
         }
@@ -183,69 +220,34 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
         }
 
-        public void ValidateFilters(PostSearchFilters postSearchFilters, Func<List<Results>> getParsedResults)
+        public void ValidateFilters(PostSearchFilters postSearchFilters)
         {
             var carPostSearchFilters = postSearchFilters as CarPostSearchFilters;
-            var carResults = getParsedResults().Select(x => x as CarResult).ToList();
             _failedFilters = new List<string>();
             if (carPostSearchFilters == null)
                 throw new InvalidInputException("PostSearchFilters");
             if (carPostSearchFilters.PriceRange != null)
-                ValidatePriceRange(carPostSearchFilters.PriceRange, carResults.Select(x => x.TotalPrice.TotalAmount));
+                ValidatePriceRange(carPostSearchFilters.PriceRange);
             if (carPostSearchFilters.LocationValues != null)
             {
-                ValidateLocations(carPostSearchFilters.LocationValues.ConvertAll(d => d.ToLower()), carResults.Select(x => x.Location).ToList().ConvertAll(d => d.ToLower()));
+                ValidateLocations(carPostSearchFilters.LocationValues.ConvertAll(d => d.ToLower()));
             }
             if (carPostSearchFilters.CarTypes != null)
             {
-                ValidateCarTypes(carPostSearchFilters.CarTypes.ConvertAll(d => d.ToLower()), carResults.Select(x => x.CarType).ToList().ConvertAll(d => d.ToLower()));
+                ValidateCarTypes(carPostSearchFilters.CarTypes.ConvertAll(d => d.ToLower()));
             }
             if (carPostSearchFilters.RentalAgency != null)
             {
-                ValidateRentalAgency(carPostSearchFilters.RentalAgency.ConvertAll(d => d.ToLower()), carResults.Select(x => x.RentalAgency).ToList().ConvertAll(d => d.ToLower()));
+                ValidateRentalAgency(carPostSearchFilters.RentalAgency.ConvertAll(d => d.ToLower()));
             }
             if (carPostSearchFilters.CarOptions != null)
             {
-                ValidateCarOptions(carPostSearchFilters.CarOptions, carResults);
+                ValidateCarOptions(carPostSearchFilters.CarOptions);
             }
             if (carPostSearchFilters.Matrix != null)
-                ValidateMatrix(_carMatrix, carResults);
+                ValidateMatrix(_carMatrix);
             if (_failedFilters.Any())
                 throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
-        }
-
-        private void ValidateCarOptions(List<string> carOptions, List<CarResult> carResults)
-        {
-            if (!(carResults.Select(x => x.AirConditioning).All(GetCarOptionsText(carOptions).Contains)))
-                _failedFilters.Add("Car options");
-        }
-
-        private List<string> GetCarOptionsText(List<string> carOptionsCode)
-        {
-            var carOptionsText = new List<string>();
-            foreach (string code in carOptionsCode)
-            {
-                switch (code)
-                {
-                    case "EAC":
-                        carOptionsText.Add("Air Conditioning");
-                        break;
-                    case "EAT":
-                        carOptionsText.Add("Auto Transmission");
-                        break;
-                }
-            }
-            return carOptionsText;
-        }
-
-        private void ValidateMatrix(CarMatrix carMatrix, List<CarResult> carResults)
-        {
-            if (!carResults.Select(x => x.TotalPrice.TotalAmount).All(x => x.Equals(carMatrix.TotalFare)))
-                _failedFilters.Add("Price");
-            if (!carResults.Select(x => x.CarType).All(x => x.Equals(carMatrix.CarType)))
-                _failedFilters.Add("Car type");
-            if (!carResults.Select(x => x.RentalAgency).All(x => x.Equals(carMatrix.RentalAgency)))
-                _failedFilters.Add("Rental Agency");
         }
     }
 }

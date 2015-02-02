@@ -30,17 +30,8 @@ namespace Rovia.UI.Automation.Tests.Utility
 
         public static CabinType ToCabinType(this string cabinType)
         {
-            switch (cabinType.ToLower())
+            switch (cabinType.Split()[0].ToLower())
             {
-                case "economy (r)":
-                case "economy (q)":
-                case "economy (w)":
-                case "economy (g)":
-                case "economy (n)":
-                case "economy (u)":
-                case "economy (k)":
-                case "economy (l)":
-                case "economy (m)":
                 case "economy":
                     return CabinType.Economy;
                 case "premium_economy":

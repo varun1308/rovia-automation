@@ -7,3 +7,8 @@ carRentalAgencyFilter,div.jsCarAgencyFilter .mbs input
 carOptions,div.jsCarFeaturesFilter .mbs input
 matrixSection,p.jsMatrixCarPrice
 matrixPrice,span.orangefont
+price,span.price
+locations,div.span7.pull-left div small
+carType,div.span4.borderRgt div .font10
+rentalAgency,img.phm.mtm.mlm
+carOptions,div.mts .pull-left.font12

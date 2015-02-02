@@ -11,7 +11,8 @@ airlinesFilter,div.pull-left.width50p .checkbox.font11
 jsTslider,div.jsTslider
 jsLslider,div.jsLslider
 amount,p.price.font-weight700
-legDuration,div.span3.text-flighttime
 titleAirLines,div.text-boxtitle
 zeroAiritineraryDiv,div#AirListHolder .alert.alert-error
 appliedFilters,div#AirFilterHolder span.label
+flightInfo,.span2 .text-flightinfo
+legDuration,.text-flighttime span

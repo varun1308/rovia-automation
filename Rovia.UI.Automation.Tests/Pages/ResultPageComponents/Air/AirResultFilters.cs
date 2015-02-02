@@ -7,6 +7,7 @@ using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Configuration;
+using Rovia.UI.Automation.Tests.Utility;
 
 namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
@@ -142,32 +143,45 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
-        private void ValidateTripDuration(int maxTimeDuration, IEnumerable<int> resultDuration)
+        private void ValidateTripDuration(int maxTimeDuration)
         {
-            if (resultDuration.Any(x => x > maxTimeDuration * 60))
-                _failedFilters.Add("Trip Duration");
+            var legDurations = GetUIElements("legDuration").Select(x => x.Text.Split(':')[1].ToTimeSpan()).ToList();
+            var resCount=GetUIElements("subTitle").Count;
+            var legsPerResult = legDurations.Count/resCount;
+            var resDurations = new List<double>();
+            for (var i = 0; i < resCount;i++ )
+                resDurations.Add(legDurations.Skip(i * legsPerResult).Take(i * legsPerResult).Sum(x=>x.TotalMinutes));
+            if (resDurations.Any(x => x > maxTimeDuration * 60))
+                 _failedFilters.Add("Trip Duration");
         }
 
-        private void ValidateCabinTypes(IEnumerable<CabinType> cabinTypes, List<CabinType> resultcabins)
+        private void ValidateCabinTypes(IEnumerable<CabinType> cabinTypes)
         {
-            if (resultcabins.Any(x=>cabinTypes.Min()<x))
+            var cabins = GetUIElements("flightInfo").Where((x, i) => i % 2 == 0).Select(x => x.Text.Trim().ToCabinType());
+            if (cabins.Any(x => cabinTypes.Min() < x))
                 _failedFilters.Add("Cabin/Class");
         }
-
-        private static T StringToEnum<T>(string name)
+        
+        private void ValidateAirlines(IEnumerable<string> airlines)
         {
-            return (T)Enum.Parse(typeof(T), name, true);
-        }
-
-        private void ValidateAirlines(IEnumerable<string> airlines, IEnumerable<string> resultAirlines)
-        {
-            if (resultAirlines.Any(x=>!airlines.Contains(x.ToUpper())))
+            if (!GetAirLines().All(airlines.Contains))
                 _failedFilters.Add("Airlines");
         }
 
-        private void ValidateStops(List<string> filterStops, IEnumerable<int> resultStops)
+        private IEnumerable<string> GetAirLines()
         {
-            if (GetStops(filterStops).Any(x => resultStops.Any(y => y != x)))
+            var subTitles = GetUIElements("subTitle").SelectMany(x => x.Text.ToUpper().Trim().Split('/'));
+            var airLines = GetUIElements("title").Select(x => x.Text.ToUpper()).ToList();
+            airLines.RemoveAll(x => x.Trim().Equals("Multiple Airlines"));
+            airLines.AddRange(subTitles);
+            return airLines;
+        }
+
+        private void ValidateStops(List<string> filterStopStrings)
+        {
+            var stops = GetUIElements("flightInfo").Where((x, i) => i%2 == 1).Select(x => int.Parse(x.Text.Trim()));
+            var filterStops = GetStops(filterStopStrings);
+            if(!stops.All(filterStops.Contains))
                 _failedFilters.Add("Stops");
         }
 
@@ -193,9 +207,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return stopLists;
         }
 
-        private void ValidatePriceRange(PriceRange priceRange, IEnumerable<double> amountList)
+        private void ValidatePriceRange(PriceRange priceRange)
         {
-            if (amountList.Any(x => x > priceRange.MaxPrice || x < priceRange.MinPrice))
+            if (GetUIElements("amount").Where((x,i)=>i%2==1).Select(x => (new Amount(x.Text)).TotalAmount).Any(x => x > priceRange.MaxPrice || x < priceRange.MinPrice))
                 _failedFilters.Add("Price");
         }
 
@@ -203,13 +217,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         #region IResultPage Members
 
-        public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters, Func<List<Results>> getParsedResults)
+        public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             _appliedFilters = GetAppliedFilters().ToList();
             var airFilters = preSearchFilters as AirPreSearchFilters;
             if (preSearchFilters == null)
                 throw new InvalidInputException("PreSearchFilters");
-            var airResults = getParsedResults().Select(x => x as AirResult).ToList();
             _failedFilters = new List<string>();
 
             //if (airFilters.AirLines != null && airFilters.AirLines.Count > 0 )
@@ -223,12 +236,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
                     _failedFilters.Add("Cabin/Class");
                 else
-                ValidateCabinTypes(new List<CabinType>() {airFilters.CabinType},
-                                       airResults.SelectMany(y=>y.Legs.Select(x => x.Cabin)).ToList());
+                ValidateCabinTypes(new List<CabinType>() {airFilters.CabinType});
             }
             if (airFilters.NonStopFlight)
                 if (_appliedFilters.Contains("Stops"))
-                    ValidateStops(new List<string>(){"none"}, airResults.Select(x => x.Legs.Select(y => y.Stops)).Select(z => z.Sum()).ToList());
+                    ValidateStops(new List<string>(){"none"});
                 else
                     _failedFilters.Add("Stops");
             if (_failedFilters.Any())
@@ -264,25 +276,23 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
         }
 
-        public void ValidateFilters(PostSearchFilters postSearchFilters, Func<List<Results>> getParsedResults)
+        public void ValidateFilters(PostSearchFilters postSearchFilters)
         {
             NoResultsAvailableWarning();
             var airPostSearchFilters = postSearchFilters as AirPostSearchFilters;
-            var airResults = getParsedResults().Select(x => x as AirResult).ToList();
             _failedFilters = new List<string>();
             if (airPostSearchFilters == null)
                 throw new InvalidInputException("PostSearchFilters");
-
             if (airPostSearchFilters.PriceRange != null)
-                ValidatePriceRange(airPostSearchFilters.PriceRange, airResults.Select(x => x.Amount.TotalAmount));
+                ValidatePriceRange(airPostSearchFilters.PriceRange);
             if (airPostSearchFilters.Stop != null)
-                ValidateStops(airPostSearchFilters.Stop, airResults.Select(x => x.Legs.Select(y => y.Stops)).Select(z => z.Sum()).ToList());
+                ValidateStops(airPostSearchFilters.Stop);
             if (airPostSearchFilters.Airlines != null)
-                ValidateAirlines(airPostSearchFilters.Airlines, airResults.SelectMany(x => x.AirLines));
+                ValidateAirlines(airPostSearchFilters.Airlines);
             if (airPostSearchFilters.CabinTypes != null)
-                ValidateCabinTypes(airPostSearchFilters.CabinTypes, airResults.SelectMany(x => x.Legs.Select(y => y.Cabin)).ToList());
+                ValidateCabinTypes(airPostSearchFilters.CabinTypes);
             if (airPostSearchFilters.MaxTimeDurationDiff > 0)
-                ValidateTripDuration(airPostSearchFilters.MaxTimeDurationDiff, airResults.Select(x => x.Legs.Sum(y => y.Duration.Minutes)).ToList());
+                ValidateTripDuration(airPostSearchFilters.MaxTimeDurationDiff);
             if (_failedFilters.Any())
                 throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
         }

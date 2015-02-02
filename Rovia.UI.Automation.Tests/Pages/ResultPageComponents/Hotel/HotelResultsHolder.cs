@@ -60,19 +60,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
            return div != null && div.Displayed;
         }
 
-        public List<Results> ParseResults()
-        {
-            var ratings = GetUIElements("hotelRating").Select(x => x.GetUIElements("stars").Count).ToArray();
-            var hotelNames = GetUIElements("divHotelName").Select(x=>x.Text);
-            var prices = GetUIElements("hotelPrice").Select(x => new Amount(x.Text)).ToArray();
-            return hotelNames.Select((x, index) => new HotelResult()
-                {
-                    HotelName = x,
-                    Amount = prices[index],
-                    HotelRating = ratings[index]
-                } as Results).ToList();
-        }
-
         public Results AddToCart(SearchCriteria  criteria)
         {
             try

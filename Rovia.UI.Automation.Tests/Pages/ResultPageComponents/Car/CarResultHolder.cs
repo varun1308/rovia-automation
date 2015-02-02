@@ -72,39 +72,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return div != null && div.Displayed;
         }
 
-        public List<Results> ParseResults()
-        {
-            var rentalAgency = GetUIElements("rentalAgency").Select(x => x.GetAttribute("alt"));
-
-            var carType = GetUIElements("carType").Where((x, index) => index == 0 || (index % 3 == 0)).Select(x => x.Text.Split(' ')[0]).ToList();
-            var carOptions = GetUIElements("carOptions");
-            var airconditioning = carOptions.Skip(1).Where((x, index) => index % 4 == 0).Select(x => x.Text).ToList();
-            var transmission = carOptions.Skip(2).Where((x, index) => index % 4 == 0).Select(x => x.Text).ToList();
-
-            var price = GetUIElements("price");
-            var pricePerWeek = price.Select(x => x.Text).Where((item, index) => index % 2 == 0).ToArray();
-            var totalPrice = price.Select(x => x.Text).Where((item, index) => index % 2 != 0).ToArray();
-            var locations = GetUIElements("locations").Select(x => x.Text.Split('-')[0].TrimEnd(' ')).Where((item, index) => index % 2 == 0).ToArray();
-
-            var allDateTimes = GetUIElements("DateTimes").Where((item) => item.Text.Contains(" AM") || item.Text.Contains(" PM")).Select(x => x.Text).ToList();
-            var pickUpDateTimes = allDateTimes.Where(((item, index) => index % 2 == 0)).ToArray();
-            var dropOffDateTimes = allDateTimes.Where(((item, index) => index % 2 != 0)).ToArray();
-
-            return rentalAgency.Select((x, index) => new CarResult()
-                {
-                    RentalAgency = x,
-                    CarType = carType[index],
-                    AirConditioning = airconditioning[index],
-                    Transmission = transmission[index],
-                    PricePerWeek = new Amount(pricePerWeek[index]),
-                    TotalPrice = new Amount(totalPrice[index]),
-                    Location = locations[index],
-                    PickUpDateTime = DateTime.Parse(pickUpDateTimes[index]),
-                    DropOffDateTime = DateTime.Parse(dropOffDateTimes[index])
-                } as Results).ToList();
-
-        }
-
         public Results AddToCart(SearchCriteria criteria)
         {
             try

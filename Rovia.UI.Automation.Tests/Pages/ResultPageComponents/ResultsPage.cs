@@ -94,20 +94,15 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
-        public List<Results> ParseResults()
-        {
-            return ResultsHolder.ParseResults();
-        }
-
         public void SetAndValidatePostSearchFilters(PostSearchFilters postSearchFilters)
         {
              ResultFilters.SetPostSearchFilters(postSearchFilters);
-             ResultFilters.ValidateFilters(postSearchFilters,ResultsHolder.ParseResults);
+             ResultFilters.ValidateFilters(postSearchFilters);
         }
  
         public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
-             ResultFilters.VerifyPreSearchFilters(preSearchFilters, ResultsHolder.ParseResults);
+             ResultFilters.VerifyPreSearchFilters(preSearchFilters);
         }
 
         public void ValidateSearch(SearchCriteria criteria)

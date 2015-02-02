@@ -59,7 +59,7 @@ namespace Rovia.UI.Automation.Tests.Application
                         resultsPage.ResultTitle = InitializePage<HotelResultsTitle>("HotelResultsTitleControls");
                         break;
                     case TripProductType.Car:
-                        resultsPage.ResultsHolder = InitializePage<CarResultHolder>("CarResultsControls");
+                        resultsPage.ResultsHolder = InitializePage<CarResultHolder>("CarResultsHolderControls");
                         resultsPage.ResultFilters = InitializePage<CarResultFilters>("CarFiltersControls");
                         break;
                     case TripProductType.Activity:
@@ -105,7 +105,7 @@ namespace Rovia.UI.Automation.Tests.Application
         {
             get
             {
-                var checkOutPage = InitializePage<CheckoutPage>("CheckoutTripProductHolderControls");
+                var checkOutPage = InitializePage<CheckoutPage>("CheckoutControls");
                 checkOutPage.TripProductHolder = InitializePage<TripProductHolder>("CheckoutTripProductHolderControls");
                 return checkOutPage;
             }

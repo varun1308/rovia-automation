@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AppacitiveAutomationFramework;
 using OpenQA.Selenium;
 using Rovia.UI.Automation.Criteria;
@@ -57,22 +54,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             var div = WaitAndGetBySelector("divResultHolder", ApplicationSettings.TimeOut.Slow);
             return div != null && div.Displayed;
         }
-
-        public List<Results> ParseResults()
-        {
-            var activityNames = GetUIElements("activityNames").Select(x => x.Text);
-            var categories = GetUIElements("activityCategories").Select(x => x.Text.Remove(0, 11).Trim());
-            var prices = GetUIElements("activityPrices").Select(x => new Amount(x.Text));
-            return activityNames.Select((x, i) =>
-                new ActivityResult()
-                    {
-                        Name = x,
-                        Amount = prices.ElementAt(i),
-                        Category = categories.ElementAt(i)
-                    } as Results
-                ).ToList();
-        }
-
+        
         public Results AddToCart(SearchCriteria criteria)
         {
             try

@@ -41,17 +41,26 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private TripProduct ParseActivityTripProduct(IUIWebElement paxCartContainer)
         {
-            return new ActivityTripProduct()
+            try
             {
-                ProductTitle = paxCartContainer.WaitAndGetBySelector("activityTitle", ApplicationSettings.TimeOut.Fast).Text,
-                ActivityProductName = paxCartContainer.WaitAndGetBySelector("activityProductName", ApplicationSettings.TimeOut.Fast).Text,
-                Category = paxCartContainer.WaitAndGetBySelector("activityCategory", ApplicationSettings.TimeOut.Fast).Text,
-                Date = DateTime.Parse(paxCartContainer.WaitAndGetBySelector("stayDates", ApplicationSettings.TimeOut.Fast).Text),
-                Fares = new Fare()
+                return new ActivityTripProduct()
                 {
-                    TotalFare = new Amount(paxCartContainer.WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text)
-                }
-            };
+                    ProductTitle = paxCartContainer.WaitAndGetBySelector("activityTitle", ApplicationSettings.TimeOut.Fast).Text,
+                    ActivityProductName = paxCartContainer.WaitAndGetBySelector("activityProductName", ApplicationSettings.TimeOut.Fast).Text,
+                    Category = paxCartContainer.WaitAndGetBySelector("activityCategory", ApplicationSettings.TimeOut.Fast).Text,
+                    Date = DateTime.Parse(paxCartContainer.WaitAndGetBySelector("stayDates", ApplicationSettings.TimeOut.Fast).Text),
+                    Fares = new Fare()
+                    {
+                        TotalFare = new Amount(paxCartContainer.WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text)
+                    }
+                };
+
+            }
+            catch (Exception exception)
+            {
+
+                throw;
+            }
         }
 
         private TripProduct ParseAirTripProduct(IUIWebElement tripProduct)

@@ -143,27 +143,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                     Segments = segments
                 };
         }
-
-        private static void ProcessairLines(IList<string> airLines, IReadOnlyList<string> subair)
-        {
-            var j = 0;
-            for (int i = 0; i < airLines.Count; i++)
-            {
-                if (airLines[i].Equals("Multiple Airlines"))
-                    airLines[i] = subair[j++];
-            }
-        }
-
-        private static AirResult ParseSingleResult(string perHeadPrice, string totalPrice, string airLine, List<FlightLeg> legs)
-        {
-            return new AirResult()
-            {
-                Amount = ParseAmount(perHeadPrice.Split(), totalPrice.Split()),
-                AirLines = new List<string>(airLine.Split('/')),
-                Legs = legs
-            };
-        }
-
+        
         private static Supplier ParseSupplier(IList<string> supplier)
         {
             return new Supplier()
@@ -172,17 +152,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 SupplierName = supplier[1]
             };
         }
-
-        private static Amount ParseAmount(IList<string> perHead, IList<string> total)
-        {
-            return new Amount()
-            {
-                Currency = perHead[1],
-                TotalAmount = double.Parse(total[0].Remove(0, 1)),
-                AmountPerPerson = double.Parse(perHead[0].Remove(0, 1))
-            };
-        }
-
+        
         #endregion
 
         #region IResultHolder Members
@@ -191,16 +161,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         {
             var div = WaitAndGetBySelector("divMatrix", ApplicationSettings.TimeOut.Slow);
             return div != null && div.Displayed;
-        }
-
-        public List<Results> ParseResults()
-        {
-            var price = GetUIElements("amount").Select(x => x.Text).ToArray();
-            var airLines = GetUIElements("titleAirLines").Select(x => x.Text).ToList();
-            var subair = GetUIElements("subTitleAirLines").Select(x => x.Text).ToList();
-            var flightSegmentHolder = GetUIElements("flightSegmentHolder");
-            ProcessairLines(airLines, subair);
-            return airLines.Select((t, i) => ParseSingleResult(price[2 * i], price[2 * i + 1], t, GetFlightLegs(flightSegmentHolder[i]))).Cast<Results>().ToList();
         }
 
         public Results AddToCart(SearchCriteria criteria)

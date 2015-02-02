@@ -21,3 +21,6 @@ activityCount,.activity_count
 categories,.jsCategoryContainer input
 matrixCategory,.jActivity .multilineText
 mCategoryName,.jsActPrice
+activityPrices,.jActivityBox .price
+activityNames,.jActivityBox .text-boxtitle
+activityCategories,.jActivityBox .text-flighttime

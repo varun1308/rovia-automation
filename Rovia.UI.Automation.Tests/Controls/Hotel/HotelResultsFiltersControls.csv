@@ -28,3 +28,7 @@ ratedStars,.rated
 preLoader,#modal_filterloader .icon_preloader_small
 matrixPrice,.orangeTxt
 error,.alert-error
+hotelPrice,span.price
+divHotelName,div.text-boxtitle
+stars,a.orangeStar
+hotelRating,ul.hotel_result_stars

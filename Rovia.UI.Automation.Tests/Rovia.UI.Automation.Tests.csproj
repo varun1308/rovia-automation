@@ -135,7 +135,7 @@
     <None Include="Controls\Hotel\HotelResultsTitleControls.csv" />
     <None Include="Controls\Hotel\HotelRoomsHolderControls.csv" />
     <None Include="Controls\Car\CarFiltersControls.csv" />
-    <None Include="Controls\Car\CarResultsControls.csv" />
+    <None Include="Controls\Car\CarResultsHolderControls.csv" />
     <None Include="Controls\Car\CarSearchPanelControls.csv" />
     <None Include="Controls\PassengerInfoTripProductHolderControls.csv" />
     <None Include="Controls\ResultControls.csv" />

@@ -25,3 +25,4 @@ segmentDuration,.txtAlignRight.fontsize12
 stops,.pas.mam.font12
 stopDate,.txtAlignCenter
 stopDuration,.txtAlignRight
+divMatrix,div#flightMatrixTable
