@@ -11,8 +11,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
     public class CarSearchPanel : UIPage, ISearchPanel
     {
-        #region Private Members
-        private void ApplyDiscountCode(List<CorporateDiscount> corporateDiscounts)
+        protected void ApplyDiscountCode(List<CorporateDiscount> corporateDiscounts)
         {
             ExecuteJavascript("$('span:contains(\"Corporate Discount\")').click()");
             foreach (var corpDisc in corporateDiscounts)
@@ -22,9 +21,10 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 WaitAndGetBySelector("txtPromotionalCOde", ApplicationSettings.TimeOut.Fast).SendKeys(corpDisc.PromotionalCode);
                 WaitAndGetBySelector("btnaddCorporateCode", ApplicationSettings.TimeOut.Fast).Click();
             }
+            ExecuteJavascript("$('span:contains(\"Corporate Discount\")').click()");
         }
 
-        private void SetOriginLocation(string location)
+        protected void SetOriginLocation(string location)
         {
             IUIWebElement autoSuggestBox;
             do
@@ -34,7 +34,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             GetUIElements("autoSuggestOptionsOriginLoc").First(x => (x.Displayed && x.Text.Equals(location))).Click();
         }
 
-        private void SetDestinationLocation(string location)
+        protected void SetDestinationLocation(string location)
         {
             //to implement
             //IUIWebElement autoSuggestBox;
@@ -45,14 +45,14 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             //GetUIElements("autoSuggestOptionsDestinationLoc").First(x => (x.Displayed && x.Text.Equals(location))).Click();
         }
 
-        private void ResolveMultiLocationOptions()
+        protected void ResolveMultiLocationOptions()
         {
             var multiLocOption = WaitAndGetBySelector("multiLocOptionButton", ApplicationSettings.TimeOut.Fast);
             if (multiLocOption != null && multiLocOption.Displayed)
                 multiLocOption.Click();
         }
 
-        private void EnterPickUpDetails(CarSearchCriteria carSearchCriteria)
+        protected virtual void EnterPickUpDetails(CarSearchCriteria carSearchCriteria)
         {
             if (carSearchCriteria.PickUp.PickUpType.Equals(PickUpType.Airport))
             {
@@ -71,7 +71,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             WaitAndGetBySelector("pickUpTime", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(carSearchCriteria.PickUp.PickUpTime);
         }
 
-        private void EnterDropOffDetails(CarSearchCriteria carSearchCriteria)
+        protected virtual void EnterDropOffDetails(CarSearchCriteria carSearchCriteria)
         {
             if (!carSearchCriteria.DropOff.DropOffType.Equals(DropOffType.SameAsPickUp))
             {
@@ -94,12 +94,8 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             dropoffDate.Click();
             WaitAndGetBySelector("dropoffTime", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(carSearchCriteria.DropOff.DropOffTime);
         }
-
-        #endregion
-
-        #region Protected Members
-
-        private void ApplyPreSearchFilters(PreSearchFilters filters)
+        
+        protected void ApplyPreSearchFilters(PreSearchFilters filters)
         {
             var carFilters = filters as CarPreSearchFilters;
             if (!string.IsNullOrEmpty(carFilters.RentalAgency))
@@ -119,7 +115,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 ApplyDiscountCode(carFilters.CorporateDiscount);
         }
 
-        private void SelectSearchPanel()
+        protected void SelectSearchPanel()
         {
             var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
             if (navBar == null || !navBar.Displayed)
@@ -132,8 +128,6 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             if (searchPanel == null || !searchPanel.Displayed)
                 throw new UIElementNullOrNotVisible("SearchPanel");
         }
-
-        #endregion
 
         public void Search(SearchCriteria searchCriteria)
         {

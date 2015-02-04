@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using AppacitiveAutomationFramework;
 using Rovia.UI.Automation.Criteria;
@@ -11,8 +10,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
     public class HotelSearchPanel : UIPage, ISearchPanel
     {
-
-        private void SetPassengerDetails(Passengers passengers)
+        protected virtual void SetPassengerDetails(Passengers passengers)
         {
             WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Adults + (passengers.Adults > 1 ? " Adults" : " Adult"));
             if (passengers.Children == 0)
@@ -23,13 +21,13 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
         }
 
-        private void SetStayPeriod(StayPeriod stayPeriod)
+        protected void SetStayPeriod(StayPeriod stayPeriod)
         {
             WaitAndGetBySelector("checkInDate", ApplicationSettings.TimeOut.Slow).SendKeys(stayPeriod.CheckInDate.ToString("MM/dd/yyyy"));
             WaitAndGetBySelector("checkOutDate", ApplicationSettings.TimeOut.Slow).SendKeys(stayPeriod.CheckOutDate.ToString("MM/dd/yyyy"));
         }
 
-        private void SetLocation(string shortlocation, string location)
+        protected void SetLocation(string shortlocation, string location)
         {
             var locationHolder = WaitAndGetBySelector("inpShortLocation", ApplicationSettings.TimeOut.Slow);
             locationHolder.Click();
@@ -43,7 +41,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             GetUIElements("autoSuggestOptions").First(x => (x.Displayed && x.Text.Equals(location))).Click();
         }
 
-        private void SelectSearchPanel()
+        protected void SelectSearchPanel()
         {
             var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
             if (navBar == null || !navBar.Displayed)
@@ -57,7 +55,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("SearchPanel");
         }
 
-        private void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
+        protected virtual void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             var filters = preSearchFilters as HotelPreSearchFilters;
             if (!string.IsNullOrEmpty(filters.StarRating))
@@ -67,6 +65,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             if (filters.AdditionalPreferences != null && filters.AdditionalPreferences.Count != 0)
                 filters.AdditionalPreferences.ForEach(x => ExecuteJavascript("$('#ulAdditionalPref').find('[data-value=\"" + x + "\"]').click()"));
         }
+        
         public void Search(SearchCriteria searchCriteria)
         {
             var hotelSearchCriteria = searchCriteria as HotelSearchCriteria;
@@ -78,6 +77,5 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
             WaitAndGetBySelector("btnHotelSearch", ApplicationSettings.TimeOut.Slow).Click();
         }
-
     }
 }

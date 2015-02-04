@@ -16,12 +16,12 @@ namespace Rovia.UI.Automation.Tests.Pages
             try
             {
                 GetUIElements("divErrors").ForEach(x =>
+                {
+                    if (x.Displayed)
                     {
-                        if (x.Displayed)
-                        {
-                            throw new Alert(x.Text);
-                        }
-                    });
+                        throw new Alert(x.Text);
+                    }
+                });
             }
             catch (OpenQA.Selenium.StaleElementReferenceException)
             {
@@ -35,8 +35,8 @@ namespace Rovia.UI.Automation.Tests.Pages
             {
                 var divHome = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Safe);
                 if (divHome != null && divHome.Displayed)
-                    SetCountry();
-                while (!IsVisible()) { }
+                    //SetCountry();
+                    while (!IsVisible()) { }
             }
             catch (Exception exception)
             {
@@ -77,8 +77,8 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         internal void LogOut()
         {
-            var logout= ApplicationSettings.Environment == "PROD"
-                ?WaitAndGetBySelector("logOutProd", ApplicationSettings.TimeOut.Fast): WaitAndGetBySelector("logOutQA", ApplicationSettings.TimeOut.Fast);
+            var logout = ApplicationSettings.Environment == "PROD"
+                ? WaitAndGetBySelector("logOutProd", ApplicationSettings.TimeOut.Fast) : WaitAndGetBySelector("logOutQA", ApplicationSettings.TimeOut.Fast);
             logout.Click();
         }
 

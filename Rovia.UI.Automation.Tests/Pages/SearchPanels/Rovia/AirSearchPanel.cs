@@ -13,9 +13,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
     public class AirSearchPanel : UIPage , ISearchPanel
     {
-        #region Private Members
-
-        private void SetFlightType(SearchType searchType)
+        protected void SetFlightType(SearchType searchType)
         {
             switch (searchType)
             {
@@ -27,7 +25,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                     break;
             }
         }
-        private void SelectOneWayFlight()
+        protected void SelectOneWayFlight()
         {
             try
             {
@@ -38,7 +36,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("One-way journey button", ex);
             }
         }
-        private void SelectMulticityFlight()
+        protected void SelectMulticityFlight()
         {
             try
             {
@@ -49,7 +47,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("Multicity journey button", ex);
             }
         }
-        private void SelectRoundTripFlight()
+        protected void SelectRoundTripFlight()
         {
             try
             {
@@ -61,11 +59,11 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
         }
 
-        private void EnterPassengerDetails(Passengers passengers)
+        protected void EnterPassengerDetails(Passengers passengers)
         {
             try
             {
-                WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Adults.ToString());
+                WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(passengers.Adults.ToString());
                 WaitAndGetBySelector("children", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Children.ToString());
                 WaitAndGetBySelector("infants", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Infants.ToString());
             }
@@ -75,7 +73,13 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw;
             }
         }
-        private void EnterAirports(SearchType searchType, List<AirportPair> airportPairs)
+        protected void ResolveMultiLocationOptions()
+        {
+            var multiLocOption = WaitAndGetBySelector("multiLocOptionButton", ApplicationSettings.TimeOut.Fast);
+            if (multiLocOption != null && multiLocOption.Displayed)
+                multiLocOption.Click();
+        }
+        protected void EnterAirports(SearchType searchType, List<AirportPair> airportPairs)
         {
             if (searchType == SearchType.MultiCity)
                 InputMultiCityAirPorts(airportPairs);
@@ -85,11 +89,13 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].ArrivalAirport);
                 WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].DepartureDateTime.ToString("MM/dd/yyyy"));
                 if (searchType == SearchType.RoundTrip)
-                    WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
+                    WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Slow).SendKeys(
+                        airportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
+                WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Slow).Click();
             }
 
         }
-        private void InputMultiCityAirPorts(List<AirportPair> airportPairs)
+        protected void InputMultiCityAirPorts(List<AirportPair> airportPairs)
         {
             var i = 1;
             while (true)
@@ -108,11 +114,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             dates[0].Click();
         }
 
-        #endregion
-
-        #region Protected Members
-
-        private void SelectSearchPanel()
+        protected void SelectSearchPanel()
         {
             var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
             if (navBar == null || !navBar.Displayed)
@@ -126,10 +128,23 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("SearchPanel");
         }
 
-        private void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
+        protected void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             var filters = preSearchFilters as AirPreSearchFilters;
-            ExecuteJavascript("$('.jCabinClass').siblings('div').find('.filter-option').text('" + filters.CabinType.ToString().Replace('_', ' ') + "')");
+            if (!string.IsNullOrEmpty(filters.CabinType.ToString()))
+            {
+                IUIWebElement firstOrDefault = GetUIElements("cabinTypeClick").FirstOrDefault(x => x.Text.Contains("Cabin") || x.Text.Contains("Economy"));
+                if (firstOrDefault != null)
+                    firstOrDefault.Click();
+                var cabinPref = GetUIElements("cabinTypeOptions").ToList();
+               cabinPref.ForEach(x => {
+                   if (x.GetAttribute("innerText").Equals(filters.CabinType.ToString().Replace('_', ' '), StringComparison.InvariantCultureIgnoreCase))
+                   {
+                       x.Click();
+                   }
+               });
+                //ExecuteJavascript("$('.jCabinClass').siblings('div').find('.filter-option').text('" + filters.CabinType.ToString().Replace('_', ' ') + "')");
+            }
             if (filters.IncludeNearByAirPorts)
                 WaitAndGetBySelector("includeNearByAirports", ApplicationSettings.TimeOut.SuperFast).Click();
             if (filters.NonStopFlight)
@@ -138,7 +153,6 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 filters.AirLines.ForEach(x => ExecuteJavascript("$('#ulAirlines').find('[data-text=\"" + x + "\"]').click()"));
 
         }
-        #endregion
 
         public void Search(SearchCriteria searchCriteria)
         {
@@ -150,10 +164,9 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             EnterAirports(airSearchCriteria.SearchType, airSearchCriteria.AirportPairs);
             //Enter from/to airports
             EnterPassengerDetails(airSearchCriteria.Passengers);
-            if(airSearchCriteria.Filters!=null && airSearchCriteria.Filters.PreSearchFilters!=null)
-                ApplyPreSearchFilters(airSearchCriteria.Filters.PreSearchFilters as AirPreSearchFilters);
+            ApplyPreSearchFilters(airSearchCriteria.Filters.PreSearchFilters as AirPreSearchFilters);
             WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Slow).Click();
-            
+            ResolveMultiLocationOptions();
         }
     }
 }

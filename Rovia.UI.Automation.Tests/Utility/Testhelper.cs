@@ -9,7 +9,6 @@ using Rovia.UI.Automation.Exceptions;
 using Rovia.UI.Automation.ScenarioObjects;
 using Rovia.UI.Automation.Tests.Application;
 using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Validator;
 using Rovia.UI.Automation.Logger;
 using InvalidOperationException = Rovia.UI.Automation.Exceptions.InvalidOperationException;
 
@@ -26,7 +25,6 @@ namespace Rovia.UI.Automation.Tests.Utility
         private static SearchCriteria _criteria;
         private static Results _selectedItineary;
         public static TripFolder Trip { get; set; }
-        public static IValidator Validator { get; set; }
         public static List<Results> Results;
         public static TripProductType TripProductType
         {
@@ -35,13 +33,17 @@ namespace Rovia.UI.Automation.Tests.Utility
         }
 
         #endregion
-
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext testContext)
         {
             LogManager.Initialise();
             _logger = LogManager.GetInstance();
-            _app = new RoviaApp();
+            SelectSite();
+            LaunchSite();
+        }
+
+        private static void LaunchSite()
+        {
             var i = 0;
             while (true)
             {
@@ -55,6 +57,16 @@ namespace Rovia.UI.Automation.Tests.Utility
                     _app.SaveScreenshot("SiteLoadFailed" + i++);
                 }
             }
+        }
+
+        private static void SelectSite()
+        {
+            if (ApplicationSettings.Site.Equals("TRAVEL"))
+                _app = new RoviaTravelApp();
+            else if (ApplicationSettings.Site.Equals("DT"))
+                _app = new DreamTripsApp();
+            else
+                _app = new RoviaApp();
         }
 
         [AssemblyCleanup]

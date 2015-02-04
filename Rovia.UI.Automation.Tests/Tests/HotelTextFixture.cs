@@ -4,7 +4,6 @@ using Rovia.UI.Automation.DataBinder;
 using Rovia.UI.Automation.Logger;
 using Rovia.UI.Automation.Tests.Utility;
 using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Validator;
 
 namespace Rovia.UI.Automation.Tests.Tests
 {
@@ -20,7 +19,6 @@ namespace Rovia.UI.Automation.Tests.Tests
         {
             DataBinder = new HotelCriteriaDatabinder();
             TestHelper.TripProductType = TripProductType.Hotel;
-            TestHelper.Validator = new AirValidator();
             _logManager = LogManager.GetInstance();
         }
 

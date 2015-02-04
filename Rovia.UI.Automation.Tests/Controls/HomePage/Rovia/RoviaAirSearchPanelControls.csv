@@ -12,6 +12,8 @@ children,select#drpChildCount
 infants,select.jInfant
 btnAirSearch,button#btnAirSearch
 addFlight,a#addflight
-cabinType,select.jCabinClass
+cabinTypeClick,.jCabinClass button
+cabinTypeOptions,.selectpicker li a span
 includeNearByAirports,input.jsIncludeNearbyAirports
 dates,.timepicker_arrow
+multiLocOptionButton,button.btn.btn-primary.jsContinue

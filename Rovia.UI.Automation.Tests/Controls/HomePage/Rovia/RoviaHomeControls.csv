@@ -1,0 +1,11 @@
+divHome,div#ucPWP_AP
+divNavigationBar,div.navbar.navbar-inverse
+sessionIdQA,span#ucPWP_ctl15_21153_lblAPISessionId
+sessionIdProd,span#ucPWP_ctl14_13006_lblAPISessionId
+lnkLogInQA,a#ucPWP_ctl08_21232_ucHeaderMenu_lnkLogin
+logOutQA,a#ucPWP_ctl08_21232_ucHeaderMenu_lnkLogout 
+lnkLogInProd,a#ucPWP_ctl08_13082_ucHeaderMenu_lnkLogin
+logOutProd,a#ucPWP_ctl08_13082_ucHeaderMenu_lnkLogout
+divErrors,span.divError
+country,select.span12.jCountrySelect
+saveCountry,a.btn.btn-primary.span12.jSaveBtn

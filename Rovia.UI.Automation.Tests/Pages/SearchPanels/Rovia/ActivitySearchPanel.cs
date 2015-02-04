@@ -10,7 +10,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
     class ActivitySearchPanel : UIPage, ISearchPanel
     {
-        private void SelectSearchPanel()
+        protected void SelectSearchPanel()
         {
             var navBar = WaitAndGetBySelector("navBar", ApplicationSettings.TimeOut.Slow);
             if (navBar == null || !navBar.Displayed)
@@ -22,7 +22,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("SearchPanel");
         }
 
-        private void SetLocation(string shortlocation, string location)
+        protected void SetLocation(string shortlocation, string location)
         {
             var locationHolder = WaitAndGetBySelector("inpShortLocation", ApplicationSettings.TimeOut.Slow);
             locationHolder.Click();

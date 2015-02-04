@@ -20,20 +20,33 @@ namespace Rovia.UI.Automation.Tests.Application
     {
         public AppState State { get; set; }
 
-        public HomePage HomePage
+        public RoviaApp()
+        {
+            State = new AppState()
+            {
+                CurrentUser = new User()
+                {
+                    Type = UserType.Guest,
+                    IsLoggedIn = false
+                },
+                CurrentProduct = TripProductType.Air
+            };
+        }
+
+        public virtual HomePage HomePage
         {
             get
             {
-                var homePage = InitializePage<HomePage>("HomeControls");
+                var homePage = InitializePage<HomePage>("RoviaHomeControls");
                 switch (State.CurrentProduct)
                 {
-                    case TripProductType.Air: homePage.SearchPanel = InitializePage<AirSearchPanel>("AirSearchPanelControls");
+                    case TripProductType.Air: homePage.SearchPanel = InitializePage<AirSearchPanel>("RoviaAirSearchPanelControls");
                         break;
-                    case TripProductType.Hotel: homePage.SearchPanel = InitializePage<HotelSearchPanel>("HotelSearchPanelControls");
+                    case TripProductType.Hotel: homePage.SearchPanel = InitializePage<HotelSearchPanel>("RoviaHotelSearchPanelControls");
                         break;
-                    case TripProductType.Car: homePage.SearchPanel = InitializePage<CarSearchPanel>("CarSearchPanelControls");
+                    case TripProductType.Car: homePage.SearchPanel = InitializePage<CarSearchPanel>("RoviaCarSearchPanelControls");
                         break;
-                    case TripProductType.Activity: homePage.SearchPanel = InitializePage<ActivitySearchPanel>("ActivitySearchPanelControls");
+                    case TripProductType.Activity: homePage.SearchPanel = InitializePage<ActivitySearchPanel>("RoviaActivitySearchPanelControls");
                         break;
                 }
                 return homePage;
@@ -85,7 +98,7 @@ namespace Rovia.UI.Automation.Tests.Application
         {
             get
             {
-                var tripFolderPage= InitializePage<TripFolderPage>("TripFolderControls");
+                var tripFolderPage = InitializePage<TripFolderPage>("TripFolderControls");
                 tripFolderPage.TripProductParser = InitializePage<TripFolderParser>("TripFolderParserControls");
                 return tripFolderPage;
             }
@@ -116,19 +129,6 @@ namespace Rovia.UI.Automation.Tests.Application
             get { return InitializePage<BFCPaymentPage>("BFCPaymentControls"); }
         }
 
-        public RoviaApp()
-        {
-            State = new AppState()
-            {
-                CurrentUser = new User()
-                {
-                    Type = UserType.Guest,
-                    IsLoggedIn = false
-                },
-                CurrentProduct = TripProductType.Air
-            };
-        }
-
         public void SaveScreenshot(TestContext context)
         {
             try
@@ -145,7 +145,7 @@ namespace Rovia.UI.Automation.Tests.Application
                 screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
                 LogManager.GetInstance().LogInformation("$$ " + fileName + " $$");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogManager.GetInstance().LogWarning("Error in taking screenshot: Driver freezed due to Rovia Award Popup.");
             }
@@ -185,10 +185,7 @@ namespace Rovia.UI.Automation.Tests.Application
             {
                 Driver.SwitchTo().Alert().Accept();
             }
-            catch (NoAlertPresentException)
-            {
-
-            }
+            catch (NoAlertPresentException) { }
         }
     }
 }

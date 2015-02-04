@@ -16,11 +16,11 @@ namespace Rovia.UI.Automation.Tests.Configuration
         {
             public static string Username
             {
-                get { return ConfigurationManager.AppSettings["application.preferred.username"]??"3285301"; }
+                get { return ConfigurationManager.AppSettings["application.preferred.username"] ?? "3285301"; }
             }
             public static string Password
             {
-                get { return ConfigurationManager.AppSettings["application.preferred.password"]??"test"; }
+                get { return ConfigurationManager.AppSettings["application.preferred.password"] ?? "test"; }
             }
         }
 
@@ -38,7 +38,7 @@ namespace Rovia.UI.Automation.Tests.Configuration
 
         public static int MaxSearchDepth
         {
-            get { return int.Parse(ConfigurationManager.AppSettings["application.maxSearchDepth"]??"1"); }
+            get { return int.Parse(ConfigurationManager.AppSettings["application.maxSearchDepth"] ?? "1"); }
         }
 
         public static string LoggedFilePath
@@ -54,6 +54,11 @@ namespace Rovia.UI.Automation.Tests.Configuration
             public static int SuperFast { get { return 3; } }
         }
 
+        public static string Site
+        {
+            get { return ConfigurationManager.AppSettings["site"].ToUpper(); }
+        }
+
         public static string Environment
         {
             get { return ConfigurationManager.AppSettings["application.environment"].ToUpper(); }
@@ -62,6 +67,10 @@ namespace Rovia.UI.Automation.Tests.Configuration
         public static string TripsErrorUri
         {
             get { return ConfigurationManager.AppSettings["application.tripsErrorUI.url"]; }
+        }
+        public static string Driver
+        {
+            get { return ConfigurationManager.AppSettings["driver"].ToUpper(); }
         }
     }
 }

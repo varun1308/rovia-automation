@@ -1,0 +1,11 @@
+divHome,div#ucPWP_AP
+divNavigationBar,div.homeSearchContainer
+sessionIdQA,span#ucPWP_ctl16_23178_lblAPISessionId
+sessionIdProd,span#ucPWP_ctl14_13200_lblAPISessionId
+lnkLogInQA,ul.nav li a[href="http://dtl.qa-rovia.com/travel/login"] span
+logOutQA,.jsLogoutBtn 
+lnkLogInProd,ul.nav li a[href="http://www.rovia.com/login"] span
+logOutProd,.jsLogoutBtn
+divErrors,span.divError
+country,select.span12.jCountrySelect
+saveCountry,a.btn.btn-primary.span12.jSaveBtn
