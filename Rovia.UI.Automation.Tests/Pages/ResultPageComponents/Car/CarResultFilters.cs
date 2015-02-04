@@ -49,7 +49,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         private void SetCarOptionsFilter(List<string> carOptions)
         {
-            var carOptionsFilter = GetUIElements("carOptions").ToList();
+            var carOptionsFilter = GetUIElements("carOptionsFilter").ToList();
             carOptionsFilter[0].Click();
 
             carOptionsFilter.ForEach(x =>

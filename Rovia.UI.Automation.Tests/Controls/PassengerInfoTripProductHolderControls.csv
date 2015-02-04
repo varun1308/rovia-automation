@@ -3,7 +3,6 @@ hotelStars,.hotel_stars
 rating,.rated
 title,h5
 subTitle,span.greyfont,
-stayDates,.mvl .mtsairportCodes
 price,.price
 roomCount,.mrm .greyfont
 carDates,div.mvl .font10.greyfont
