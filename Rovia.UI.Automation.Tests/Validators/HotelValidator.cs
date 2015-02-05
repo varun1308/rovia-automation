@@ -1,18 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Pages;
-
-namespace Rovia.UI.Automation.Tests.Validators
+﻿namespace Rovia.UI.Automation.Tests.Validators
 {
+    using System;
+    using System.Text;
+    using Exceptions;
+    using ScenarioObjects;
+    using Pages;
+
+    /// <summary>
+    /// This class contains all the methods for hotel product validations
+    /// </summary>
     public static class HotelValidator
     {
-        public static void ValidateTripProduct(this TripFolderPage page, HotelTripProduct tripProduct,
-                                                    HotelResult hotelResult)
+        #region Private Members
+
+        private static string FormatError(string error, string addedValue, string tfValue)
+        {
+            return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
+        }
+
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Extension method to validate hotel trip product with added product in cart from result page
+        /// </summary>
+        /// <param name="page">Page instance</param>
+        /// <param name="tripProduct">Hotel trip product on trip folder page</param>
+        /// <param name="hotelResult">Added itinerary to cart on result page</param>
+        public static void ValidateTripProduct(this TripFolderPage page, HotelTripProduct tripProduct,HotelResult hotelResult)
         {
             var errors = new StringBuilder();
             if (!hotelResult.HotelName.Equals(tripProduct.ProductTitle, StringComparison.OrdinalIgnoreCase))
@@ -29,6 +45,12 @@ namespace Rovia.UI.Automation.Tests.Validators
                 throw new ValidationException(errors + "| on TripFolderPage");
         }
 
+        /// <summary>
+        /// Extension method to validate hotel trip product with added product in cart from result page
+        /// </summary>
+        /// <param name="page">Page instance</param>
+        /// <param name="hotelTripProduct">Hotel trip product on passenger info page</param>
+        /// <param name="hotelResult">Added itinerary to cart on result page</param>
         public static void ValidateTripProduct(this PassengerInfoPage page, HotelTripProduct hotelTripProduct, HotelResult hotelResult)
         {
             var errors = new StringBuilder();
@@ -46,6 +68,12 @@ namespace Rovia.UI.Automation.Tests.Validators
                 throw new ValidationException(errors + "| on PaxInfoPage");
         }
 
+        /// <summary>
+        /// Extension method to validate hotel trip product with added product in cart from result page
+        /// </summary>
+        /// <param name="page">Page instance</param>
+        /// <param name="hotelTripProduct">Hotel trip product on checkout page</param>
+        /// <param name="hotelResult">Added itinerary to cart on result page</param>
         public static void ValidateTripProduct(this CheckoutPage page, HotelTripProduct hotelTripProduct, HotelResult hotelResult)
         {
             var errors = new StringBuilder();
@@ -63,7 +91,12 @@ namespace Rovia.UI.Automation.Tests.Validators
                 throw new ValidationException(errors + "| on PaxInfoPage");
         }
 
-
+        /// <summary>
+        /// Extension method to validate hotel trip product with added product in cart from result page
+        /// </summary>
+        /// <param name="page">Page instance</param>
+        /// <param name="hotelTripProduct">Hotel trip product on confirmation page</param>
+        /// <param name="hotelResult">Added itinerary to cart on result page</param>
         public static void ValidateBookedTripProducts(this CheckoutPage page, HotelTripProduct hotelTripProduct, HotelResult hotelResult)
         {
             var errors = new StringBuilder();
@@ -80,10 +113,7 @@ namespace Rovia.UI.Automation.Tests.Validators
             if (!string.IsNullOrEmpty(errors.ToString()))
                 throw new ValidationException(errors + "| on ConfirmationPage");
         }
-        
-        private static string FormatError(string error, string addedValue, string tfValue)
-        {
-            return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
-        }
+
+        #endregion
     }
 }

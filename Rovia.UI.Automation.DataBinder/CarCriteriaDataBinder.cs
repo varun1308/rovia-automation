@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.ScenarioObjects;
-
-namespace Rovia.UI.Automation.DataBinder
+﻿namespace Rovia.UI.Automation.DataBinder
 {
+    using Criteria;
+    using Exceptions;
+    using ScenarioObjects;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+
+    /// <summary>
+    /// Car Search Criteria data binder
+    /// </summary>
     public class CarCriteriaDataBinder : ICriteriaDataBinder
     {
         #region Private Members
 
-        private PickUp ParsePickUpDetails(string pickUp, string location, string travelDates)
+        private static PickUp ParsePickUpDetails(string pickUp, string location, string travelDates)
         {
             try
             {
@@ -33,7 +35,7 @@ namespace Rovia.UI.Automation.DataBinder
             }
         }
 
-        private DropOff ParseDropOffDetails(string dropOff, string location, string travelDates)
+        private static DropOff ParseDropOffDetails(string dropOff, string location, string travelDates)
         {
             try
             {
@@ -59,7 +61,7 @@ namespace Rovia.UI.Automation.DataBinder
             return (T)Enum.Parse(typeof(T), name, true);
         }
 
-        private List<CorporateDiscount> ParseCorporateDiscount(string rentalAgency, string corpDiscCode, string promotionalCode)
+        private static List<CorporateDiscount> ParseCorporateDiscount(string rentalAgency, string corpDiscCode, string promotionalCode)
         {
             try
             {
@@ -86,7 +88,7 @@ namespace Rovia.UI.Automation.DataBinder
             }
         }
 
-        private int ParseTransmission(string transmission)
+        private static int ParseTransmission(string transmission)
         {
             if (!string.IsNullOrEmpty(transmission))
                 switch (transmission.ToUpper())
@@ -99,14 +101,61 @@ namespace Rovia.UI.Automation.DataBinder
             return 0;
         }
 
-        private int ParseAirContioningPreference(string isairconditioned)
+        private static int ParseAirContioningPreference(string isairconditioned)
         {
             if (string.IsNullOrEmpty(isairconditioned)) return 0;
             return bool.Parse(isairconditioned) ? 1 : 2;
         }
 
-        #endregion
+        private static CarPostSearchFilters GetPostSearchFilters(string filter, string value)
+        {
+            if (string.IsNullOrEmpty(filter))
+                return null;
+            var filterList = filter.Split('|');
+            var valueList = value.Split('|');
+            var i = 0;
+            var carfilterCriteria = new CarPostSearchFilters();
+            while (i < filterList.Length)
+            {
+                switch (filterList[i].ToUpper())
+                {
+                    case "PRICE":
+                        carfilterCriteria.PriceRange = new PriceRange()
+                        {
+                            Min = int.Parse(valueList[i].Split('-')[0]),
+                            Max = int.Parse(valueList[i].Split('-')[1])
+                        };
+                        break;
+                    case "LOCATIONS":
+                        carfilterCriteria.LocationValues = new List<string>(valueList[i].Split('/'));
+                        break;
+                    case "CARTYPE":
+                        carfilterCriteria.CarTypes = new List<string>(valueList[i].Split('/'));
+                        break;
+                    case "RENTALAGENCY":
+                        carfilterCriteria.RentalAgency = new List<string>(valueList[i].Split('/'));
+                        break;
+                    case "CAROPTIONS":
+                        carfilterCriteria.CarOptions = new List<string>(valueList[i].Split('/'));
+                        break;
+                    case "MATRIX":
+                        carfilterCriteria.Matrix = new CarMatrix() { CheckMatrix = true };
+                        break;
+                    default: throw new InvalidInputException("Invalid filter keyword : " + filterList[i]);
+                }
+                i++;
+            }
+            return carfilterCriteria;
+        }
 
+        #endregion
+        
+        #region Public Members
+        /// <summary>
+        /// Car Product Search Criteria Data Binder
+        /// </summary>
+        /// <param name="dataRow">Input datasheet row</param>
+        /// <returns>Car Search Criteria Object</returns>
         public SearchCriteria GetCriteria(DataRow dataRow)
         {
             try
@@ -138,46 +187,6 @@ namespace Rovia.UI.Automation.DataBinder
                 throw new InvalidInputException("DataRow to CarCriteriaDataBinder.GetCriteria", exception);
             }
         }
-
-        private CarPostSearchFilters GetPostSearchFilters(string filter, string value)
-        {
-            if (string.IsNullOrEmpty(filter))
-                return null;
-            var filterList = filter.Split('|');
-            var valueList = value.Split('|');
-            var i = 0;
-            var carfilterCriteria = new CarPostSearchFilters();
-            while (i < filterList.Length)
-            {
-                switch (filterList[i].ToUpper())
-                {
-                    case "PRICE":
-                        carfilterCriteria.PriceRange = new PriceRange()
-                            {
-                                Min = int.Parse(valueList[i].Split('-')[0]),
-                                Max = int.Parse(valueList[i].Split('-')[1])
-                            };
-                        break;
-                    case "LOCATIONS":
-                        carfilterCriteria.LocationValues = new List<string>(valueList[i].Split('/'));
-                        break;
-                    case "CARTYPE":
-                        carfilterCriteria.CarTypes = new List<string>(valueList[i].Split('/'));
-                        break;
-                    case "RENTALAGENCY":
-                        carfilterCriteria.RentalAgency = new List<string>(valueList[i].Split('/'));
-                        break;
-                    case "CAROPTIONS":
-                        carfilterCriteria.CarOptions = new List<string>(valueList[i].Split('/'));
-                        break;
-                    case "MATRIX":
-                        carfilterCriteria.Matrix = new CarMatrix() { CheckMatrix = true };
-                        break;
-                    default: throw new InvalidInputException("Invalid filter keyword : " + filterList[i]);
-                }
-                i++;
-            }
-            return carfilterCriteria;
-        }
+        #endregion
     }
 }

@@ -1,8 +1,10 @@
-﻿
-using System.Configuration;
-
-namespace Rovia.UI.Automation.Logger
+﻿namespace Rovia.UI.Automation.Logger
 {
+    using System.Configuration;
+
+    /// <summary>
+    /// Sets log strategy settings from Configuration files
+    /// </summary>
     class LogManagerConfigSection : ConfigurationSection
     {
         [ConfigurationProperty("SummaryLoggers", IsRequired = false, IsDefaultCollection = true)]

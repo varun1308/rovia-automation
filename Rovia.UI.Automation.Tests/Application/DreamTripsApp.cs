@@ -1,11 +1,12 @@
-﻿using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Pages;
-using Rovia.UI.Automation.Tests.Pages.ResultPageComponents;
-using Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity;
-using Rovia.UI.Automation.Tests.Pages.SearchPanels;
-
-namespace Rovia.UI.Automation.Tests.Application
+﻿namespace Rovia.UI.Automation.Tests.Application
 {
+    using ScenarioObjects;
+    using Pages;
+    using Pages.SearchPanels;
+
+    /// <summary>
+    /// Dreamtrips.com site specific intialization
+    /// </summary>
     public  class DreamTripsApp :RoviaApp
     {
         public override HomePage HomePage

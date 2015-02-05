@@ -1,14 +1,33 @@
-﻿using System.Text;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Pages;
-
-namespace Rovia.UI.Automation.Tests.Validators
+﻿namespace Rovia.UI.Automation.Tests.Validators
 {
+    using System.Text;
+    using Exceptions;
+    using ScenarioObjects;
+    using Pages;
+
+    /// <summary>
+    /// This class contains all the methods for car product validations
+    /// </summary>
     public static class CarValidator
     {
-        public static void ValidateTripProduct(this TripFolderPage page, CarTripProduct carTripProduct,
-                                               CarResult carResult)
+        #region Private Members
+
+        private static string FormatError(string error, string addedValue, string tfValue)
+        {
+            return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
+        }
+
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Extension method to validate car trip product with added product in cart from result page
+        /// </summary>
+        /// <param name="page">Page instance</param>
+        /// <param name="carTripProduct">Car trip product on trip folder page</param>
+        /// <param name="carResult">Added itinerary to cart on result page</param>
+        public static void ValidateTripProduct(this TripFolderPage page, CarTripProduct carTripProduct, CarResult carResult)
         {
             var errors = new StringBuilder();
             if (!carResult.TotalPrice.Equals(carTripProduct.Fares.TotalFare))
@@ -30,6 +49,12 @@ namespace Rovia.UI.Automation.Tests.Validators
                 throw new ValidationException(errors + "| on TripFolderPage");
         }
 
+        /// <summary>
+        /// Extension method to validate car trip product with added product in cart from result page
+        /// </summary>
+        /// <param name="page">Page instance</param>
+        /// <param name="carTripProduct">Car trip product on passenger info page</param>
+        /// <param name="carResult">Added itinerary to cart on result page</param>
         public static void ValidateTripProduct(this PassengerInfoPage page, CarTripProduct carTripProduct, CarResult carResult)
         {
             var errors = new StringBuilder();
@@ -47,6 +72,12 @@ namespace Rovia.UI.Automation.Tests.Validators
                 throw new ValidationException(errors + "| on PassengerInfoPage");
         }
 
+        /// <summary>
+        /// Extension method to validate car trip product with added product in cart from result page
+        /// </summary>
+        /// <param name="page">Page instance</param>
+        /// <param name="carTripProduct">Car trip product on checkout page</param>
+        /// <param name="carResult">Added itinerary to cart on result page</param>
         public static void ValidateTripProduct(this CheckoutPage page, CarTripProduct carTripProduct, CarResult carResult)
         {
             var errors = new StringBuilder();
@@ -64,6 +95,12 @@ namespace Rovia.UI.Automation.Tests.Validators
                 throw new ValidationException(errors + "| on CheckOutPage");
         }
 
+        /// <summary>
+        /// Extension method to validate car trip product with added product in cart from result page
+        /// </summary>
+        /// <param name="page">Page instance</param>
+        /// <param name="carTripProduct">Car trip product on confirmation page</param>
+        /// <param name="carResult">Added itinerary to cart on result page</param>
         public static void ValidateBookedTripProducts(this CheckoutPage page, CarTripProduct carTripProduct, CarResult carResult)
         {
             var errors = new StringBuilder();
@@ -83,9 +120,6 @@ namespace Rovia.UI.Automation.Tests.Validators
                 throw new ValidationException(errors + "| on ConfirmationPage");
         }
 
-        private static string FormatError(string error, string addedValue, string tfValue)
-        {
-            return string.Format("| Invalid {0} ({1}, {2})", error, addedValue, tfValue);
-        }
+        #endregion
     }
 }

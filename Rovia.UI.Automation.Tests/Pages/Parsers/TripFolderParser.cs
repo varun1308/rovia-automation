@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.ScenarioObjects.Activity;
-using Rovia.UI.Automation.ScenarioObjects.Air;
-using Rovia.UI.Automation.ScenarioObjects.Hotel;
-using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Utility;
-
-namespace Rovia.UI.Automation.Tests.Pages.Parsers
+﻿namespace Rovia.UI.Automation.Tests.Pages.Parsers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using ScenarioObjects.Activity;
+    using ScenarioObjects.Air;
+    using ScenarioObjects.Hotel;
+    using Configuration;
+    using Utility;
+
+    /// <summary>
+    /// Trip folder page elements parser
+    /// </summary>
     public class TripFolderParser : UIPage
     {
+        #region Private Members
+
         private IEnumerable<Fare> ParseFares()
         {
             var fares = new List<Fare>();
@@ -99,7 +104,7 @@ namespace Rovia.UI.Automation.Tests.Pages.Parsers
             return GetUIElements("flightLegs").Select((x, i) => ParseFlightLeg(x, segments[i])).ToList();
         }
 
-        private FlightLeg ParseFlightLeg(IUIWebElement leg, IUIWebElement segments)
+        private static FlightLeg ParseFlightLeg(IUIWebElement leg, IUIWebElement segments)
         {
               var airportPair = leg.GetUIElements("legAirPorts").Select(x => x.Text).ToArray();
                 var legInfo = leg.GetUIElements("legInfo").Select(x => x.Text.Replace("AM", "AM,").Replace("PM", "PM,").Split('\n').ToList()).ToList();
@@ -172,6 +177,14 @@ namespace Rovia.UI.Automation.Tests.Pages.Parsers
             };
         }
 
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Parse trip products on tripfolder page
+        /// </summary>
+        /// <returns>List of products</returns>
         public List<TripProduct> ParseTripProducts()
         {
             var tripProducts = new List<TripProduct>();
@@ -198,6 +211,6 @@ namespace Rovia.UI.Automation.Tests.Pages.Parsers
             return tripProducts;
         }
 
-
+        #endregion
     }
 }

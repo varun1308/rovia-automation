@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
+﻿namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Criteria;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using Configuration;
+
+    /// <summary>
+    /// Rovia site specific air product search methods
+    /// </summary>
     public class AirSearchPanel : UIPage , ISearchPanel
     {
+        #region Protected Members
+
         protected void SetFlightType(SearchType searchType)
         {
             switch (searchType)
@@ -25,6 +30,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                     break;
             }
         }
+
         protected void SelectOneWayFlight()
         {
             try
@@ -36,6 +42,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("One-way journey button", ex);
             }
         }
+
         protected void SelectMulticityFlight()
         {
             try
@@ -47,6 +54,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("Multicity journey button", ex);
             }
         }
+
         protected void SelectRoundTripFlight()
         {
             try
@@ -73,12 +81,14 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw;
             }
         }
+
         protected void ResolveMultiLocationOptions()
         {
             var multiLocOption = WaitAndGetBySelector("multiLocOptionButton", ApplicationSettings.TimeOut.Fast);
             if (multiLocOption != null && multiLocOption.Displayed)
                 multiLocOption.Click();
         }
+
         protected void EnterAirports(SearchType searchType, List<AirportPair> airportPairs)
         {
             if (searchType == SearchType.MultiCity)
@@ -95,6 +105,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             }
 
         }
+
         protected void InputMultiCityAirPorts(List<AirportPair> airportPairs)
         {
             var i = 1;
@@ -138,11 +149,11 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                     firstOrDefault.Click();
                 var cabinPref = GetUIElements("cabinTypeOptions").ToList();
                cabinPref.ForEach(x => {
-                   if (x.GetAttribute("innerText").Equals(filters.CabinType.ToString().Replace('_', ' '), StringComparison.InvariantCultureIgnoreCase))
+                   if (x.Text.Equals(filters.CabinType.ToString().Replace('_', ' '), StringComparison.InvariantCultureIgnoreCase))
                    {
                        x.Click();
                    }
-               });
+               });//GetAttribute("innerText")
                 //ExecuteJavascript("$('.jCabinClass').siblings('div').find('.filter-option').text('" + filters.CabinType.ToString().Replace('_', ' ') + "')");
             }
             if (filters.IncludeNearByAirPorts)
@@ -154,6 +165,14 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
         }
 
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Search for air product
+        /// </summary>
+        /// <param name="searchCriteria">Air Search Criteria Object</param>
         public void Search(SearchCriteria searchCriteria)
         {
             var airSearchCriteria = searchCriteria as AirSearchCriteria;
@@ -168,5 +187,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             WaitAndGetBySelector("btnAirSearch", ApplicationSettings.TimeOut.Slow).Click();
             ResolveMultiLocationOptions();
         }
+
+        #endregion
     }
 }

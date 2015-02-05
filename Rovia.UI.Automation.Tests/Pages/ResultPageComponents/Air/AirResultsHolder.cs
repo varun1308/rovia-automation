@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.ScenarioObjects.Air;
-using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Utility;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Criteria;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using ScenarioObjects.Air;
+    using Configuration;
+    using Utility;
+
+    /// <summary>
+    /// Air Results page itineraries container
+    /// </summary>
     public class AirResultsHolder : UIPage, IResultsHolder
     {
         private AirResult _addedItinerary;
@@ -155,7 +158,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
         
         #endregion
 
-        #region IResultHolder Members
+        /// <summary>
+        /// Check if results visible
+        /// </summary>
+        /// <returns></returns>
+        #region Public Members
 
         public bool IsVisible()
         {
@@ -163,6 +170,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return div != null && div.Displayed;
         }
 
+        /// <summary>
+        /// Add air product to cart
+        /// </summary>
+        /// <param name="criteria">criteria object to add itinerary</param>
+        /// <returns></returns>
         public Results AddToCart(SearchCriteria criteria)
         {
             try

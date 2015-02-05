@@ -1,19 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AppacitiveAutomationFramework;
+    using ScenarioObjects;
+    using Exceptions;
+    using Configuration;
+
+    /// <summary>
+    /// Car results page filters container
+    /// </summary>
     public class CarResultFilters : UIPage, IResultFilters
     {
+        #region Private Fields
+
         private List<string> _appliedFilters;
         private List<string> _failedFilters;
         private CarMatrix _carMatrix;
-        
+
+        #endregion
+
+        #region Private Members
+
         private IEnumerable<string> GetAppliedFilters()
         {
             return GetUIElements("appliedFilters").Select(x => x.Text.Trim());
@@ -165,6 +173,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 _failedFilters.Add("Rental Agency");
         }
 
+        #endregion
+
+        /// <summary>
+        /// Verify pre search filters on resulting itineraries
+        /// </summary>
+        /// <param name="preSearchFilters">Applied pre search filter object</param>
         public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             var carSearchFilters = preSearchFilters as CarPreSearchFilters;
@@ -177,6 +191,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw new ValidationException("Following Filters were not applied on search : " + string.Join(",", unAppliedFilters));
         }
 
+        /// <summary>
+        /// Set Filters and Matrix on result page
+        /// </summary>
+        /// <param name="postSearchFilters">Filters and matrix parameter to set</param>
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
             var carPostSearchFilters = postSearchFilters as CarPostSearchFilters;
@@ -220,6 +238,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
         }
 
+        /// <summary>
+        /// Validate applied filters and matrix on results page
+        /// </summary>
+        /// <param name="postSearchFilters">Applied filters and matrix object</param>
         public void ValidateFilters(PostSearchFilters postSearchFilters)
         {
             var carPostSearchFilters = postSearchFilters as CarPostSearchFilters;

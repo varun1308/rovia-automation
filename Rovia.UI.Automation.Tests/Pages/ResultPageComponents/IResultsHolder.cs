@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.ScenarioObjects;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
+    using Criteria;
+    using ScenarioObjects;
+
+    //This interface holds results page itinerary specific actions methods
     public interface IResultsHolder
     {
         bool IsVisible();

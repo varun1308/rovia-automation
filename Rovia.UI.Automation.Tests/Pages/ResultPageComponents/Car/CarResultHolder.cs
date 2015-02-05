@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
+    using System;
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Criteria;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using Configuration;
+
+    /// <summary>
+    /// Car Results page itineraries container
+    /// </summary>
     public class CarResultHolder : UIPage, IResultsHolder
     {
         private CarResult _addedItinerary;
+
+        #region Private Members
 
         private bool AddToCart(IUIWebElement btnAddToCart)
         {
@@ -66,12 +70,25 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         }
 
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Check if results visible
+        /// </summary>
+        /// <returns></returns>
         public bool IsVisible()
         {
             var div = WaitAndGetBySelector("matrixHolder", ApplicationSettings.TimeOut.Slow);
             return div != null && div.Displayed;
         }
 
+        /// <summary>
+        /// Add car product to cart
+        /// </summary>
+        /// <param name="criteria">criteria object to add itinerary</param>
+        /// <returns></returns>
         public Results AddToCart(SearchCriteria criteria)
         {
             try
@@ -87,5 +104,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 return null;
             }
         }
+
+        #endregion
     }
 }

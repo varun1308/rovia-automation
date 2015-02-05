@@ -1,37 +1,48 @@
-﻿using System;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Pages;
-using Rovia.UI.Automation.Tests.Pages.Parsers;
-using Rovia.UI.Automation.Tests.Pages.ResultPageComponents;
-using Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity;
-using Rovia.UI.Automation.Tests.Pages.SearchPanels;
-
-namespace Rovia.UI.Automation.Tests.Application
+﻿namespace Rovia.UI.Automation.Tests.Application
 {
+    using System;
+    using System.Drawing.Imaging;
+    using System.IO;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using OpenQA.Selenium;
+    using Logger;
+    using ScenarioObjects;
+    using Configuration;
+    using Pages;
+    using Pages.Parsers;
+    using Pages.ResultPageComponents;
+    using Pages.ResultPageComponents.Activity;
+    using Pages.SearchPanels;
+
+    /// <summary>
+    /// Class to intialize driver configuration and UI controls
+    /// </summary>
     public class RoviaApp : UIApplication
     {
+        #region Public Properties
+
         public AppState State { get; set; }
 
-        public RoviaApp()
+        #endregion
+
+        #region Private Members
+
+        private static string GetDirectoryPath()
         {
-            State = new AppState()
+            var directoryPath = ApplicationSettings.LoggedFilePath + "\\Dated_" +
+                                        DateTime.Now.ToShortDateString().Replace('/', '_');
+            if (!Directory.Exists(directoryPath))
             {
-                CurrentUser = new User()
-                {
-                    Type = UserType.Guest,
-                    IsLoggedIn = false
-                },
-                CurrentProduct = TripProductType.Air
-            };
+                Directory.CreateDirectory(directoryPath);
+            }
+            return directoryPath;
         }
+
+        #endregion
+
+        #region Public Properties
 
         public virtual HomePage HomePage
         {
@@ -129,6 +140,27 @@ namespace Rovia.UI.Automation.Tests.Application
             get { return InitializePage<BFCPaymentPage>("BFCPaymentControls"); }
         }
 
+        #endregion
+
+        #region Puplic Members
+
+        public RoviaApp()
+        {
+            State = new AppState()
+            {
+                CurrentUser = new User()
+                {
+                    Type = UserType.Guest,
+                    IsLoggedIn = false
+                },
+                CurrentProduct = TripProductType.Air
+            };
+        }
+
+        /// <summary>
+        /// Save UI screen shot with default test names
+        /// </summary>
+        /// <param name="context">TestContext Instance</param>
         public void SaveScreenshot(TestContext context)
         {
             try
@@ -151,6 +183,10 @@ namespace Rovia.UI.Automation.Tests.Application
             }
         }
 
+        /// <summary>
+        /// Save UI scrren shot with custom image name
+        /// </summary>
+        /// <param name="name"></param>
         public void SaveScreenshot(string name)
         {
             var driver = Driver as ITakesScreenshot;
@@ -161,17 +197,9 @@ namespace Rovia.UI.Automation.Tests.Application
             screenShot.SaveAsFile(fileName, ImageFormat.Jpeg);
         }
 
-        private string GetDirectoryPath()
-        {
-            var directoryPath = ApplicationSettings.LoggedFilePath + "\\Dated_" +
-                                        DateTime.Now.ToShortDateString().Replace('/', '_');
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-            return directoryPath;
-        }
-
+        /// <summary>
+        /// Clear browser cache explicitly 
+        /// </summary>
         public void ClearBrowserCache()
         {
 
@@ -179,6 +207,9 @@ namespace Rovia.UI.Automation.Tests.Application
             Thread.Sleep(5000); //wait 5 seconds to clear cookies.
         }
 
+        /// <summary>
+        /// Confirm unwanted alert coming on page those are freezing browser
+        /// </summary>
         public void ConfirmAlert()
         {
             try
@@ -187,5 +218,7 @@ namespace Rovia.UI.Automation.Tests.Application
             }
             catch (NoAlertPresentException) { }
         }
+
+        #endregion
     }
 }

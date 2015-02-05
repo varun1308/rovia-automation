@@ -1,22 +1,20 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.DataBinder;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Utility;
-
-namespace Rovia.UI.Automation.Tests.Tests
+﻿namespace Rovia.UI.Automation.Tests.Tests
 {
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using DataBinder;
+    using Logger;
+    using ScenarioObjects;
+    using Utility;
+
+    // Test Class holding Activity Product specific tests
     [TestClass]
     public class ActivityTestFixtures
     {
+        private static LogManager _logManager;
         public TestContext TestContext { get; set; }
         public static ICriteriaDataBinder DataBinder { get; set; }
-        private static LogManager _logManager;
-
+        
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
@@ -37,21 +35,22 @@ namespace Rovia.UI.Automation.Tests.Tests
             TestHelper.SaveScreenShot(TestContext);
             _logManager.SubmitLog(TestHelper.TripsErrorUI);
         }
-
-
-
+        
+        //Test executing Activity product search to book flow
         [TestMethod, DataSource("ActivityCompleteBookingFlows"), TestCategory("Sanity")]
         public void ActivityCompleteBookingFlowTests()
         {
             Execute();
         }
 
+        //Test executing Activity results page filters and matrix validations
         [TestMethod, DataSource("ActivityMatrixSortAndFilters"), TestCategory("Sanity")]
         public void ActivityMatrixSortAndFiltersTests()
         {
             Execute();
         }
 
+        //Executes the tests depending on pipeline and given criteria
         private void Execute()
         {
             try

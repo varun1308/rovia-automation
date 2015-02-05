@@ -1,12 +1,21 @@
-﻿using System.Collections.Generic;
-
-namespace Rovia.UI.Automation.Logger
+﻿namespace Rovia.UI.Automation.Logger
 {
+    using System.Collections.Generic;
+    /// <summary>
+    /// Class for summary log file
+    /// </summary>
     class SummaryEntry
     {
-        public string Id { get; set; }
+        #region private fileds
         private readonly List<string> _passedSteps;
         private readonly List<string> _failedSteps;
+        #endregion
+
+        #region Public Properties
+        public string Id { get; set; }
+        #endregion
+
+        #region public Members
         public SummaryEntry()
         {
             _passedSteps=new List<string>();
@@ -30,5 +39,6 @@ namespace Rovia.UI.Automation.Logger
                        ? "FAILED"
                        : "PASSED");
         }
+        #endregion
     }
 }

@@ -1,145 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using Configuration;
+
+    /// <summary>
+    /// Hotel results page filters container
+    /// </summary>
     class HotelResultFilters : UIPage, IResultFilters
     {
+        #region Private Fields
+
         private List<string> _appliedFilters;
         private List<string> _failedFilters;
 
-        #region IResultFilter Members
-
-        public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
-        {
-            if (!AreResultsAvailable())
-                return;
-            _appliedFilters = GetAppliedFilters().ToList();
-            var hotelFilters = preSearchFilters as HotelPreSearchFilters;
-            if (hotelFilters == null)
-                throw new InvalidInputException("PreSearchFilters");
-            _failedFilters = new List<string>();
-
-            if (hotelFilters.AdditionalPreferences != null && hotelFilters.AdditionalPreferences.Count > 0 && !_appliedFilters.Contains("Amenities"))
-                _failedFilters.Add("Amenities");
-            if (!string.IsNullOrEmpty(hotelFilters.HotelName))
-            {
-                if (_appliedFilters.Contains("Hotel Name"))
-                    ValidateHotelNameFilter(hotelFilters.HotelName);
-                else
-                    _failedFilters.Add("Hotel Name");
-            }
-            if (!string.IsNullOrEmpty(hotelFilters.StarRating))
-                if (_appliedFilters.Contains("Star Rating"))
-                    ValidateRatingRangeFilter(new RatingRange() { From = int.Parse(hotelFilters.StarRating), To = 5 });
-                else
-                    _failedFilters.Add("Star Rating");
-            if (_failedFilters.Any())
-                throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
-        }
-
-        public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
-        {
-            var hotelPostSearchFilters = postSearchFilters as HotelPostSearchFilters;
-            if (hotelPostSearchFilters == null)
-                throw new InvalidInputException("PostSearchFilters");
-            _appliedFilters = new List<string>();
-            if (hotelPostSearchFilters.Matrix != null)
-            {
-                SetMatrix(hotelPostSearchFilters.Matrix as HotelMatrix);
-                if (!AreResultsAvailable())
-                    hotelPostSearchFilters.Matrix = null;
-            }
-            if (hotelPostSearchFilters.PriceRange != null)
-            {
-                SetPriceRangeFilter(hotelPostSearchFilters.PriceRange);
-                if (!AreResultsAvailable())
-                    hotelPostSearchFilters.PriceRange = null;
-                else
-                    _appliedFilters.Add("Price");
-            }
-            if (hotelPostSearchFilters.HotelName != null)
-            {
-                SetHotelNameFilter(hotelPostSearchFilters.HotelName);
-                if (!AreResultsAvailable())
-                    hotelPostSearchFilters.HotelName = null;
-                else
-                    _appliedFilters.Add("Hotel Name");
-            }
-            if (hotelPostSearchFilters.RatingRange != null)
-            {
-                SetRatingRangeFilter(hotelPostSearchFilters.RatingRange);
-                if (!AreResultsAvailable())
-                    hotelPostSearchFilters.RatingRange = null;
-                else
-                    _appliedFilters.Add("Star Rating");
-            }
-            if (hotelPostSearchFilters.Amenities != null)
-            {
-                SetAmenitiesFilter(hotelPostSearchFilters.Amenities);
-                if (!AreResultsAvailable())
-                    hotelPostSearchFilters.Amenities = null;
-                else
-                    _appliedFilters.Add("Amenities");
-            }
-            if (hotelPostSearchFilters.PreferredLocation != null)
-            {
-                SetPreferredLocationFilter(hotelPostSearchFilters.PreferredLocation);
-                if (!AreResultsAvailable())
-                    hotelPostSearchFilters.PreferredLocation = null;
-                else
-                    _appliedFilters.Add("Preferred Location");
-            }
-            if (hotelPostSearchFilters.DistanceRange != null)
-            {
-                SetDistanceRangeFilter(hotelPostSearchFilters.DistanceRange);
-                if (!AreResultsAvailable())
-                    hotelPostSearchFilters.DistanceRange = null;
-                else
-                    _appliedFilters.Add("Distance");
-            }
-            if (hotelPostSearchFilters.SortBy != SortBy.Featured)
-            {
-                SortResults(hotelPostSearchFilters.SortBy);
-            }
-            var unAppliedFilters = _appliedFilters.Except(GetAppliedFilters()).ToList();
-            if (unAppliedFilters.Any())
-                throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
-        }
-
-        public void ValidateFilters(PostSearchFilters postSearchFilters)
-        {
-            var hotelPostSearchFilters = postSearchFilters as HotelPostSearchFilters;
-            _failedFilters = new List<string>();
-            if (hotelPostSearchFilters == null)
-                throw new InvalidInputException("PostSearchFilters");
-            if (hotelPostSearchFilters.PriceRange != null)
-                ValidatePriceRangeFilter(hotelPostSearchFilters.PriceRange);
-            if (hotelPostSearchFilters.HotelName != null)
-                ValidateHotelNameFilter(hotelPostSearchFilters.HotelName);
-            if (hotelPostSearchFilters.RatingRange != null)
-                ValidateRatingRangeFilter(hotelPostSearchFilters.RatingRange);
-            if (hotelPostSearchFilters.SortBy != SortBy.Featured)
-                ValidateSort(hotelPostSearchFilters.SortBy);
-            if (hotelPostSearchFilters.Matrix != null)
-            {
-                ValidateMatrix(hotelPostSearchFilters.Matrix as HotelMatrix);
-                SortResults(hotelPostSearchFilters.SortBy);
-            }
-            if (_failedFilters.Any())
-                throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
-        }
-
         #endregion
 
-        #region private Hotel Specific members
+        #region Private Members
         
         private void WaitWhilePreLoaderIsDisplayed()
         {
@@ -354,6 +237,143 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             WaitAndGetBySelector("searchIcon", ApplicationSettings.TimeOut.Fast).Click();
             WaitWhilePreLoaderIsDisplayed();
         }
+
+        #endregion
+
+        #region IResultFilter Members
+
+        /// <summary>
+        /// Verify pre search filters on resulting itineraries
+        /// </summary>
+        /// <param name="preSearchFilters">Applied pre search filter object</param>
+        public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
+        {
+            if (!AreResultsAvailable())
+                return;
+            _appliedFilters = GetAppliedFilters().ToList();
+            var hotelFilters = preSearchFilters as HotelPreSearchFilters;
+            if (hotelFilters == null)
+                throw new InvalidInputException("PreSearchFilters");
+            _failedFilters = new List<string>();
+
+            if (hotelFilters.AdditionalPreferences != null && hotelFilters.AdditionalPreferences.Count > 0 && !_appliedFilters.Contains("Amenities"))
+                _failedFilters.Add("Amenities");
+            if (!string.IsNullOrEmpty(hotelFilters.HotelName))
+            {
+                if (_appliedFilters.Contains("Hotel Name"))
+                    ValidateHotelNameFilter(hotelFilters.HotelName);
+                else
+                    _failedFilters.Add("Hotel Name");
+            }
+            if (!string.IsNullOrEmpty(hotelFilters.StarRating))
+                if (_appliedFilters.Contains("Star Rating"))
+                    ValidateRatingRangeFilter(new RatingRange() { From = int.Parse(hotelFilters.StarRating), To = 5 });
+                else
+                    _failedFilters.Add("Star Rating");
+            if (_failedFilters.Any())
+                throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
+        }
+
+        /// <summary>
+        /// Set Filters and Matrix on result page
+        /// </summary>
+        /// <param name="postSearchFilters">Filters and matrix parameter to set</param>
+        public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
+        {
+            var hotelPostSearchFilters = postSearchFilters as HotelPostSearchFilters;
+            if (hotelPostSearchFilters == null)
+                throw new InvalidInputException("PostSearchFilters");
+            _appliedFilters = new List<string>();
+            if (hotelPostSearchFilters.Matrix != null)
+            {
+                SetMatrix(hotelPostSearchFilters.Matrix as HotelMatrix);
+                if (!AreResultsAvailable())
+                    hotelPostSearchFilters.Matrix = null;
+            }
+            if (hotelPostSearchFilters.PriceRange != null)
+            {
+                SetPriceRangeFilter(hotelPostSearchFilters.PriceRange);
+                if (!AreResultsAvailable())
+                    hotelPostSearchFilters.PriceRange = null;
+                else
+                    _appliedFilters.Add("Price");
+            }
+            if (hotelPostSearchFilters.HotelName != null)
+            {
+                SetHotelNameFilter(hotelPostSearchFilters.HotelName);
+                if (!AreResultsAvailable())
+                    hotelPostSearchFilters.HotelName = null;
+                else
+                    _appliedFilters.Add("Hotel Name");
+            }
+            if (hotelPostSearchFilters.RatingRange != null)
+            {
+                SetRatingRangeFilter(hotelPostSearchFilters.RatingRange);
+                if (!AreResultsAvailable())
+                    hotelPostSearchFilters.RatingRange = null;
+                else
+                    _appliedFilters.Add("Star Rating");
+            }
+            if (hotelPostSearchFilters.Amenities != null)
+            {
+                SetAmenitiesFilter(hotelPostSearchFilters.Amenities);
+                if (!AreResultsAvailable())
+                    hotelPostSearchFilters.Amenities = null;
+                else
+                    _appliedFilters.Add("Amenities");
+            }
+            if (hotelPostSearchFilters.PreferredLocation != null)
+            {
+                SetPreferredLocationFilter(hotelPostSearchFilters.PreferredLocation);
+                if (!AreResultsAvailable())
+                    hotelPostSearchFilters.PreferredLocation = null;
+                else
+                    _appliedFilters.Add("Preferred Location");
+            }
+            if (hotelPostSearchFilters.DistanceRange != null)
+            {
+                SetDistanceRangeFilter(hotelPostSearchFilters.DistanceRange);
+                if (!AreResultsAvailable())
+                    hotelPostSearchFilters.DistanceRange = null;
+                else
+                    _appliedFilters.Add("Distance");
+            }
+            if (hotelPostSearchFilters.SortBy != SortBy.Featured)
+            {
+                SortResults(hotelPostSearchFilters.SortBy);
+            }
+            var unAppliedFilters = _appliedFilters.Except(GetAppliedFilters()).ToList();
+            if (unAppliedFilters.Any())
+                throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
+        }
+
+        /// <summary>
+        /// Validate applied filters and matrix on results page
+        /// </summary>
+        /// <param name="postSearchFilters">Applied filters and matrix object</param>
+        public void ValidateFilters(PostSearchFilters postSearchFilters)
+        {
+            var hotelPostSearchFilters = postSearchFilters as HotelPostSearchFilters;
+            _failedFilters = new List<string>();
+            if (hotelPostSearchFilters == null)
+                throw new InvalidInputException("PostSearchFilters");
+            if (hotelPostSearchFilters.PriceRange != null)
+                ValidatePriceRangeFilter(hotelPostSearchFilters.PriceRange);
+            if (hotelPostSearchFilters.HotelName != null)
+                ValidateHotelNameFilter(hotelPostSearchFilters.HotelName);
+            if (hotelPostSearchFilters.RatingRange != null)
+                ValidateRatingRangeFilter(hotelPostSearchFilters.RatingRange);
+            if (hotelPostSearchFilters.SortBy != SortBy.Featured)
+                ValidateSort(hotelPostSearchFilters.SortBy);
+            if (hotelPostSearchFilters.Matrix != null)
+            {
+                ValidateMatrix(hotelPostSearchFilters.Matrix as HotelMatrix);
+                SortResults(hotelPostSearchFilters.SortBy);
+            }
+            if (_failedFilters.Any())
+                throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
+        }
+
         #endregion
     }
 }

@@ -1,19 +1,78 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.ScenarioObjects.Activity;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
 {
+    using System;
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Criteria;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using ScenarioObjects.Activity;
+    using Configuration;
+
+    /// <summary>
+    /// Activity results page holder for Itinerary,Filter and Matrix
+    /// </summary>
     public class ActivityHolder : UIPage
     {
+        #region Private Fields
+
         private ActivityResult _addedResult;
+
+        #endregion
+
+        #region Private Members
+
+        private bool AddToCart(IUIWebElement btnAddToCart)
+        {
+            btnAddToCart.Click();
+            //var divloader = WaitAndGetBySelector("divLoader", ApplicationSettings.TimeOut.Fast);
+            try
+            {
+                while (true)
+                {
+                    GetUIElements("alerts").ForEach(x =>
+                    {
+                        if (x.Displayed)
+                            throw new Alert(x.Text);
+                    });
+                    Thread.Sleep(1000);
+                }
+            }
+            catch (Exception exception)
+            {
+                LogManager.GetInstance().LogWarning(exception.Message);
+            }
+            var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Slow);
+            if (btnCheckOut != null && btnCheckOut.Displayed)
+            {
+                _addedResult = ParseResultFromCart();
+                btnCheckOut.Click();
+                return true;
+            }
+            WaitAndGetBySelector("btnCancel", ApplicationSettings.TimeOut.Slow).Click();
+            return false;
+        }
+
+        private ActivityResult ParseResultFromCart()
+        {
+            var activityDetails = GetUIElements("activityDetails").Select(x => x.Text).ToArray();
+            return new ActivityResult()
+            {
+                ProductName = activityDetails[1],
+                Date = DateTime.Parse(WaitAndGetBySelector("activityDate", ApplicationSettings.TimeOut.Fast).Text.Remove(0, 5).Trim()),
+                Amount = new Amount(WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text)
+            };
+        }
+        
+        #endregion
+
+        #region Internal Members
+
+        /// <summary>
+        /// Wait for result activities to load
+        /// </summary>
         internal void WaitForLoad()
         {
             try
@@ -33,6 +92,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
             }
         }
 
+        /// <summary>
+        /// Add Activity product to cart
+        /// </summary>
+        /// <param name="criteria">Activity search criteria object</param>
+        /// <returns></returns>
         internal Results AddToCart(ActivitySearchCriteria criteria)
         {
 
@@ -47,7 +111,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
             else
                 criteria.AdultAgeGroup = new AgeGroup(GetUIElements("adultAgeGrp")[0].Text);
             var btnAddChildren = GetUIElements("childrenCount").Where((x, index) => index % 2 == 1).ToArray();
-            
+
             if (!btnAddChildren.Any())
                 criteria.Passengers.Children = 0;
             else
@@ -89,46 +153,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
             return null;
         }
 
-        private bool AddToCart(IUIWebElement btnAddToCart)
-        {
-            btnAddToCart.Click();
-            //var divloader = WaitAndGetBySelector("divLoader", ApplicationSettings.TimeOut.Fast);
-            try
-            {
-                while (true)
-                {
-                    GetUIElements("alerts").ForEach(x =>
-                    {
-                        if (x.Displayed)
-                            throw new Alert(x.Text);
-                    });
-                    Thread.Sleep(1000);
-                }
-            }
-            catch (Exception exception)
-            {
-                LogManager.GetInstance().LogWarning(exception.Message);
-            }
-            var btnCheckOut = WaitAndGetBySelector("btnCheckOut", ApplicationSettings.TimeOut.Slow);
-            if (btnCheckOut != null && btnCheckOut.Displayed)
-            {
-                _addedResult = ParseResultFromCart();
-                btnCheckOut.Click();
-                return true;
-            }
-            WaitAndGetBySelector("btnCancel", ApplicationSettings.TimeOut.Slow).Click();
-            return false;
-        }
-
-        private ActivityResult ParseResultFromCart()
-        {
-            var activityDetails = GetUIElements("activityDetails").Select(x => x.Text).ToArray();
-            return new ActivityResult()
-                {
-                    ProductName = activityDetails[1],
-                    Date = DateTime.Parse(WaitAndGetBySelector("activityDate", ApplicationSettings.TimeOut.Fast).Text.Remove(0, 5).Trim()),
-                    Amount = new Amount(WaitAndGetBySelector("price", ApplicationSettings.TimeOut.Fast).Text)
-                };
-        }
+        #endregion
     }
 }

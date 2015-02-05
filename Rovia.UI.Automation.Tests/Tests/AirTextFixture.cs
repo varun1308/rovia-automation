@@ -1,19 +1,20 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Rovia.UI.Automation.DataBinder;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.Tests.Utility;
-using Rovia.UI.Automation.ScenarioObjects;
-
-namespace Rovia.UI.Automation.Tests.Tests
+﻿namespace Rovia.UI.Automation.Tests.Tests
 {
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using DataBinder;
+    using Logger;
+    using Utility;
+    using ScenarioObjects;
+
+    // Test Class holding Air Product specific tests
     [TestClass]
     public class AirTextFixture
     {
-        public TestContext TestContext { get; set; }
-        public static ICriteriaDataBinder DataBinder { get; set; }
         private static LogManager _logManager;
-
+        public TestContext TestContext { get; set; }
+        private static ICriteriaDataBinder DataBinder { get; set; }
+        
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
@@ -35,66 +36,77 @@ namespace Rovia.UI.Automation.Tests.Tests
             _logManager.SubmitLog(TestHelper.TripsErrorUI);
         }
 
-        [TestMethod,DataSource("Air_Amadeus_OneWay"),TestCategory("Sanity")]
+        //Test executing Air Amadeus Supplier for OneWay Trip
+        [TestMethod, DataSource("Air_Amadeus_OneWay"), TestCategory("Sanity")]
         public void Air_Amadeus_OneWay()
         {
             Execute();
         }
 
+        //Test executing Air Amadeus Supplier for RoundTrip Trip
         [TestMethod, DataSource("Air_Amadeus_RoundTrip"), TestCategory("Sanity")]
         public void Air_Amadeus_RoundTrip()
         {
             Execute();
         }
 
-        [TestMethod,DataSource("Air_Amadeus_Multicity"),TestCategory("Sanity")]
+        //Test executing Air Amadeus Supplier for Multicity Trip
+        [TestMethod, DataSource("Air_Amadeus_Multicity"), TestCategory("Sanity")]
         public void Air_Amadeus_Multicity()
         {
             Execute();
         }
 
-        [TestMethod, DataSource("Air_Mystifly_OneWay"),TestCategory("Sanity")]
+        //Test executing Air Mystifly Supplier for OneWay Trip
+        [TestMethod, DataSource("Air_Mystifly_OneWay"), TestCategory("Sanity")]
         public void Air_Mystifly_OneWay()
         {
             Execute();
         }
 
-        [TestMethod, DataSource("Air_Mystifly_RoundTrip"),TestCategory("Sanity")]
+        //Test executing Air Mystifly Supplier for RoundTrip Trip
+        [TestMethod, DataSource("Air_Mystifly_RoundTrip"), TestCategory("Sanity")]
         public void Air_Mystifly_RoundTrip()
         {
             Execute();
         }
 
-        [TestMethod, DataSource("Air_Mystifly_Multicity"),TestCategory("Sanity")]
+        //Test executing Air Mystifly Supplier for Multicity Trip
+        [TestMethod, DataSource("Air_Mystifly_Multicity"), TestCategory("Sanity")]
         public void Air_Mystifly_Multicity()
         {
             Execute();
         }
 
-        [TestMethod, DataSource("Air_Sabre_OneWay"),TestCategory("Sanity")]
+        //Test executing Air Sabre Supplier for OneWay Trip
+        [TestMethod, DataSource("Air_Sabre_OneWay"), TestCategory("Sanity")]
         public void Air_Sabre_OneWay()
         {
             Execute();
         }
 
-        [TestMethod, DataSource("Air_Sabre_RoundTrip"),TestCategory("Sanity")]
+        //Test executing Air Sabre Supplier for OneWay Trip
+        [TestMethod, DataSource("Air_Sabre_RoundTrip"), TestCategory("Sanity")]
         public void Air_Sabre_RoundTrip()
         {
             Execute();
         }
 
-        [TestMethod,DataSource("Air_WorldSpan_OneWay"),TestCategory("Sanity")]
+        //Test executing Air WorldSpan Supplier for OneWay Trip
+        [TestMethod, DataSource("Air_WorldSpan_OneWay"), TestCategory("Sanity")]
         public void Air_WorldSpan_OneWay()
         {
             Execute();
         }
 
-        [TestMethod,DataSource("Air_WorldSpan_RoundTrip"),TestCategory("Sanity")]
+        //Test executing Air WorldSpan Supplier for RoundTrip Trip
+        [TestMethod, DataSource("Air_WorldSpan_RoundTrip"), TestCategory("Sanity")]
         public void Air_WorldSpan_RoundTrip()
         {
             Execute();
         }
 
+        //Executes the tests depending on pipeline and given criteria
         private void Execute()
         {
             try
@@ -111,6 +123,5 @@ namespace Rovia.UI.Automation.Tests.Tests
                 Assert.Fail(exception.Message);
             }
         }
-
     }
 }

@@ -7,12 +7,13 @@ using Rovia.UI.Automation.ScenarioObjects;
 
 namespace Rovia.UI.Automation.Tests.Tests
 {
+    // Test Class holding Hotel Product specific tests
     [TestClass]
     public class HotelTextFixture
     {
+        private static LogManager _logManager;
         public TestContext TestContext { get; set; }
         public static ICriteriaDataBinder DataBinder { get; set; }
-        private static LogManager _logManager;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -35,54 +36,63 @@ namespace Rovia.UI.Automation.Tests.Tests
             _logManager.SubmitLog(TestHelper.TripsErrorUI);
         }
 
+        //Test executing Hotel AmadeusWS supplier booking flow
         [TestMethod,TestCategory("Sanity"),DataSource("AmedusWSHotelBookingFlow")]
         public void Hotel_AmedusWsBookingFlow()
         {
             Execute();
         }
 
+        //Test executing Hotel HotelsCom supplier booking flow
         [TestMethod, TestCategory("Sanity"), DataSource("HotelsComHotelBookingFlow")]
         public void Hotel_HotelsComBookingFlow()
         {
             Execute();
         }
 
+        //Test executing Hotel HotelBeds supplier booking flow
         [TestMethod, TestCategory("Sanity"), DataSource("HotelBedsHotelBookingFlow")]
         public void HotelBedsHotelBookingFlow()
         {
             Execute();
         }
 
+        //Test executing Hotel Pegasus supplier booking flow
         [TestMethod, TestCategory("Sanity"), DataSource("PegasusHotelBookingFlow")]
         public void Hotel_PegasusBookingFlow()
         {
             Execute();
         }
 
+        //Test executing Hotel PegasusSpl supplier booking flow
         [TestMethod, TestCategory("Sanity"), DataSource("PegasussplHotelBookingFlow")]
         public void Hotel_PegasussplBookingFlow()
         {
             Execute();
         }
 
+        //Test executing Hotel PricelineV3 supplier booking flow
         [TestMethod, TestCategory("Sanity"), DataSource("PriceLineV3HotelBookingFlow")]
         public void Hotel_PriceLineV3BookingFlow()
         {
             Execute();
         }
 
-        [TestMethod, TestCategory("Sanity"), DataSource("TuricoTGSHotelBookingFlow")]
-        public void Hotel_TuricoTgsBookingFlow()
+        //Test executing Hotel TouricoTGS supplier booking flow
+        [TestMethod, TestCategory("Sanity"), DataSource("TouricoTGSHotelBookingFlow")]
+        public void Hotel_TouricoTGSBookingFlow()
         {
             Execute();
         }
 
+        //Test executing Hotel results page validations for filters and matrix
         [TestMethod, TestCategory("Sanity"), DataSource("FiltersAndMatrixScenarios")]
         public void Hotel_FiltersAndMatrixTests()
         {
             Execute();
         }
 
+        //Executes the tests depending on pipeline and given criteria
         private void Execute()
         {
             try

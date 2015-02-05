@@ -1,7 +1,7 @@
-﻿using Rovia.UI.Automation.ScenarioObjects;
-
-namespace Rovia.UI.Automation.Criteria
+﻿namespace Rovia.UI.Automation.Criteria
 {
+    using ScenarioObjects;
+
     public class HotelSearchCriteria:SearchCriteria
     {
         public string Location { get; set; }

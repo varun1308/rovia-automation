@@ -1,23 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Utility;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using Configuration;
+    using Utility;
+
+    /// <summary>
+    /// Air results page filters container
+    /// </summary>
     public class AirResultFilters : UIPage, IResultFilters
     {
-        #region private Air Specific members
+
+        #region Private Fields
 
         private AirMatrix _airMatrix;
         private List<string> _failedFilters;
         private List<string> _appliedFilters;
+
+        #endregion
+
+        #region Private Members
 
         private IEnumerable<string> GetAppliedFilters()
         {
@@ -215,8 +222,12 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         #endregion
 
-        #region IResultPage Members
+        #region Public Members
 
+        /// <summary>
+        /// Verify pre search filters on resulting itineraries
+        /// </summary>
+        /// <param name="preSearchFilters">Applied pre search filter object</param>
         public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             _appliedFilters = GetAppliedFilters().ToList();
@@ -247,6 +258,10 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 throw new ValidationException("Validation Failed for following filters : " + string.Join(",", _failedFilters));
         }
 
+        /// <summary>
+        /// Set Filters and Matrix on result page
+        /// </summary>
+        /// <param name="postSearchFilters">Filters and matrix parameter to set</param>
         public void SetPostSearchFilters(PostSearchFilters postSearchFilters)
         {
             var airPostSearchFilters = postSearchFilters as AirPostSearchFilters;
@@ -275,7 +290,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             if (unAppliedFilters.Any())
                 throw new ValidationException("Following Filters were not applied : " + string.Join(",", unAppliedFilters));
         }
-
+        
+        /// <summary>
+        /// Validate applied filters and matrix on results page
+        /// </summary>
+        /// <param name="postSearchFilters">Applied filters and matrix object</param>
         public void ValidateFilters(PostSearchFilters postSearchFilters)
         {
             NoResultsAvailableWarning();

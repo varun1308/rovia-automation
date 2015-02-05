@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.ScenarioObjects.Activity;
-using Rovia.UI.Automation.ScenarioObjects.Air;
-using Rovia.UI.Automation.ScenarioObjects.Hotel;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages
+﻿namespace Rovia.UI.Automation.Tests.Pages
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AppacitiveAutomationFramework;
+    using Logger;
+    using ScenarioObjects;
+    using ScenarioObjects.Activity;
+    using ScenarioObjects.Air;
+    using ScenarioObjects.Hotel;
+    using Configuration;
+
+    /// <summary>
+    /// This class holds fields and methods for product on trip page
+    /// </summary>
     public class TripProductHolder : UIPage
     {
+        #region Private Members 
+
         private TripProduct ParseHotelTripProduct(IUIWebElement tripProduct)
         {
             var stayperiod = tripProduct.GetUIElements("stayDates").Select(x => x.Text).ToArray();
@@ -56,7 +61,6 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
             catch (Exception exception)
             {
-
                 throw;
             }
         }
@@ -96,8 +100,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 }).ToList();
             return airSegments;
         }
-
-
+        
         private TripProduct ParseCarTripProduct(IUIWebElement tripProduct)
         {
             var title = tripProduct.WaitAndGetBySelector("title", ApplicationSettings.TimeOut.Fast).Text.Split(' ');
@@ -128,6 +131,14 @@ namespace Rovia.UI.Automation.Tests.Pages
             return TripProductType.Air;
         }
 
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Get trip products from trip folder or passenger info page
+        /// </summary>
+        /// <returns>list of trip product object</returns>
         public List<TripProduct> GetTripProducts()
         {
             return GetUIElements("tripProducts").Select(x =>
@@ -147,6 +158,7 @@ namespace Rovia.UI.Automation.Tests.Pages
                 }
             }).ToList();
         }
-
+        
+        #endregion
     }
 }

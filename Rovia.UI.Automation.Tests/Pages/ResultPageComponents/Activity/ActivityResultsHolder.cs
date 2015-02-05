@@ -1,21 +1,28 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AppacitiveAutomationFramework;
-using OpenQA.Selenium;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.ScenarioObjects.Activity;
-using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
+    using System.Linq;
+    using AppacitiveAutomationFramework;
+    using OpenQA.Selenium;
+    using Criteria;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using Configuration;
+    using Activity;
+
+    /// <summary>
+    /// Activity Results page itineraries container
+    /// </summary>
     public class ActivityResultsHolder : UIPage, IResultsHolder
     {
+        #region Private Fields
+
         private Results _selectedItinerary;
         public ActivityHolder ActivityHolder { private get; set; }
+
+        #endregion
+
+        #region Private Members
 
         private void SelectActivity(SearchCriteria criteria)
         {
@@ -49,12 +56,25 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Check if results visible
+        /// </summary>
+        /// <returns></returns>
         public bool IsVisible()
         {
             var div = WaitAndGetBySelector("divResultHolder", ApplicationSettings.TimeOut.Slow);
             return div != null && div.Displayed;
         }
         
+        /// <summary>
+        /// Add activity product to cart
+        /// </summary>
+        /// <param name="criteria">criteria object to add itinerary</param>
+        /// <returns></returns>
         public Results AddToCart(SearchCriteria criteria)
         {
             try
@@ -69,5 +89,6 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
+        #endregion
     }
 }

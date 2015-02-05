@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects.Activity;
-using Rovia.UI.Automation.ScenarioObjects.Hotel;
-using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Utility;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Validators;
-namespace Rovia.UI.Automation.Tests.Pages
+﻿namespace Rovia.UI.Automation.Tests.Pages
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Exceptions;
+    using Logger;
+    using Configuration;
+    using Utility;
+    using ScenarioObjects;
+    using Validators;
+
+    /// <summary>
+    /// This class contains all the fields and methods for passenger info page
+    /// </summary>
     public class PassengerInfoPage : UIPage
     {
-        public TripProductHolder TripProductHolder { get; set; }
         #region Private Members
-
 
         private static List<Passenger> _passengers;
 
@@ -107,63 +106,8 @@ namespace Rovia.UI.Automation.Tests.Pages
                    {"gender", GetUIElements("gender")},
                };
         }
-        
-        
-        #endregion
 
-        internal void EditPassengerInfo()
-        {
-            WaitAndGetBySelector("lnkEditPassengerInfo", ApplicationSettings.TimeOut.Slow).Click();
-            if (IsInputFormVisible() == false)
-                throw new UIElementNullOrNotVisible("PassengerDetails InputForm");
-            WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
-            WaitForConfirmationPageLoad();
-        }
-
-        internal void ConfirmPassengers()
-        {
-            VerifyPassengerDetails();
-            WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
-        }
-
-        public void WaitForPageLoad(Action confirmAlert)
-        {
-            while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Fast) == null)
-                confirmAlert();
-
-            var startCount = Environment.TickCount;
-            while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Fast).Displayed)
-            {
-                if (Environment.TickCount - startCount > 120000)
-                    throw new PageLoadFailed("passengerInfoPage", new TimeoutException());
-            }
-            if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Safe).Displayed == false)
-                throw new PageLoadFailed("PassengerInfoPage");
-        }
-
-
-        public bool IsLeavePopupVisible()
-        {
-            try
-            {
-                var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
-                return divDontLeavePopup != null && divDontLeavePopup.Displayed;
-            }
-            catch (OpenQA.Selenium.StaleElementReferenceException)
-            {
-                LogManager.GetInstance().LogWarning("Rovia Award Popup - Stale element reference caught and suppressed.");
-            }
-            return false;
-        }
-
-        internal void ValidateTripDetails(Results selectedItinerary)
-        {
-            TripProductHolder.GetTripProducts().ForEach(x=>this.ValidateTripProduct(x,selectedItinerary));
-        }
-
-
-
-        public void WaitForConfirmationPageLoad()
+        private void WaitForConfirmationPageLoad()
         {
             try
             {
@@ -182,6 +126,39 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
         }
 
+        #endregion
+
+        #region Public Properties
+
+        public TripProductHolder TripProductHolder { get; set; }
+
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Wait for passenger info page to load
+        /// </summary>
+        /// <param name="confirmAlert">Do action if rovia award popup appears</param>
+        public void WaitForPageLoad(Action confirmAlert)
+        {
+            while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Fast) == null)
+                confirmAlert();
+
+            var startCount = Environment.TickCount;
+            while (WaitAndGetBySelector("SpinningDiv", ApplicationSettings.TimeOut.Fast).Displayed)
+            {
+                if (Environment.TickCount - startCount > 120000)
+                    throw new PageLoadFailed("passengerInfoPage", new TimeoutException());
+            }
+            if (WaitAndGetBySelector("divPassengerHolder", ApplicationSettings.TimeOut.Safe).Displayed == false)
+                throw new PageLoadFailed("PassengerInfoPage");
+        }
+
+        /// <summary>
+        /// Enter passenger details and submit to confirm passenger info page
+        /// </summary>
+        /// <param name="passengerDetails"></param>
         public void SubmitPassengerDetails(PassengerDetails passengerDetails)
         {
             Thread.Sleep(1500);
@@ -197,6 +174,56 @@ namespace Rovia.UI.Automation.Tests.Pages
             WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Slow).Click();
             WaitForConfirmationPageLoad();
         }
+
+        /// <summary>
+        /// Edit passenger information
+        /// </summary>
+        public void EditPassengerInfo()
+        {
+            WaitAndGetBySelector("lnkEditPassengerInfo", ApplicationSettings.TimeOut.Slow).Click();
+            if (IsInputFormVisible() == false)
+                throw new UIElementNullOrNotVisible("PassengerDetails InputForm");
+            WaitAndGetBySelector("Submitbutton", ApplicationSettings.TimeOut.Fast).Click();
+            WaitForConfirmationPageLoad();
+        }
+
+        /// <summary>
+        /// Confirm the passenger details provided on passenger info page
+        /// </summary>
+        public void ConfirmPassengers()
+        {
+            VerifyPassengerDetails();
+            WaitAndGetBySelector("ConfirmPxButton", ApplicationSettings.TimeOut.Slow).Click();
+        }
+       
+        /// <summary>
+        /// Validate trip  details on passenger info page
+        /// </summary>
+        /// <param name="selectedItinerary">added itinerary to cart</param>
+        public void ValidateTripDetails(Results selectedItinerary)
+        {
+            TripProductHolder.GetTripProducts().ForEach(x => this.ValidateTripProduct(x, selectedItinerary));
+        }
+
+        /// <summary>
+        /// Waits for unwanted alerts on browser and confirm them
+        /// </summary>
+        /// <returns></returns>
+        public bool IsLeavePopupVisible()
+        {
+            try
+            {
+                var divDontLeavePopup = WaitAndGetBySelector("dontLeavePopup", ApplicationSettings.TimeOut.Slow);
+                return divDontLeavePopup != null && divDontLeavePopup.Displayed;
+            }
+            catch (OpenQA.Selenium.StaleElementReferenceException)
+            {
+                LogManager.GetInstance().LogWarning("Rovia Award Popup - Stale element reference caught and suppressed.");
+            }
+            return false;
+        }
+        
+        #endregion
 
     }
 }

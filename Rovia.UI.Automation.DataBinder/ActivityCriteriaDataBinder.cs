@@ -1,43 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.ScenarioObjects;
-
-namespace Rovia.UI.Automation.DataBinder
+﻿namespace Rovia.UI.Automation.DataBinder
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using Criteria;
+    using Exceptions;
+    using ScenarioObjects;
+
+    /// <summary>
+    /// Activity Search Criteria data binder
+    /// </summary>
     public class ActivityCriteriaDataBinder : ICriteriaDataBinder
     {
-        public SearchCriteria GetCriteria(DataRow dataRow)
-        {
-            try
-            {
-                var scenario = new ActivitySearchCriteria()
-                {
-                    Pipeline = (string)dataRow["ExecutionPipeline"],
-                    UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
-                    Description = (string)dataRow["Description"],
-                    ShortLocation = dataRow["ShortLocation"].ToString().Replace("..", ","),
-                    Location = dataRow["Location"].ToString().Replace("..", ","),
-                    Passengers = ParsePassengers(dataRow["Adults"].ToString(), dataRow["Children"].ToString(), dataRow["Infants"].ToString()),
-                    Filters = GetFilters(dataRow["PostSearchFilters"].ToString(), dataRow["PostSearchFilterValues"].ToString()),
-
-                    FromDate = DateTime.Now.AddDays(int.Parse(dataRow["StartDate"].ToString())),
-                    ToDate = DateTime.Now.AddDays(int.Parse(dataRow["EndDate"].ToString())),
-                };
-
-                SetPaymentMode(scenario, dataRow["PaymentMode"].ToString());
-                return scenario;
-            }
-            catch (Exception exception)
-            {
-                throw new InvalidInputException("DataRow to AirCriteriaDataBinder.GetCriteria", exception);
-            }
-        }
+        #region Private Members
 
         private static void SetPaymentMode(ActivitySearchCriteria scenario, string paymentMode)
         {
@@ -49,17 +24,17 @@ namespace Rovia.UI.Automation.DataBinder
                 scenario.CardType = StringToEnum<CreditCardType>(paymentOptions[1]);
         }
 
-        private Passengers ParsePassengers(string adults, string children, string infant)
+        private static Passengers ParsePassengers(string adults, string children, string infant)
         {
             return new Passengers()
-                {
-                    Adults = string.IsNullOrEmpty(adults) ? 0 : int.Parse(adults),
-                    Children = string.IsNullOrEmpty(children) ? 0 : int.Parse(children),
-                    Infants = string.IsNullOrEmpty(infant) ? 0 : int.Parse(infant)
-                };
+            {
+                Adults = string.IsNullOrEmpty(adults) ? 0 : int.Parse(adults),
+                Children = string.IsNullOrEmpty(children) ? 0 : int.Parse(children),
+                Infants = string.IsNullOrEmpty(infant) ? 0 : int.Parse(infant)
+            };
         }
 
-        private Filters GetFilters(string filters, string value)
+        private static Filters GetFilters(string filters, string value)
         {
             if (string.IsNullOrEmpty(filters))
                 return null;
@@ -98,12 +73,12 @@ namespace Rovia.UI.Automation.DataBinder
                 }
                 i++;
             }
-            if(filterCriteria.SortBy==SortBy.Featured)
-                filterCriteria.SortBy=SortBy.PriceAsc;
+            if (filterCriteria.SortBy == SortBy.Featured)
+                filterCriteria.SortBy = SortBy.PriceAsc;
             return new Filters()
-                {
-                    PostSearchFilters = filterCriteria
-                };
+            {
+                PostSearchFilters = filterCriteria
+            };
         }
 
         private static T StringToEnum<T>(string name)
@@ -111,5 +86,42 @@ namespace Rovia.UI.Automation.DataBinder
             return (T)Enum.Parse(typeof(T), name, true);
         }
 
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Activity Product Search Criteria Data Binder
+        /// </summary>
+        /// <param name="dataRow">Input datasheet row</param>
+        /// <returns>Activity Search Criteria Object</returns>
+        public SearchCriteria GetCriteria(DataRow dataRow)
+        {
+            try
+            {
+                var scenario = new ActivitySearchCriteria()
+                {
+                    Pipeline = (string)dataRow["ExecutionPipeline"],
+                    UserType = StringToEnum<UserType>((string)dataRow["UserType"]),
+                    Description = (string)dataRow["Description"],
+                    ShortLocation = dataRow["ShortLocation"].ToString().Replace("..", ","),
+                    Location = dataRow["Location"].ToString().Replace("..", ","),
+                    Passengers = ParsePassengers(dataRow["Adults"].ToString(), dataRow["Children"].ToString(), dataRow["Infants"].ToString()),
+                    Filters = GetFilters(dataRow["PostSearchFilters"].ToString(), dataRow["PostSearchFilterValues"].ToString()),
+
+                    FromDate = DateTime.Now.AddDays(int.Parse(dataRow["StartDate"].ToString())),
+                    ToDate = DateTime.Now.AddDays(int.Parse(dataRow["EndDate"].ToString())),
+                };
+
+                SetPaymentMode(scenario, dataRow["PaymentMode"].ToString());
+                return scenario;
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidInputException("DataRow to AirCriteriaDataBinder.GetCriteria", exception);
+            }
+        }
+
+        #endregion
     }
 }

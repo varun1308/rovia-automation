@@ -1,19 +1,20 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Rovia.UI.Automation.DataBinder;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Utility;
-
-namespace Rovia.UI.Automation.Tests.Tests
+﻿namespace Rovia.UI.Automation.Tests.Tests
 {
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using DataBinder;
+    using Logger;
+    using ScenarioObjects;
+    using Utility;
+
+    // Test Class holding Car Product specific tests
     [TestClass]
     public class CarTestFixture
     {
+        private static LogManager _logManager;
         public TestContext TestContext { get; set; }
         public static ICriteriaDataBinder DataBinder { get; set; }
-        private static LogManager _logManager;
-
+        
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
@@ -35,43 +36,49 @@ namespace Rovia.UI.Automation.Tests.Tests
             _logManager.SubmitLog(TestHelper.TripsErrorUI);
         }
 
-
+        //Test executing car pick up as Airport and drop off as Airport booking flow for all scenarios
         [TestMethod, DataSource("Car_Airport_To_Airport"), TestCategory("Sanity")]
         public void Car_Airport_To_Airport()
         {
             Execute();
         }
 
+        //Test executing car pick up as Airport and drop off as City booking flow for all scenarios
         [TestMethod, DataSource("Car_Airport_To_City"), TestCategory("Sanity")]
         public void Car_Airport_To_City()
         {
             Execute();
         }
 
+        //Test executing car pick up as Airport and same drop off location booking flow for all scenarios
         [TestMethod, DataSource("Car_Airport_To_SameAsPickUp"), TestCategory("Sanity")]
         public void Car_Airport_To_SameAsPickUp()
         {
             Execute();
         }
 
+        //Test executing car pick up as City and drop off as Airport booking flow for all scenarios
         [TestMethod, DataSource("Car_City_To_Airport"), TestCategory("Sanity")]
         public void Car_City_To_Airport()
         {
             Execute();
         }
 
+        //Test executing car pick up as City and drop off as City booking flow for all scenarios
         [TestMethod, DataSource("Car_City_To_City"), TestCategory("Sanity")]
         public void Car_City_To_City()
         {
             Execute();
         }
 
+        //Test executing car pick up as City and same drop off loaction booking flow for all scenarios
         [TestMethod, DataSource("Car_City_To_SameAsPickUp"), TestCategory("Sanity")]
         public void Car_City_To_SameAsPickUp()
         {
             Execute();
         }
 
+        //Executes the tests depending on pipeline and given criteria
         private void Execute()
         {
             try

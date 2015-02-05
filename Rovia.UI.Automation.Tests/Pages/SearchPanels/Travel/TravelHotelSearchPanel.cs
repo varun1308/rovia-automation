@@ -1,11 +1,18 @@
-﻿using System.Linq;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
+﻿namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
+    using System.Linq;
+    using ScenarioObjects;
+    using Configuration;
+
+    /// <summary>
+    /// Travel site specific hotel product search methods
+    /// </summary>
     public class TravelHotelSearchPanel : HotelSearchPanel
     {
+        /// <summary>
+        /// Override enter passenger details method with respect to travel site controls
+        /// </summary>
+        /// <param name="passengers"></param>
         protected override void SetPassengerDetails(Passengers passengers)
         {
             GetUIElements("dropdownClick").FirstOrDefault(x => x.Text.Contains("Adults")).Click();
@@ -20,6 +27,10 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 
         }
 
+        /// <summary>
+        /// Override applying pre serach filters method with respect to travel site controls
+        /// </summary>
+        /// <param name="preSearchFilters"></param>
         protected override void ApplyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
             var filters = preSearchFilters as HotelPreSearchFilters;

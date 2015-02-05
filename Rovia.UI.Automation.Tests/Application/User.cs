@@ -1,7 +1,10 @@
-﻿using Rovia.UI.Automation.ScenarioObjects;
-
-namespace Rovia.UI.Automation.Tests.Application
+﻿namespace Rovia.UI.Automation.Tests.Application
 {
+    using ScenarioObjects;
+
+    /// <summary>
+    /// Saves logged in user data
+    /// </summary>
     public class User
     {
         public UserType Type { get; set; }

@@ -1,12 +1,21 @@
-﻿using System.Collections.Generic;
-
-namespace Rovia.UI.Automation.Logger
+﻿namespace Rovia.UI.Automation.Logger
 {
+    using System.Collections.Generic;
+    /// <summary>
+    /// Class for Details log file
+    /// </summary>
     class DetailEntry
     {
-        public string Id { get; set; }
+        #region private fileds
         private readonly List<string> _details;
+        #endregion
 
+        #region Public Properties
+        public string Id { get; set; }
+        public string Description { get; set; }
+        #endregion
+
+        #region public Members
         public DetailEntry()
         {
             _details = new List<string>();
@@ -17,12 +26,11 @@ namespace Rovia.UI.Automation.Logger
             _details.Add(s);
         }
 
-        public string Description { get; set; }
-
         public override string ToString()
         {
             return "<< " + Id + " >> " + Description + "\n" + string.Join("\n", _details) +
                 "\n---------------------------------------------------------------------------------";
         }
+        #endregion
     }
 }

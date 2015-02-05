@@ -1,16 +1,20 @@
-﻿using System;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.Tests.Configuration;
-using System.Threading;
-
-
-namespace Rovia.UI.Automation.Tests.Pages
+﻿namespace Rovia.UI.Automation.Tests.Pages
 {
+    using AppacitiveAutomationFramework;
+    using Configuration;
+    using Criteria;
+    using Exceptions;
+    using Logger;
+    using System;
+    using System.Threading;
+
+    /// <summary>
+    /// This class contains all the fields and methods for site home page
+    /// </summary>
     public class HomePage : UIPage
     {
+        #region Private Members
+
         private void CheckForErrors()
         {
             try
@@ -29,14 +33,32 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
         }
 
-        internal void WaitForHomePage()
+        private bool IsVisible()
+        {
+            var div = WaitAndGetBySelector("divNavigationBar", ApplicationSettings.TimeOut.Slow);
+            return div != null && div.Displayed;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public ISearchPanel SearchPanel { get; set; }
+
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Wait for home page to load
+        /// </summary>
+        public void WaitForHomePage()
         {
             try
             {
                 var divHome = WaitAndGetBySelector("divHome", ApplicationSettings.TimeOut.Safe);
-                if (divHome != null && divHome.Displayed)
-                    //SetCountry();
-                    while (!IsVisible()) { }
+                if (divHome != null && divHome.Displayed) { }
+                while (!IsVisible()) { }
             }
             catch (Exception exception)
             {
@@ -44,13 +66,10 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
         }
 
-        internal bool IsVisible()
-        {
-            var div = WaitAndGetBySelector("divNavigationBar", ApplicationSettings.TimeOut.Slow);
-            return div != null && div.Displayed;
-        }
-
-        internal void SetCountry()
+        /// <summary>
+        /// Used only in case of dev env, ignored for QA/Prod env
+        /// </summary>
+        public void SetCountry()
         {
             var country = WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Safe);
             Thread.Sleep(500);
@@ -61,35 +80,47 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
         }
 
-        internal bool IsUserLoggedIn()
+        public bool IsUserLoggedIn()
         {
             var anchor = ApplicationSettings.Environment == "PROD"
                 ? WaitAndGetBySelector("logOutProd", ApplicationSettings.TimeOut.Fast) : WaitAndGetBySelector("logOutQA", ApplicationSettings.TimeOut.Fast);
             return anchor != null && anchor.Displayed;
         }
 
-        internal void GoToLoginPage()
+        /// <summary>
+        /// Redirect to log in page
+        /// </summary>
+        public void GoToLoginPage()
         {
             var login = ApplicationSettings.Environment == "PROD"
                ? WaitAndGetBySelector("lnkLogInProd", ApplicationSettings.TimeOut.Fast) : WaitAndGetBySelector("lnkLogInQA", ApplicationSettings.TimeOut.Fast);
             login.Click();
         }
 
-        internal void LogOut()
+        /// <summary>
+        /// Log out from site
+        /// </summary>
+        public void LogOut()
         {
             var logout = ApplicationSettings.Environment == "PROD"
                 ? WaitAndGetBySelector("logOutProd", ApplicationSettings.TimeOut.Fast) : WaitAndGetBySelector("logOutQA", ApplicationSettings.TimeOut.Fast);
             logout.Click();
         }
 
-        internal void Search(SearchCriteria searchCriteria)
+        /// <summary>
+        /// Initiate search action
+        /// </summary>
+        /// <param name="searchCriteria"></param>
+        public void Search(SearchCriteria searchCriteria)
         {
             SearchPanel.Search(searchCriteria);
             CheckForErrors();
         }
 
-        public ISearchPanel SearchPanel { get; set; }
-
+        /// <summary>
+        /// Get trips error UI URL with sessionId
+        /// </summary>
+        /// <returns></returns>
         public string GetTripsErrorUri()
         {
             var sessionId = ApplicationSettings.Environment == "PROD" ? WaitAndGetBySelector("sessionIdProd", ApplicationSettings.TimeOut.Fast).GetAttribute("title") :
@@ -97,5 +128,7 @@ namespace Rovia.UI.Automation.Tests.Pages
             return string.IsNullOrEmpty(sessionId) ? string.Empty :
                ApplicationSettings.TripsErrorUri + "?sessionid=" + sessionId;
         }
+
+        #endregion
     }
 }

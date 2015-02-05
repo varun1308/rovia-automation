@@ -1,8 +1,8 @@
-﻿using System;
-using Rovia.UI.Automation.ScenarioObjects;
-
-namespace Rovia.UI.Automation.Criteria
+﻿namespace Rovia.UI.Automation.Criteria
 {
+    using System;
+    using ScenarioObjects;
+
     public class ActivitySearchCriteria:SearchCriteria
     {
         public DateTime FromDate { get; set; }

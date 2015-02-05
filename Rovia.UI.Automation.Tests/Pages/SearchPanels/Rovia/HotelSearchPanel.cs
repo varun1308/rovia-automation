@@ -1,15 +1,21 @@
-﻿using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
+﻿namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Criteria;
+    using Exceptions;
+    using ScenarioObjects;
+    using Configuration;
+
+    /// <summary>
+    /// Rovia site specific hotel product search methods
+    /// </summary>
     public class HotelSearchPanel : UIPage, ISearchPanel
     {
+
+        #region Protected Members
+
         protected virtual void SetPassengerDetails(Passengers passengers)
         {
             WaitAndGetBySelector("adults", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(passengers.Adults + (passengers.Adults > 1 ? " Adults" : " Adult"));
@@ -65,7 +71,15 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             if (filters.AdditionalPreferences != null && filters.AdditionalPreferences.Count != 0)
                 filters.AdditionalPreferences.ForEach(x => ExecuteJavascript("$('#ulAdditionalPref').find('[data-value=\"" + x + "\"]').click()"));
         }
-        
+
+        #endregion
+
+        #region Public Mebmers
+
+        /// <summary>
+        /// Search for hotel product
+        /// </summary>
+        /// <param name="searchCriteria">Hotel Search Criteria Object</param>
         public void Search(SearchCriteria searchCriteria)
         {
             var hotelSearchCriteria = searchCriteria as HotelSearchCriteria;
@@ -77,5 +91,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
             WaitAndGetBySelector("btnHotelSearch", ApplicationSettings.TimeOut.Slow).Click();
         }
+
+        #endregion
     }
 }

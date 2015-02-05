@@ -5,8 +5,15 @@ using InvalidOperationException = Rovia.UI.Automation.Exceptions.InvalidOperatio
 
 namespace Rovia.UI.Automation.Tests.Utility
 {
+    /// <summary>
+    /// Class to determine and executing the steps in a tests
+    /// </summary>
     public static class TestExecutionPipeLine
     {
+        /// <summary>
+        /// Executes all the steps inside given pipeline
+        /// </summary>
+        /// <param name="pipeline">Steps separated by '|' symbol</param>
         public static void Execute( string pipeline)
         {
             try
@@ -46,7 +53,7 @@ namespace Rovia.UI.Automation.Tests.Utility
                                     TestHelper.ContinueShopping();
                                     break;
                                 case "SETFILTERS":
-                                    TestHelper.SetFilters();
+                                    TestHelper.SetValidateFilters();
                                     break;
                                 case "PAYNOW":
                                     TestHelper.PayNow();

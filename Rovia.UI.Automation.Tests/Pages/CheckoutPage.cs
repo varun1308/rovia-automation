@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AppacitiveAutomationFramework;
-using OpenQA.Selenium;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.ScenarioObjects.Activity;
-using Rovia.UI.Automation.ScenarioObjects.Hotel;
-using Rovia.UI.Automation.Tests.Configuration;
-using Rovia.UI.Automation.Tests.Validators;
-
-namespace Rovia.UI.Automation.Tests.Pages
+﻿namespace Rovia.UI.Automation.Tests.Pages
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AppacitiveAutomationFramework;
+    using OpenQA.Selenium;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using ScenarioObjects.Activity;
+    using ScenarioObjects.Hotel;
+    using Configuration;
+    using Validators;
+
+    /// <summary>
+    /// This class holds all the fields and methods for checkout page
+    /// </summary>
     public class CheckoutPage : UIPage
     {
-        public TripProductHolder TripProductHolder { get; set; }
         #region Private Members
 
         private void SetPaymentMode(PaymentMode paymentMode)
@@ -186,9 +187,19 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         #endregion
 
-        #region Protected Members
+        #region Public Properties
 
-        internal void PayNow(PaymentMode paymentMode)
+        public TripProductHolder TripProductHolder { get; set; }
+
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Payment with Credit card
+        /// </summary>
+        /// <param name="paymentMode"></param>
+        public void PayNow(PaymentMode paymentMode)
         {
             SetPaymentMode(paymentMode);
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
@@ -197,7 +208,10 @@ namespace Rovia.UI.Automation.Tests.Pages
             CheckAndThrowErrors();
         }
 
-        internal void WaitForLoad()
+        /// <summary>
+        /// Wait for checkout page to load
+        /// </summary>
+        public void WaitForLoad()
         {
             IUIWebElement fillCcDetailsDiv;
             do
@@ -206,7 +220,11 @@ namespace Rovia.UI.Automation.Tests.Pages
             } while (fillCcDetailsDiv == null || !fillCcDetailsDiv.Displayed);
         }
 
-        internal void PayNow(PaymentInfo paymentInfo)
+        /// <summary>
+        /// Payment with Rovia Bucks
+        /// </summary>
+        /// <param name="paymentInfo"></param>
+        public void PayNow(PaymentInfo paymentInfo)
         {
             SetPaymentMode(paymentInfo.PaymentMode);
             SetAddress(paymentInfo.BillingAddress);
@@ -215,14 +233,18 @@ namespace Rovia.UI.Automation.Tests.Pages
             WaitAndGetBySelector("paynow", ApplicationSettings.TimeOut.Fast).Click();
         }
 
-        internal void BookNow()
+        /// <summary>
+        /// Car Product book call
+        /// </summary>
+        public void BookNow()
         {
             WaitAndGetBySelector("checkTerms", ApplicationSettings.TimeOut.Fast).Click();
             WaitAndGetBySelector("booknow", ApplicationSettings.TimeOut.Fast).Click();
         }
 
-        #endregion
-
+        /// <summary>
+        /// Check for payment status for success or failure
+        /// </summary>
         public void CheckPaymentStatus()
         {
             try
@@ -242,17 +264,25 @@ namespace Rovia.UI.Automation.Tests.Pages
             }
         }
 
+        /// <summary>
+        /// Validate trip details on checkout page
+        /// </summary>
+        /// <param name="selectedItineary">added itinerary to cart</param>
         public void ValidateTripDetails(Results selectedItineary)
         {
             TripProductHolder.GetTripProducts().ForEach(x => this.ValidateTripProduct(x, selectedItineary));
         }
 
+        /// <summary>
+        /// validate booked product info on confirmation page to added product in cart
+        /// </summary>
+        /// <param name="selectedItineary">added itinerary to cart</param>
         public void ValidateBookedProductDetails(Results selectedItineary)
         {
             ParseBookedTripProducts().ForEach(x => this.ValidateBookedTripProducts(x, selectedItineary));
         }
 
-
-
+        #endregion
+        
     }
 }

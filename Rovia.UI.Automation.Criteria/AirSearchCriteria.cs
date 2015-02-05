@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Rovia.UI.Automation.ScenarioObjects;
-
-namespace Rovia.UI.Automation.Criteria
+﻿namespace Rovia.UI.Automation.Criteria
 {
+    using System.Collections.Generic;
+    using ScenarioObjects;
+
     public class AirSearchCriteria: SearchCriteria
     {
         public List<AirportPair> AirportPairs { get; set; }

@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Rovia.UI.Automation.ScenarioObjects;
-
-namespace Rovia.UI.Automation.Criteria
+﻿namespace Rovia.UI.Automation.Criteria
 {
+    using ScenarioObjects;
+
     public abstract class SearchCriteria
     {
         public string Description { get; set; }

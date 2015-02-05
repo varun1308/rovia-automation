@@ -1,25 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
+    using System;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Criteria;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using Configuration;
+
+
     public class ResultsPage:UIPage
     {
         #region Private Members
 
+        private static int _currentPageNo = 1;
+
+        #endregion
+
+        #region Public Properties
+
         public IResultFilters ResultFilters { private get; set; }
         public IResultsHolder ResultsHolder { private get; set; }
+        public IResultsTitle ResultTitle { private get; set; }
 
-        public IResultsTitle ResultTitle{ private get; set; }
+        #endregion
 
-        private static int _currentPageNo = 1;
+        #region Private Members
+
         private bool IsWaitingVisible()
         {
             var div = WaitAndGetBySelector("divWaiting", ApplicationSettings.TimeOut.Fast);
@@ -32,6 +40,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             if(preloader!=null)
                 while (preloader.Displayed) ;
         }
+
         private void GoToNextPage()
         {
             WaitAndGetBySelector("aNext", ApplicationSettings.TimeOut.Fast).Click();
@@ -56,6 +65,11 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 
         #region Public Members
 
+        /// <summary>
+        /// Add to cart a product
+        /// </summary>
+        /// <param name="criteria">Search Criteria Object</param>
+        /// <returns></returns>
         public Results AddToCart(SearchCriteria criteria)
         {
             var selectedResult=ResultsHolder.AddToCart(criteria);
@@ -67,6 +81,9 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             return selectedResult;
         }
 
+        /// <summary>
+        /// Wait for result to display
+        /// </summary>
         public void WaitForResultLoad()
         {
             try
@@ -94,17 +111,29 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
+        /// <summary>
+        /// set and validate the filters and matrix on results page
+        /// </summary>
+        /// <param name="postSearchFilters"></param>
         public void SetAndValidatePostSearchFilters(PostSearchFilters postSearchFilters)
         {
              ResultFilters.SetPostSearchFilters(postSearchFilters);
              ResultFilters.ValidateFilters(postSearchFilters);
         }
  
+        /// <summary>
+        /// Verify all the search filters passed during search
+        /// </summary>
+        /// <param name="preSearchFilters">Pre search filter object</param>
         public void VerifyPreSearchFilters(PreSearchFilters preSearchFilters)
         {
              ResultFilters.VerifyPreSearchFilters(preSearchFilters);
         }
 
+        /// <summary>
+        /// Validate search criteria with title on results page
+        /// </summary>
+        /// <param name="criteria"></param>
         public void ValidateSearch(SearchCriteria criteria)
         {
             if (!ResultTitle.ValidateTitle(criteria))

@@ -1,15 +1,17 @@
-﻿
-using System;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using OpenQA.Selenium;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages
+﻿namespace Rovia.UI.Automation.Tests.Pages
 {
+    using System;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using OpenQA.Selenium;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using Configuration;
+
+    /// <summary>
+    /// This class holds all the fields and methods for BFC Payment page
+    /// </summary>
     public class BFCPaymentPage : UIPage
     {
         #region Private Members
@@ -81,7 +83,12 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         #endregion
 
-        internal void WaitForLoad()
+        #region Public Members
+
+        /// <summary>
+        /// Wait for Bfc Payment page to load
+        /// </summary>
+        public void WaitForLoad()
         {
             IUIWebElement nameOnCard;
             do
@@ -90,6 +97,10 @@ namespace Rovia.UI.Automation.Tests.Pages
             } while (nameOnCard == null || !nameOnCard.Displayed);
         }
 
+        /// <summary>
+        /// Enter and submit all the required fields for CC payment
+        /// </summary>
+        /// <param name="paymentInfo"></param>
         public void PayNow(PaymentInfo paymentInfo)
         {
             SetCreditCardInfo(paymentInfo.CreditCardInfo);
@@ -98,6 +109,8 @@ namespace Rovia.UI.Automation.Tests.Pages
             WaitForPayment();
             CheckErrors();
         }
+
+        #endregion
 
     }
 }

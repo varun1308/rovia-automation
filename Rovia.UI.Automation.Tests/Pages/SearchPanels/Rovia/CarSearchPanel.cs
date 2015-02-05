@@ -1,16 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
+﻿namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using AppacitiveAutomationFramework;
+    using Criteria;
+    using Exceptions;
+    using ScenarioObjects;
+    using Configuration;
+
+    /// <summary>
+    /// Rovia site specific car product search methods
+    /// </summary>
     public class CarSearchPanel : UIPage, ISearchPanel
     {
+        #region Protected Members
+
         protected void ApplyDiscountCode(List<CorporateDiscount> corporateDiscounts)
         {
             ExecuteJavascript("$('span:contains(\"Corporate Discount\")').click()");
@@ -129,6 +134,14 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 throw new UIElementNullOrNotVisible("SearchPanel");
         }
 
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Search for car product
+        /// </summary>
+        /// <param name="searchCriteria">Car Search Criteria Object</param>
         public void Search(SearchCriteria searchCriteria)
         {
             var carSearchCriteria = searchCriteria as CarSearchCriteria;
@@ -139,5 +152,7 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
             WaitAndGetBySelector("buttonCarSearch", ApplicationSettings.TimeOut.Slow).Click();
             ResolveMultiLocationOptions();
         }
+
+        #endregion
     }
 }

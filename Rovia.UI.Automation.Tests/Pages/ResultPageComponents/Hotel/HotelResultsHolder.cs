@@ -1,19 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AppacitiveAutomationFramework;
-using OpenQA.Selenium;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.Logger;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
+﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
 {
+    using System.Linq;
+    using AppacitiveAutomationFramework;
+    using OpenQA.Selenium;
+    using Criteria;
+    using Exceptions;
+    using Logger;
+    using ScenarioObjects;
+    using Configuration;
+
+    /// <summary>
+    /// Hotel Results page itineraries container
+    /// </summary>
     class HotelResultsHolder : UIPage, IResultsHolder
     {
         private Results _selectedItinerary;
-        public HotelRoomsHolder RoomsHolder{private get; set;}
+        public HotelRoomsHolder RoomsHolder { private get; set; }
+
+        #region Private Members
 
         private  void SelectHotel(string hotelSupplier, string roomSupplier)
         {
@@ -54,12 +58,25 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
             }
         }
 
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Check if results visible
+        /// </summary>
+        /// <returns></returns>
         public bool IsVisible()
         {
            var div = WaitAndGetBySelector("divResultHolder", ApplicationSettings.TimeOut.Slow);
            return div != null && div.Displayed;
         }
 
+        /// <summary>
+        /// Select hotel
+        /// </summary>
+        /// <param name="criteria">criteria object to add itinerary</param>
+        /// <returns></returns>
         public Results AddToCart(SearchCriteria  criteria)
         {
             try
@@ -74,5 +91,7 @@ namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
                 return null;
             }
         }
+
+        #endregion
     }
 }

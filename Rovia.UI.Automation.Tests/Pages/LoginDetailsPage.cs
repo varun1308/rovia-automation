@@ -1,16 +1,28 @@
-﻿using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages
+﻿namespace Rovia.UI.Automation.Tests.Pages
 {
+    using AppacitiveAutomationFramework;
+    using Configuration;
+
+    /// <summary>
+    /// This clas holds methods for login to site
+    /// </summary>
     public class LoginDetailsPage : UIPage
     {
+        /// <summary>
+        /// Check if log in page visible
+        /// </summary>
+        /// <returns></returns>
         internal bool IsVisible()
         {
             var div = WaitAndGetBySelector("divLogInPanel", ApplicationSettings.TimeOut.Slow);
             return div != null && div.Displayed;
         }
 
+        /// <summary>
+        /// Log in with username password to site
+        /// </summary>
+        /// <param name="userId">Username</param>
+        /// <param name="password">Password</param>
         internal void LogIn(string userId, string password)
         {
             WaitAndGetBySelector("username", ApplicationSettings.TimeOut.Slow).SendKeys(userId);
@@ -20,6 +32,12 @@ namespace Rovia.UI.Automation.Tests.Pages
             WaitAndGetBySelector("btnLogIn", ApplicationSettings.TimeOut.Fast).Click();
         }
 
+        /// <summary>
+        /// Continue as guest option method
+        /// </summary>
+        /// <param name="fname">FirstName</param>
+        /// <param name="lname">LastName</param>
+        /// <param name="emailid">EmailId</param>
         internal void ContinueAsGuest(string fname,string lname, string emailid)
         {
             WaitAndGetBySelector("guestOption", 120).Click();

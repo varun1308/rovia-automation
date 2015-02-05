@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using AppacitiveAutomationFramework;
-using Rovia.UI.Automation.Criteria;
-using Rovia.UI.Automation.Exceptions;
-using Rovia.UI.Automation.ScenarioObjects;
-using Rovia.UI.Automation.Tests.Configuration;
-
-namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
+﻿namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
 {
+    using System.Linq;
+    using Criteria;
+    using ScenarioObjects;
+    using Configuration;
+
+    /// <summary>
+    /// Travel site specific car product search methods
+    /// </summary>
     public class TravelCarSearchPanel : CarSearchPanel
     {
+        /// <summary>
+        /// Override pickup details with respect to travel site controls
+        /// </summary>
+        /// <param name="carSearchCriteria"></param>
         protected override void EnterPickUpDetails(CarSearchCriteria carSearchCriteria)
         {
             if (carSearchCriteria.PickUp.PickUpType.Equals(PickUpType.Airport))
@@ -33,6 +36,10 @@ namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
                 .Click();
         }
 
+        /// <summary>
+        /// Override dropoff details with respect to travel site controls
+        /// </summary>
+        /// <param name="carSearchCriteria"></param>
         protected override void EnterDropOffDetails(CarSearchCriteria carSearchCriteria)
         {
             if (!carSearchCriteria.DropOff.DropOffType.Equals(DropOffType.SameAsPickUp))
