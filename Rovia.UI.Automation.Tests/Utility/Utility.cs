@@ -6,7 +6,7 @@
     using ScenarioObjects;
 
     /// <summary>
-    /// This class provides conversion methods
+    /// This class provides few common conversion methods like (string cabinType to enumeration of cabinType)
     /// </summary>
     public static class UtilityFunctions
     {

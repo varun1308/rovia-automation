@@ -6,7 +6,7 @@ using InvalidOperationException = Rovia.UI.Automation.Exceptions.InvalidOperatio
 namespace Rovia.UI.Automation.Tests.Utility
 {
     /// <summary>
-    /// Class to determine and executing the steps in a tests
+    /// THis class helps to determine and executing the steps in a tests
     /// </summary>
     public static class TestExecutionPipeLine
     {

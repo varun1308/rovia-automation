@@ -13,7 +13,7 @@
     using InvalidOperationException = Exceptions.InvalidOperationException;
 
     /// <summary>
-    /// Test Helper class
+    /// This is common helper class to call all page level methods
     /// </summary>
     [TestClass]
     public class TestHelper
