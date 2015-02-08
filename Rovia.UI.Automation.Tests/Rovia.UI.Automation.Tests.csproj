@@ -69,7 +69,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AppacitiveAutomationFramework">
+    <Reference Include="AppacitiveAutomationFramework, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\AppacitiveLoggingFramework\AppacitiveAutomationFramework.dll</HintPath>
     </Reference>
     <Reference Include="Selenium.WebDriverBackedSelenium, Version=2.42.0.0, Culture=neutral, processorArchitecture=MSIL">
