@@ -9,7 +9,7 @@
 
     // Test Class holding Air Product specific tests
     [TestClass]
-    public class AirTextFixture
+    public class AirTestFixture
     {
         private static LogManager _logManager;
         public TestContext TestContext { get; set; }

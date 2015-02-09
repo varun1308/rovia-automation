@@ -9,7 +9,7 @@ namespace Rovia.UI.Automation.Tests.Tests
 {
     // Test Class holding Hotel Product specific tests
     [TestClass]
-    public class HotelTextFixture
+    public class HotelTestFixture
     {
         private static LogManager _logManager;
         public TestContext TestContext { get; set; }

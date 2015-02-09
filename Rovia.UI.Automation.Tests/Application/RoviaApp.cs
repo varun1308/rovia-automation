@@ -142,7 +142,7 @@
 
         #endregion
 
-        #region Puplic Members
+        #region Public Members
 
         public RoviaApp()
         {

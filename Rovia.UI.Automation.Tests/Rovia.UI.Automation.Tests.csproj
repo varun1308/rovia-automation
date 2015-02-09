@@ -155,10 +155,10 @@
     <Compile Include="Pages\Parsers\TripFolderParser.cs" />
     <Compile Include="Pages\TripProductHolder.cs" />
     <Compile Include="Tests\ActivityTestFixtures.cs" />
-    <Compile Include="Tests\AirTextFixture.cs" />
+    <Compile Include="Tests\AirTestFixture.cs" />
     <Compile Include="Tests\CarTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\HotelTextFixture.cs" />
+    <Compile Include="Tests\HotelTestFixture.cs" />
     <Compile Include="Utility\TestExecutionPipeLine.cs" />
     <Compile Include="Utility\Testhelper.cs" />
     <Compile Include="Utility\Utility.cs" />
