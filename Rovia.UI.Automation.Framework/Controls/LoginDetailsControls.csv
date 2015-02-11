@@ -1,0 +1,14 @@
+loginlink,a#ucPWP_ctl09_5270_ucHeaderMenu_lnkLogin
+username,input#userid
+password,input#Password
+signin,button[val-submit="login"]
+loginsuccessHome,span.notxtshadow.mrm.username
+loginsuccessTrip,span.greyfont.mrm
+divPrefCust,div#dvPrefCustHolder
+divLogInPanel,div.create_profile_wrap.new_layout
+btnLogIn,button.btn.btn-large.btn-block.btn-primary.jSubmit
+guestFName,input#Text5
+guestLName,input#Text9
+guestEmailId,input#Text10
+guestOption,input[value="register"]
+guestOptionContinue,input[value="guest"]

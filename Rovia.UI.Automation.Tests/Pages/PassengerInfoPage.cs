@@ -159,11 +159,11 @@
         /// Enter passenger details and submit to confirm passenger info page
         /// </summary>
         /// <param name="passengerDetails"></param>
-        public void SubmitPassengerDetails(PassengerDetails passengerDetails)
+        public void SubmitPassengerDetails(PassengerDetails passengerDetails, TripProductType productType)
         {
             Thread.Sleep(1500);
             _passengers = passengerDetails.Passengers;
-            if (TestHelper.TripProductType == TripProductType.Air || TestHelper.TripProductType == TripProductType.Hotel)
+            if (productType == TripProductType.Air || productType == TripProductType.Hotel)
             {
                 WaitAndGetBySelector("country", ApplicationSettings.TimeOut.Slow).SelectFromDropDown(
                     passengerDetails.Country);

@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		QA.testsettings = QA.testsettings
 		Rovia-Automation.vsmdi = Rovia-Automation.vsmdi
 		Rovia.Prod.testsettings = Rovia.Prod.testsettings
+		RoviaAutomationFramework.mkd = RoviaAutomationFramework.mkd
 		Travel.Prod.testsettings = Travel.Prod.testsettings
 		Travel.QA.testsettings = Travel.QA.testsettings
 	EndProjectSection
@@ -52,6 +53,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logger", "Logger", "{B2676A56-3EB7-47EF-A85C-1F405E87D3FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovia.UI.Automation.Logger", "Rovia.UI.Automation.Logger\Rovia.UI.Automation.Logger.csproj", "{6537DEE2-BB5F-4F94-B774-BD2B8A079EC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Rovia.Automation.Framework", "4. Rovia.Automation.Framework", "{BE83DE59-6B99-42B9-84EF-C05ECC451506}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovia.UI.Automation.Framework", "Rovia.UI.Automation.Framework\Rovia.UI.Automation.Framework.csproj", "{56917C65-23AC-49A0-B4E7-B116ED99028A}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -164,6 +169,22 @@ Global
 		{6537DEE2-BB5F-4F94-B774-BD2B8A079EC1}.Travel.Prod|Any CPU.Build.0 = Travel.Prod|Any CPU
 		{6537DEE2-BB5F-4F94-B774-BD2B8A079EC1}.Travel.QA|Any CPU.ActiveCfg = Travel.QA|Any CPU
 		{6537DEE2-BB5F-4F94-B774-BD2B8A079EC1}.Travel.QA|Any CPU.Build.0 = Travel.QA|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.DT.Prod|Any CPU.ActiveCfg = Debug|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.DT.Prod|Any CPU.Build.0 = Debug|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.DT.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.DT.QA|Any CPU.Build.0 = Debug|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Rovia.Prod|Any CPU.ActiveCfg = Release|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Rovia.Prod|Any CPU.Build.0 = Release|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Rovia.QA|Any CPU.ActiveCfg = Release|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Rovia.QA|Any CPU.Build.0 = Release|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Travel.Prod|Any CPU.ActiveCfg = Release|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Travel.Prod|Any CPU.Build.0 = Release|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Travel.QA|Any CPU.ActiveCfg = Release|Any CPU
+		{56917C65-23AC-49A0-B4E7-B116ED99028A}.Travel.QA|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -180,5 +201,6 @@ Global
 		{B2676A56-3EB7-47EF-A85C-1F405E87D3FD} = {36CFF5D1-7D1F-4ED7-AB01-EF7675149095}
 		{2433E2F8-ADCC-4B6E-87FA-2BDB60FD67E4} = {6CA27755-D98D-4B22-AAE5-070E88372CA6}
 		{6537DEE2-BB5F-4F94-B774-BD2B8A079EC1} = {B2676A56-3EB7-47EF-A85C-1F405E87D3FD}
+		{56917C65-23AC-49A0-B4E7-B116ED99028A} = {BE83DE59-6B99-42B9-84EF-C05ECC451506}
 	EndGlobalSection
 EndGlobal

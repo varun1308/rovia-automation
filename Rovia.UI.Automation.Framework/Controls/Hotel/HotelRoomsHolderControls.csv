@@ -1,0 +1,21 @@
+hotelDetailGallery,div#HotelDetailsWidget
+backToResults,a#backToResult
+progressBar,div.progress
+tableHotelRooms,table.hotelRooms
+divNoRoomsAvailable,div.jRoomContent div.border_notop
+amanities,ul.ameneties_list li
+roomDetails,table.hotelRooms td p.mbs
+suppliers,td.avgNightHotel600 span
+btnAddToCart,a.jsAddToCart
+btnCancel,button#btnCloseFlightPopup
+alerts,div.alert
+btnCheckOut,a#btnCheckout
+divloader,div.txtAlignCenter.jsWaitMessage
+showAllRooms,a.jshowAll
+hotelRating,a.orangeStar
+cartPrice,#dvAddToCartHotel span.price
+passengerInfo,#dvAddToCartHotel div.font11.mbl
+hotelName,#dvAddToCartHotel span.text-boxtitle
+hotelAddress,#dvAddToCartHotel span.font11.greyfont
+roomDescription,#dvAddToCartHotel div.font11.greyfont
+stayInfo,#dvAddToCartHotel div.text-flightinfo

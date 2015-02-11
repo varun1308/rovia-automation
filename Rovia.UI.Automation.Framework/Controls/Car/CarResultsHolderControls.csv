@@ -1,0 +1,17 @@
+matrixHolder,div#CarMatrixHolder
+rentalAgency,img.phm.mtm.mlm                      
+carType,div.span4.borderRgt div .font10
+carOptions,div.mts .pull-left.font12
+price,span.price
+addToCartButton,a.jsAddToCart
+divloader,div.txtAlignCenter.jsWaitMessage
+btnCancel,button#btnCloseFlightPopup
+btnContinue,button.jsContinue
+alerts,div#dvAddToCartCar .alert
+btnCheckOut,a#btnCheckout
+rentalAgencyOnCArt,div#dvAddToCartCar .phm.mtm.mlm
+carOptionsOnCart,div.mts.mbl .pull-left.font12
+priceOnCart,div.jsPrice span.price
+DatesOnCart,div.span5 .font12.fontBold
+locations,div.span7.pull-left div small
+DateTimes,div.span4 .font12.fontBold

@@ -1,0 +1,26 @@
+error,.alert-error
+minPrice,div.jsMinPrice
+maxPrice,div.jsMaxPrice
+textActivityName,input#Text1
+searchIcon,div.icon-search.pointer
+categoriesResetLink,div.jsStarRatingFilter a.jsResetLink
+categoryHolder,div.jsCategoryHolder a.btn
+zeroAiritineraryDiv,div#AirListHolder .alert.alert-error
+appliedFilters,div#ActivityFilterHolder  span.label
+priceAsc,#Price-Asc
+priceDsc,#Price-Desc
+categoryAsc,#Category-Asc
+categoryDsc,#Category-Desc
+nameDsc,#Name-Desc,
+nameAsc,#Name-Asc
+sortHeader,#sortHeader
+matrixSection,.jspContainer ul li
+startingPrice,.price_small
+preLoader,.filterloader_wrap .icon_preloader_small
+activityCount,.activity_count
+categories,.jsCategoryContainer input
+matrixCategory,.jActivity .multilineText
+mCategoryName,.jsActPrice
+activityPrices,.jActivityBox .price
+activityNames,.jActivityBox .text-boxtitle
+activityCategories,.jActivityBox .text-flighttime

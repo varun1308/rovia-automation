@@ -1,0 +1,8 @@
+navBar,ul.nav.fontUpperCase li.ico_activities
+searchPanel,div[data-producttype="activity"]
+fromDate,#txtFromDate
+toDate,#txtToDate
+inpShortLocation,#txtActivityDestination
+autoSuggestOptions, div.ac_results li
+autoSuggestBox, div.ac_results
+btnActivitySearch,#btnActivitySearch

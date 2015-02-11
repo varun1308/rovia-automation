@@ -1,0 +1,14 @@
+appliedFilters,div#CarFilterHolder span.label
+minPrice,div.jsMinPrice
+maxPrice,div.jsMaxPrice
+locationFilter,div.jsCarLocationFilter .mbs .checkbox.font11
+carTypeFilter,div.jsCarClassFilter .mbs input
+carRentalAgencyFilter,div.jsCarAgencyFilter .mbs input
+carOptionsFilter,div.jsCarFeaturesFilter .mbs input
+matrixSection,p.jsMatrixCarPrice
+matrixPrice,span.orangefont
+price,span.price
+locations,div.span7.pull-left div small
+carType,div.span4.borderRgt div .font10
+rentalAgency,img.phm.mtm.mlm
+carOptions,div.mts .pull-left.font12

@@ -1,0 +1,5 @@
+divResultHolder,#ActivityListHolder
+activityNames,.jActivityBox .text-boxtitle
+activityCategories,.jActivityBox .text-flighttime
+activityPrices,.jActivityBox .price
+btnSelectActivity,.btnTopMinusMargin

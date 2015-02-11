@@ -358,7 +358,7 @@
             {
                 if (!_app.State.CurrentPage.Equals("PassengerInfoPage"))
                     throw new InvalidOperationException("EnterPassengerDetails", _app.State.CurrentPage);
-                _app.PassengerInfoPage.SubmitPassengerDetails(GetPassengerDetails());
+                _app.PassengerInfoPage.SubmitPassengerDetails(GetPassengerDetails(), _app.State.CurrentProduct);
                 _app.State.CurrentPage = "PassengerDetails-ConfirmationPage";
                 _logger.LogStatus("EnterPassengerDetails", "Passed");
             }
