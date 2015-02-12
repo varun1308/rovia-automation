@@ -1,19 +1,19 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.Parsers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using AppacitiveAutomationFramework;
-    using Exceptions;
-    using Logger;
-    using ScenarioObjects;
-    using ScenarioObjects.Activity;
-    using ScenarioObjects.Air;
-    using ScenarioObjects.Hotel;
-    using Configuration;
-    using Utility;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.Framework.Utility;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Activity;
+using Rovia.UI.Automation.ScenarioObjects.Air;
+using Rovia.UI.Automation.ScenarioObjects.Hotel;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// Trip folder page elements parser
     /// </summary>

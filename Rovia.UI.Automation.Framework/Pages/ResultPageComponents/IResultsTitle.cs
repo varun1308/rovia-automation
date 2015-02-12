@@ -1,7 +1,7 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
-{
-    using Criteria;
+﻿using Rovia.UI.Automation.Criteria;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     //This interface holds results page title specific methods
     public interface IResultsTitle
     {

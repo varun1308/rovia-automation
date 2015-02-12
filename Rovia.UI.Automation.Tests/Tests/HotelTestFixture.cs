@@ -9,31 +9,13 @@ namespace Rovia.UI.Automation.Tests.Tests
 {
     // Test Class holding Hotel Product specific tests
     [TestClass]
-    public class HotelTestFixture
+    public class HotelTestFixture:BaseTestClass
     {
-        private static LogManager _logManager;
-        public TestContext TestContext { get; set; }
-        public static ICriteriaDataBinder DataBinder { get; set; }
-
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
             DataBinder = new HotelCriteriaDatabinder();
             TestHelper.TripProductType = TripProductType.Hotel;
-            _logManager = LogManager.GetInstance();
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            TestHelper.InitializeTest();
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            TestHelper.SaveScreenShot(TestContext);
-            _logManager.SubmitLog(TestHelper.TripsErrorUI);
         }
 
         //Test executing Hotel AmadeusWS supplier booking flow
@@ -90,24 +72,6 @@ namespace Rovia.UI.Automation.Tests.Tests
         public void Hotel_FiltersAndMatrixTests()
         {
             Execute();
-        }
-
-        //Executes the tests depending on pipeline and given criteria
-        private void Execute()
-        {
-            try
-            {
-                var criteria = DataBinder.GetCriteria(TestContext.DataRow);
-                _logManager.StartNewLog(criteria.Description);
-                TestHelper.SetCriteria(criteria);
-                TestExecutionPipeLine.Execute(criteria.Pipeline);
-                _logManager.LogInformation("Test Passed.");
-            }
-            catch (Exception exception)
-            {
-                _logManager.LogInformation("Test Failed.");
-                Assert.Fail(exception.Message);
-            }
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages
-{
-    using AppacitiveAutomationFramework;
-    using Configuration;
+﻿using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Framework.Configurations;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// This clas holds methods for login to site
     /// </summary>
@@ -23,7 +23,7 @@
         /// </summary>
         /// <param name="userId">Username</param>
         /// <param name="password">Password</param>
-        internal void LogIn(string userId, string password)
+        public void LogIn(string userId, string password)
         {
             WaitAndGetBySelector("username", ApplicationSettings.TimeOut.Slow).SendKeys(userId);
 
@@ -38,7 +38,7 @@
         /// <param name="fname">FirstName</param>
         /// <param name="lname">LastName</param>
         /// <param name="emailid">EmailId</param>
-        internal void ContinueAsGuest(string fname,string lname, string emailid)
+        public void ContinueAsGuest(string fname,string lname, string emailid)
         {
             WaitAndGetBySelector("guestOption", 120).Click();
             WaitAndGetBySelector("guestOptionContinue", ApplicationSettings.TimeOut.Safe).Click();

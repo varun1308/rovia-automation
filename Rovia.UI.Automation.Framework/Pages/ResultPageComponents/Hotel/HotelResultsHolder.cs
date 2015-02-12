@@ -1,14 +1,14 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
-{
-    using System.Linq;
-    using AppacitiveAutomationFramework;
-    using OpenQA.Selenium;
-    using Criteria;
-    using Exceptions;
-    using Logger;
-    using ScenarioObjects;
-    using Configuration;
+﻿using System.Linq;
+using AppacitiveAutomationFramework;
+using OpenQA.Selenium;
+using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// Hotel Results page itineraries container
     /// </summary>

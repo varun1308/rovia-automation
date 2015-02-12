@@ -1,7 +1,7 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages
-{
-    using Criteria;
+﻿using Rovia.UI.Automation.Criteria;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// Interface holding search widgets methods
     /// </summary>

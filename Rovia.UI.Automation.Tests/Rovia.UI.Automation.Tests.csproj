@@ -112,61 +112,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Application\AppState.cs" />
-    <Compile Include="Application\DreamTripsApp.cs" />
-    <Compile Include="Application\RoviaApp.cs" />
-    <Compile Include="Application\RoviaTravelApp.cs" />
-    <Compile Include="Application\User.cs" />
-    <Compile Include="Configuration\ApplicationSettings.cs" />
-    <Compile Include="Pages\ResultPageComponents\Activity\ActivityHolder.cs" />
-    <Compile Include="Pages\ResultPageComponents\Activity\ActivityResultFilters.cs" />
-    <Compile Include="Pages\ResultPageComponents\Activity\ActivityResultsHolder.cs" />
-    <Compile Include="Pages\ResultPageComponents\Air\AirResultFilters.cs" />
-    <Compile Include="Pages\ResultPageComponents\Air\AirResultsHolder.cs" />
-    <Compile Include="Pages\ResultPageComponents\Car\CarResultFilters.cs" />
-    <Compile Include="Pages\ResultPageComponents\Car\CarResultHolder.cs" />
-    <Compile Include="Pages\ResultPageComponents\Hotel\HotelResultFilters.cs" />
-    <Compile Include="Pages\ResultPageComponents\Hotel\HotelResultsHolder.cs" />
-    <Compile Include="Pages\ResultPageComponents\Hotel\HotelResultsTitle.cs" />
-    <Compile Include="Pages\ResultPageComponents\Hotel\HotelRoomsHolder.cs" />
-    <Compile Include="Pages\ResultPageComponents\IResultFilters.cs" />
-    <Compile Include="Pages\ResultPageComponents\IResultsHolder.cs" />
-    <Compile Include="Pages\ResultPageComponents\IResultsTitle.cs" />
-    <Compile Include="Pages\ResultPageComponents\ResultsPage.cs" />
-    <Compile Include="Pages\BFCPaymentPage.cs" />
-    <Compile Include="Pages\CheckoutPage.cs" />
-    <Compile Include="Pages\HomePage.cs" />
-    <Compile Include="Pages\LoginDetailsPage.cs" />
-    <Compile Include="Pages\PassengerInfoPage.cs" />
-    <Compile Include="Pages\SearchPanels\DreamTrips\DTActivitySearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\DreamTrips\DTAirSearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\DreamTrips\DTCarSearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\DreamTrips\DTHotelSearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\ISearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\Rovia\ActivitySearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\Rovia\AirSearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\Rovia\CarSearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\Rovia\HotelSearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\Travel\TravelActivitySearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\Travel\TravelAirSearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\Travel\TravelCarSearchPanel.cs" />
-    <Compile Include="Pages\SearchPanels\Travel\TravelHotelSearchPanel.cs" />
-    <Compile Include="Pages\TripFolderPage.cs" />
-    <Compile Include="Pages\Parsers\TripFolderParser.cs" />
-    <Compile Include="Pages\TripProductHolder.cs" />
     <Compile Include="Tests\ActivityTestFixtures.cs" />
     <Compile Include="Tests\AirTestFixture.cs" />
     <Compile Include="Tests\CarTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\HotelTestFixture.cs" />
-    <Compile Include="Utility\TestExecutionPipeLine.cs" />
+    <Compile Include="Tests\BaseTestClass.cs" />
     <Compile Include="Utility\Testhelper.cs" />
-    <Compile Include="Utility\Utility.cs" />
-    <Compile Include="Validators\ActivityValidator.cs" />
-    <Compile Include="Validators\AirValidator.cs" />
-    <Compile Include="Validators\CarValidator.cs" />
-    <Compile Include="Validators\HotelValidator.cs" />
-    <Compile Include="Validators\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -204,41 +156,6 @@
       <DependentUpon>App.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
-    <None Include="Controls\Activity\ActivityHolderControls.csv" />
-    <None Include="Controls\Activity\ActivityResultsHolderControls.csv" />
-    <None Include="Controls\Activity\ActivityResultsFiltersControls.csv" />
-    <None Include="Controls\CheckoutTripProductHolderControls.csv" />
-    <None Include="Controls\HomePage\DreamTrips\DTActivitySearchPanelControls.csv" />
-    <None Include="Controls\HomePage\DreamTrips\DTAirSearchPanelControls.csv" />
-    <None Include="Controls\HomePage\DreamTrips\DTCarSearchPanelControls.csv" />
-    <None Include="Controls\HomePage\DreamTrips\DTHomeControls.csv" />
-    <None Include="Controls\HomePage\DreamTrips\DTHotelSearchPanelControls.csv" />
-    <None Include="Controls\HomePage\Rovia\RoviaActivitySearchPanelControls.csv" />
-    <None Include="Controls\HomePage\Rovia\RoviaAirSearchPanelControls.csv" />
-    <None Include="Controls\HomePage\Rovia\RoviaCarSearchPanelControls.csv" />
-    <None Include="Controls\HomePage\Rovia\RoviaHomeControls.csv" />
-    <None Include="Controls\HomePage\Rovia\RoviaHotelSearchPanelControls.csv" />
-    <None Include="Controls\HomePage\Travel\TravelActivitySearchPanelControls.csv" />
-    <None Include="Controls\HomePage\Travel\TravelAirSearchPanelControls.csv" />
-    <None Include="Controls\HomePage\Travel\TravelCarSearchPanelControls.csv" />
-    <None Include="Controls\HomePage\Travel\TravelHomeControls.csv" />
-    <None Include="Controls\HomePage\Travel\TravelHotelSearchPanelControls.csv" />
-    <None Include="Controls\Hotel\HotelResultsFiltersControls.csv" />
-    <None Include="Controls\Hotel\HotelResultsHolderControls.csv" />
-    <None Include="Controls\Hotel\HotelResultsTitleControls.csv" />
-    <None Include="Controls\Hotel\HotelRoomsHolderControls.csv" />
-    <None Include="Controls\Car\CarFiltersControls.csv" />
-    <None Include="Controls\Car\CarResultsHolderControls.csv" />
-    <None Include="Controls\PassengerInfoTripProductHolderControls.csv" />
-    <None Include="Controls\ResultControls.csv" />
-    <None Include="Controls\Air\AirResultsFiltersControls.csv" />
-    <None Include="Controls\Air\AirResultsHolderControls.csv" />
-    <None Include="Controls\BFCPaymentControls.csv" />
-    <None Include="Controls\CheckoutControls.csv" />
-    <None Include="Controls\LoginDetailsControls.csv" />
-    <None Include="Controls\PassengerInfoControls.csv" />
-    <Content Include="Controls\chromedriver.exe" />
-    <None Include="Controls\TripFolderControls.csv" />
     <Content Include="DataSheet\Air\Air_Amadeus.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -251,7 +168,6 @@
     <Content Include="DataSheet\Air\Air_WorldSpan.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Controls\TripFolderParserControls.csv" />
     <None Include="DataSheet\Activities\ActivityScenarios.xlsx" />
     <None Include="DataSheet\Car\CarScenarios.xlsx" />
     <None Include="DataSheet\Hotel\HotelScenarios.xlsx" />
@@ -269,6 +185,10 @@
     <ProjectReference Include="..\Rovia.UI.Automation.Exceptions\Rovia.UI.Automation.Exceptions.csproj">
       <Project>{2433e2f8-adcc-4b6e-87fa-2bdb60fd67e4}</Project>
       <Name>Rovia.UI.Automation.Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rovia.UI.Automation.Framework\Rovia.UI.Automation.Framework.csproj">
+      <Project>{56917c65-23ac-49a0-b4e7-b116ed99028a}</Project>
+      <Name>Rovia.UI.Automation.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Rovia.UI.Automation.Logger\Rovia.UI.Automation.Logger.csproj">
       <Project>{6537dee2-bb5f-4f94-b774-bd2b8a079ec1}</Project>

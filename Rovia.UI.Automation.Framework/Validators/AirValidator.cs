@@ -1,13 +1,13 @@
-﻿namespace Rovia.UI.Automation.Tests.Validators
-{
-    using System.Text;
-    using Exceptions;
-    using Logger;
-    using ScenarioObjects;
-    using ScenarioObjects.Air;
-    using Pages;
-    using System.Linq;
+﻿using Rovia.UI.Automation.Framework.Pages;
+using System.Text;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Air;
+using System.Linq;
 
+namespace Rovia.UI.Automation.Framework.Validators
+{
     /// <summary>
     /// This class contains all the methods for air product validations
     /// </summary>

@@ -1,15 +1,15 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using AppacitiveAutomationFramework;
-    using Exceptions;
-    using Logger;
-    using ScenarioObjects;
-    using Configuration;
-    using Utility;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.Framework.Utility;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// Air results page filters container
     /// </summary>

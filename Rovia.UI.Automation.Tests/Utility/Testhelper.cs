@@ -1,17 +1,17 @@
-﻿namespace Rovia.UI.Automation.Tests.Utility
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Criteria;
-    using Exceptions;
-    using Logger;
-    using ScenarioObjects;
-    using Application;
-    using Configuration;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using InvalidOperationException = Exceptions.InvalidOperationException;
+﻿using Rovia.UI.Automation.Framework.Application;
+using Rovia.UI.Automation.Framework.Configurations;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using InvalidOperationException = Rovia.UI.Automation.Exceptions.InvalidOperationException;
 
+namespace Rovia.UI.Automation.Tests.Utility
+{
     /// <summary>
     /// This is common helper class to call all page level methods
     /// </summary>

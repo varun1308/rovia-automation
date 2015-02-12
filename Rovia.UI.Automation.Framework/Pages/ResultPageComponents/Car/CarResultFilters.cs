@@ -1,12 +1,12 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using AppacitiveAutomationFramework;
-    using ScenarioObjects;
-    using Exceptions;
-    using Configuration;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.Exceptions;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// Car results page filters container
     /// </summary>

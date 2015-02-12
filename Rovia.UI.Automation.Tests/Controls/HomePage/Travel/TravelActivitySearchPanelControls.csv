@@ -1,8 +1,0 @@
-navBar,ul.nav li a.icon_activity
-searchPanel,div#activities
-fromDate,#txtFromDate
-toDate,#txtToDate
-inpShortLocation,#txtActivityDestination
-autoSuggestOptions, div.ac_results li
-autoSuggestBox, div.ac_results
-btnActivitySearch,#btnActivitySearch

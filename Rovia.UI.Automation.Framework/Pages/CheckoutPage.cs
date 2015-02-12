@@ -1,18 +1,18 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using AppacitiveAutomationFramework;
-    using OpenQA.Selenium;
-    using Exceptions;
-    using Logger;
-    using ScenarioObjects;
-    using ScenarioObjects.Activity;
-    using ScenarioObjects.Hotel;
-    using Configuration;
-    using Validators;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AppacitiveAutomationFramework;
+using OpenQA.Selenium;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.Framework.Validators;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Activity;
+using Rovia.UI.Automation.ScenarioObjects.Hotel;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// This class holds all the fields and methods for checkout page
     /// </summary>

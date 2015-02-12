@@ -1,17 +1,16 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using AppacitiveAutomationFramework;
-    using Exceptions;
-    using Logger;
-    using Configuration;
-    using Utility;
-    using ScenarioObjects;
-    using Validators;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.Framework.Validators;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// This class contains all the fields and methods for passenger info page
     /// </summary>

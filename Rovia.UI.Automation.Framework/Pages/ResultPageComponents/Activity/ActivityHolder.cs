@@ -1,16 +1,16 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents.Activity
-{
-    using System;
-    using System.Linq;
-    using System.Threading;
-    using AppacitiveAutomationFramework;
-    using Criteria;
-    using Exceptions;
-    using Logger;
-    using ScenarioObjects;
-    using ScenarioObjects.Activity;
-    using Configuration;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Activity;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// Activity results page holder for Itinerary,Filter and Matrix
     /// </summary>

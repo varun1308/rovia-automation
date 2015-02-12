@@ -1,11 +1,11 @@
-﻿namespace Rovia.UI.Automation.Tests.Validators
-{
-    using System;
-    using System.Text;
-    using Exceptions;
-    using ScenarioObjects;
-    using Pages;
+﻿using Rovia.UI.Automation.Framework.Pages;
+using System;
+using System.Text;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Validators
+{
     /// <summary>
     /// This class contains all the methods for hotel product validations
     /// </summary>

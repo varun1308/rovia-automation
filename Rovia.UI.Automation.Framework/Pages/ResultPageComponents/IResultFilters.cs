@@ -1,7 +1,7 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
-{
-    using ScenarioObjects;
+﻿using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     //This interface holds results page filters methods
     public interface IResultFilters
     {

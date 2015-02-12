@@ -1,13 +1,13 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
-{
-    using System.Linq;
-    using System.Threading;
-    using AppacitiveAutomationFramework;
-    using Criteria;
-    using Exceptions;
-    using ScenarioObjects;
-    using Configuration;
+﻿using System.Linq;
+using System.Threading;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// Rovia site specific hotel product search methods
     /// </summary>

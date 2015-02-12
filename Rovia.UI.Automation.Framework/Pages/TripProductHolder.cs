@@ -1,16 +1,16 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using AppacitiveAutomationFramework;
-    using Logger;
-    using ScenarioObjects;
-    using ScenarioObjects.Activity;
-    using ScenarioObjects.Air;
-    using ScenarioObjects.Hotel;
-    using Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
+using Rovia.UI.Automation.ScenarioObjects.Activity;
+using Rovia.UI.Automation.ScenarioObjects.Air;
+using Rovia.UI.Automation.ScenarioObjects.Hotel;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// This class holds fields and methods for product on trip page
     /// </summary>

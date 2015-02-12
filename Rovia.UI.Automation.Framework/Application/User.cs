@@ -1,7 +1,7 @@
-﻿namespace Rovia.UI.Automation.Tests.Application
-{
-    using ScenarioObjects;
+﻿using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Application
+{
     /// <summary>
     /// Saves logged in user data
     /// </summary>

@@ -1,10 +1,10 @@
-﻿namespace Rovia.UI.Automation.Tests.Utility
-{
-    using System;
-    using System.Collections.Generic;
-    using Exceptions;
-    using ScenarioObjects;
+﻿using System;
+using System.Collections.Generic;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Utility
+{
     /// <summary>
     /// This class provides few common conversion methods like (string cabinType to enumeration of cabinType)
     /// </summary>

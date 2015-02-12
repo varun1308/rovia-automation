@@ -1,9 +1,0 @@
-divResultHolder,div#HotelListHolder
-divOffers,div.maroonbg
-divHotelName,div.text-boxtitle
-hotelRating,ul.hotel_result_stars
-stars,a.orangeStar
-hotelAddress,p.hotelAddressTruncate
-hotelPrice,span.price
-btnSelectHotel,div.btnTopMinusMargin
-suppliers,.jsShowHotelDetails .text-flighttime span

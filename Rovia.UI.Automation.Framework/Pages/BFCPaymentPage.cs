@@ -1,14 +1,14 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages
-{
-    using System;
-    using System.Threading;
-    using AppacitiveAutomationFramework;
-    using OpenQA.Selenium;
-    using Exceptions;
-    using Logger;
-    using ScenarioObjects;
-    using Configuration;
+﻿using System;
+using System.Threading;
+using AppacitiveAutomationFramework;
+using OpenQA.Selenium;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// This class holds all the fields and methods for BFC Payment page
     /// </summary>

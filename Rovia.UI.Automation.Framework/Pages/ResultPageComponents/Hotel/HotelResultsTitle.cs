@@ -1,13 +1,13 @@
 ﻿
 
-namespace Rovia.UI.Automation.Tests.Pages.ResultPageComponents
-{
-    using System;
-    using System.Linq;
-    using AppacitiveAutomationFramework;
-    using Criteria;
-    using Configuration;
+using System;
+using System.Linq;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Framework.Configurations;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// Class contains properties of results page title
     /// </summary>

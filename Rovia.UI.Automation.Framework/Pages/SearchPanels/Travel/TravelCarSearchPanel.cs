@@ -1,10 +1,10 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
-{
-    using System.Linq;
-    using Criteria;
-    using ScenarioObjects;
-    using Configuration;
+﻿using Rovia.UI.Automation.Framework.Configurations;
+using System.Linq;
+using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// Travel site specific car product search methods
     /// </summary>

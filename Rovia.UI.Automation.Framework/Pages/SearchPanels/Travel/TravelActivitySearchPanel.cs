@@ -1,4 +1,5 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
+﻿
+namespace Rovia.UI.Automation.Framework.Pages
 {
     /// <summary>
     /// Travel site specific activity product search methods

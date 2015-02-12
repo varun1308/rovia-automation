@@ -1,21 +1,17 @@
-﻿namespace Rovia.UI.Automation.Tests.Application
-{
-    using System;
-    using System.Drawing.Imaging;
-    using System.IO;
-    using System.Threading;
-    using AppacitiveAutomationFramework;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using OpenQA.Selenium;
-    using Logger;
-    using ScenarioObjects;
-    using Configuration;
-    using Pages;
-    using Pages.Parsers;
-    using Pages.ResultPageComponents;
-    using Pages.ResultPageComponents.Activity;
-    using Pages.SearchPanels;
+﻿using Rovia.UI.Automation.Framework.Configurations;
+using Rovia.UI.Automation.Framework.Pages;
+using System;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Threading;
+using AppacitiveAutomationFramework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using Rovia.UI.Automation.Logger;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Application
+{
     /// <summary>
     /// Class to intialize driver configuration and UI controls
     /// </summary>

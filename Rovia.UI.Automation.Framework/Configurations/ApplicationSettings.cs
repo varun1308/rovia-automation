@@ -1,6 +1,7 @@
-﻿namespace Rovia.UI.Automation.Tests.Configuration
+﻿using System.Configuration;
+
+namespace Rovia.UI.Automation.Framework.Configurations
 {
-    using System.Configuration;
     /// <summary>
     /// Stores all the app configuration keys in properties
     /// </summary>

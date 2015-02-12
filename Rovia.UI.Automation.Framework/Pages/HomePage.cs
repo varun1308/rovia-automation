@@ -1,13 +1,13 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages
-{
-    using AppacitiveAutomationFramework;
-    using Configuration;
-    using Criteria;
-    using Exceptions;
-    using Logger;
-    using System;
-    using System.Threading;
+﻿using Rovia.UI.Automation.Framework.Configurations;
+using AppacitiveAutomationFramework;
+using Rovia.UI.Automation.Criteria;
+using Rovia.UI.Automation.Exceptions;
+using Rovia.UI.Automation.Logger;
+using System;
+using System.Threading;
 
+namespace Rovia.UI.Automation.Framework.Pages
+{
     /// <summary>
     /// This class contains all the fields and methods for site home page
     /// </summary>

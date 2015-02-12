@@ -1,4 +1,4 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages.SearchPanels
+﻿namespace Rovia.UI.Automation.Framework.Pages
 {
     /// <summary>
     /// DreamTrips site specific car product search methods

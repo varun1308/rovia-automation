@@ -1,9 +1,8 @@
-﻿namespace Rovia.UI.Automation.Tests.Application
-{
-    using ScenarioObjects;
-    using Pages;
-    using Pages.SearchPanels;
+﻿using Rovia.UI.Automation.Framework.Pages;
+using Rovia.UI.Automation.ScenarioObjects;
 
+namespace Rovia.UI.Automation.Framework.Application
+{
     /// <summary>
     /// Travel site specific intialization
     /// </summary>
