@@ -1,0 +1,13 @@
+﻿#UnitTests
+
+##Introduction
+
+All test classes derieve from _BaseTestClass_. It encapsulates a reference to the LogManger, and DataBinder.
+It takes care of _Initialization_ as well as _CleanUp_ tasks. 
+
+##Steps for adding new TestClasses:
+
+1. Derieve a new testClass from _BaseTestClass_.
+2. Initialize _DataBinder_ and _TestHelper.TripProductType_ under _ClassInitialize_ attribute;
+3. Write UnitTest , add _DataSource_ and _TestCategory_ attributes;
+4. Call _Execute()_ from within the testcase.
