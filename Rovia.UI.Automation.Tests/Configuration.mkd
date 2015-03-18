@@ -1,0 +1,17 @@
+﻿#Configuration Settings
+
+##Introduction 
+
+###Connection Strings
+
+
+###DataSources
+
+
+###LogManager
+
+This section defines all the logging settings for the test run. Here we add Summaryloggers, Detail Loggers and define the severity settings.  
+To add a logger we are required to provide an alias, its namespace, assembly name and it target (filepath in case of file loggers and console for console loggers).  
+Severity values defines the extent of logging. Only those msgs which have a priority equal to or greater than the severity setting are logged.
+
+###AppSettings
