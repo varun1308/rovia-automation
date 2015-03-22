@@ -1,0 +1,14 @@
+#**References**
+Various external(in-house as well as third-party) libraries used in framework.
+
+1. AppacitiveAutomationFramework.dll : Wrapper dll project over Selenium methods.
+
+2. chromedriver.exe : Third party driver exe for chrome browser. Selenium inbuild supports firefox. So for running scripts other than firefox browser need browser exe's. We can download these driver exe's [here](http://www.seleniumhq.org/download/) .
+
+3. Selenium package dll's : Slenium provides below 4 dll's with downloads. We need to include all of them into project.
+* Selenium.WebDriverBackedSelenium.dll
+* ThoughtWorks.Selenium.Core.dll
+* WebDriver.dll
+* WebDriver.Support.dll
+
+We can download updated selenium package [here](http://www.seleniumhq.org/download/).

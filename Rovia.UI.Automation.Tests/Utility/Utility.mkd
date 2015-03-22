@@ -1,0 +1,7 @@
+﻿This folder contains following classes.
+
+1. Utility.cs : This class provides few common conversion methods like (string cabinType to enumeration of cabinType)
+
+2. TestExecutionPipeLine.cs : This class helps to determine and executing the steps in a tests.
+
+3. Testhelper.cs : This is an entry point to run test suite as it contains assembly initialize method. Acts as common helper class to call all page level methods.

@@ -1,0 +1,42 @@
+﻿#Configuration Settings
+
+###Connection Strings
+As this is data driven test suite. All connections strings are ODBC data providers. Datasources corresponding to these connection string can be served to run test case.
+
+
+###DataSources
+This is used to map to a worksheet in excel and used as datasource to test case.
+
+###LogManager
+
+This section defines all the logging settings for the test run. Here we add Summaryloggers, Detail Loggers and define the severity settings.  
+To add a logger we are required to provide an alias, its namespace, assembly name and it target (filepath in case of file loggers and console for console loggers).  
+Severity values defines the extent of logging. Only those msgs which have a priority equal to or greater than the severity setting are logged.
+
+###AppSettings
+* runner - Value can be local or browserstack. THis key will determines the test run target either it will be a Local System or BrowserStack Remote Machine.
+* driver - Value can be chrome or ie or firefox. In case of local runner we can specify driver here.
+
+#### BrowserStack Specific Keys
+* hubhost - BrowserStack remote url.
+* browserstack.user - BrowserStack Usernmae. 
+* browserstack.key - BrowserStack accesskey. 
+* browser - Specify browser name and version e.g. chrome|36
+* os - Specify os and version e.g. windows|8.1
+* resolution - Specify resolution for end browser. e.g. 1024x768
+* browserstack.debug - True/False. If it is true browserstack saves all debug info. 
+* takesScreenshot - True/False. If it is true browserstack takes screenshots at all stages in test run.
+
+#### Site Specific Keys
+* site - Site name travel/rovia/dt
+* application.environment - Specify environment qa/prod.
+* application.tripsErrorUI.url - Environment specific Trips Error Uri.
+* application.url -  Site url to be test.
+
+* application.maxSearchDepth - Limit page navigation on results page for add to cart action.
+* application.loggedfilepath - Provide path for storing log files and screenshots.
+
+* application.preferred.username - preferred customer username 
+* application.preferred.password - preferred customer password
+* application.registered.username - registered customer username
+* application.registered.password - registered customer password

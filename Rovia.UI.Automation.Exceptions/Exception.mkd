@@ -1,0 +1,17 @@
+﻿#Exceptions
+
+##Introduction
+
+These contain a set of Custom Exception which are used when the App moves to a logically invalid state.
+
+## Available Exceptions:
+
+*  **BaseException** :  All other exceptions are derieved from it.
+*  **InvalidInputException** :  Thrown when the Databinders encounter Invalid TestData.
+*  **InvalidOperationException** :  Thrown when the current page int the App does not support requested functionality.
+*  **PageLoadFailed** :  Thrown when a requested page fails to load.
+*  **UIElementNullOrNotVisible** :  Thrown when a UIElement is either null or not visible.
+*  **ValidationException** :  Thrown when page validation fails.
+*  **Alert** :  Thrown to register a warning.
+*  **AddToCartFailedException** :  Thrown when AddToCart Operation fails.
+  

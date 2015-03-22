@@ -1,0 +1,46 @@
+﻿#Logging Framework
+
+##Introduction
+
+Logging framework provides logging features. A singleton class LogManager is the entrypoint and serves all logging need.  
+Two types of logging is supported :    
+  1. Detail Logging  
+  2. Summary Logging
+
+###_LogManager_:  
+Logmanager ecncapsulates a list of _DetailLoggers_ and _summaryLoggers_.
+It Instructs the Loggers to create logs and the basis of Severity settings.
+
+###_Severity_
+
+Severity indicates the priority of the logging msg.
+Possible values:  
+  
+1.  All
+2.  Debug,
+3.  Information,
+4.  Status,
+5.  Warning,
+6.  Error,
+7.  Fatal,
+8.  Off
+
+Out of these 2-7 are available for use.
+
+###_SummaryEntry_
+
+Summary entry defines the structure of an entry in summary log.  
+It has the following structure : _ID-Description-PassedSteps-FailedSteps-Status_.
+
+###_DetailEntry_
+
+Detail Entry defines the structure of an entry in details log.  
+It Has the following structure : _ID-Description-LogData_.
+
+###_ILogger_
+
+ILogger is an interface that must be implemented by all loggers before they can be used. It force the logger to implement on on function :  _void Log(string message);_  
+Currently we have implemented 2 types of loggers : 
+
+1. ConsoleLoggers
+2. FileLoggers

@@ -1,0 +1,19 @@
+#**Rovia Automation Test-Suite**
+
+###Introduction
+    Rovia UI Automation Tool using Selenium and C# Scripting language.
+
+###Modules
+
+1. [References](References.mkd) : Various external(in-house as well as third-party) libraries used in framework.
+2. [Tests](Rovia.UI.Automation.Tests\Tests.mkd) : Unit tests and test data.
+3. [Data]() : Databinders and application-level object Models.
+4. [Automation Framework]().
+5. [Utility]() : Coustom-Exceptions and Log-Manager  
+
+
+### Techinical Aspects:
+
+* Selenium WebDriver 
+* C#
+* Selenio# Framework

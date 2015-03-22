@@ -204,10 +204,13 @@
       <DependentUpon>App.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
+    <None Include="Application\Application.mkd" />
+    <None Include="Configuration.mkd" />
     <None Include="Controls\Activity\ActivityHolderControls.csv" />
     <None Include="Controls\Activity\ActivityResultsHolderControls.csv" />
     <None Include="Controls\Activity\ActivityResultsFiltersControls.csv" />
     <None Include="Controls\CheckoutTripProductHolderControls.csv" />
+    <None Include="Controls\Controls.mkd" />
     <None Include="Controls\HomePage\DreamTrips\DTActivitySearchPanelControls.csv" />
     <None Include="Controls\HomePage\DreamTrips\DTAirSearchPanelControls.csv" />
     <None Include="Controls\HomePage\DreamTrips\DTCarSearchPanelControls.csv" />
@@ -254,7 +257,11 @@
     <None Include="Controls\TripFolderParserControls.csv" />
     <None Include="DataSheet\Activities\ActivityScenarios.xlsx" />
     <None Include="DataSheet\Car\CarScenarios.xlsx" />
+    <None Include="DataSheet\DataSheets.mkd" />
     <None Include="DataSheet\Hotel\HotelScenarios.xlsx" />
+    <None Include="Tests.mkd" />
+    <None Include="Tests\UnitTests.mkd" />
+    <None Include="Utility\Utility.mkd" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

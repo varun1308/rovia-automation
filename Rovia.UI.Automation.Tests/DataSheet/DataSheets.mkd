@@ -1,0 +1,78 @@
+﻿#Datasheets
+
+##Introduction
+Roviautomation Framework is essentially data-Driven. We have used a saperate data-sheet for each unit-test, clubbed  
+together in excel files.
+
+We hae essentially defined four formats for adding Test data to the data-sheets.
+
+####1. AirDataFormat:
+ 1. **Description** (_case-Insensitive_, _required_) : General description of the test flow, used for logging purposes.
+ 2. **ExecutionPipline** (_case-Insensitive_, _required_) : It describes the flow of the testcase. It takes multiple '|' separated  
+    execution-steps as input. Example _LogIn_|_Search_|_AddToCart_|_CheckOutTrip_  
+        Execution-Step :  
+      * LOGIN
+      * SEARCH
+      * SETFILTERS
+      * ADDTOCART
+      * CHECKOUTTRIP 
+      * EDITPAXINFO
+      * ENTERPAXINFO
+      * CONFIRMPAXINFO
+      * SAVETRIP
+      * TRIPSTARTOVER
+      * CONTINUESHOPPING
+      * PAYNOW  
+Though there is no restricction on Pipeline Creation, the Execution steps should make Logical sense.  
+ 3. **TripType** (_case-sensitive_, _required_) : Describes the nature of trip.  
+         Valid-values :  
+        * OneWay
+        * RoundTrip
+        * Multicity
+ 4. **AirPortPairs** (_case-Insensitive_, _required_) : List of hyphen seperated AirportCode. The airport Codes must be valid.  
+      Example : _SIN-BKK_|_BKK-SIN_|_SIN-HKG_
+ 5. **TravelDates** (_required_) : List of '|' seprated positive numbers used for calculating travel dates.  
+For example : 10 means 10 days from now.
+ 6. **Adults Infants And Children** (_required_) :  Indicate no of passengers.
+ 7. **IncludeNearByAirports** (_case-Insensitive_, _optional_) : Indicates weather to include nearby airports in the serach.  
+    Valid values:
+    * True
+    * False
+ 8. **CabinType** (_case-sensitive_, _required_) : Indicates the prefered cabin-type.  
+     valid-values:
+    * Economy
+    * Premium_Economy
+    * First
+    * Business
+ 9. **NonStopFlight** (_case-Insensitive_, _optional_) : Indicates if nonStop Flight is required.
+    Valid Values
+    * True 
+    * False  
+ 10. **AirLines** (_case-Insensitive_, _optional_) : List of '|' seperated Airline names used for selecting preferred airlines.  
+ 11.  **PaymentMode** (_case-Sensitive_, _optional_) : It specifies the payment mode to be used for booking.  
+Valid Values
+ * True 
+ * False  
+On Selecting CreditCard you can also select CreditCardType
+Valid Credit Card Types  
+        * Visa
+        * MasterCard
+        * AmericanExpress
+        * Discover
+        * JCB  
+Example : CreditCard|Visa
+ 12.  **Supplier** (_case-Insensitive_, _optional_) : It indicates the desired supplier you want to test.
+ 13. **UserType** (_case-sensitive_, _required_) : It indiacates the user type. Currently three user types are supported(_Guest_, _Registered_ and _Preferred_).
+ 14.  **Post Search Filters** and **Values** (_case-Insensitive_, _optional_) : These store the filter data. Currently forllowing filters are supported for Air results:
+   *  Duration
+   * CabinType
+   * TakeOffTimeRange
+   * AirLines
+   * Sort
+   * Matrix
+
+####2. HotelDataFormat:
+
+####3. CarDataFormat:
+
+####2. ActivityDataFormat:

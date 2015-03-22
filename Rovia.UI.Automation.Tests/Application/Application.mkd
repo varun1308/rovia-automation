@@ -1,0 +1,9 @@
+﻿# Application
+
+This folder contains application level classes. Responsibility of application classes is initilizing page classes with corresponding control files.
+
+1. RoviaApp.cs : It is a base application and it contains a logic to invoke controls for corp.rovia.com site.
+
+2. RoviaTravelApp.cs : This application class used for www.rovia.com site. It is inherited from RoviaApp.cs so it will use all the common methods from RoviaApp.cs class. We need to override properties wherver necessary.
+
+3. DreamTripsApp.cs : This application class used for dreamtrips.com site. It is inherited from RoviaApp.cs so it will use all the common methods from RoviaApp.cs class. We need to override properties wherver necessary.

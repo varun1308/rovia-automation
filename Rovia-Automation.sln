@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppacitiveLoggingFramework"
 	ProjectSection(SolutionItems) = preProject
 		References\AppacitiveLoggingFramework\AppacitiveAutomationFramework.dll = References\AppacitiveLoggingFramework\AppacitiveAutomationFramework.dll
 		References\AppacitiveLoggingFramework\chromedriver.exe = References\AppacitiveLoggingFramework\chromedriver.exe
+		References.mkd = References.mkd
 		References\AppacitiveLoggingFramework\Selenium.WebDriverBackedSelenium.dll = References\AppacitiveLoggingFramework\Selenium.WebDriverBackedSelenium.dll
 		References\AppacitiveLoggingFramework\Tavisca.Testing.Platform.dll = References\AppacitiveLoggingFramework\Tavisca.Testing.Platform.dll
 		References\AppacitiveLoggingFramework\ThoughtWorks.Selenium.Core.dll = References\AppacitiveLoggingFramework\ThoughtWorks.Selenium.Core.dll
@@ -27,6 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		QA.testsettings = QA.testsettings
 		Rovia-Automation.vsmdi = Rovia-Automation.vsmdi
 		Rovia.Prod.testsettings = Rovia.Prod.testsettings
+		RoviaAutomationFramework.mkd = RoviaAutomationFramework.mkd
 		Travel.Prod.testsettings = Travel.Prod.testsettings
 		Travel.QA.testsettings = Travel.QA.testsettings
 	EndProjectSection

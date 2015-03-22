@@ -1,0 +1,5 @@
+﻿# Control Files
+
+This folder contains all the controls visible on UI. As application is a collection of pages, controls are saved at page levels.
+
+Control files name itself specifies the page controls resides inside.
