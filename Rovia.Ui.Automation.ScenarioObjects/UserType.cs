@@ -4,6 +4,11 @@
     {
         Registered,
         Guest,
-        Preferred
+        Preferred,
+        DTP,
+        DTG,
+        WV,
+        DTS,
+        LTC
     }
 }

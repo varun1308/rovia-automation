@@ -83,9 +83,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tavisca.Testing.Platform">
-      <HintPath>..\References\AppacitiveLoggingFramework\Tavisca.Testing.Platform.dll</HintPath>
-    </Reference>
     <Reference Include="ThoughtWorks.Selenium.Core, Version=2.42.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\AppacitiveLoggingFramework\ThoughtWorks.Selenium.Core.dll</HintPath>
@@ -171,6 +168,7 @@
   <ItemGroup>
     <None Include="App.config">
       <TransformOnBuild>true</TransformOnBuild>
+      <SubType>Designer</SubType>
     </None>
     <None Include="App.Debug.config">
       <DependentUpon>App.config</DependentUpon>
@@ -191,10 +189,12 @@
     <None Include="App.Rovia.Prod.config">
       <DependentUpon>App.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
+      <SubType>Designer</SubType>
     </None>
     <None Include="App.Rovia.QA.config">
       <DependentUpon>App.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
+      <SubType>Designer</SubType>
     </None>
     <None Include="App.Travel.Prod.config">
       <DependentUpon>App.config</DependentUpon>

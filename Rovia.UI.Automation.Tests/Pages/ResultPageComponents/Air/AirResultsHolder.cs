@@ -184,7 +184,7 @@
                 var flightSegmentHolder = GetUIElements("flightSegmentHolder");
                 var validIndices = Enumerable.Range(0, suppliers.Count());
                 if (!string.IsNullOrEmpty(criteria.Supplier))
-                    validIndices = validIndices.Where(i => suppliers[i].SupplierName.Equals(criteria.Supplier));
+                    validIndices = validIndices.Where(i => suppliers[i].SupplierName.Contains(criteria.Supplier));
                 var resultIndex = validIndices.First(i => AddToCart(flightSegmentHolder[i], btnAddToCart[i]));
                 _addedItinerary.Supplier = suppliers[resultIndex];
                 _addedItinerary.Passengers = criteria.Passengers;
