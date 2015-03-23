@@ -126,7 +126,7 @@
             var sessionId = ApplicationSettings.Environment == "PROD" ? WaitAndGetBySelector("sessionIdProd", ApplicationSettings.TimeOut.Fast).GetAttribute("title") :
                 WaitAndGetBySelector("sessionIdQA", ApplicationSettings.TimeOut.Fast).GetAttribute("title");
             return string.IsNullOrEmpty(sessionId) ? string.Empty :
-               ApplicationSettings.TripsErrorUri + "?sessionid=" + sessionId;
+               ApplicationSettings.TripsErrorUri + "?sessionId=" + sessionId;
         }
 
         #endregion
