@@ -58,10 +58,12 @@
                 inputForm["fNames"][i].SendKeys(x.FirstName);
                 inputForm["mNames"][i].SendKeys(x.MiddleName);
                 inputForm["lNames"][i].SendKeys(x.LastName);
+                inputForm["dob"][i].SendKeys(x.BirthDate.Replace('-', '/'));
+                inputForm["eMail"][i].Click();
                 inputForm["eMail"][i].SendKeys(x.Emailid);
-                inputForm["dob"][i].SendKeys(x.BirthDate);
-                inputForm["gender"][i].SelectFromDropDown(x.Gender);
                 inputForm["vEmail"][i].SendKeys(x.Emailid);
+                
+                inputForm["gender"][i].SelectFromDropDown(x.Gender);
                 ++i;
             });
         }

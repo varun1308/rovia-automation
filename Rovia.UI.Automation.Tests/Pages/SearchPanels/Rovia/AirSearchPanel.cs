@@ -97,10 +97,14 @@
             {
                 WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].DepartureAirport);
                 WaitAndGetBySelector("toAp", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].ArrivalAirport);
+                ExecuteJavascript("$('input.jOW.dateReadOnly_hm').attr('readonly', false);");
                 WaitAndGetBySelector("onwardDate", ApplicationSettings.TimeOut.Slow).SendKeys(airportPairs[0].DepartureDateTime.ToString("MM/dd/yyyy"));
                 if (searchType == SearchType.RoundTrip)
+                {
+                    ExecuteJavascript("$('input.jRT.dateReadOnly_hm').attr(\"readonly\", false);");
                     WaitAndGetBySelector("returnDate", ApplicationSettings.TimeOut.Slow).SendKeys(
                         airportPairs[1].DepartureDateTime.ToString("MM/dd/yyyy"));
+                }
                 WaitAndGetBySelector("fromAp", ApplicationSettings.TimeOut.Slow).Click();
             }
 
@@ -121,6 +125,9 @@
             }
             i = 0;
             var dates = GetUIElements("dates").Skip(2).Take(airportPairs.Count).ToList();
+            ExecuteJavascript("var row = $('.jRowFlight','.jMDContainer');" +
+                              "$.each(row,function(index,value)" +
+                              "{ $('#Text7',value).attr('readonly',false);});");
             dates.ForEach(x => x.SendKeys(airportPairs[i++].DepartureDateTime.ToString("MM/dd/yyyy")));
             dates[0].Click();
         }
