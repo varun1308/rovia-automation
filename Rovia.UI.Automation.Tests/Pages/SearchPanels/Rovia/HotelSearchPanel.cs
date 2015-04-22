@@ -29,10 +29,12 @@
 
         protected void SetStayPeriod(StayPeriod stayPeriod)
         {
+            ExecuteJavascript("$('input.checkInDate').attr('readonly', false);");
             WaitAndGetBySelector("checkInDate", ApplicationSettings.TimeOut.Slow).SendKeys(stayPeriod.CheckInDate.ToString("MM/dd/yyyy"));
+            ExecuteJavascript("$('input.checkOutDate').attr('readonly', false);");
             WaitAndGetBySelector("checkOutDate", ApplicationSettings.TimeOut.Slow).SendKeys(stayPeriod.CheckOutDate.ToString("MM/dd/yyyy"));
         }
-
+        
         protected void SetLocation(string shortlocation, string location)
         {
             var locationHolder = WaitAndGetBySelector("inpShortLocation", ApplicationSettings.TimeOut.Slow);
@@ -72,6 +74,13 @@
                 filters.AdditionalPreferences.ForEach(x => ExecuteJavascript("$('#ulAdditionalPref').find('[data-value=\"" + x + "\"]').click()"));
         }
 
+        protected void ResolveMultiLocationOptions()
+        {
+            var multiLocOption = WaitAndGetBySelector("multiLocOptionButton", ApplicationSettings.TimeOut.Fast);
+            if (multiLocOption != null && multiLocOption.Displayed)
+                multiLocOption.Click();
+        }
+
         #endregion
 
         #region Public Mebmers
@@ -90,6 +99,7 @@
             SetPassengerDetails(hotelSearchCriteria.Passengers);
             ApplyPreSearchFilters(hotelSearchCriteria.Filters.PreSearchFilters);
             WaitAndGetBySelector("btnHotelSearch", ApplicationSettings.TimeOut.Slow).Click();
+            ResolveMultiLocationOptions();
         }
 
         #endregion

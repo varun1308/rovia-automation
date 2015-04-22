@@ -179,7 +179,7 @@
         {
             var subTitles = GetUIElements("subTitle").SelectMany(x => x.Text.ToUpper().Trim().Split('/'));
             var airLines = GetUIElements("title").Select(x => x.Text.ToUpper()).ToList();
-            airLines.RemoveAll(x => x.Trim().Equals("Multiple Airlines"));
+            airLines.RemoveAll(x => x.Trim().Contains("Multiple Airlines"));
             airLines.AddRange(subTitles);
             return airLines;
         }

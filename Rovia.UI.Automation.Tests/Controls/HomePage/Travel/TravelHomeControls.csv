@@ -9,3 +9,6 @@ logOutProd,.jsLogoutBtn
 divErrors,span.divError
 country,select.span12.jCountrySelect
 saveCountry,a.btn.btn-primary.span12.jSaveBtn
+lnkLogInPreQA,ul.nav li a[href="http://portal.preqa-rovia.com/travel/login"] span
+logOutPreQA,.jsLogoutBtn
+sessionIdPreQA,span#ucPWP_ctl16_31210_lblAPISessionId

@@ -51,7 +51,9 @@
         {
             var activitySearchCriteria = searchCriteria as ActivitySearchCriteria;
             SelectSearchPanel();
+            ExecuteJavascript("$('#txtFromDate').attr('readonly',false);");
             WaitAndGetBySelector("fromDate", ApplicationSettings.TimeOut.Slow).SendKeys(activitySearchCriteria.FromDate.ToString("MM/dd/yyyy"));
+            ExecuteJavascript("$('#txtToDate').attr('readonly',false);");
             WaitAndGetBySelector("toDate", ApplicationSettings.TimeOut.Slow).SendKeys(activitySearchCriteria.ToDate.ToString("MM/dd/yyyy"));
             SetLocation(activitySearchCriteria.ShortLocation, activitySearchCriteria.Location);
             WaitAndGetBySelector("btnActivitySearch", ApplicationSettings.TimeOut.Slow).Click();

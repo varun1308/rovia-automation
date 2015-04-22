@@ -70,6 +70,7 @@
                 WaitAndGetBySelector("pickUpCityLoc", ApplicationSettings.TimeOut.Slow).SendKeys(carSearchCriteria.PickUp.PickUpLocCode);
                 if (!string.IsNullOrEmpty(carSearchCriteria.PickUp.PickUpLocation)) SetOriginLocation(carSearchCriteria.PickUp.PickUpLocation);
             }
+            ExecuteJavascript("$('#txtPickupDate').attr('readonly', false);");
             var pickUpDate = WaitAndGetBySelector("pickUpDate", ApplicationSettings.TimeOut.Slow);
             pickUpDate.SendKeys(carSearchCriteria.PickUp.PickUpDate.ToString("MM/dd/yyyy"));
             pickUpDate.Click();
@@ -94,6 +95,7 @@
             }
             else
                 WaitAndGetBySelector("dropoffSameAsPickUp", ApplicationSettings.TimeOut.Slow).Click();
+            ExecuteJavascript("$('#txtDropoffDate').attr('readonly', false);");
             var dropoffDate = WaitAndGetBySelector("dropoffDate", ApplicationSettings.TimeOut.Slow);
             dropoffDate.SendKeys(carSearchCriteria.DropOff.DropOffDate.ToString("MM/dd/yyyy"));
             dropoffDate.Click();

@@ -80,20 +80,27 @@
             }
         }
 
-        public bool IsUserLoggedIn()
-        {
-            var anchor = ApplicationSettings.Environment == "PROD"
-                ? WaitAndGetBySelector("logOutProd", ApplicationSettings.TimeOut.Fast) : WaitAndGetBySelector("logOutQA", ApplicationSettings.TimeOut.Fast);
-            return anchor != null && anchor.Displayed;
-        }
-
         /// <summary>
         /// Redirect to log in page
         /// </summary>
         public void GoToLoginPage()
         {
-            var login = ApplicationSettings.Environment == "PROD"
-               ? WaitAndGetBySelector("lnkLogInProd", ApplicationSettings.TimeOut.Fast) : WaitAndGetBySelector("lnkLogInQA", ApplicationSettings.TimeOut.Fast);
+            IUIWebElement login;
+            switch (ApplicationSettings.Environment)
+            {
+                case "QA":
+                    login = WaitAndGetBySelector("lnkLogInQA", ApplicationSettings.TimeOut.Fast);
+                    break;
+                case "STAGE":
+                    login = WaitAndGetBySelector("lnkLogInStage", ApplicationSettings.TimeOut.Fast);
+                    break;
+                case "PROD":
+                    login = WaitAndGetBySelector("lnkLogInProd", ApplicationSettings.TimeOut.Fast);
+                    break;
+                default:
+                    login = WaitAndGetBySelector("lnkLogInPreQA", ApplicationSettings.TimeOut.Fast);
+                    break;
+            }
             login.Click();
         }
 
@@ -102,8 +109,22 @@
         /// </summary>
         public void LogOut()
         {
-            var logout = ApplicationSettings.Environment == "PROD"
-                ? WaitAndGetBySelector("logOutProd", ApplicationSettings.TimeOut.Fast) : WaitAndGetBySelector("logOutQA", ApplicationSettings.TimeOut.Fast);
+            IUIWebElement logout;
+            switch (ApplicationSettings.Environment)
+            {
+                case "QA":
+                    logout = WaitAndGetBySelector("logOutQA", ApplicationSettings.TimeOut.Fast);
+                    break;
+                case "STAGE":
+                    logout = WaitAndGetBySelector("logOutStage", ApplicationSettings.TimeOut.Fast);
+                    break;
+                case "PROD":
+                    logout = WaitAndGetBySelector("logOutProd", ApplicationSettings.TimeOut.Fast);
+                    break;
+                default:
+                    logout = WaitAndGetBySelector("logOutPreQA", ApplicationSettings.TimeOut.Fast);
+                    break;
+            }
             logout.Click();
         }
 
@@ -123,10 +144,26 @@
         /// <returns></returns>
         public string GetTripsErrorUri()
         {
-            var sessionId = ApplicationSettings.Environment == "PROD" ? WaitAndGetBySelector("sessionIdProd", ApplicationSettings.TimeOut.Fast).GetAttribute("title") :
-                WaitAndGetBySelector("sessionIdQA", ApplicationSettings.TimeOut.Fast).GetAttribute("title");
+
+            string sessionId;
+            switch (ApplicationSettings.Environment)
+            {
+                case "QA":
+                    sessionId =
+                        WaitAndGetBySelector("sessionIdQA", ApplicationSettings.TimeOut.Fast).GetAttribute("title");
+                    break;
+                case "STAGE":
+                    sessionId = WaitAndGetBySelector("sessionIdStage", ApplicationSettings.TimeOut.Fast).GetAttribute("title");
+                    break;
+                case "PROD":
+                    sessionId = WaitAndGetBySelector("sessionIdProd", ApplicationSettings.TimeOut.Fast).GetAttribute("title");
+                    break;
+                default:
+                    sessionId = WaitAndGetBySelector("sessionIdPreQA", ApplicationSettings.TimeOut.Fast).GetAttribute("title");
+                    break;
+            }
             return string.IsNullOrEmpty(sessionId) ? string.Empty :
-               ApplicationSettings.TripsErrorUri + "?sessionId=" + sessionId;
+                ApplicationSettings.TripsErrorUri + "?sessionId=" + sessionId;
         }
 
         #endregion

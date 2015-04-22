@@ -238,7 +238,7 @@
                         _app.State.CurrentUser.IsLoggedIn = true;
                         break;
                     case UserType.Guest:
-                        _app.LoginDetailsPage.ContinueAsGuest("vikul", "rathod", "vrathod@tavisca.com");
+                        _app.LoginDetailsPage.ContinueAsGuest("Rohan", "Pandit", "rpandit@tavisca.com");
                         _app.State.CurrentUser.ResetUser();
                         break;
                 }

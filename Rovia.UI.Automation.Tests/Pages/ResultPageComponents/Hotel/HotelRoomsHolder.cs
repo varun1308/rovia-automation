@@ -125,7 +125,7 @@
                        .Select(x => x.GetAttribute("title")).ToArray();
                 var validIndices = Enumerable.Range(0, suppliers.Count());
                 if (supplier != null)
-                    validIndices = validIndices.TakeWhile(x => suppliers[x].Equals(supplier));
+                    validIndices = validIndices.TakeWhile(x => suppliers[x].Contains(supplier));
                 var addToCartBtn = GetUIElements("btnAddToCart");
                 var hotelRating = GetUIElements("hotelRating").Count;
                 var roomDetatils = GetUIElements("roomDetails").Select(x => x.Text).ToArray();

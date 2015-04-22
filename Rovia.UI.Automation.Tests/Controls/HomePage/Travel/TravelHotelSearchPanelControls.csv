@@ -10,3 +10,4 @@ autoSuggestOptions, div.ac_results li
 autoSuggestBox, div.ac_results
 txtHotelName,input#txtHotelName
 btnHotelSearch,button#btnHotelSearch
+multiLocOptionButton,button.btn.btn-primary.jsContinue

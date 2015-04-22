@@ -9,3 +9,6 @@ logOutProd,a#ucPWP_ctl08_13082_ucHeaderMenu_lnkLogout
 divErrors,span.divError
 country,select.span12.jCountrySelect
 saveCountry,a.btn.btn-primary.span12.jSaveBtn
+lnkLogInPreQA,a#ucPWP_ctl09_26970_ucHeaderMenu_lnkLogin
+logOutPreQA,a#ucPWP_ctl09_26970_ucHeaderMenu_lnkLogout
+sessionIdPreQA,span#ucPWP_ctl15_26892_lblAPISessionId

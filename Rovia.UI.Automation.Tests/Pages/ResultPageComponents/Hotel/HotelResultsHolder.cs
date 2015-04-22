@@ -27,7 +27,7 @@
                             .Select(x => x.GetAttribute("title").Split('|')).ToArray();
                 var validIndices = Enumerable.Range(0, suppliers.Count());
                 if (!string.IsNullOrEmpty(hotelSupplier))
-                    validIndices = validIndices.Where(x => suppliers[x][1].Equals(hotelSupplier));
+                    validIndices = validIndices.Where(x => suppliers[x][1].Contains(hotelSupplier));
                 var btnAddToCart = GetUIElements("btnSelectHotel");
                 var resultIndex = validIndices.First(i => SelectRoom(btnAddToCart[i], roomSupplier));
                 _selectedItinerary.Supplier = new Supplier()

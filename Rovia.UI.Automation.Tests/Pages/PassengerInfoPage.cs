@@ -1,4 +1,6 @@
-﻿namespace Rovia.UI.Automation.Tests.Pages
+﻿using System.Globalization;
+
+namespace Rovia.UI.Automation.Tests.Pages
 {
     using System;
     using System.Collections.Generic;
@@ -85,7 +87,8 @@
         private static Passenger GetPassenger(List<string> passengerElements)
         {
             var today = DateTime.Today;
-            var bday = DateTime.Parse(passengerElements[passengerElements.IndexOf("BIRTHDATE") + 1]);
+            var bday = DateTime.ParseExact(passengerElements[passengerElements.IndexOf("BIRTHDATE") + 1], "mm/dd/yyyy", new CultureInfo("en-US"), DateTimeStyles.None);
+
             var age = today.Year - bday.Year;
             if (bday > today.AddYears(-age)) age--;
             if (age <= 2)
