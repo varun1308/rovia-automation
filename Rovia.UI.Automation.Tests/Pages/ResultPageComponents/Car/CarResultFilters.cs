@@ -39,8 +39,8 @@
 
             priceRange.MinPrice = minPrice;
             priceRange.MaxPrice = maxPrice;
-
-            ExecuteJavascript("$('#sliderRangePrice').trigger({type:'slideStop',value:[" + (minPrice * 100) + "," + (maxPrice * 100) + "]})");
+            //$('#sliderRangePrice').val(["300","200"]);
+            ExecuteJavascript("$('#sliderRangePrice').val([" + (minPrice * 100) + "," + (maxPrice * 100) + "])");
         }
 
         private void SetLocationsFilter(List<string> locations)

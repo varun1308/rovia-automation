@@ -25,7 +25,7 @@
                     PickUpType = StringToEnum<PickUpType>(pick[0]),
                     PickUpLocCode = pick[1],
                     PickUpDate = DateTime.Now.AddDays(int.Parse(pickUpDateTimeTime[0])),
-                    PickUpTime = pickUpDateTimeTime.Length == 2 ? pickUpDateTimeTime[1] : "Anytime",
+                    PickUpTime = pickUpDateTimeTime.Length == 2 ? pickUpDateTimeTime[1] : "9:30 AM",
                     PickUpLocation = location
                 };
             }
@@ -46,7 +46,7 @@
                     DropOffType = StringToEnum<DropOffType>(drop[0]),
                     DropOffLocCode = drop.Length > 1 && !string.IsNullOrEmpty(drop[1]) ? drop[1] : string.Empty,
                     DropOffDate = DateTime.Now.AddDays(int.Parse(dropoffDateTime[0])),
-                    DropOffTime = dropoffDateTime.Length == 2 ? dropoffDateTime[1] : "Anytime",
+                    DropOffTime = dropoffDateTime.Length == 2 ? dropoffDateTime[1] : "11:30 PM",
                     DropOffLocation = location
                 };
             }
