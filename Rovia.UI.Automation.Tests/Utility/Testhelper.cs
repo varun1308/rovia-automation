@@ -262,6 +262,7 @@
                 if (!_app.State.CurrentPage.Equals("HomePage"))
                     throw new InvalidOperationException("Search", _app.State.CurrentPage);
                 _app.HomePage.Search(_criteria);
+                //TODO: To change the controls preloader
                 _app.ResultsPage.WaitForResultLoad();
                 TripsErrorUI = _app.HomePage.GetTripsErrorUri();
                 _app.State.CurrentPage = "ResultsPage";

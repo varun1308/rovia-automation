@@ -3,17 +3,17 @@ amount,p.price.font-weight700
 titleAirLines,div.text-boxtitle
 subTitleAirLines,div.text-subtitle
 suppliers,div.jsSupplierName
-btnAddToCart,a.btn_AddToCart
+btnAddToCart,.btn_AddToCart
 btnCancel,button#btnCloseFlightPopup
 alerts,#dvAddToCartAir .alert
 btnCheckOut,a#btnCheckout
 airlineOnCart,div#dvAddToCartAir .span2.font12
 priceOnCart,div#dvAddToCartAir .price
-flightSegmentHolder,#AirListHolder .segmentHolder
-viewDetailsLink,.text-link
-flightLegs,.searchResultsInBorder
-legAirPorts,.airportname
-legTravelTime,.span3.borderRight
+flightSegmentHolder,#AirListHolder .jsItineary
+viewDetailsLink,a.viewDetails
+flightLegs,.jsItineary
+legAirPorts,.destination.fontBold.mbn.fontUpperCase
+legTravelTime,.takeoffDateTime
 legDuration,.text-flighttime
 legInfo,.span2 .text-flightinfo
 legLayOverTime,.bgwhite .pinkbg .txtAlignCenter
