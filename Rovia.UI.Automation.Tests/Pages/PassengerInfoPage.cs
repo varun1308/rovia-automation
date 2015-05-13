@@ -51,7 +51,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private void EnterPassengerDetails()
         {
-            ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
+            //ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
             var inputForm = GetInputForm();
             (new List<List<IUIWebElement>>(inputForm.Values.Take(6))).ForEach(x => x.ForEach(y => y.Clear()));
             var i = 0;
@@ -60,7 +60,12 @@ namespace Rovia.UI.Automation.Tests.Pages
                 inputForm["fNames"][i].SendKeys(x.FirstName);
                 inputForm["mNames"][i].SendKeys(x.MiddleName);
                 inputForm["lNames"][i].SendKeys(x.LastName);
-                inputForm["dob"][i].SendKeys(x.BirthDate.Replace('-', '/'));
+
+                if (inputForm["dob"].Count == 1)
+                {
+                    ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
+                    inputForm["dob"][i].SendKeys(x.BirthDate.Replace('-', '/'));
+                }
                 inputForm["eMail"][i].Click();
                 inputForm["eMail"][i].SendKeys(x.Emailid);
                 inputForm["vEmail"][i].SendKeys(x.Emailid);
@@ -74,8 +79,10 @@ namespace Rovia.UI.Automation.Tests.Pages
         {
             var paxConfDetails = GetUIElements("paxConfDiv").Select(x => x.Text.Split(new[] { '\r', '\n' }).ToList()).ToList();
             paxConfDetails.ForEach(x => x.RemoveAll(string.IsNullOrEmpty));
-            VerifyPaxDetails(paxConfDetails.Select(GetPassenger));
-
+            if (TestHelper.TripProductType != TripProductType.Car )
+            {
+                VerifyPaxDetails(paxConfDetails.Select(GetPassenger));
+            }
         }
 
         private static void VerifyPaxDetails(IEnumerable<Passenger> passengers)

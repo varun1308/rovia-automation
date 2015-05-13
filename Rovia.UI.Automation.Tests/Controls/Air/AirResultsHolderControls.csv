@@ -11,8 +11,8 @@ airlineOnCart,div#dvAddToCartAir .span2.font12
 priceOnCart,div#dvAddToCartAir .price
 flightSegmentHolder,#AirListHolder .jsItineary
 viewDetailsLink,a.viewDetails
-flightLegs,.jsItineary
-legAirPorts,.destination.fontBold.mbn.fontUpperCase
+flightLegs,.jsItinearylegAirPorts
+legAirPorts,.displayInlineBlock .fontUpperCase strong
 legTravelTime,.takeoffDateTime
 legDuration,.text-flighttime
 legInfo,.span2 .text-flightinfo

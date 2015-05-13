@@ -310,7 +310,7 @@
                     throw new AddToCartFailedException();
                 _app.State.CurrentPage = "TripFolderPage";
                 //TODO: This is a bug which needs to be resolved
-                //_app.TripFolderPage.ValidateTripFolder(_selectedItineary);
+                _app.TripFolderPage.ValidateTripFolder(_selectedItineary);
                 _logger.LogStatus("AddToCart", "Passed");
             }
             catch (Exception)
