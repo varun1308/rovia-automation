@@ -33,7 +33,7 @@
                     .ToArray();
             var taxes =
                 GetUIElements("fareBreakup")
-                    .Where((item) => item.Text.Contains("Taxes & fees"))
+                    .Where((item) => item.Text.Contains("Taxes & Fees"))
                     .Select(x => x.Text.Split(':')[1].TrimStart(' '))
                     .ToArray();
 
@@ -106,7 +106,7 @@
 
         private static FlightLeg ParseFlightLeg(IUIWebElement leg, IUIWebElement segments)
         {
-              var airportPair = leg.GetUIElements("legAirPorts").Select(x => x.Text).ToArray();
+                var airportPair = leg.GetUIElements("legAirPorts").Select(x => x.Text).ToArray();
                 var legInfo = leg.GetUIElements("legInfo").Select(x => x.Text.Replace("AM", "AM,").Replace("PM", "PM,").Split('\n').ToList()).ToList();
                 legInfo.ForEach(x => x.RemoveAt(0));
                 var segmentAirports = segments.GetUIElements("segmentAirPorts").Select(x => x.Text).ToArray();
