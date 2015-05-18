@@ -10,9 +10,9 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public bool IsInsuranceRequired { get; set; }
         public List<Passenger> Passengers { get; private set; }
         private static readonly string[] FirstName = { "VIKUL", "ASHISH", "POOJA", "PRIYA", "ASMITA", "GATUM", "RAMESH", "SURESH", "AARTI", "SNEHA", "ASTHA", "DIKSHA","TEJAS","ROHAN","KUNAL","SANDESH","KHUSHBOO" };
-        private static readonly string[] LastName = { "RATHOD", "GULIYA", "SINGH", "ROY", "SINGH", "DABUR", "GUPTA", "SHARMA", "TRIVEDI", "PASWAAN", "FERNANDIS", "SILVA", "LOL","CHAVHAN","PAWAR","ADE","TEDE" };
-        private static readonly string[] MiddleName = { "", "KUMAR", "", "", "RAM", "VIR", "", "VIJAY", "K", "", "", "D", "" };
-        private static readonly string[] EmailId = { "rpandit@tavisca.com", "kpriya@tavisca.com" };
+        private static readonly string[] LastName = { "AUTOMATION", "AUTOMATION", "AUTOMATION", "AUTOMATION"};
+        private static readonly string[] MiddleName = { "", ""};
+        private static readonly string[] EmailId = { "rpandit@tavisca.com", "vrathod@tavisca.com" };
         public PassengerDetails(Passengers passengers)
         {
             Passengers = new List<Passenger>();

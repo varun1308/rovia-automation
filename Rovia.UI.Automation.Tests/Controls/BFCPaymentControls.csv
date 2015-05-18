@@ -17,3 +17,4 @@ inpPostalCode,Input#PostalCode
 payNow,a#SubmitPayment
 divError,div#txtError
 divSpinner,div#ajax-loading
+selectCardType,Select#SupportedCardTypes

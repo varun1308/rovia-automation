@@ -51,7 +51,7 @@ namespace Rovia.UI.Automation.Tests.Pages
 
         private void EnterPassengerDetails()
         {
-            //ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
+            ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
             var inputForm = GetInputForm();
             (new List<List<IUIWebElement>>(inputForm.Values.Take(6))).ForEach(x => x.ForEach(y => y.Clear()));
             var i = 0;
@@ -61,9 +61,9 @@ namespace Rovia.UI.Automation.Tests.Pages
                 inputForm["mNames"][i].SendKeys(x.MiddleName);
                 inputForm["lNames"][i].SendKeys(x.LastName);
 
-                if (inputForm["dob"].Count == 1)
+                if (inputForm["dob"].Count != 0)
                 {
-                    ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
+                    //ExecuteJavascript("$('input.span7.jsDob').prop('disabled',false);");
                     inputForm["dob"][i].SendKeys(x.BirthDate.Replace('-', '/'));
                 }
                 inputForm["eMail"][i].Click();

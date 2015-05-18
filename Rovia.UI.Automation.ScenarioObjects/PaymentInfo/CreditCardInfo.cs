@@ -13,23 +13,23 @@ namespace Rovia.UI.Automation.ScenarioObjects
         public DateTime ExpiryDate { get; private set; }
         public string CardHolderEmailId { get; private set; }
 
-        private static readonly string[] CardNunmbers =
+        private static readonly string[] CardNumbers =
         {
             "4111111111111111",
-            "5424000000000015",
-            "370000000000002",
-            "6011000000000012",
-            "3528288605211810"
+            //"5424000000000015",
+            //"370000000000002",
+            //"6011000000000012",
+            //"3528288605211810"
         };
 
         public CreditCardInfo(CreditCardType cardType)
         {
             CardType = cardType;
-            CardNo = CardNunmbers[(int) cardType];
+            CardNo = CardNumbers[(int) cardType];
             Cvv = cardType == CreditCardType.AmericanExpress ? "9999" : "999";
-            NameOnCard = "VerifiTestAccount";
+            NameOnCard = "UIAutomationTestAccount";
             ExpiryDate = DateTime.Now.AddYears(10);
-            CardHolderEmailId = "vrathod@tavisca.com";
+            CardHolderEmailId = "rpandit@tavisca.com";
         }
     }
 }

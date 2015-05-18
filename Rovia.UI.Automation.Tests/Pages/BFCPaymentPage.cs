@@ -68,6 +68,7 @@
             {
                 Thread.Sleep(1000);
                 WaitAndGetBySelector("inpNameOnCard", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.NameOnCard);
+                WaitAndGetBySelector("selectCardType",ApplicationSettings.TimeOut.Fast).SelectFromDropDown("Visa"); //This is hard coded as for now BFC accepts Visa Card only on PreQA/QA environments!!
                 WaitAndGetBySelector("inpCardNumber", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.CardNo);
                 WaitAndGetBySelector("inpSecurityCode", ApplicationSettings.TimeOut.Fast).SendKeys(creditCardInfo.Cvv);
                 WaitAndGetBySelector("selectExpirationMonth", ApplicationSettings.TimeOut.Fast).SelectFromDropDown(creditCardInfo.ExpiryDate.ToString("MMMM"));
